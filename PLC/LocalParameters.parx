@@ -1,0 +1,1192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parx><deviceconfig><parameters><par ipa="15716" name="Par_TAB" descr="Tab (map code)" defval="0" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="205"/><option name="displayAccessLevel">3</option><option name="flashOffset">0</option></par>
+			<par ipa="15717" name="Par_POLI" descr="Polycarbonate code" defval="1025" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="205"/><option name="displayAccessLevel">3</option><option name="flashOffset">2</option></par>
+			<par ipa="15718" name="Par_PCH" hidden="true" descr="PCh (model ID code)" defval="499" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="205"/><option name="displayAccessLevel">3</option><option name="flashOffset">4</option></par>
+			<par ipa="8692" name="Msk" descr="CF43 Msk" shortdescr="CF43" defval="825" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8694" name="Rel" descr="CF44 Release" shortdescr="CF44" defval="0" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8696" name="ICF" hidden="true" descr="ICF" defval="0" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8698" name="InKeyboard_Msk" descr="CF45 Msk of internal keyboard" shortdescr="CF45" defval="829" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8700" name="InKeyboard_Rel" descr="CF46 Release of internal keyboard" shortdescr="CF46" defval="0" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8702" name="InKeyboard_ICF" hidden="true" descr="ICF of internal keyboard" defval="0" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8704" name="ExtKeyboard_Msk" descr="CF47 Msk of external keyboard" shortdescr="CF47" defval="829" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8706" name="ExtKeyboard_Rel" descr="CF48 Release of external keyboard" shortdescr="CF48" defval="0" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8708" name="ExtKeyboard_ICF" hidden="true" descr="ICF of external keyboard" defval="0" min="0" max="65535" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8710" name="Serial Number DW0" descr="First Double Word" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8712" name="Serial Number DW1" descr="Second Double Word" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8714" name="Serial Number DW2" descr="Third Double Word" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8716" name="Serial Number DW3" descr="Fourth Double Word" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8718" name="IntKeyboard Serial Number DW0" descr="First Double Word - internal keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8720" name="IntKeyboard Serial Number DW1" descr="Second Double Word - internal keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8722" name="IntKeyboard Serial Number DW2" descr="Third Double Word - internal keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8724" name="IntKeyboard Serial Number DW3" descr="Fourth Double Word - internal keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8726" name="ExtKeyboard Serial Number DW0" descr="First Double Word - external keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8728" name="ExtKeyboard Serial Number DW1" descr="Second Double Word -external keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8730" name="ExtKeyboard Serial Number DW2" descr="Third Double Word - external keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8732" name="ExtKeyboard Serial Number DW3" descr="Fourth Double Word -external keyboard" defval="0" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" readonly="true" form="0x%08X"><menu id="205"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15725" name="Temp_UM" descr="CL08 Unit of temperature measurement" shortdescr="CL08" defval="0" min="0" max="1" um="num" typepar="enum202" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">6</option></par>
+			<par ipa="15726" name="Cfg_AI1" descr="CL00 Type of analog input AI1" shortdescr="CL00" defval="2" min="0" max="11" um="num" typepar="enum200" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">8</option></par>
+			<par ipa="15727" name="Cfg_AI2" descr="CL01 Type of analog input AI2" shortdescr="CL01" defval="2" min="0" max="11" um="num" typepar="enum200" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">10</option></par>
+			<par ipa="15728" name="Cfg_AI3" descr="CL02 Type of analog input AI3" shortdescr="CL02" defval="2" min="0" max="11" um="num" typepar="enum200" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">12</option></par>
+			<par ipa="15729" name="Cfg_AI4" descr="CL03 Type of analog input AI4" shortdescr="CL03" defval="2" min="0" max="11" um="num" typepar="enum200" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">14</option></par>
+			<par ipa="15730" name="Cfg_AI5" descr="CL04 Type of analog input AI5" shortdescr="CL04" defval="2" min="0" max="11" um="num" typepar="enum200" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">16</option></par>
+			<par ipa="15731" name="Cfg_AI6" descr="CL05 Type of analog input AI6" shortdescr="CL05" defval="2" min="0" max="11" um="num" typepar="enum200" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">18</option></par>
+			<par ipa="15732" name="Cfg_AI7" descr="CL06 Type of analog input AI7" shortdescr="CL06" defval="2" min="0" max="9" um="num" typepar="enum201" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">20</option></par>
+			<par ipa="15736" name="FullScaleMin_AI1" descr="CL10 First value analog input AI1 scale" shortdescr="CL10" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">22</option></par>
+			<par ipa="15737" name="FullScaleMax_AI1" descr="CL11 Last value analog input AI1 scale" shortdescr="CL11" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">36</option></par>
+			<par ipa="15738" name="FullScaleMin_AI2" descr="CL12 First value analog input AI2 scale" shortdescr="CL12" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">24</option></par>
+			<par ipa="15739" name="FullScaleMax_AI2" descr="CL13 Last value analog input AI2 scale" shortdescr="CL13" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">38</option></par>
+			<par ipa="15740" name="FullScaleMin_AI3" descr="CL14 First value analog input AI3 scale" shortdescr="CL14" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">26</option></par>
+			<par ipa="15741" name="FullScaleMax_AI3" descr="CL15 Last value analog input AI3 scale" shortdescr="CL15" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">40</option></par>
+			<par ipa="15742" name="FullScaleMin_AI4" descr="CL16 First value analog input AI4 scale" shortdescr="CL16" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">28</option></par>
+			<par ipa="15743" name="FullScaleMax_AI4" descr="CL17 Last value analog input AI4 scale" shortdescr="CL17" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">42</option></par>
+			<par ipa="15744" name="FullScaleMin_AI5" descr="CL18 First value analog input AI5 scale" shortdescr="CL18" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">30</option></par>
+			<par ipa="15745" name="FullScaleMax_AI5" descr="CL19 Last value analog input AI5 scale" shortdescr="CL19" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">44</option></par>
+			<par ipa="15746" name="FullScaleMin_AI6" descr="CL28 First value analog input AI6 scale" shortdescr="CL28" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">32</option></par>
+			<par ipa="15747" name="FullScaleMax_AI6" descr="CL29 Last value analog input AI6 scale" shortdescr="CL29" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">46</option></par>
+			<par ipa="15756" name="FullScaleMin_AI7" descr="CL30 First value analog input AI7 scale" shortdescr="CL30" defval="0" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">34</option></par>
+			<par ipa="15757" name="FullScaleMax_AI7" descr="CL31 Last value analog input AI7 scale" shortdescr="CL31" defval="1000" min="-9999" max="9999" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">48</option></par>
+			<par ipa="15748" name="Calibration_AI1" descr="CL20 Analog input AI1 differential" shortdescr="CL20" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">50</option></par>
+			<par ipa="15749" name="Calibration_AI2" descr="CL21 Analog input AI2 differential" shortdescr="CL21" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">52</option></par>
+			<par ipa="15750" name="Calibration_AI3" descr="CL22 Analog input AI3 differential" shortdescr="CL22" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">54</option></par>
+			<par ipa="15751" name="Calibration_AI4" descr="CL23 Analog input AI4 differential" shortdescr="CL23" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">56</option></par>
+			<par ipa="15752" name="Calibration_AI5" descr="CL24 Analog input AI5 differential" shortdescr="CL24" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">58</option></par>
+			<par ipa="15753" name="Calibration_AI6" descr="CL25 Analog input AI6 differential" shortdescr="CL25" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">60</option></par>
+			<par ipa="15754" name="Calibration_AI7" descr="CL26 Analog input AI7 differential" shortdescr="CL26" defval="0" min="-1000" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">62</option></par>
+			<par ipa="15758" name="Cfg_AO1" descr="CL60 Type of analog output AO1" shortdescr="CL60" defval="0" min="0" max="2" um="num" typepar="enum203" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">64</option></par>
+			<par ipa="15759" name="Cfg_AO2" descr="CL61 Type of analog output AO2" shortdescr="CL61" defval="0" min="0" max="1" um="num" typepar="enum204" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">66</option></par>
+			<par ipa="15760" name="Cfg_AO3" descr="CL62 Type of analog output AO3" shortdescr="CL62" defval="0" min="0" max="1" um="num" typepar="enum204" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">68</option></par>
+			<par ipa="15761" name="Cfg_AO4" descr="CL63 Type of analog output AO4" shortdescr="CL63" defval="0" min="0" max="1" um="num" typepar="enum204" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">70</option></par>
+			<par ipa="15884" name="FullScaleMin_AO1" descr="CL70 First value analog output AO1 scale" shortdescr="CL70" defval="0" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">88</option></par>
+			<par ipa="15888" name="FullScaleMax_AO1" descr="CL71 Last value analog output AO1 scale" shortdescr="CL71" defval="1000" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">96</option></par>
+			<par ipa="15885" name="FullScaleMin_AO2" descr="CL72 First value analog output AO2 scale" shortdescr="CL72" defval="0" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">90</option></par>
+			<par ipa="15889" name="FullScaleMax_AO2" descr="CL73 Last value analog output AO2 scale" shortdescr="CL73" defval="1000" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">98</option></par>
+			<par ipa="15886" name="FullScaleMin_AO3" descr="CL74 First value analog output AO3 scale" shortdescr="CL74" defval="0" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">92</option></par>
+			<par ipa="15890" name="FullScaleMax_AO3" descr="CL75 Last value analog output AO3 scale" shortdescr="CL75" defval="1000" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">100</option></par>
+			<par ipa="15887" name="FullScaleMin_AO4" descr="CL76 First value analog output AO4 scale" shortdescr="CL76" defval="0" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">94</option></par>
+			<par ipa="15891" name="FullScaleMax_AO4" descr="CL77 Last value analog output AO4 scale" shortdescr="CL77" defval="1000" min="0" max="1000" um="" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">102</option></par>
+			<par ipa="15769" name="PWM_frequency_A01" hidden="true" descr="CL80 PWM Frequency for AO1 in PWM mode" shortdescr="CL80" defval="1000" min="0" max="2000" um="Hz" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">72</option></par>
+			<par ipa="15770" name="PWM_frequency_A02" descr="CL81 PWM Frequency for AO2 in PWM mode" shortdescr="CL81" defval="1000" min="0" max="2000" um="Hz" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">74</option></par>
+			<par ipa="15771" name="PWM_frequency_A03" descr="CL82 PWM Frequency for AO3 in PWM mode" shortdescr="CL82" defval="1000" min="0" max="2000" um="Hz" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">76</option></par>
+			<par ipa="15772" name="PWM_frequency_A04" descr="CL83 PWM Frequency for AO4 in PWM mode" shortdescr="CL83" defval="1000" min="0" max="2000" um="Hz" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">78</option></par>
+			<par ipa="15720" name="PWM_polarity_A01" hidden="true" descr="CL90 PWM Polarity for AO1 in PWM mode" shortdescr="CL90" defval="1" min="0" max="1" um="num" typepar="enum205" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">80</option></par>
+			<par ipa="15721" name="PWM_polarity_A02" descr="CL91 PWM Polarity for AO2 in PWM mode" shortdescr="CL91" defval="1" min="0" max="1" um="num" typepar="enum205" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">82</option></par>
+			<par ipa="15722" name="PWM_polarity_A03" descr="CL92 PWM Polarity for AO3 in PWM mode" shortdescr="CL92" defval="1" min="0" max="1" um="num" typepar="enum205" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">84</option></par>
+			<par ipa="15723" name="PWM_polarity_A04" descr="CL93 PWM Polarity for AO4 in PWM mode" shortdescr="CL93" defval="1" min="0" max="1" um="num" typepar="enum205" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="200"/><option name="displayAccessLevel">3</option><option name="flashOffset">86</option></par>
+			<par ipa="15799" name="Key_hold_time" descr="Ui26 Key hold time to enable funtion" shortdescr="Ui26" defval="1400" min="1000" max="9999" um="ms" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">146</option></par>
+			<par ipa="15780" name="Inst_PWD" descr="Ui27 Installation engineer password" shortdescr="Ui27" defval="1" min="0" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">1</option><option name="flashOffset">150</option></par>
+			<par ipa="15781" name="Manuf_PWD" descr="Ui28 Manufacturer password" shortdescr="Ui28" defval="2" min="0" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">2</option><option name="flashOffset">152</option></par>
+			<par ipa="15788" name="Pass_reset_time" descr="Ui29 Visibility level reset time" shortdescr="Ui29" defval="100" min="0" max="1000" um="s" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form="%.1D"><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">154</option></par>
+			<par ipa="15842" name="LocalDisplay_DataDecode" hidden="true" descr="Data Decode Local Display" defval="1" min="1" max="3" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1472</option></par>
+			<par ipa="15843" name="RemoteDisplay_DataDecode" hidden="true" descr="Data Decode Remote Display" defval="1" min="1" max="3" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1474</option></par>
+			<par ipa="15844" name="LocalDisplay_CommAddress" hidden="true" descr="Comm Address Local Display" defval="1" min="1" max="247" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1476</option></par>
+			<par ipa="15845" name="LocalDisplay_Proto" hidden="true" descr="Protocol Local Display" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1478</option></par>
+			<par ipa="15846" name="LocalDisplay_DataBit" hidden="true" descr="Data Bit Local Display" defval="8" min="7" max="9" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1480</option></par>
+			<par ipa="15847" name="LocalDisplay_StopBit" hidden="true" descr="Stop Bit Local Display" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1482</option></par>
+			<par ipa="15848" name="LocalDisplay_Parity" hidden="true" descr="Parity Local Display" defval="2" min="0" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1484</option></par>
+			<par ipa="15849" name="LocalDisplay_BaudRate" hidden="true" descr="BaudRate Local Display" defval="1" min="0" max="5" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1486</option></par>
+			<par ipa="15850" name="RemoteDisplay_CommAddress" hidden="true" descr="Comm Address Remote Display" defval="1" min="1" max="247" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1488</option></par>
+			<par ipa="15851" name="RemoteDisplay_Proto" hidden="true" descr="Protocol Remote Display" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1490</option></par>
+			<par ipa="15852" name="RemoteDisplay_DataBit" hidden="true" descr="Data Bit Remote Display" defval="8" min="7" max="9" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1492</option></par>
+			<par ipa="15853" name="RemoteDisplay_StopBit" hidden="true" descr="Stop Bit Remote Display" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1494</option></par>
+			<par ipa="15854" name="RemoteDisplay_Parity" hidden="true" descr="Parity Remote Display" defval="2" min="0" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1496</option></par>
+			<par ipa="15855" name="RemoteDisplay_BaudRate" hidden="true" descr="BaudRate Remote Display" defval="1" min="0" max="5" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1498</option></par>
+			<par ipa="15856" name="LocalDisplay_K1_Enabled" hidden="true" descr="Key 1 Enabled Local Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1500</option></par>
+			<par ipa="15857" name="LocalDisplay_K2_Enabled" hidden="true" descr="Key 2 Enabled Local Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1506</option></par>
+			<par ipa="15858" name="LocalDisplay_K3_Enabled" hidden="true" descr="Key 3 Enabled Local Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1512</option></par>
+			<par ipa="15859" name="LocalDisplay_K4_Enabled" hidden="true" descr="Key 4 Enabled Local Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1518</option></par>
+			<par ipa="15860" name="RemoteDisplay_K1_Enabled" hidden="true" descr="Key 1 Enabled Remote Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1524</option></par>
+			<par ipa="15861" name="RemoteDisplay_K2_Enabled" hidden="true" descr="Key 2 Enabled Remote Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1530</option></par>
+			<par ipa="15862" name="RemoteDisplay_K3_Enabled" hidden="true" descr="Key 3 Enabled Remote Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1536</option></par>
+			<par ipa="15863" name="RemoteDisplay_K4_Enabled" hidden="true" descr="Key 4 Enabled Remote Display" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1542</option></par>
+			<par ipa="15864" name="LocalDisplay_K1_ThrPush" hidden="true" descr="Key 1 Push Thr Local Display" defval="44" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1502</option></par>
+			<par ipa="15865" name="LocalDisplay_K2_ThrPush" hidden="true" descr="Key 2 Push Thr Local Display" defval="64" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1508</option></par>
+			<par ipa="15866" name="LocalDisplay_K3_ThrPush" hidden="true" descr="Key 3 Push Thr Local Display" defval="80" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1514</option></par>
+			<par ipa="15867" name="LocalDisplay_K4_ThrPush" hidden="true" descr="Key 4 Push Thr Local Display" defval="52" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1520</option></par>
+			<par ipa="15868" name="RemoteDisplay_K1_ThrPush" hidden="true" descr="Key 1 Push Thr Remote Display" defval="44" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1526</option></par>
+			<par ipa="15869" name="RemoteDisplay_K2_ThrPush" hidden="true" descr="Key 2 Push Thr Remote Display" defval="64" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1532</option></par>
+			<par ipa="15870" name="RemoteDisplay_K3_ThrPush" hidden="true" descr="Key 3 Push Thr Remote Display" defval="80" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1538</option></par>
+			<par ipa="15871" name="RemoteDisplay_K4_ThrPush" hidden="true" descr="Key 4 Push Thr Remote Display" defval="52" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1544</option></par>
+			<par ipa="15872" name="LocalDisplay_K1_ThrRel" hidden="true" descr="Key 1 Rel Thr Local Display" defval="30" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1504</option></par>
+			<par ipa="15873" name="LocalDisplay_K2_ThrRel" hidden="true" descr="Key 2 Rel Thr Local Display" defval="44" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1510</option></par>
+			<par ipa="15874" name="LocalDisplay_K3_ThrRel" hidden="true" descr="Key 3 Rel Thr Local Display" defval="54" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1516</option></par>
+			<par ipa="15875" name="LocalDisplay_K4_ThrRel" hidden="true" descr="Key 4 Rel Thr Local Display" defval="54" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1522</option></par>
+			<par ipa="15876" name="RemoteDisplay_K1_ThrRel" hidden="true" descr="Key 1 Rel Thr Remote Display" defval="30" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1528</option></par>
+			<par ipa="15877" name="RemoteDisplay_K2_ThrRel" hidden="true" descr="Key 2 Rel Thr Remote Display" defval="44" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1534</option></par>
+			<par ipa="15878" name="RemoteDisplay_K3_ThrRel" hidden="true" descr="Key 3 Rel Thr Remote Display" defval="54" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1540</option></par>
+			<par ipa="15879" name="RemoteDisplay_K4_ThrRel" hidden="true" descr="Key 4 Rel Thr Remote Display" defval="54" min="1" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1546</option></par>
+			<par ipa="15880" name="KeyboardLockTime" descr="UI30 Keyboard Lock Time" shortdescr="UI30" defval="0" min="0" max="1200" um="s/10" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1552</option></par>
+			<par ipa="15882" name="KeyboardUnlockTime" descr="UI31 Keyboard Unlock Time" shortdescr="UI31" defval="30" min="10" max="1200" um="s/10" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form=""><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1556</option></par>
+			<par ipa="15892" name="Menu folder_time" descr="UI32 Menu folder timeout" shortdescr="UI32" defval="300" min="0" max="1000" um="s" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form="%.1D"><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">148</option></par>
+			<par ipa="15894" name="KeyboardMap" hidden="true" descr="UI33 Keyboard Map" shortdescr="UI33" defval="8976" min="0" max="13107" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="%04x"><menu id="204"/><option name="displayAccessLevel">3</option><option name="flashOffset">1548</option></par>
+			<par ipa="15774" name="Addr_RS485_1" descr="CF30 RS485-1 address" shortdescr="CF30" defval="1" min="1" max="247" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="201"/><option name="displayAccessLevel">3</option><option name="flashOffset">104</option></par>
+			<par ipa="15779" name="Baud_RS485_1" descr="CF31 RS485-1 baud rate protocol" shortdescr="CF31" defval="1" min="0" max="5" um="num" typepar="enum206" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="201"/><option name="displayAccessLevel">3</option><option name="flashOffset">114</option></par>
+			<par ipa="15778" name="Parity_RS485_1" descr="CF32 RS485-1 parity protocol" shortdescr="CF32" defval="2" min="0" max="2" um="num" typepar="enum207" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="201"/><option name="displayAccessLevel">3</option><option name="flashOffset">112</option></par>
+			<par ipa="15775" name="Proto_RS485_1" hidden="true" descr="CF00 Select RS485-1 protocol" shortdescr="CF00" defval="1" min="0" max="1" um="num" typepar="enum208" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="201"/><option name="displayAccessLevel">3</option><option name="flashOffset">106</option></par>
+			<par ipa="15776" name="DataBit_RS485_1" hidden="true" descr="RS485-1 data bit number" defval="8" min="8" max="8" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="201"/><option name="displayAccessLevel">3</option><option name="flashOffset">108</option></par>
+			<par ipa="15777" name="StopBit_RS485_1" descr="CF33 RS485-1 stop bit number" shortdescr="CF33" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="201"/><option name="displayAccessLevel">3</option><option name="flashOffset">110</option></par>
+			<par ipa="15782" name="Addr_RS485_2" descr="CF35 RS485-2 address" shortdescr="CF35" defval="1" min="1" max="247" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="202"/><option name="displayAccessLevel">3</option><option name="flashOffset">116</option></par>
+			<par ipa="15787" name="Baud_RS485_2" descr="CF36 RS485-2 baud rate protocol" shortdescr="CF36" defval="1" min="0" max="5" um="num" typepar="enum206" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="202"/><option name="displayAccessLevel">3</option><option name="flashOffset">126</option></par>
+			<par ipa="15786" name="Parity_RS485_2" descr="CF37 RS485-2 parity protocol" shortdescr="CF37" defval="2" min="0" max="2" um="num" typepar="enum207" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="202"/><option name="displayAccessLevel">3</option><option name="flashOffset">124</option></par>
+			<par ipa="15783" name="Proto_RS485_2" hidden="true" descr="CF01 Select RS485-2 protocol" shortdescr="CF01" defval="1" min="0" max="1" um="num" typepar="enum208" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="202"/><option name="displayAccessLevel">3</option><option name="flashOffset">118</option></par>
+			<par ipa="15784" name="DataBit_RS485_2" hidden="true" descr="RS485-2 data bit number" defval="8" min="8" max="8" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="202"/><option name="displayAccessLevel">3</option><option name="flashOffset">120</option></par>
+			<par ipa="15785" name="StopBit_RS485_2" descr="CF38 RS485-2 stop bit number" shortdescr="CF38" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="202"/><option name="displayAccessLevel">3</option><option name="flashOffset">122</option></par>
+			<par ipa="15790" name="Addr_CommMod" hidden="true" descr="CF70 Communication module address" shortdescr="CF70" defval="1" min="1" max="247" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="203"/><option name="displayAccessLevel">3</option><option name="flashOffset">128</option></par>
+			<par ipa="15794" name="Parity_CommMod" hidden="true" descr="CF71 Communication module parity protocol" shortdescr="CF71" defval="2" min="0" max="2" um="num" typepar="enum207" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="203"/><option name="displayAccessLevel">3</option><option name="flashOffset">136</option></par>
+			<par ipa="15795" name="Baud_CommMod" hidden="true" descr="CF72 Communication module baud rate protocol" shortdescr="CF72" defval="5" min="0" max="5" um="num" typepar="enum206" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="203"/><option name="displayAccessLevel">3</option><option name="flashOffset">138</option></par>
+			<par ipa="15791" name="Proto_CommMod" hidden="true" descr="Select Communication module protocol" defval="1" min="0" max="1" um="num" typepar="enum208" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="203"/><option name="displayAccessLevel">3</option><option name="flashOffset">130</option></par>
+			<par ipa="15792" name="DataBit_CommMod" hidden="true" descr="Communication module data bit number" defval="8" min="8" max="8" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="203"/><option name="displayAccessLevel">3</option><option name="flashOffset">132</option></par>
+			<par ipa="15793" name="StopBit_CommMod" hidden="true" descr="CF73 Communication module stop bit number" shortdescr="CF73" defval="1" min="1" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="203"/><option name="displayAccessLevel">3</option><option name="flashOffset">134</option></par>
+			<par ipa="15796" name="RTC_present" descr="CF50 RTC present" shortdescr="CF50" defval="1" min="0" max="1" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="208"/><option name="displayAccessLevel">3</option><option name="flashOffset">140</option></par>
+			<par ipa="15797" name="Customer code 1" descr="CF60 Customer code 1" shortdescr="CF60" defval="0" min="0" max="999" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="208"/><option name="displayAccessLevel">3</option><option name="flashOffset">142</option></par>
+			<par ipa="15798" name="Customer code 2" descr="CF61 Customer code 2" shortdescr="CF61" defval="0" min="0" max="999" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="208"/><option name="displayAccessLevel">3</option><option name="flashOffset">144</option></par>
+			<par ipa="16144" name="CANExpPresenceByPar" descr="CF22 bit(x) : if 0 the (x+1)-th CAN slave is present, otherwise not present" shortdescr="CF22" defval="0" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="210"/><option name="displayAccessLevel">3</option><option name="flashOffset">1560</option></par>
+			<par ipa="16145" name="MbmRtu_DisByPar" descr="CF40 Modbus RTU master disable by parameter" shortdescr="CF40" defval="0" min="0" max="1" um="num" typepar="enum309" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="210"/><option name="displayAccessLevel">3</option><option name="flashOffset">1562</option></par>
+			<par ipa="15900" name="Baudrate" descr="CF21 Baudrate" shortdescr="CF21" defval="2" min="" max="" um="Kbit/s" typepar="enum102" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">244</option></par>
+			<par ipa="15902" name="NodeId" descr="CF20 CANopen slave node unique ID" shortdescr="CF20" defval="1" min="1" max="127" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">248</option></par>
+			<par ipa="15903" name="SyncCOB" descr="C000 Sync object COBID" shortdescr="C000" defval="128" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">252</option></par>
+			<par ipa="15905" name="GuardTime" descr="C001 Node guarding time" shortdescr="C001" defval="500" min="" max="" um="ms" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">256</option></par>
+			<par ipa="15906" name="HeartbeatTimeConsumer" descr="C002 Heartbeat consumer time" shortdescr="C002" defval="0" min="" max="" um="ms" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">260</option></par>
+			<par ipa="15908" name="HeartbeatTimeProducer" descr="C003 Heartbeat producer time" shortdescr="C003" defval="0" min="" max="" um="ms" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">264</option></par>
+			<par ipa="15909" name="LifeTimeFactor" descr="C004 Life time factor" shortdescr="C004" defval="3" min="0" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">266</option></par>
+			<par ipa="15910" name="CommCyclePeriod" descr="C005 Communication cycle period" shortdescr="C005" defval="0" min="0" max="" um="us" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form=""><menu id="100"/><option name="displayAccessLevel">3</option><option name="flashOffset">268</option></par>
+			<par ipa="15920" name="PdoCobid Rx1" descr="C010 PDO Rx 1 COBID" shortdescr="C010" defval="0x80000201" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="110"/><option name="displayAccessLevel">3</option><option name="flashOffset">288</option></par>
+			<par ipa="15922" name="TransmissionType Rx1" descr="C011 PDO Rx 1 Transmission Type" shortdescr="C011" defval="255" min="" max="" um="" typepar="enum101" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="110"/><option name="displayAccessLevel">3</option><option name="flashOffset">292</option></par>
+			<par ipa="15923" name="NumMappings Rx1" descr="C012 PDO Rx 1 Number of mapped objects" shortdescr="C012" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">293</option></par>
+			<par ipa="15924" name="Mapping 1 Rx1" descr="C013 PDO Rx 1 Mapped object 1" shortdescr="C013" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">296</option></par>
+			<par ipa="15926" name="Mapping 2 Rx1" descr="C014 PDO Rx 1 Mapped object 2" shortdescr="C014" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">300</option></par>
+			<par ipa="15928" name="Mapping 3 Rx1" descr="C015 PDO Rx 1 Mapped object 3" shortdescr="C015" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">304</option></par>
+			<par ipa="15930" name="Mapping 4 Rx1" descr="C016 PDO Rx 1 Mapped object 4" shortdescr="C016" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">308</option></par>
+			<par ipa="15932" name="Mapping 5 Rx1" descr="C017 PDO Rx 1 Mapped object 5" shortdescr="C017" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">312</option></par>
+			<par ipa="15934" name="Mapping 6 Rx1" descr="C018 PDO Rx 1 Mapped object 6" shortdescr="C018" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">316</option></par>
+			<par ipa="15936" name="Mapping 7 Rx1" descr="C019 PDO Rx 1 Mapped object 7" shortdescr="C019" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">320</option></par>
+			<par ipa="15938" name="Mapping 8 Rx1" descr="C020 PDO Rx 1 Mapped object 8" shortdescr="C020" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="111"/><option name="displayAccessLevel">3</option><option name="flashOffset">324</option></par>
+			<par ipa="15940" name="PdoCobid Rx2" descr="C021 PDO Rx 2 COBID" shortdescr="C021" defval="0x80000301" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="120"/><option name="displayAccessLevel">3</option><option name="flashOffset">360</option></par>
+			<par ipa="15942" name="TransmissionType Rx2" descr="C022 PDO Rx 2 Transmission Type" shortdescr="C022" defval="255" min="" max="" um="" typepar="enum101" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="120"/><option name="displayAccessLevel">3</option><option name="flashOffset">364</option></par>
+			<par ipa="15943" name="NumMappings Rx2" descr="C023 PDO Rx 2 Number of mapped objects" shortdescr="C023" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">365</option></par>
+			<par ipa="15944" name="Mapping 1 Rx2" descr="C024 PDO Rx 2 Mapped object 1" shortdescr="C024" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">368</option></par>
+			<par ipa="15946" name="Mapping 2 Rx2" descr="C025 PDO Rx 2 Mapped object 2" shortdescr="C025" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">372</option></par>
+			<par ipa="15948" name="Mapping 3 Rx2" descr="C026 PDO Rx 2 Mapped object 3" shortdescr="C026" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">376</option></par>
+			<par ipa="15950" name="Mapping 4 Rx2" descr="C027 PDO Rx 2 Mapped object 4" shortdescr="C027" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">380</option></par>
+			<par ipa="15952" name="Mapping 5 Rx2" descr="C028 PDO Rx 2 Mapped object 5" shortdescr="C028" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">384</option></par>
+			<par ipa="15954" name="Mapping 6 Rx2" descr="C029 PDO Rx 2 Mapped object 6" shortdescr="C029" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">388</option></par>
+			<par ipa="15956" name="Mapping 7 Rx2" descr="C030 PDO Rx 2 Mapped object 7" shortdescr="C030" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">392</option></par>
+			<par ipa="15958" name="Mapping 8 Rx2" descr="C031 PDO Rx 2 Mapped object 8" shortdescr="C031" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="121"/><option name="displayAccessLevel">3</option><option name="flashOffset">396</option></par>
+			<par ipa="15960" name="PdoCobid Rx3" descr="C032 PDO Rx 3 COBID" shortdescr="C032" defval="0x80000401" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="130"/><option name="displayAccessLevel">3</option><option name="flashOffset">432</option></par>
+			<par ipa="15962" name="TransmissionType Rx3" descr="C033 PDO Rx 3 Transmission Type" shortdescr="C033" defval="255" min="" max="" um="" typepar="enum101" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="130"/><option name="displayAccessLevel">3</option><option name="flashOffset">436</option></par>
+			<par ipa="15963" name="NumMappings Rx3" descr="C034 PDO Rx 3 Number of mapped objects" shortdescr="C034" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">437</option></par>
+			<par ipa="15964" name="Mapping 1 Rx3" descr="C035 PDO Rx 3 Mapped object 1" shortdescr="C035" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">440</option></par>
+			<par ipa="15966" name="Mapping 2 Rx3" descr="C036 PDO Rx 3 Mapped object 2" shortdescr="C036" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">444</option></par>
+			<par ipa="15968" name="Mapping 3 Rx3" descr="C037 PDO Rx 3 Mapped object 3" shortdescr="C037" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">448</option></par>
+			<par ipa="15970" name="Mapping 4 Rx3" descr="C038 PDO Rx 3 Mapped object 4" shortdescr="C038" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">452</option></par>
+			<par ipa="15972" name="Mapping 5 Rx3" descr="C039 PDO Rx 3 Mapped object 5" shortdescr="C039" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">456</option></par>
+			<par ipa="15974" name="Mapping 6 Rx3" descr="C040 PDO Rx 3 Mapped object 6" shortdescr="C040" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">460</option></par>
+			<par ipa="15976" name="Mapping 7 Rx3" descr="C041 PDO Rx 3 Mapped object 7" shortdescr="C041" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">464</option></par>
+			<par ipa="15978" name="Mapping 8 Rx3" descr="C042 PDO Rx 3 Mapped object 8" shortdescr="C042" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="131"/><option name="displayAccessLevel">3</option><option name="flashOffset">468</option></par>
+			<par ipa="15980" name="PdoCobid Rx4" descr="C043 PDO Rx 4 COBID" shortdescr="C043" defval="0x80000501" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="140"/><option name="displayAccessLevel">3</option><option name="flashOffset">504</option></par>
+			<par ipa="15982" name="TransmissionType Rx4" descr="C044 PDO Rx 4 Transmission Type" shortdescr="C044" defval="255" min="" max="" um="" typepar="enum101" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="140"/><option name="displayAccessLevel">3</option><option name="flashOffset">508</option></par>
+			<par ipa="15983" name="NumMappings Rx4" descr="C045 PDO Rx 4 Number of mapped objects" shortdescr="C045" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">509</option></par>
+			<par ipa="15984" name="Mapping 1 Rx4" descr="C046 PDO Rx 4 Mapped object 1" shortdescr="C046" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">512</option></par>
+			<par ipa="15986" name="Mapping 2 Rx4" descr="C047 PDO Rx 4 Mapped object 2" shortdescr="C047" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">516</option></par>
+			<par ipa="15988" name="Mapping 3 Rx4" descr="C048 PDO Rx 4 Mapped object 3" shortdescr="C048" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">520</option></par>
+			<par ipa="15990" name="Mapping 4 Rx4" descr="C049 PDO Rx 4 Mapped object 4" shortdescr="C049" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">524</option></par>
+			<par ipa="15992" name="Mapping 5 Rx4" descr="C050 PDO Rx 4 Mapped object 5" shortdescr="C050" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">528</option></par>
+			<par ipa="15994" name="Mapping 6 Rx4" descr="C051 PDO Rx 4 Mapped object 6" shortdescr="C051" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">532</option></par>
+			<par ipa="15996" name="Mapping 7 Rx4" descr="C052 PDO Rx 4 Mapped object 7" shortdescr="C052" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">536</option></par>
+			<par ipa="15998" name="Mapping 8 Rx4" descr="C053 PDO Rx 4 Mapped object 8" shortdescr="C053" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="141"/><option name="displayAccessLevel">3</option><option name="flashOffset">540</option></par>
+			<par ipa="16000" name="PdoCobid Tx1" descr="C054 PDO Tx 1 COBID" shortdescr="C054" defval="0x80000181" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="150"/><option name="displayAccessLevel">3</option><option name="flashOffset">864</option></par>
+			<par ipa="16002" name="TransmissionType Tx1" descr="C055 PDO Tx 1 Transmission Type" shortdescr="C055" defval="255" min="" max="" um="" typepar="enum100" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="150"/><option name="displayAccessLevel">3</option><option name="flashOffset">868</option></par>
+			<par ipa="16003" name="NumMappings Tx1" descr="C056 PDO Tx 1 Number of mapped objects" shortdescr="C056" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">874</option></par>
+			<par ipa="16004" name="Mapping 1 Tx1" descr="C057 PDO Tx 1 Mapped object 1" shortdescr="C057" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">876</option></par>
+			<par ipa="16006" name="Mapping 2 Tx1" descr="C058 PDO Tx 1 Mapped object 2" shortdescr="C058" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">880</option></par>
+			<par ipa="16008" name="Mapping 3 Tx1" descr="C059 PDO Tx 1 Mapped object 3" shortdescr="C059" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">884</option></par>
+			<par ipa="16010" name="Mapping 4 Tx1" descr="C060 PDO Tx 1 Mapped object 4" shortdescr="C060" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">888</option></par>
+			<par ipa="16012" name="Mapping 5 Tx1" descr="C061 PDO Tx 1 Mapped object 5" shortdescr="C061" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">892</option></par>
+			<par ipa="16014" name="Mapping 6 Tx1" descr="C062 PDO Tx 1 Mapped object 6" shortdescr="C062" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">896</option></par>
+			<par ipa="16016" name="Mapping 7 Tx1" descr="C063 PDO Tx 1 Mapped object 7" shortdescr="C063" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">900</option></par>
+			<par ipa="16018" name="Mapping 8 Tx1" descr="C064 PDO Tx 1 Mapped object 8" shortdescr="C064" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="151"/><option name="displayAccessLevel">3</option><option name="flashOffset">904</option></par>
+			<par ipa="16020" name="Inhibit Time Tx1" descr="C065 PDO Tx 1 Inhibit Time" shortdescr="C065" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="150"/><option name="displayAccessLevel">3</option><option name="flashOffset">870</option></par>
+			<par ipa="16021" name="Event Timer Tx1" descr="C066 PDO Tx 1 Event Timer" shortdescr="C066" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="150"/><option name="displayAccessLevel">3</option><option name="flashOffset">872</option></par>
+			<par ipa="16030" name="PdoCobid Tx2" descr="C067 PDO Tx 2 COBID" shortdescr="C067" defval="0x80000281" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="160"/><option name="displayAccessLevel">3</option><option name="flashOffset">940</option></par>
+			<par ipa="16032" name="TransmissionType Tx2" descr="C068 PDO Tx 2 Transmission Type" shortdescr="C068" defval="255" min="" max="" um="" typepar="enum100" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="160"/><option name="displayAccessLevel">3</option><option name="flashOffset">944</option></par>
+			<par ipa="16033" name="NumMappings Tx2" descr="C069 PDO Tx 2 Number of mapped objects" shortdescr="C069" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">950</option></par>
+			<par ipa="16034" name="Mapping 1 Tx2" descr="C070 PDO Tx 2 Mapped object 1" shortdescr="C070" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">952</option></par>
+			<par ipa="16036" name="Mapping 2 Tx2" descr="C071 PDO Tx 2 Mapped object 2" shortdescr="C071" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">956</option></par>
+			<par ipa="16038" name="Mapping 3 Tx2" descr="C072 PDO Tx 2 Mapped object 3" shortdescr="C072" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">960</option></par>
+			<par ipa="16040" name="Mapping 4 Tx2" descr="C073 PDO Tx 2 Mapped object 4" shortdescr="C073" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">964</option></par>
+			<par ipa="16042" name="Mapping 5 Tx2" descr="C074 PDO Tx 2 Mapped object 5" shortdescr="C074" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">968</option></par>
+			<par ipa="16044" name="Mapping 6 Tx2" descr="C075 PDO Tx 2 Mapped object 6" shortdescr="C075" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">972</option></par>
+			<par ipa="16046" name="Mapping 7 Tx2" descr="C076 PDO Tx 2 Mapped object 7" shortdescr="C076" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">976</option></par>
+			<par ipa="16048" name="Mapping 8 Tx2" descr="C077 PDO Tx 2 Mapped object 8" shortdescr="C077" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="161"/><option name="displayAccessLevel">3</option><option name="flashOffset">980</option></par>
+			<par ipa="16050" name="Inhibit Time Tx2" descr="C078 PDO Tx 2 Inhibit Time" shortdescr="C078" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="160"/><option name="displayAccessLevel">3</option><option name="flashOffset">946</option></par>
+			<par ipa="16051" name="Event Timer Tx2" descr="C079 PDO Tx 2 Event Timer" shortdescr="C079" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="160"/><option name="displayAccessLevel">3</option><option name="flashOffset">948</option></par>
+			<par ipa="16060" name="PdoCobid Tx3" descr="C080 PDO Tx 3 COBID" shortdescr="C080" defval="0x80000381" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="170"/><option name="displayAccessLevel">3</option><option name="flashOffset">1016</option></par>
+			<par ipa="16062" name="TransmissionType Tx3" descr="C081 PDO Tx 3 Transmission Type" shortdescr="C081" defval="255" min="" max="" um="" typepar="enum100" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="170"/><option name="displayAccessLevel">3</option><option name="flashOffset">1020</option></par>
+			<par ipa="16063" name="NumMappings Tx3" descr="C082 PDO Tx 3 Number of mapped objects" shortdescr="C082" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1026</option></par>
+			<par ipa="16064" name="Mapping 1 Tx3" descr="C083 PDO Tx 3 Mapped object 1" shortdescr="C083" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1028</option></par>
+			<par ipa="16066" name="Mapping 2 Tx3" descr="C084 PDO Tx 3 Mapped object 2" shortdescr="C084" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1032</option></par>
+			<par ipa="16068" name="Mapping 3 Tx3" descr="C085 PDO Tx 3 Mapped object 3" shortdescr="C085" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1036</option></par>
+			<par ipa="16070" name="Mapping 4 Tx3" descr="C086 PDO Tx 3 Mapped object 4" shortdescr="C086" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1040</option></par>
+			<par ipa="16072" name="Mapping 5 Tx3" descr="C087 PDO Tx 3 Mapped object 5" shortdescr="C087" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1044</option></par>
+			<par ipa="16074" name="Mapping 6 Tx3" descr="C088 PDO Tx 3 Mapped object 6" shortdescr="C088" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1048</option></par>
+			<par ipa="16076" name="Mapping 7 Tx3" descr="C089 PDO Tx 3 Mapped object 7" shortdescr="C089" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1052</option></par>
+			<par ipa="16078" name="Mapping 8 Tx3" descr="C090 PDO Tx 3 Mapped object 8" shortdescr="C090" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="171"/><option name="displayAccessLevel">3</option><option name="flashOffset">1056</option></par>
+			<par ipa="16080" name="Inhibit Time Tx3" descr="C091 PDO Tx 3 Inhibit Time" shortdescr="C091" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="170"/><option name="displayAccessLevel">3</option><option name="flashOffset">1022</option></par>
+			<par ipa="16081" name="Event Timer Tx3" descr="C092 PDO Tx 3 Event Timer" shortdescr="C092" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="170"/><option name="displayAccessLevel">3</option><option name="flashOffset">1024</option></par>
+			<par ipa="16090" name="PdoCobid Tx4" descr="C093 PDO Tx 4 COBID" shortdescr="C093" defval="0x80000481" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="180"/><option name="displayAccessLevel">3</option><option name="flashOffset">1092</option></par>
+			<par ipa="16092" name="TransmissionType Tx4" descr="C094 PDO Tx 4 Transmission Type" shortdescr="C094" defval="255" min="" max="" um="" typepar="enum100" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="180"/><option name="displayAccessLevel">3</option><option name="flashOffset">1096</option></par>
+			<par ipa="16093" name="NumMappings Tx4" descr="C095 PDO Tx 4 Number of mapped objects" shortdescr="C095" defval="0" min="0" max="8" um="" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1102</option></par>
+			<par ipa="16094" name="Mapping 1 Tx4" descr="C096 PDO Tx 4 Mapped object 1" shortdescr="C096" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1104</option></par>
+			<par ipa="16096" name="Mapping 2 Tx4" descr="C097 PDO Tx 4 Mapped object 2" shortdescr="C097" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1108</option></par>
+			<par ipa="16098" name="Mapping 3 Tx4" descr="C098 PDO Tx 4 Mapped object 3" shortdescr="C098" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1112</option></par>
+			<par ipa="16100" name="Mapping 4 Tx4" descr="C099 PDO Tx 4 Mapped object 4" shortdescr="C099" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1116</option></par>
+			<par ipa="16102" name="Mapping 5 Tx4" descr="C100 PDO Tx 4 Mapped object 5" shortdescr="C100" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1120</option></par>
+			<par ipa="16104" name="Mapping 6 Tx4" descr="C101 PDO Tx 4 Mapped object 6" shortdescr="C101" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1124</option></par>
+			<par ipa="16106" name="Mapping 7 Tx4" descr="C102 PDO Tx 4 Mapped object 7" shortdescr="C102" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1128</option></par>
+			<par ipa="16108" name="Mapping 8 Tx4" descr="C103 PDO Tx 4 Mapped object 8" shortdescr="C103" defval="0" min="" max="" um="" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="false" form="0x%08X"><menu id="181"/><option name="displayAccessLevel">3</option><option name="flashOffset">1132</option></par>
+			<par ipa="16110" name="Inhibit Time Tx4" descr="C104 PDO Tx 4 Inhibit Time" shortdescr="C104" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="180"/><option name="displayAccessLevel">3</option><option name="flashOffset">1098</option></par>
+			<par ipa="16111" name="Event Timer Tx4" descr="C105 PDO Tx 4 Event Timer" shortdescr="C105" defval="0" min="" max="" um="" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="180"/><option name="displayAccessLevel">3</option><option name="flashOffset">1100</option></par>
+			<par ipa="15800" name="dE00" hidden="true" descr="Valve selection" defval="0" min="0" max="255" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">156</option></par>
+			<par ipa="15801" name="dE01" hidden="true" descr="Maximum speed" defval="40" min="0" max="999" um="Step/s" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">158</option></par>
+			<par ipa="15802" name="dE02" hidden="true" descr="Full opening" defval="250" min="0" max="9990" um="Steps" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">160</option></par>
+			<par ipa="15803" name="dE03" hidden="true" descr="Extra movement in full closure" defval="0" min="0" max="999" um="Steps" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">162</option></par>
+			<par ipa="15804" name="dE04" hidden="true" descr="Reserved" defval="260" min="-560" max="850" um="mA" typepar="short" typetarg="short" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">164</option></par>
+			<par ipa="15805" name="dE05" hidden="true" descr="Reserved" defval="46" min="0" max="999" um="Ohm" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">166</option></par>
+			<par ipa="15806" name="dE06" hidden="true" descr="Reserved" defval="0" min="0" max="850" um="mA" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">168</option></par>
+			<par ipa="15807" name="dE07" hidden="true" descr="Type of stepper motor control" defval="1" min="0" max="2" um="num" typepar="enum302" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">170</option></par>
+			<par ipa="15808" name="dE08" hidden="true" descr="Duty cycle" defval="100" min="0" max="100" um="%" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">172</option></par>
+			<par ipa="15809" name="dE09" hidden="true" descr="Acceleration/deceleration" defval="0" min="0" max="999" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">174</option></par>
+			<par ipa="15810" name="dE80" hidden="true" descr="Minimum speed for acceleration/deceleration" defval="0" min="0" max="999" um="Steps/s" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">176</option></par>
+			<par ipa="15811" name="n10" hidden="true" descr="Pause time" defval="0" min="0" max="999" um="ms" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">178</option></par>
+			<par ipa="15812" name="n11" hidden="true" descr="Extra movement in full closure every 24 hours working" defval="30" min="0" max="9990" um="Steps" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">180</option></par>
+			<par ipa="15813" name="n12" hidden="true" descr="Change direction counter limit" defval="0" min="0" max="9990" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">182</option></par>
+			<par ipa="15814" name="n13" hidden="true" descr="Extra movement in full opening" defval="0" min="0" max="9990" um="Steps" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">184</option></par>
+			<par ipa="15815" name="n14" hidden="true" descr="Duty cycle period of activation/deactivation" defval="0" min="0" max="9990" um="s/10" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">186</option></par>
+			<par ipa="15816" name="n15" hidden="true" descr="Period of periodical synchronization" defval="0" min="0" max="9990" um="hour" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">188</option></par>
+			<par ipa="15817" name="n16" hidden="true" descr="Unipolar/Bipolar valve selection" defval="2" min="1" max="2" um="num" typepar="enum303" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">190</option></par>
+			<par ipa="15818" name="n17" hidden="true" descr="Maximum speed in emergency closing" defval="40" min="0" max="999" um="Steps/s" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">192</option></par>
+			<par ipa="15819" name="n18" hidden="true" descr="Reserved" defval="0" min="0" max="1" um="num" typepar="enum304" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">194</option></par>
+			<par ipa="15820" name="n19" hidden="true" descr="Reserved" defval="3072" min="0" max="4095" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">196</option></par>
+			<par ipa="15821" name="n20" hidden="true" descr="Reserved" defval="256" min="0" max="2047" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">198</option></par>
+			<par ipa="15822" name="n21" hidden="true" descr="Reserved" defval="50" min="0" max="512" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">200</option></par>
+			<par ipa="15823" name="n22" hidden="true" descr="Reserved" defval="288" min="0" max="512" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">202</option></par>
+			<par ipa="15824" name="n23" hidden="true" descr="Reserved" defval="1296" min="0" max="2047" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">204</option></par>
+			<par ipa="15825" name="n24" hidden="true" descr="Reserved" defval="2562" min="0" max="4095" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">206</option></par>
+			<par ipa="15826" name="n25" hidden="true" descr="Reserved" defval="240" min="0" max="4095" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">208</option></par>
+			<par ipa="15827" name="n26" hidden="true" descr="Periodical override mode" defval="0" min="0" max="1" um="num" typepar="enum305" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">210</option></par>
+			<par ipa="15828" name="n27" hidden="true" descr="Reserved" defval="0" min="0" max="850" um="mA" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">212</option></par>
+			<par ipa="15829" name="n28" hidden="true" descr="Reserved" defval="0" min="0" max="1000" um="°/oo" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">214</option></par>
+			<par ipa="15830" name="n29" hidden="true" descr="Reserved" defval="0" min="0" max="3" um="num" typepar="enum306" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">216</option></par>
+			<par ipa="15831" name="n30" hidden="true" descr="Emergency opening percentage" defval="0" min="0" max="1000" um="°/oo" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">218</option></par>
+			<par ipa="15832" name="n31" hidden="true" descr="Behaviour on power fail" defval="1" min="0" max="1" um="num" typepar="enum307" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">220</option></par>
+			<par ipa="15833" name="n32" hidden="true" descr="Unipolar W1+ allocation" defval="0" min="0" max="4" um="num" typepar="enum308" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">222</option></par>
+			<par ipa="15834" name="n33" hidden="true" descr="Unipolar W1- allocation" defval="0" min="0" max="4" um="num" typepar="enum308" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">224</option></par>
+			<par ipa="15835" name="n34" hidden="true" descr="Unipolar W2+ allocation" defval="0" min="0" max="4" um="num" typepar="enum308" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">226</option></par>
+			<par ipa="15836" name="n35" hidden="true" descr="Unipolar W2- allocation" defval="0" min="0" max="4" um="num" typepar="enum308" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">228</option></par>
+			<par ipa="15837" name="n36" hidden="true" descr="Number of Battery Backup modules" defval="0" min="0" max="2" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">230</option></par>
+			<par ipa="15838" name="n37" hidden="true" descr="Valve energization time at startup" defval="0" min="0" max="65535" um="ms" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">232</option></par>
+			<par ipa="15839" name="n38" hidden="true" descr="Valve energization time at stop" defval="0" min="0" max="65535" um="ms" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">234</option></par>
+			<par ipa="15840" name="n39" hidden="true" descr="Reserved" defval="0" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">236</option></par>
+			<par ipa="15841" name="n40" hidden="true" descr="Reserved" defval="0" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">238</option></par>
+			<par ipa="16124" name="PowerPackChargeSt" hidden="true" descr="Power Pack Charge Status" defval="0" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">240</option></par>
+			<par ipa="16125" name="PowerPackDischSt" hidden="true" descr="Power Pack Discharge Status" defval="0" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form=""><menu id="209"/><option name="displayAccessLevel">3</option><option name="flashOffset">242</option></par>
+			<par ipa="15524" name="Gain_Ntc_AI1" descr="NTC calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15525" name="Gain_PT1000_AI1" descr="PT1000 calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15526" name="Gain_5Vr_AI1" descr="0-5Vr calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15527" name="Gain_10V_AI1" descr="0-10V calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15528" name="Gain_mA_AI1" descr="4-20mA calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15529" name="Gain_5V_AI1" descr="0-5V calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15530" name="Gain_PTC_AI1" descr="PTC calibration gain AI1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15531" name="Gain_Ntc_AI2" descr="NTC calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15532" name="Gain_PT1000_AI2" descr="PT1000 calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15533" name="Gain_5Vr_AI2" descr="0-5Vr calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15534" name="Gain_10V_AI2" descr="0-10V calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15535" name="Gain_mA_AI2" descr="4-20mA calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15536" name="Gain_5V_AI2" descr="0-5V calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15537" name="Gain_PTC_AI2" descr="PTC calibration gain AI2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15538" name="Gain_Ntc_AI3" descr="NTC calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15539" name="Gain_PT1000_AI3" descr="PT1000 calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15540" name="Gain_5Vr_AI3" descr="0-5Vr calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15541" name="Gain_10V_AI3" descr="0-10V calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15542" name="Gain_mA_AI3" descr="4-20mA calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15543" name="Gain_5V_AI3" descr="0-5V calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15544" name="Gain_PTC_AI3" descr="PTC calibration gain AI3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15545" name="Gain_Ntc_AI4" descr="NTC calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15546" name="Gain_PT1000_AI4" descr="PT1000 calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15547" name="Gain_5Vr_AI4" descr="0-5Vr calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15548" name="Gain_10V_AI4" descr="0-10V calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15549" name="Gain_mA_AI4" descr="4-20mA calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15550" name="Gain_5V_AI4" descr="0-5V calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15551" name="Gain_PTC_AI4" descr="PTC calibration gain AI4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15552" name="Gain_Ntc_AI5" descr="NTC calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15553" name="Gain_PT1000_AI5" descr="PT1000 calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15554" name="Gain_5Vr_AI5" descr="0-5Vr calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15555" name="Gain_10V_AI5" descr="0-10V calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15556" name="Gain_mA_AI5" descr="4-20mA calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15557" name="Gain_5V_AI5" descr="0-5V calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15558" name="Gain_PTC_AI5" descr="PTC calibration gain AI5" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15559" name="Gain_Ntc_AI6" descr="NTC calibration gain AI6" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15560" name="Gain_PT1000_AI6" descr="PT1000 calibration gain AI6" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15561" name="Gain_5Vr_AI6" descr="0-5Vr calibration gain AI6" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15562" name="Gain_10V_AI6" descr="0-10V calibration gain AI6" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15563" name="Gain_mA_AI6" descr="4-20mA calibration gain AI6" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15564" name="Gain_5V_AI6" descr="0-5V calibration gain AI6" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15565" name="Gain_PTC_AI6" descr="PTC calibration gain AI66" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15566" name="Gain_Ntc_AI7" descr="NTC calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15567" name="Gain_PT1000_AI7" descr="PT1000 calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15568" name="Gain_5Vr_AI7" descr="0-5Vr calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15569" name="Gain_10V_AI7" descr="0-10V calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15570" name="Gain_mA_AI7" descr="4-20mA calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15571" name="Gain_5V_AI7" descr="0-5V calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15572" name="Gain_PTC_AI7" descr="PTC calibration gain AI7" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15608" name="Offs_Ntc_AI1" descr="NTC calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15609" name="Offs_PT1000_AI1" descr="PT1000 calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15610" name="Offs_5Vr_AI1" descr="0-5Vr calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15611" name="Offs_10V_AI1" descr="0-10V calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15612" name="Offs_mA_AI1" descr="4-20mA calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15613" name="Offs_5V_AI1" descr="0-5V calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15614" name="Offs_PTC_AI1" descr="PTC calibration offset AI1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15615" name="Offs_Ntc_AI2" descr="NTC calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15616" name="Offs_PT1000_AI2" descr="PT1000 calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15617" name="Offs_5Vr_AI2" descr="0-5Vr calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15618" name="Offs_10V_AI2" descr="0-10V calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15619" name="Offs_mA_AI2" descr="4-20mA calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15620" name="Offs_5V_AI2" descr="0-5V calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15621" name="Offs_PTC_AI2" descr="PTC calibration offset AI2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15622" name="Offs_Ntc_AI3" descr="NTC calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15623" name="Offs_PT1000_AI3" descr="PT1000 calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15624" name="Offs_5Vr_AI3" descr="0-5Vr calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15625" name="Offs_10V_AI3" descr="0-10V calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15626" name="Offs_mA_AI3" descr="4-20mA calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15627" name="Offs_5V_AI3" descr="0-5V calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15628" name="Offs_PTC_AI3" descr="PTC calibration offset AI3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15629" name="Offs_Ntc_AI4" descr="NTC calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15630" name="Offs_PT1000_AI4" descr="PT1000 calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15631" name="Offs_5Vr_AI4" descr="0-5Vr calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15632" name="Offs_10V_AI4" descr="0-10V calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15633" name="Offs_mA_AI4" descr="4-20mA calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15634" name="Offs_5V_AI4" descr="0-5V calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15635" name="Offs_PTC_AI4" descr="PTC calibration offset AI4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15636" name="Offs_Ntc_AI5" descr="NTC calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15637" name="Offs_PT1000_AI5" descr="PT1000 calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15638" name="Offs_5Vr_AI5" descr="0-5Vr calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15639" name="Offs_10V_AI5" descr="0-10V calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15640" name="Offs_mA_AI5" descr="4-20mA calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15641" name="Offs_5V_AI5" descr="0-5V calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15642" name="Offs_PTC_AI5" descr="PTC calibration offset AI5" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15643" name="Offs_Ntc_AI6" descr="NTC calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15644" name="Offs_PT1000_AI6" descr="PT1000 calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15645" name="Offs_5Vr_AI6" descr="0-5Vr calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15646" name="Offs_10V_AI6" descr="0-10V calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15647" name="Offs_mA_AI6" descr="4-20mA calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15648" name="Offs_5V_AI6" descr="0-5V calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15649" name="Offs_PTC_AI6" descr="PTC calibration offset AI6" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15650" name="Offs_Ntc_AI7" descr="NTC calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15651" name="Offs_PT1000_AI7" descr="PT1000 calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15652" name="Offs_5Vr_AI7" descr="0-5Vr calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15653" name="Offs_10V_AI7" descr="0-10V calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15654" name="Offs_mA_AI7" descr="4-20mA calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15655" name="Offs_5V_AI7" descr="0-5V calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15656" name="Offs_PTC_AI7" descr="PTC calibration offset AI7" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="206"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15692" name="Gain_10V_AO1" descr="0-10V calibration gain AO1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15693" name="Gain_mA_AO1" descr="4-20mA calibration gain AO1" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15694" name="Gain_10V_AO2" descr="0-10V calibration gain AO2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15695" name="Gain_mA_AO2" descr="4-20mA calibration gain AO2" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15696" name="Gain_10V_AO3" descr="0-10V calibration gain AO3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15697" name="Gain_mA_AO3" descr="4-20mA calibration gain AO3" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15698" name="Gain_10V_AO4" descr="0-10V calibration gain AO4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15699" name="Gain_mA_AO4" descr="4-20mA calibration gain AO4" defval="32768" min="0" max="65535" um="num" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15704" name="Offs_10V_AO1" descr="0-10V calibration offset AO1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15705" name="Offs_mA_AO1" descr="4-20mA calibration offset AO1" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15706" name="Offs_10V_AO2" descr="0-10V calibration offset AO2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15707" name="Offs_mA_AO2" descr="4-20mA calibration offset AO2" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15708" name="Offs_10V_AO3" descr="0-10V calibration offset AO3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15709" name="Offs_mA_AO3" descr="4-20mA calibration offset AO3" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15710" name="Offs_10V_AO4" descr="0-10V calibration offset AO4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="15711" name="Offs_mA_AO4" descr="4-20mA calibration offset AO4" defval="0" min="-32768" max="32767" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="207"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="65103" hidden="true" name="IPA_SAVEPARAMETERS" descr="IPA_SAVEPARAMETERS" defval="0" um="" typepar="boolean" typetarg="boolean">
+				<protocol name="Modbus" commaddr="65103" commsubindex="0"/>
+				<protocol name="CanOpen" commaddr="65103" commsubindex="0"/>
+			</par>
+			<par ipa="65104" hidden="true" name="IPA_RESETTARGET" descr="IPA_RESETTARGET" defval="0" um="" typepar="boolean" typetarg="boolean">
+				<protocol name="Modbus" commaddr="65104" commsubindex="0"/>
+				<protocol name="CanOpen" commaddr="65104" commsubindex="0"/>
+			</par>
+			<par ipa="65105" hidden="true" name="IPA_ALARMSTATUS" descr="IPA_ALARMSTATUS" defval="0" um="" typepar="unsignedInt" typetarg="unsignedInt" readonly="true">
+				<protocol name="Modbus" commaddr="65105" commsubindex="0"/>
+				<protocol name="CanOpen" commaddr="65105" commsubindex="0"/>
+			</par>
+			<par ipa="65107" hidden="true" name="IPA_RESTOREDEFAULTS" descr="IPA_RESTOREDEFAULTS" defval="0" um="" typepar="boolean" typetarg="boolean">
+				<protocol name="Modbus" commaddr="65107" commsubindex="0"/>
+				<protocol name="CanOpen" commaddr="65107" commsubindex="0"/>
+			</par>
+			<par ipa="65108" hidden="true" name="IPA_SETDEFAULTSATSTARTUP" descr="IPA_SETDEFAULTSATSTARTUP" defval="0" um="" typepar="boolean" typetarg="boolean">
+				<protocol name="Modbus" commaddr="65108" commsubindex="0"/>
+				<protocol name="CanOpen" commaddr="65108" commsubindex="0"/>
+			</par>
+			<par ipa="8336" name="AIL1" descr="AIL1 analogue input" defval="-32768" min="" max="" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8337" name="AIL2" descr="AIL2 analogue input" defval="-32768" min="" max="" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8338" name="AIL3" descr="AIL3 analogue input" defval="-32768" min="" max="" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8339" name="AIL4" descr="AIL4 analogue input" defval="-32768" min="" max="" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8340" name="AIL5" descr="AIL5 analogue input" defval="-32768" min="" max="" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8341" name="AIL6" descr="AIL6 analogue input" defval="-32768" min="" max="" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8342" name="AIL7" descr="AIL7 analogue input" defval="-32768" min="0" max="1" um="num" typepar="short" typetarg="short" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8192" name="DIL1" descr="DIL1 digital input" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8193" name="DIL2" descr="DIL2 digital input" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8194" name="DIL3" descr="DIL3 digital input" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8195" name="DIL4" descr="DIL4 digital input" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8196" name="DIL5" descr="DIL5 digital input" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8197" name="DIL6" descr="DIL6 digital input" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8528" name="DOL1" descr="DOL1 digital output" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8529" name="DOL2" descr="DOL2 digital output" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8530" name="DOL3" descr="DOL3 digital output" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8531" name="DOL4" descr="DOL4 digital output" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8532" name="DOL5" descr="DOL5 digital output" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8448" name="AOL1" descr="AOL1 analogue output" defval="0" min="0" max="1000" um="%" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form="%.1D"><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8449" name="AOL2" descr="AOL2 analogue output" defval="0" min="0" max="1000" um="%" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form="%.1D"><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8450" name="AOL3" descr="AOL3 analogue output" defval="0" min="0" max="1000" um="%" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form="%.1D"><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8451" name="AOL4" descr="AOL4 analogue output" defval="0" min="0" max="1000" um="%" typepar="unsignedShort" typetarg="unsignedShort" scale="1" offs="0" readonly="false" form="%.1D"><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8752" name="FD1_counter" descr="FD1c FDI1 input counter" shortdescr="FD1c" defval="0" min="" max="" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8754" name="FD1_frequency" descr="FD1f FDI1 frequency" shortdescr="FD1f" defval="0" min="" max="" um="Hz" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="true" form="%.1D"><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8760" name="FD1_value" descr="FD1i FDI1 digital input" shortdescr="FD1i" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8761" name="FD1_reset_counter" descr="FD1r FDI1 reset input counter value" shortdescr="FD1r" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8898" name="FD2_counter" descr="FD2c FDI2 input counter" shortdescr="FD2c" defval="0" min="" max="" um="num" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8900" name="FD2_frequency" descr="FD2f FDI2 frequency" shortdescr="FD2f" defval="0" min="" max="" um="Hz" typepar="unsignedInt" typetarg="unsignedInt" scale="1" offs="0" readonly="true" form="%.1D"><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8902" name="FD2_value" descr="FD2i FDI2 digital input" shortdescr="FD2i" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8903" name="FD2_reset_counter" descr="FD2r FDI2 reset input counter value" shortdescr="FD2r" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="500"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8736" name="sysClock_seconds" descr="Second value" defval="0" min="0" max="59" um="s" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8737" name="sysClock_minutes" descr="Minute value" defval="0" min="0" max="59" um="min" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8738" name="sysClock_hours" descr="Hour value" defval="0" min="0" max="23" um="hours" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8739" name="sysClock_dayweek" descr="Day of week value" defval="0" min="0" max="6" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8740" name="sysClock_daymonth" descr="Day of the month value" defval="1" min="1" max="31" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8741" name="sysClock_month" descr="Month value" defval="1" min="1" max="12" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8742" name="sysClock_year" descr="Year value" defval="0" min="10" max="99" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8743" name="sysClock_Error" descr="RTC not inizialized" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="true" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8744" name="sysClockSet_seconds" descr="SEC Second value (write)" shortdescr="SEC" defval="0" min="0" max="59" um="sec" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8745" name="sysClockSet_minutes" descr="MIN Minute value (write)" shortdescr="MIN" defval="0" min="0" max="59" um="min" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8746" name="sysClockSet_hours" descr="HOUR Hour value (write)" shortdescr="HOUR" defval="0" min="0" max="23" um="hours" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8747" name="sysClockSet_dayweek" descr="WDAY Day of week value (write)" shortdescr="WDAY" defval="0" min="0" max="6" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8748" name="sysClockSet_daymonth" descr="MDAY Day of the month value (write)" shortdescr="MDAY" defval="1" min="1" max="31" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8749" name="sysClockSet_month" descr="MONT Month value (write)" shortdescr="MONT" defval="1" min="1" max="12" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8750" name="sysClockSet_year" descr="YEAR Year value (write)" shortdescr="YEAR" defval="0" min="10" max="99" um="num" typepar="unsignedChar" typetarg="unsignedChar" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8751" name="sysClockSet_Upload" descr="RTC upload" defval="0" min="0" max="1" um="flag" typepar="boolean" typetarg="boolean" scale="1" offs="0" readonly="false" form=""><menu id="501"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="24320" name="PASSWORD" descr="Numeric Password for Application protection. Write-only parameter, One Time Programmable!!!" defval="4294967295" min="0" max="4294967295" um="num" typepar="unsignedInt" typetarg="unsignedInt" writeonly="true"><menu id="502"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8756" name="USB_Host_command" descr="FN00 USB-Host Command" shortdescr="FN00" defval="0" min="0" max="218" um="num" typepar="enum24" typetarg="unsignedInt" scale="1" readonly="false" form="%d"><menu id="503"/><option name="displayAccessLevel">3</option></par>
+			<par ipa="8758" name="USB_Host_status" descr="FN01 Result of USB-Host command" shortdescr="FN01" defval="0" min="0" max="255" um="num" typepar="enum21" typetarg="unsignedInt" scale="1" readonly="true" form="%d"><menu id="503"/><option name="displayAccessLevel">3</option></par>
+		</parameters><enums>
+			<enum id="100">
+				<elem value="0" descr="synchronous acyclic"/>
+				<elem value="1" descr="synchronous cyclic 1"/>
+				<elem value="2" descr="synchronous cyclic 2"/>
+				<elem value="3" descr="synchronous cyclic 3"/>
+				<elem value="4" descr="synchronous cyclic 4"/>
+				<elem value="5" descr="synchronous cyclic 5"/>
+				<elem value="6" descr="synchronous cyclic 6"/>
+				<elem value="7" descr="synchronous cyclic 7"/>
+				<elem value="8" descr="synchronous cyclic 8"/>
+				<elem value="9" descr="synchronous cyclic 9"/>
+				<elem value="10" descr="synchronous cyclic 10"/>
+				<elem value="11" descr="synchronous cyclic 11"/>
+				<elem value="12" descr="synchronous cyclic 12"/>
+				<elem value="13" descr="synchronous cyclic 13"/>
+				<elem value="14" descr="synchronous cyclic 14"/>
+				<elem value="15" descr="synchronous cyclic 15"/>
+				<elem value="16" descr="synchronous cyclic 16"/>
+				<elem value="17" descr="synchronous cyclic 17"/>
+				<elem value="18" descr="synchronous cyclic 18"/>
+				<elem value="19" descr="synchronous cyclic 19"/>
+				<elem value="20" descr="synchronous cyclic 20"/>
+				<elem value="21" descr="synchronous cyclic 21"/>
+				<elem value="22" descr="synchronous cyclic 22"/>
+				<elem value="23" descr="synchronous cyclic 23"/>
+				<elem value="24" descr="synchronous cyclic 24"/>
+				<elem value="25" descr="synchronous cyclic 25"/>
+				<elem value="26" descr="synchronous cyclic 26"/>
+				<elem value="27" descr="synchronous cyclic 27"/>
+				<elem value="28" descr="synchronous cyclic 28"/>
+				<elem value="29" descr="synchronous cyclic 29"/>
+				<elem value="30" descr="synchronous cyclic 30"/>
+				<elem value="31" descr="synchronous cyclic 31"/>
+				<elem value="32" descr="synchronous cyclic 32"/>
+				<elem value="33" descr="synchronous cyclic 33"/>
+				<elem value="34" descr="synchronous cyclic 34"/>
+				<elem value="35" descr="synchronous cyclic 35"/>
+				<elem value="36" descr="synchronous cyclic 36"/>
+				<elem value="37" descr="synchronous cyclic 37"/>
+				<elem value="38" descr="synchronous cyclic 38"/>
+				<elem value="39" descr="synchronous cyclic 39"/>
+				<elem value="40" descr="synchronous cyclic 40"/>
+				<elem value="41" descr="synchronous cyclic 41"/>
+				<elem value="42" descr="synchronous cyclic 42"/>
+				<elem value="43" descr="synchronous cyclic 43"/>
+				<elem value="44" descr="synchronous cyclic 44"/>
+				<elem value="45" descr="synchronous cyclic 45"/>
+				<elem value="46" descr="synchronous cyclic 46"/>
+				<elem value="47" descr="synchronous cyclic 47"/>
+				<elem value="48" descr="synchronous cyclic 48"/>
+				<elem value="49" descr="synchronous cyclic 49"/>
+				<elem value="50" descr="synchronous cyclic 50"/>
+				<elem value="51" descr="synchronous cyclic 51"/>
+				<elem value="52" descr="synchronous cyclic 52"/>
+				<elem value="53" descr="synchronous cyclic 53"/>
+				<elem value="54" descr="synchronous cyclic 54"/>
+				<elem value="55" descr="synchronous cyclic 55"/>
+				<elem value="56" descr="synchronous cyclic 56"/>
+				<elem value="57" descr="synchronous cyclic 57"/>
+				<elem value="58" descr="synchronous cyclic 58"/>
+				<elem value="59" descr="synchronous cyclic 59"/>
+				<elem value="60" descr="synchronous cyclic 60"/>
+				<elem value="61" descr="synchronous cyclic 61"/>
+				<elem value="62" descr="synchronous cyclic 62"/>
+				<elem value="63" descr="synchronous cyclic 63"/>
+				<elem value="64" descr="synchronous cyclic 64"/>
+				<elem value="65" descr="synchronous cyclic 65"/>
+				<elem value="66" descr="synchronous cyclic 66"/>
+				<elem value="67" descr="synchronous cyclic 67"/>
+				<elem value="68" descr="synchronous cyclic 68"/>
+				<elem value="69" descr="synchronous cyclic 69"/>
+				<elem value="70" descr="synchronous cyclic 70"/>
+				<elem value="71" descr="synchronous cyclic 71"/>
+				<elem value="72" descr="synchronous cyclic 72"/>
+				<elem value="73" descr="synchronous cyclic 73"/>
+				<elem value="74" descr="synchronous cyclic 74"/>
+				<elem value="75" descr="synchronous cyclic 75"/>
+				<elem value="76" descr="synchronous cyclic 76"/>
+				<elem value="77" descr="synchronous cyclic 77"/>
+				<elem value="78" descr="synchronous cyclic 78"/>
+				<elem value="79" descr="synchronous cyclic 79"/>
+				<elem value="80" descr="synchronous cyclic 80"/>
+				<elem value="81" descr="synchronous cyclic 81"/>
+				<elem value="82" descr="synchronous cyclic 82"/>
+				<elem value="83" descr="synchronous cyclic 83"/>
+				<elem value="84" descr="synchronous cyclic 84"/>
+				<elem value="85" descr="synchronous cyclic 85"/>
+				<elem value="86" descr="synchronous cyclic 86"/>
+				<elem value="87" descr="synchronous cyclic 87"/>
+				<elem value="88" descr="synchronous cyclic 88"/>
+				<elem value="89" descr="synchronous cyclic 89"/>
+				<elem value="90" descr="synchronous cyclic 90"/>
+				<elem value="91" descr="synchronous cyclic 91"/>
+				<elem value="92" descr="synchronous cyclic 92"/>
+				<elem value="93" descr="synchronous cyclic 93"/>
+				<elem value="94" descr="synchronous cyclic 94"/>
+				<elem value="95" descr="synchronous cyclic 95"/>
+				<elem value="96" descr="synchronous cyclic 96"/>
+				<elem value="97" descr="synchronous cyclic 97"/>
+				<elem value="98" descr="synchronous cyclic 98"/>
+				<elem value="99" descr="synchronous cyclic 99"/>
+				<elem value="100" descr="synchronous cyclic 100"/>
+				<elem value="101" descr="synchronous cyclic 101"/>
+				<elem value="102" descr="synchronous cyclic 102"/>
+				<elem value="103" descr="synchronous cyclic 103"/>
+				<elem value="104" descr="synchronous cyclic 104"/>
+				<elem value="105" descr="synchronous cyclic 105"/>
+				<elem value="106" descr="synchronous cyclic 106"/>
+				<elem value="107" descr="synchronous cyclic 107"/>
+				<elem value="108" descr="synchronous cyclic 108"/>
+				<elem value="109" descr="synchronous cyclic 109"/>
+				<elem value="110" descr="synchronous cyclic 110"/>
+				<elem value="111" descr="synchronous cyclic 111"/>
+				<elem value="112" descr="synchronous cyclic 112"/>
+				<elem value="113" descr="synchronous cyclic 113"/>
+				<elem value="114" descr="synchronous cyclic 114"/>
+				<elem value="115" descr="synchronous cyclic 115"/>
+				<elem value="116" descr="synchronous cyclic 116"/>
+				<elem value="117" descr="synchronous cyclic 117"/>
+				<elem value="118" descr="synchronous cyclic 118"/>
+				<elem value="119" descr="synchronous cyclic 119"/>
+				<elem value="120" descr="synchronous cyclic 120"/>
+				<elem value="121" descr="synchronous cyclic 121"/>
+				<elem value="122" descr="synchronous cyclic 122"/>
+				<elem value="123" descr="synchronous cyclic 123"/>
+				<elem value="124" descr="synchronous cyclic 124"/>
+				<elem value="125" descr="synchronous cyclic 125"/>
+				<elem value="126" descr="synchronous cyclic 126"/>
+				<elem value="127" descr="synchronous cyclic 127"/>
+				<elem value="128" descr="synchronous cyclic 128"/>
+				<elem value="129" descr="synchronous cyclic 129"/>
+				<elem value="130" descr="synchronous cyclic 130"/>
+				<elem value="131" descr="synchronous cyclic 131"/>
+				<elem value="132" descr="synchronous cyclic 132"/>
+				<elem value="133" descr="synchronous cyclic 133"/>
+				<elem value="134" descr="synchronous cyclic 134"/>
+				<elem value="135" descr="synchronous cyclic 135"/>
+				<elem value="136" descr="synchronous cyclic 136"/>
+				<elem value="137" descr="synchronous cyclic 137"/>
+				<elem value="138" descr="synchronous cyclic 138"/>
+				<elem value="139" descr="synchronous cyclic 139"/>
+				<elem value="140" descr="synchronous cyclic 140"/>
+				<elem value="141" descr="synchronous cyclic 141"/>
+				<elem value="142" descr="synchronous cyclic 142"/>
+				<elem value="143" descr="synchronous cyclic 143"/>
+				<elem value="144" descr="synchronous cyclic 144"/>
+				<elem value="145" descr="synchronous cyclic 145"/>
+				<elem value="146" descr="synchronous cyclic 146"/>
+				<elem value="147" descr="synchronous cyclic 147"/>
+				<elem value="148" descr="synchronous cyclic 148"/>
+				<elem value="149" descr="synchronous cyclic 149"/>
+				<elem value="150" descr="synchronous cyclic 150"/>
+				<elem value="151" descr="synchronous cyclic 151"/>
+				<elem value="152" descr="synchronous cyclic 152"/>
+				<elem value="153" descr="synchronous cyclic 153"/>
+				<elem value="154" descr="synchronous cyclic 154"/>
+				<elem value="155" descr="synchronous cyclic 155"/>
+				<elem value="156" descr="synchronous cyclic 156"/>
+				<elem value="157" descr="synchronous cyclic 157"/>
+				<elem value="158" descr="synchronous cyclic 158"/>
+				<elem value="159" descr="synchronous cyclic 159"/>
+				<elem value="160" descr="synchronous cyclic 160"/>
+				<elem value="161" descr="synchronous cyclic 161"/>
+				<elem value="162" descr="synchronous cyclic 162"/>
+				<elem value="163" descr="synchronous cyclic 163"/>
+				<elem value="164" descr="synchronous cyclic 164"/>
+				<elem value="165" descr="synchronous cyclic 165"/>
+				<elem value="166" descr="synchronous cyclic 166"/>
+				<elem value="167" descr="synchronous cyclic 167"/>
+				<elem value="168" descr="synchronous cyclic 168"/>
+				<elem value="169" descr="synchronous cyclic 169"/>
+				<elem value="170" descr="synchronous cyclic 170"/>
+				<elem value="171" descr="synchronous cyclic 171"/>
+				<elem value="172" descr="synchronous cyclic 172"/>
+				<elem value="173" descr="synchronous cyclic 173"/>
+				<elem value="174" descr="synchronous cyclic 174"/>
+				<elem value="175" descr="synchronous cyclic 175"/>
+				<elem value="176" descr="synchronous cyclic 176"/>
+				<elem value="177" descr="synchronous cyclic 177"/>
+				<elem value="178" descr="synchronous cyclic 178"/>
+				<elem value="179" descr="synchronous cyclic 179"/>
+				<elem value="180" descr="synchronous cyclic 180"/>
+				<elem value="181" descr="synchronous cyclic 181"/>
+				<elem value="182" descr="synchronous cyclic 182"/>
+				<elem value="183" descr="synchronous cyclic 183"/>
+				<elem value="184" descr="synchronous cyclic 184"/>
+				<elem value="185" descr="synchronous cyclic 185"/>
+				<elem value="186" descr="synchronous cyclic 186"/>
+				<elem value="187" descr="synchronous cyclic 187"/>
+				<elem value="188" descr="synchronous cyclic 188"/>
+				<elem value="189" descr="synchronous cyclic 189"/>
+				<elem value="190" descr="synchronous cyclic 190"/>
+				<elem value="191" descr="synchronous cyclic 191"/>
+				<elem value="192" descr="synchronous cyclic 192"/>
+				<elem value="193" descr="synchronous cyclic 193"/>
+				<elem value="194" descr="synchronous cyclic 194"/>
+				<elem value="195" descr="synchronous cyclic 195"/>
+				<elem value="196" descr="synchronous cyclic 196"/>
+				<elem value="197" descr="synchronous cyclic 197"/>
+				<elem value="198" descr="synchronous cyclic 198"/>
+				<elem value="199" descr="synchronous cyclic 199"/>
+				<elem value="200" descr="synchronous cyclic 200"/>
+				<elem value="201" descr="synchronous cyclic 201"/>
+				<elem value="202" descr="synchronous cyclic 202"/>
+				<elem value="203" descr="synchronous cyclic 203"/>
+				<elem value="204" descr="synchronous cyclic 204"/>
+				<elem value="205" descr="synchronous cyclic 205"/>
+				<elem value="206" descr="synchronous cyclic 206"/>
+				<elem value="207" descr="synchronous cyclic 207"/>
+				<elem value="208" descr="synchronous cyclic 208"/>
+				<elem value="209" descr="synchronous cyclic 209"/>
+				<elem value="210" descr="synchronous cyclic 210"/>
+				<elem value="211" descr="synchronous cyclic 211"/>
+				<elem value="212" descr="synchronous cyclic 212"/>
+				<elem value="213" descr="synchronous cyclic 213"/>
+				<elem value="214" descr="synchronous cyclic 214"/>
+				<elem value="215" descr="synchronous cyclic 215"/>
+				<elem value="216" descr="synchronous cyclic 216"/>
+				<elem value="217" descr="synchronous cyclic 217"/>
+				<elem value="218" descr="synchronous cyclic 218"/>
+				<elem value="219" descr="synchronous cyclic 219"/>
+				<elem value="220" descr="synchronous cyclic 220"/>
+				<elem value="221" descr="synchronous cyclic 221"/>
+				<elem value="222" descr="synchronous cyclic 222"/>
+				<elem value="223" descr="synchronous cyclic 223"/>
+				<elem value="224" descr="synchronous cyclic 224"/>
+				<elem value="225" descr="synchronous cyclic 225"/>
+				<elem value="226" descr="synchronous cyclic 226"/>
+				<elem value="227" descr="synchronous cyclic 227"/>
+				<elem value="228" descr="synchronous cyclic 228"/>
+				<elem value="229" descr="synchronous cyclic 229"/>
+				<elem value="230" descr="synchronous cyclic 230"/>
+				<elem value="231" descr="synchronous cyclic 231"/>
+				<elem value="232" descr="synchronous cyclic 232"/>
+				<elem value="233" descr="synchronous cyclic 233"/>
+				<elem value="234" descr="synchronous cyclic 234"/>
+				<elem value="235" descr="synchronous cyclic 235"/>
+				<elem value="236" descr="synchronous cyclic 236"/>
+				<elem value="237" descr="synchronous cyclic 237"/>
+				<elem value="238" descr="synchronous cyclic 238"/>
+				<elem value="239" descr="synchronous cyclic 239"/>
+				<elem value="240" descr="synchronous cyclic 240"/>
+				<elem value="252" descr="synchronous RTR-only"/>
+				<elem value="253" descr="asynchronous RTR-only"/>
+				<elem value="254" descr="asynchronous on event (254)"/>
+				<elem value="255" descr="asynchronous on event"/>
+			</enum>
+			<enum id="101">
+				<elem value="0" descr="synchronous acyclic"/>
+				<elem value="1" descr="synchronous cyclic 1"/>
+				<elem value="2" descr="synchronous cyclic 2"/>
+				<elem value="3" descr="synchronous cyclic 3"/>
+				<elem value="4" descr="synchronous cyclic 4"/>
+				<elem value="5" descr="synchronous cyclic 5"/>
+				<elem value="6" descr="synchronous cyclic 6"/>
+				<elem value="7" descr="synchronous cyclic 7"/>
+				<elem value="8" descr="synchronous cyclic 8"/>
+				<elem value="9" descr="synchronous cyclic 9"/>
+				<elem value="10" descr="synchronous cyclic 10"/>
+				<elem value="11" descr="synchronous cyclic 11"/>
+				<elem value="12" descr="synchronous cyclic 12"/>
+				<elem value="13" descr="synchronous cyclic 13"/>
+				<elem value="14" descr="synchronous cyclic 14"/>
+				<elem value="15" descr="synchronous cyclic 15"/>
+				<elem value="16" descr="synchronous cyclic 16"/>
+				<elem value="17" descr="synchronous cyclic 17"/>
+				<elem value="18" descr="synchronous cyclic 18"/>
+				<elem value="19" descr="synchronous cyclic 19"/>
+				<elem value="20" descr="synchronous cyclic 20"/>
+				<elem value="21" descr="synchronous cyclic 21"/>
+				<elem value="22" descr="synchronous cyclic 22"/>
+				<elem value="23" descr="synchronous cyclic 23"/>
+				<elem value="24" descr="synchronous cyclic 24"/>
+				<elem value="25" descr="synchronous cyclic 25"/>
+				<elem value="26" descr="synchronous cyclic 26"/>
+				<elem value="27" descr="synchronous cyclic 27"/>
+				<elem value="28" descr="synchronous cyclic 28"/>
+				<elem value="29" descr="synchronous cyclic 29"/>
+				<elem value="30" descr="synchronous cyclic 30"/>
+				<elem value="31" descr="synchronous cyclic 31"/>
+				<elem value="32" descr="synchronous cyclic 32"/>
+				<elem value="33" descr="synchronous cyclic 33"/>
+				<elem value="34" descr="synchronous cyclic 34"/>
+				<elem value="35" descr="synchronous cyclic 35"/>
+				<elem value="36" descr="synchronous cyclic 36"/>
+				<elem value="37" descr="synchronous cyclic 37"/>
+				<elem value="38" descr="synchronous cyclic 38"/>
+				<elem value="39" descr="synchronous cyclic 39"/>
+				<elem value="40" descr="synchronous cyclic 40"/>
+				<elem value="41" descr="synchronous cyclic 41"/>
+				<elem value="42" descr="synchronous cyclic 42"/>
+				<elem value="43" descr="synchronous cyclic 43"/>
+				<elem value="44" descr="synchronous cyclic 44"/>
+				<elem value="45" descr="synchronous cyclic 45"/>
+				<elem value="46" descr="synchronous cyclic 46"/>
+				<elem value="47" descr="synchronous cyclic 47"/>
+				<elem value="48" descr="synchronous cyclic 48"/>
+				<elem value="49" descr="synchronous cyclic 49"/>
+				<elem value="50" descr="synchronous cyclic 50"/>
+				<elem value="51" descr="synchronous cyclic 51"/>
+				<elem value="52" descr="synchronous cyclic 52"/>
+				<elem value="53" descr="synchronous cyclic 53"/>
+				<elem value="54" descr="synchronous cyclic 54"/>
+				<elem value="55" descr="synchronous cyclic 55"/>
+				<elem value="56" descr="synchronous cyclic 56"/>
+				<elem value="57" descr="synchronous cyclic 57"/>
+				<elem value="58" descr="synchronous cyclic 58"/>
+				<elem value="59" descr="synchronous cyclic 59"/>
+				<elem value="60" descr="synchronous cyclic 60"/>
+				<elem value="61" descr="synchronous cyclic 61"/>
+				<elem value="62" descr="synchronous cyclic 62"/>
+				<elem value="63" descr="synchronous cyclic 63"/>
+				<elem value="64" descr="synchronous cyclic 64"/>
+				<elem value="65" descr="synchronous cyclic 65"/>
+				<elem value="66" descr="synchronous cyclic 66"/>
+				<elem value="67" descr="synchronous cyclic 67"/>
+				<elem value="68" descr="synchronous cyclic 68"/>
+				<elem value="69" descr="synchronous cyclic 69"/>
+				<elem value="70" descr="synchronous cyclic 70"/>
+				<elem value="71" descr="synchronous cyclic 71"/>
+				<elem value="72" descr="synchronous cyclic 72"/>
+				<elem value="73" descr="synchronous cyclic 73"/>
+				<elem value="74" descr="synchronous cyclic 74"/>
+				<elem value="75" descr="synchronous cyclic 75"/>
+				<elem value="76" descr="synchronous cyclic 76"/>
+				<elem value="77" descr="synchronous cyclic 77"/>
+				<elem value="78" descr="synchronous cyclic 78"/>
+				<elem value="79" descr="synchronous cyclic 79"/>
+				<elem value="80" descr="synchronous cyclic 80"/>
+				<elem value="81" descr="synchronous cyclic 81"/>
+				<elem value="82" descr="synchronous cyclic 82"/>
+				<elem value="83" descr="synchronous cyclic 83"/>
+				<elem value="84" descr="synchronous cyclic 84"/>
+				<elem value="85" descr="synchronous cyclic 85"/>
+				<elem value="86" descr="synchronous cyclic 86"/>
+				<elem value="87" descr="synchronous cyclic 87"/>
+				<elem value="88" descr="synchronous cyclic 88"/>
+				<elem value="89" descr="synchronous cyclic 89"/>
+				<elem value="90" descr="synchronous cyclic 90"/>
+				<elem value="91" descr="synchronous cyclic 91"/>
+				<elem value="92" descr="synchronous cyclic 92"/>
+				<elem value="93" descr="synchronous cyclic 93"/>
+				<elem value="94" descr="synchronous cyclic 94"/>
+				<elem value="95" descr="synchronous cyclic 95"/>
+				<elem value="96" descr="synchronous cyclic 96"/>
+				<elem value="97" descr="synchronous cyclic 97"/>
+				<elem value="98" descr="synchronous cyclic 98"/>
+				<elem value="99" descr="synchronous cyclic 99"/>
+				<elem value="100" descr="synchronous cyclic 100"/>
+				<elem value="101" descr="synchronous cyclic 101"/>
+				<elem value="102" descr="synchronous cyclic 102"/>
+				<elem value="103" descr="synchronous cyclic 103"/>
+				<elem value="104" descr="synchronous cyclic 104"/>
+				<elem value="105" descr="synchronous cyclic 105"/>
+				<elem value="106" descr="synchronous cyclic 106"/>
+				<elem value="107" descr="synchronous cyclic 107"/>
+				<elem value="108" descr="synchronous cyclic 108"/>
+				<elem value="109" descr="synchronous cyclic 109"/>
+				<elem value="110" descr="synchronous cyclic 110"/>
+				<elem value="111" descr="synchronous cyclic 111"/>
+				<elem value="112" descr="synchronous cyclic 112"/>
+				<elem value="113" descr="synchronous cyclic 113"/>
+				<elem value="114" descr="synchronous cyclic 114"/>
+				<elem value="115" descr="synchronous cyclic 115"/>
+				<elem value="116" descr="synchronous cyclic 116"/>
+				<elem value="117" descr="synchronous cyclic 117"/>
+				<elem value="118" descr="synchronous cyclic 118"/>
+				<elem value="119" descr="synchronous cyclic 119"/>
+				<elem value="120" descr="synchronous cyclic 120"/>
+				<elem value="121" descr="synchronous cyclic 121"/>
+				<elem value="122" descr="synchronous cyclic 122"/>
+				<elem value="123" descr="synchronous cyclic 123"/>
+				<elem value="124" descr="synchronous cyclic 124"/>
+				<elem value="125" descr="synchronous cyclic 125"/>
+				<elem value="126" descr="synchronous cyclic 126"/>
+				<elem value="127" descr="synchronous cyclic 127"/>
+				<elem value="128" descr="synchronous cyclic 128"/>
+				<elem value="129" descr="synchronous cyclic 129"/>
+				<elem value="130" descr="synchronous cyclic 130"/>
+				<elem value="131" descr="synchronous cyclic 131"/>
+				<elem value="132" descr="synchronous cyclic 132"/>
+				<elem value="133" descr="synchronous cyclic 133"/>
+				<elem value="134" descr="synchronous cyclic 134"/>
+				<elem value="135" descr="synchronous cyclic 135"/>
+				<elem value="136" descr="synchronous cyclic 136"/>
+				<elem value="137" descr="synchronous cyclic 137"/>
+				<elem value="138" descr="synchronous cyclic 138"/>
+				<elem value="139" descr="synchronous cyclic 139"/>
+				<elem value="140" descr="synchronous cyclic 140"/>
+				<elem value="141" descr="synchronous cyclic 141"/>
+				<elem value="142" descr="synchronous cyclic 142"/>
+				<elem value="143" descr="synchronous cyclic 143"/>
+				<elem value="144" descr="synchronous cyclic 144"/>
+				<elem value="145" descr="synchronous cyclic 145"/>
+				<elem value="146" descr="synchronous cyclic 146"/>
+				<elem value="147" descr="synchronous cyclic 147"/>
+				<elem value="148" descr="synchronous cyclic 148"/>
+				<elem value="149" descr="synchronous cyclic 149"/>
+				<elem value="150" descr="synchronous cyclic 150"/>
+				<elem value="151" descr="synchronous cyclic 151"/>
+				<elem value="152" descr="synchronous cyclic 152"/>
+				<elem value="153" descr="synchronous cyclic 153"/>
+				<elem value="154" descr="synchronous cyclic 154"/>
+				<elem value="155" descr="synchronous cyclic 155"/>
+				<elem value="156" descr="synchronous cyclic 156"/>
+				<elem value="157" descr="synchronous cyclic 157"/>
+				<elem value="158" descr="synchronous cyclic 158"/>
+				<elem value="159" descr="synchronous cyclic 159"/>
+				<elem value="160" descr="synchronous cyclic 160"/>
+				<elem value="161" descr="synchronous cyclic 161"/>
+				<elem value="162" descr="synchronous cyclic 162"/>
+				<elem value="163" descr="synchronous cyclic 163"/>
+				<elem value="164" descr="synchronous cyclic 164"/>
+				<elem value="165" descr="synchronous cyclic 165"/>
+				<elem value="166" descr="synchronous cyclic 166"/>
+				<elem value="167" descr="synchronous cyclic 167"/>
+				<elem value="168" descr="synchronous cyclic 168"/>
+				<elem value="169" descr="synchronous cyclic 169"/>
+				<elem value="170" descr="synchronous cyclic 170"/>
+				<elem value="171" descr="synchronous cyclic 171"/>
+				<elem value="172" descr="synchronous cyclic 172"/>
+				<elem value="173" descr="synchronous cyclic 173"/>
+				<elem value="174" descr="synchronous cyclic 174"/>
+				<elem value="175" descr="synchronous cyclic 175"/>
+				<elem value="176" descr="synchronous cyclic 176"/>
+				<elem value="177" descr="synchronous cyclic 177"/>
+				<elem value="178" descr="synchronous cyclic 178"/>
+				<elem value="179" descr="synchronous cyclic 179"/>
+				<elem value="180" descr="synchronous cyclic 180"/>
+				<elem value="181" descr="synchronous cyclic 181"/>
+				<elem value="182" descr="synchronous cyclic 182"/>
+				<elem value="183" descr="synchronous cyclic 183"/>
+				<elem value="184" descr="synchronous cyclic 184"/>
+				<elem value="185" descr="synchronous cyclic 185"/>
+				<elem value="186" descr="synchronous cyclic 186"/>
+				<elem value="187" descr="synchronous cyclic 187"/>
+				<elem value="188" descr="synchronous cyclic 188"/>
+				<elem value="189" descr="synchronous cyclic 189"/>
+				<elem value="190" descr="synchronous cyclic 190"/>
+				<elem value="191" descr="synchronous cyclic 191"/>
+				<elem value="192" descr="synchronous cyclic 192"/>
+				<elem value="193" descr="synchronous cyclic 193"/>
+				<elem value="194" descr="synchronous cyclic 194"/>
+				<elem value="195" descr="synchronous cyclic 195"/>
+				<elem value="196" descr="synchronous cyclic 196"/>
+				<elem value="197" descr="synchronous cyclic 197"/>
+				<elem value="198" descr="synchronous cyclic 198"/>
+				<elem value="199" descr="synchronous cyclic 199"/>
+				<elem value="200" descr="synchronous cyclic 200"/>
+				<elem value="201" descr="synchronous cyclic 201"/>
+				<elem value="202" descr="synchronous cyclic 202"/>
+				<elem value="203" descr="synchronous cyclic 203"/>
+				<elem value="204" descr="synchronous cyclic 204"/>
+				<elem value="205" descr="synchronous cyclic 205"/>
+				<elem value="206" descr="synchronous cyclic 206"/>
+				<elem value="207" descr="synchronous cyclic 207"/>
+				<elem value="208" descr="synchronous cyclic 208"/>
+				<elem value="209" descr="synchronous cyclic 209"/>
+				<elem value="210" descr="synchronous cyclic 210"/>
+				<elem value="211" descr="synchronous cyclic 211"/>
+				<elem value="212" descr="synchronous cyclic 212"/>
+				<elem value="213" descr="synchronous cyclic 213"/>
+				<elem value="214" descr="synchronous cyclic 214"/>
+				<elem value="215" descr="synchronous cyclic 215"/>
+				<elem value="216" descr="synchronous cyclic 216"/>
+				<elem value="217" descr="synchronous cyclic 217"/>
+				<elem value="218" descr="synchronous cyclic 218"/>
+				<elem value="219" descr="synchronous cyclic 219"/>
+				<elem value="220" descr="synchronous cyclic 220"/>
+				<elem value="221" descr="synchronous cyclic 221"/>
+				<elem value="222" descr="synchronous cyclic 222"/>
+				<elem value="223" descr="synchronous cyclic 223"/>
+				<elem value="224" descr="synchronous cyclic 224"/>
+				<elem value="225" descr="synchronous cyclic 225"/>
+				<elem value="226" descr="synchronous cyclic 226"/>
+				<elem value="227" descr="synchronous cyclic 227"/>
+				<elem value="228" descr="synchronous cyclic 228"/>
+				<elem value="229" descr="synchronous cyclic 229"/>
+				<elem value="230" descr="synchronous cyclic 230"/>
+				<elem value="231" descr="synchronous cyclic 231"/>
+				<elem value="232" descr="synchronous cyclic 232"/>
+				<elem value="233" descr="synchronous cyclic 233"/>
+				<elem value="234" descr="synchronous cyclic 234"/>
+				<elem value="235" descr="synchronous cyclic 235"/>
+				<elem value="236" descr="synchronous cyclic 236"/>
+				<elem value="237" descr="synchronous cyclic 237"/>
+				<elem value="238" descr="synchronous cyclic 238"/>
+				<elem value="239" descr="synchronous cyclic 239"/>
+				<elem value="240" descr="synchronous cyclic 240"/>
+				<elem value="254" descr="async. on event (254)"/>
+				<elem value="255" descr="asynchronous on event"/>
+			</enum>
+			<enum id="102">
+				<elem value="255" descr="Disabled"/>
+				<elem value="0" descr="1000"/>
+				<elem value="1" descr="800"/>
+				<elem value="2" descr="500"/>
+				<elem value="3" descr="250"/>
+				<elem value="4" descr="125"/>
+				<elem value="5" descr="100"/>
+				<elem value="6" descr="50"/>
+				<elem value="7" descr="20"/>
+				<elem value="8" descr="10"/>
+				<elem value="9" descr="Auto"/>
+			</enum>
+			<enum id="21">
+				<elem value="0" descr="0=Command completed"/>
+				<elem value="1" descr="1=Command processing"/>
+				<elem value="246" descr="246=Flash erase failed"/>
+				<elem value="247" descr="247=Flash write failed"/>
+				<elem value="248" descr="248=Open file in write failed"/>
+				<elem value="249" descr="249=Write file failed"/>
+				<elem value="250" descr="250=Some parameters failed"/>
+				<elem value="251" descr="251=File not compatible"/>
+				<elem value="252" descr="252=USB key not connected"/>
+				<elem value="253" descr="253=File too long"/>
+				<elem value="254" descr="254=File not present"/>
+				<elem value="255" descr="255=Command failed"/>
+				<elem value="256" descr="256=Update already running"/>
+				<elem value="257" descr="257=BIOS already installed"/>
+				<elem value="258" descr="258=Save parameters failed"/>
+				<elem value="259" descr="259=PLC not compatible"/>
+				<elem value="260" descr="260=PLC copy failed"/>
+				<elem value="261" descr="261=Parameters not compatible"/>
+			</enum>
+			<enum id="24">
+				<elem value="0" descr="0=No command"/>
+				<elem value="7" descr="7=load PARAM.BIN from USBH"/>
+				<elem value="8" descr="8=load PLCIEC.COD from USBH"/>
+				<elem value="10" descr="10=load PARAM.DAT or PARAM.RAW from USBH"/>
+				<elem value="11" descr="11=save PARAM.DAT to USBH"/>
+				<elem value="16" descr="16=load file sysUsbFileName from USBH, file must have PARAM.DAT format and filename name.DAT or name .RAW"/>
+				<elem value="19" descr="19=save PARAM.BIN to USBH"/>
+				<elem value="26" descr="26=stop PLC"/>
+				<elem value="27" descr="27=warm restart when USB key disconnected"/>
+			</enum>
+			<enum id="200">
+				<elem value="0" descr="0=NTC(NK103)"/>
+				<elem value="1" descr="1=DI"/>
+				<elem value="2" descr="2=NTC(103AT)"/>
+				<elem value="3" descr="3=4÷20mA"/>
+				<elem value="4" descr="4=0÷10V"/>
+				<elem value="5" descr="5=0÷5V(Ratiometric)"/>
+				<elem value="6" descr="6=PT1000"/>
+				<elem value="7" descr="7=hO(NTC)"/>
+				<elem value="8" descr="8=daO(PT1000)"/>
+				<elem value="9" descr="9=PTC"/>
+				<elem value="10" descr="10=0÷5V"/>
+				<elem value="11" descr="11=0÷20mA"/>
+			</enum>
+			<enum id="201">
+				<elem value="0" descr="0=NTC(NK103)"/>
+				<elem value="1" descr="1=DI"/>
+				<elem value="2" descr="2=NTC(103AT)"/>
+				<elem value="4" descr="4=0÷10V"/>
+				<elem value="6" descr="6=PT1000"/>
+				<elem value="7" descr="7=hO(NTC)"/>
+				<elem value="8" descr="8=daO(PT1000)"/>
+				<elem value="9" descr="9=PTC"/>
+			</enum>
+			<enum id="202">
+				<elem value="0" descr="°C"/>
+				<elem value="1" descr="°F"/>
+			</enum>
+			<enum id="203">
+				<elem value="0" descr="0=0-10 V"/>
+				<elem value="2" descr="2=4-20 mA"/>
+			</enum>
+			<enum id="204">
+				<elem value="0" descr="0=0-10 V"/>
+				<elem value="1" descr="1=PWM"/>
+			</enum>
+			<enum id="205">
+				<elem value="0" descr="reverse"/>
+				<elem value="1" descr="direct"/>
+			</enum>
+			<enum id="206">
+				<elem value="0" descr="9600"/>
+				<elem value="1" descr="19200"/>
+				<elem value="2" descr="38400"/>
+				<elem value="3" descr="57600"/>
+				<elem value="4" descr="76800"/>
+				<elem value="5" descr="115200"/>
+			</enum>
+			<enum id="207">
+				<elem value="0" descr="Null"/>
+				<elem value="1" descr="Odd"/>
+				<elem value="2" descr="Even"/>
+			</enum>
+			<enum id="208">
+				<elem value="0" descr="uNet"/>
+				<elem value="1" descr="Modbus/RTU"/>
+			</enum>
+			<enum id="300">
+				<elem value="0" descr="0=Customizable Unipolar Valve"/>
+				<elem value="1" descr="1=Parker-Sporlan CEV"/>
+				<elem value="2" descr="2=Sanhua DPF(T01)/(TS1)"/>
+				<elem value="3" descr="3=Sanhua DPF(S03)"/>
+				<elem value="4" descr="4=Saginomiya UKV"/>
+				<elem value="121" descr="121=Customizable(from file) Unipolar Valve"/>
+				<elem value="122" descr="122=Customizable(from file) Unipolar Valve"/>
+				<elem value="123" descr="123=Customizable(from file) Unipolar Valve"/>
+				<elem value="124" descr="124=Customizable(from file) Unipolar Valve"/>
+				<elem value="125" descr="125=Customizable(from file) Unipolar Valve"/>
+				<elem value="126" descr="126=Customizable(from file) Unipolar Valve"/>
+				<elem value="127" descr="127=Customizable(from file) Unipolar Valve"/>
+				<elem value="128" descr="128=Customizable(from file) Unipolar Valve"/>
+				<elem value="129" descr="129=Customizable(from file) Unipolar Valve"/>
+				<elem value="130" descr="130=Customizable(from file) Unipolar Valve"/>
+				<elem value="131" descr="131=Customizable(from file) Unipolar Valve"/>
+				<elem value="132" descr="132=Customizable(from file) Unipolar Valve"/>
+				<elem value="133" descr="133=Customizable(from file) Unipolar Valve"/>
+				<elem value="134" descr="134=Customizable(from file) Unipolar Valve"/>
+				<elem value="135" descr="135=Customizable(from file) Unipolar Valve"/>
+				<elem value="136" descr="136=Customizable(from file) Unipolar Valve"/>
+				<elem value="137" descr="137=Customizable(from file) Unipolar Valve"/>
+				<elem value="138" descr="138=Customizable(from file) Unipolar Valve"/>
+				<elem value="139" descr="139=Customizable(from file) Unipolar Valve"/>
+				<elem value="5" descr="5=Future use Unipolar Valve"/>
+				<elem value="6" descr="6=Future use Unipolar Valve"/>
+				<elem value="7" descr="7=Future use Unipolar Valve"/>
+				<elem value="8" descr="8=Future use Unipolar Valve"/>
+				<elem value="9" descr="9=Future use Unipolar Valve"/>
+				<elem value="10" descr="10=Future use Unipolar Valve"/>
+				<elem value="11" descr="11=Future use Unipolar Valve"/>
+				<elem value="12" descr="12=Future use Unipolar Valve"/>
+				<elem value="13" descr="13=Future use Unipolar Valve"/>
+				<elem value="14" descr="14=Future use Unipolar Valve"/>
+				<elem value="15" descr="15=Future use Unipolar Valve"/>
+				<elem value="16" descr="16=Future use Unipolar Valve"/>
+				<elem value="17" descr="17=Future use Unipolar Valve"/>
+				<elem value="18" descr="18=Future use Unipolar Valve"/>
+				<elem value="19" descr="19=Future use Unipolar Valve"/>
+				<elem value="20" descr="20=Future use Unipolar Valve"/>
+			</enum>
+			<enum id="301">
+				<elem value="0" descr="0=Customizable Bipolar Valve"/>
+				<elem value="1" descr="1=Parker-Sporlan SER AA, B, C, D"/>
+				<elem value="2" descr="2=Parker-Sporlan SER F, G, J, K"/>
+				<elem value="3" descr="3=Parker-Sporlan SER L"/>
+				<elem value="4" descr="4=Parker-Sporlan SEHI"/>
+				<elem value="5" descr="5=Emerson-ALCO EX 4, 5, 6"/>
+				<elem value="6" descr="6=Emerson-ALCO EX7"/>
+				<elem value="7" descr="7=Emerson-ALCO EX8"/>
+				<elem value="8" descr="8=Danfoss ETS 12.5, 25, 50"/>
+				<elem value="9" descr="9=Danfoss ETS 100"/>
+				<elem value="10" descr="10=Danfoss ETS 250, 400"/>
+				<elem value="11" descr="11=Danfoss ETS 12C, 24C, 50C, 100C"/>
+				<elem value="101" descr="101=Customizable(from file) Bipolar Valve"/>
+				<elem value="102" descr="102=Customizable(from file) Bipolar Valve"/>
+				<elem value="103" descr="103=Customizable(from file) Bipolar Valve"/>
+				<elem value="104" descr="104=Customizable(from file) Bipolar Valve"/>
+				<elem value="105" descr="105=Customizable(from file) Bipolar Valve"/>
+				<elem value="106" descr="106=Customizable(from file) Bipolar Valve"/>
+				<elem value="107" descr="107=Customizable(from file) Bipolar Valve"/>
+				<elem value="108" descr="108=Customizable(from file) Bipolar Valve"/>
+				<elem value="109" descr="109=Customizable(from file) Bipolar Valve"/>
+				<elem value="110" descr="110=Customizable(from file) Bipolar Valve"/>
+				<elem value="111" descr="111=Customizable(from file) Bipolar Valve"/>
+				<elem value="112" descr="112=Customizable(from file) Bipolar Valve"/>
+				<elem value="113" descr="113=Customizable(from file) Bipolar Valve"/>
+				<elem value="114" descr="114=Customizable(from file) Bipolar Valve"/>
+				<elem value="115" descr="115=Customizable(from file) Bipolar Valve"/>
+				<elem value="116" descr="116=Customizable(from file) Bipolar Valve"/>
+				<elem value="117" descr="117=Customizable(from file) Bipolar Valve"/>
+				<elem value="118" descr="118=Customizable(from file) Bipolar Valve"/>
+				<elem value="119" descr="119=Customizable(from file) Bipolar Valve"/>
+				<elem value="12" descr="12=Future use Bipolar Valve"/>
+				<elem value="13" descr="13=Future use Bipolar Valve"/>
+				<elem value="14" descr="14=Future use Bipolar Valve"/>
+				<elem value="15" descr="15=Future use Bipolar Valve"/>
+				<elem value="16" descr="16=Future use Bipolar Valve"/>
+				<elem value="17" descr="17=Future use Bipolar Valve"/>
+				<elem value="18" descr="18=Future use Bipolar Valve"/>
+				<elem value="19" descr="19=Future use Bipolar Valve"/>
+				<elem value="20" descr="20=Future use Bipolar Valve"/>
+			</enum>
+			<enum id="302">
+				<elem value="0" descr="0=FULL STEP"/>
+				<elem value="1" descr="1=HALF STEP"/>
+				<elem value="2" descr="2=MICRO STEP"/>
+			</enum>
+			<enum id="303">
+				<elem value="1" descr="1=Bipolar"/>
+				<elem value="2" descr="2=Unipolar"/>
+			</enum>
+			<enum id="304">
+				<elem value="0" descr="0=12V"/>
+				<elem value="1" descr="1=24V"/>
+			</enum>
+			<enum id="305">
+				<elem value="0" descr="0=after period n15 with Open_at_wr=0"/>
+				<elem value="1" descr="1=after period n15"/>
+			</enum>
+			<enum id="306">
+				<elem value="0" descr="0=no"/>
+				<elem value="1" descr="1=open"/>
+				<elem value="2" descr="2=close"/>
+				<elem value="3" descr="3=both"/>
+			</enum>
+			<enum id="307">
+				<elem value="0" descr="0=no action"/>
+				<elem value="1" descr="1=close"/>
+			</enum>
+			<enum id="308">
+				<elem value="0" descr="0=no redirection"/>
+				<elem value="1" descr="1=redirect to W1+"/>
+				<elem value="2" descr="2=redirect to W1-"/>
+				<elem value="3" descr="3=redirect to W2+"/>
+				<elem value="4" descr="4=redirect to W2-"/>
+			</enum>
+			<enum id="309">
+				<elem value="0" descr="0=Enabled"/>
+				<elem value="1" descr="1=Disabled"/>
+			</enum>
+			<enum id="1000"><elem value="0" descr="Hidden"/><elem value="1" descr="Visible"/><elem value="2" descr="VisibleRow1Blink"/><elem value="3" descr="VisibleRow2Blink"/><elem value="4" descr="VisibleAllBlink"/></enum></enums>
+	</deviceconfig></parx>
