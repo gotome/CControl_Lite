@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<crossReference sourceID="0x9226E178" module="CControl_Lite" optionsMask="0x3000001D">
+	<unknownObjs/>
+	<programs>
+		<program name="main" source="MAIN" sid="P:MAIN:main"/>
+	</programs>
+	<functions>
+		<function name="sysOverwriteSerialDisplay" source="TGT" sid="F:TGT:sysOverwriteSerialDisplay"/>
+		<function name="sysClearRowDisp" source="TGT" sid="F:TGT:sysClearRowDisp"/>
+		<function name="sysClearIconsDisp" source="TGT" sid="F:TGT:sysClearIconsDisp"/>
+		<function name="sysGetLastKeys" source="TGT" sid="F:TGT:sysGetLastKeys"/>
+		<function name="sysClockWrite" source="TGT" sid="F:TGT:sysClockWrite"/>
+		<function name="sysWD_Background" source="TGT" sid="F:TGT:sysWD_Background"/>
+		<function name="sysWD_Timed" source="TGT" sid="F:TGT:sysWD_Timed"/>
+		<function name="sysWD_Slow" source="TGT" sid="F:TGT:sysWD_Slow"/>
+		<function name="sysExecutionPassword" source="TGT" sid="F:TGT:sysExecutionPassword"/>
+		<function name="sysLogWriteMsg" source="TGT" sid="F:TGT:sysLogWriteMsg"/>
+		<function name="sysSleep" source="TGT" sid="F:TGT:sysSleep"/>
+		<function name="PWM_Frequency" source="TGT" sid="F:TGT:PWM_Frequency"/>
+		<function name="LocalAnalogHystFilter" source="TGT" sid="F:TGT:LocalAnalogHystFilter"/>
+		<function name="CallbackMenu_CLDate" source="TGT" sid="F:TGT:CallbackMenu_CLDate"/>
+		<function name="CallbackMenu_CLHour" source="TGT" sid="F:TGT:CallbackMenu_CLHour"/>
+		<function name="sysDBase_SaveAll" source="AlDatabase" sid="F:AlDatabase:sysDBase_SaveAll"/>
+		<function name="sysWriteParBOOL" source="AlDatabase" sid="F:AlDatabase:sysWriteParBOOL"/>
+		<function name="sysWriteParUSINT" source="AlDatabase" sid="F:AlDatabase:sysWriteParUSINT"/>
+		<function name="sysWriteParSINT" source="AlDatabase" sid="F:AlDatabase:sysWriteParSINT"/>
+		<function name="sysWriteParBYTE" source="AlDatabase" sid="F:AlDatabase:sysWriteParBYTE"/>
+		<function name="sysWriteParINT" source="AlDatabase" sid="F:AlDatabase:sysWriteParINT"/>
+		<function name="sysWriteParUINT" source="AlDatabase" sid="F:AlDatabase:sysWriteParUINT"/>
+		<function name="sysWriteParWORD" source="AlDatabase" sid="F:AlDatabase:sysWriteParWORD"/>
+		<function name="sysWriteParDINT" source="AlDatabase" sid="F:AlDatabase:sysWriteParDINT"/>
+		<function name="sysWriteParUDINT" source="AlDatabase" sid="F:AlDatabase:sysWriteParUDINT"/>
+		<function name="sysWriteParDWORD" source="AlDatabase" sid="F:AlDatabase:sysWriteParDWORD"/>
+		<function name="sysWriteParREAL" source="AlDatabase" sid="F:AlDatabase:sysWriteParREAL"/>
+		<function name="sysWriteParSTRING" source="AlDatabase" sid="F:AlDatabase:sysWriteParSTRING"/>
+		<function name="sysDBaseSetValue_Bool" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_Bool"/>
+		<function name="sysDBaseSetValue_S32" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_S32"/>
+		<function name="sysDBaseSetValue_S16" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_S16"/>
+		<function name="sysDBaseSetValue_Float32" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_Float32"/>
+		<function name="sysDBaseSetValue_S8" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_S8"/>
+		<function name="sysDBaseSetValue_U32" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_U32"/>
+		<function name="sysDBaseSetValue_U16" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_U16"/>
+		<function name="sysDBaseSetValue_U8" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_U8"/>
+		<function name="sysDBaseSetValue_String" source="AlDatabase" sid="F:AlDatabase:sysDBaseSetValue_String"/>
+		<function name="sysDBaseGetValue_Bool" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_Bool"/>
+		<function name="sysDBaseGetValue_S32" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_S32"/>
+		<function name="sysDBaseGetValue_S16" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_S16"/>
+		<function name="sysDBaseGetValue_Float32" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_Float32"/>
+		<function name="sysDBaseGetValue_S8" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_S8"/>
+		<function name="sysDBaseGetValue_U32" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_U32"/>
+		<function name="sysDBaseGetValue_U16" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_U16"/>
+		<function name="sysDBaseGetValue_U8" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_U8"/>
+		<function name="sysDBaseGetValue_String" source="AlDatabase" sid="F:AlDatabase:sysDBaseGetValue_String"/>
+		<function name="sysMbMRtu_SlaveActivation" source="AlModbusRTU" sid="F:AlModbusRTU:sysMbMRtu_SlaveActivation"/>
+		<function name="sysMbMRtu_SlaveChangeAddress" source="AlModbusRTU" sid="F:AlModbusRTU:sysMbMRtu_SlaveChangeAddress"/>
+		<function name="sysMbMRtu_GetSlaveHandle" source="AlModbusRTU" sid="F:AlModbusRTU:sysMbMRtu_GetSlaveHandle"/>
+		<function name="sysMbMRtu_ChangePortSettings" source="AlModbusRTU" sid="F:AlModbusRTU:sysMbMRtu_ChangePortSettings"/>
+		<function name="sysMbMRtu_SetMaxRetriesForSlave" source="AlModbusRTU" sid="F:AlModbusRTU:sysMbMRtu_SetMaxRetriesForSlave"/>
+		<function name="sysMbMRtu_DisableWriteForSlave" source="AlModbusRTU" sid="F:AlModbusRTU:sysMbMRtu_DisableWriteForSlave"/>
+		<function name="sysCopm_Reboot" source="AlCOPM" sid="F:AlCOPM:sysCopm_Reboot"/>
+		<function name="sysCopm_GetSlaveHandle" source="AlCOPM" sid="F:AlCOPM:sysCopm_GetSlaveHandle"/>
+	</functions>
+	<functionBlocks>
+		<functionBlock name="sysMbMRtu_GetSlaveStatus" source="AlModbusRTU" sid="FB:AlModbusRTU:sysMbMRtu_GetSlaveStatus"/>
+		<functionBlock name="sysMbMRtu_GetMasterStatus" source="AlModbusRTU" sid="FB:AlModbusRTU:sysMbMRtu_GetMasterStatus"/>
+		<functionBlock name="ModbusRTU_WriteMultCoils2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_WriteMultCoils2"/>
+		<functionBlock name="ModbusRTU_WriteSingleReg2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_WriteSingleReg2"/>
+		<functionBlock name="ModbusRTU_WriteSingleCoil2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_WriteSingleCoil2"/>
+		<functionBlock name="ModbusRTU_ReadDiscrInputs2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_ReadDiscrInputs2"/>
+		<functionBlock name="ModbusRTU_ReadCoils2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_ReadCoils2"/>
+		<functionBlock name="ModbusRTU_ReadInputRegs2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_ReadInputRegs2"/>
+		<functionBlock name="ModbusRTU_WriteMultRegs2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_WriteMultRegs2"/>
+		<functionBlock name="ModbusRTU_ReadHoldingRegs2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_ReadHoldingRegs2"/>
+		<functionBlock name="ModbusRTU_ReadDeviceIdent" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_ReadDeviceIdent"/>
+		<functionBlock name="sysCopm_SlaveSetObjInteger" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveSetObjInteger"/>
+		<functionBlock name="sysCopm_SlaveSetObjReal" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveSetObjReal"/>
+		<functionBlock name="sysCopm_SlaveSetObjBuffer" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveSetObjBuffer"/>
+		<functionBlock name="sysCopm_SlaveGetObjInteger" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveGetObjInteger"/>
+		<functionBlock name="sysCopm_SlaveGetObjReal" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveGetObjReal"/>
+		<functionBlock name="sysCopm_SlaveGetObjBuffer" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveGetObjBuffer"/>
+	</functionBlocks>
+	<vars>
+		<var name="cnt" source="MAIN" sid="V:MAIN:cnt">
+			<ref op="RD" pos="P:MAIN:main#2"/>
+			<ref op="WR" pos="P:MAIN:main#2"/>
+		</var>
+		<var name="Ausgang1" source="Configuration_variables" sid="V:Configuration_variables:Ausgang1">
+			<ref op="RD" pos="P:MAIN:main#4"/>
+			<ref op="WR" pos="P:MAIN:main#5"/>
+			<ref op="WR" pos="P:MAIN:main#7"/>
+		</var>
+		<var name="sysMbMRtuNetList" source="Modbus_cfg" sid="V:Modbus_cfg:sysMbMRtuNetList"/>
+		<var name="MBMRTUNETLISTBOUND" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTBOUND"/>
+		<var name="MBMRTUNETLISTCOUNT" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTCOUNT"/>
+		<var name="sysCopmNetList" source="CANopen_cfg" sid="V:CANopen_cfg:sysCopmNetList"/>
+		<var name="COPMNETLISTBOUND" source="CANopen_cfg" sid="V:CANopen_cfg:COPMNETLISTBOUND"/>
+		<var name="COPMNETLISTCOUNT" source="CANopen_cfg" sid="V:CANopen_cfg:COPMNETLISTCOUNT"/>
+		<var name="sysLocalDigitalInputs" source="TGT" sid="V:TGT:sysLocalDigitalInputs"/>
+		<var name="sysExpDigitalInputs" source="TGT" sid="V:TGT:sysExpDigitalInputs"/>
+		<var name="sysLocalDigitalInputsImpulseCounter" source="TGT" sid="V:TGT:sysLocalDigitalInputsImpulseCounter"/>
+		<var name="sysLocalDigitalInputsResetCounter" source="TGT" sid="V:TGT:sysLocalDigitalInputsResetCounter"/>
+		<var name="sysExpImpCntFreq" source="TGT" sid="V:TGT:sysExpImpCntFreq"/>
+		<var name="sysLocalAnalogInputs" source="TGT" sid="V:TGT:sysLocalAnalogInputs"/>
+		<var name="sysExpAnalogInputs" source="TGT" sid="V:TGT:sysExpAnalogInputs"/>
+		<var name="sysLocalADCs" source="TGT" sid="V:TGT:sysLocalADCs"/>
+		<var name="sysLocalADCsAdj" source="TGT" sid="V:TGT:sysLocalADCsAdj"/>
+		<var name="sysLocalADCsFilt" source="TGT" sid="V:TGT:sysLocalADCsFilt"/>
+		<var name="sysLocalAnalogOutputs" source="TGT" sid="V:TGT:sysLocalAnalogOutputs"/>
+		<var name="sysExpAnalogOutputs" source="TGT" sid="V:TGT:sysExpAnalogOutputs"/>
+		<var name="sysLocalDigitalOutputs" source="TGT" sid="V:TGT:sysLocalDigitalOutputs"/>
+		<var name="sysExpDigitalOutputs" source="TGT" sid="V:TGT:sysExpDigitalOutputs"/>
+		<var name="sysIcons" source="TGT" sid="V:TGT:sysIcons"/>
+		<var name="sysKeyboard" source="TGT" sid="V:TGT:sysKeyboard"/>
+		<var name="sysLogicalKeys" source="TGT" sid="V:TGT:sysLogicalKeys"/>
+		<var name="sysKeyFunctions" source="TGT" sid="V:TGT:sysKeyFunctions"/>
+		<var name="sysCurrentMenuID" source="TGT" sid="V:TGT:sysCurrentMenuID"/>
+		<var name="sysGoToMenuID" source="TGT" sid="V:TGT:sysGoToMenuID"/>
+		<var name="sysErrMsg0" source="TGT" sid="V:TGT:sysErrMsg0"/>
+		<var name="sysErrMsg1" source="TGT" sid="V:TGT:sysErrMsg1"/>
+		<var name="sysErrMsg2" source="TGT" sid="V:TGT:sysErrMsg2"/>
+		<var name="sysErrMsg3" source="TGT" sid="V:TGT:sysErrMsg3"/>
+		<var name="sysErrMsg4" source="TGT" sid="V:TGT:sysErrMsg4"/>
+		<var name="sysErrMsg5" source="TGT" sid="V:TGT:sysErrMsg5"/>
+		<var name="sysErrMsg6" source="TGT" sid="V:TGT:sysErrMsg6"/>
+		<var name="sysErrMsg7" source="TGT" sid="V:TGT:sysErrMsg7"/>
+		<var name="isEditWithIcon" source="TGT" sid="V:TGT:isEditWithIcon"/>
+		<var name="sysPWLevel" source="TGT" sid="V:TGT:sysPWLevel"/>
+		<var name="sysIsSimulMode" source="TGT" sid="V:TGT:sysIsSimulMode"/>
+		<var name="sysMSK" source="TGT" sid="V:TGT:sysMSK"/>
+		<var name="sysVER" source="TGT" sid="V:TGT:sysVER"/>
+		<var name="sysICF" source="TGT" sid="V:TGT:sysICF"/>
+		<var name="sysSN" source="TGT" sid="V:TGT:sysSN"/>
+		<var name="sysBootMSK" source="TGT" sid="V:TGT:sysBootMSK"/>
+		<var name="sysBootVER" source="TGT" sid="V:TGT:sysBootVER"/>
+		<var name="sysIntKeyboardMSK" source="TGT" sid="V:TGT:sysIntKeyboardMSK"/>
+		<var name="sysIntKeyboardVER" source="TGT" sid="V:TGT:sysIntKeyboardVER"/>
+		<var name="sysIntKeyboardICF" source="TGT" sid="V:TGT:sysIntKeyboardICF"/>
+		<var name="sysIntKeyboardSN" source="TGT" sid="V:TGT:sysIntKeyboardSN"/>
+		<var name="sysExtKeyboardMSK" source="TGT" sid="V:TGT:sysExtKeyboardMSK"/>
+		<var name="sysExtKeyboardVER" source="TGT" sid="V:TGT:sysExtKeyboardVER"/>
+		<var name="sysExtKeyboardICF" source="TGT" sid="V:TGT:sysExtKeyboardICF"/>
+		<var name="sysExtKeyboardSN" source="TGT" sid="V:TGT:sysExtKeyboardSN"/>
+		<var name="sysWatchDogOccured" source="TGT" sid="V:TGT:sysWatchDogOccured"/>
+		<var name="sysWatchDogInfo" source="TGT" sid="V:TGT:sysWatchDogInfo"/>
+		<var name="sysClock" source="TGT" sid="V:TGT:sysClock"/>
+		<var name="sysClockError" source="TGT" sid="V:TGT:sysClockError"/>
+		<var name="sysClockSet" source="TGT" sid="V:TGT:sysClockSet"/>
+		<var name="sysImpulseCounter" source="TGT" sid="V:TGT:sysImpulseCounter"/>
+		<var name="sysImpulseCounter_as_FDI" source="TGT" sid="V:TGT:sysImpulseCounter_as_FDI"/>
+		<var name="sysImpulseCounter_ResetCounter" source="TGT" sid="V:TGT:sysImpulseCounter_ResetCounter"/>
+		<var name="sysImpulseCounter2" source="TGT" sid="V:TGT:sysImpulseCounter2"/>
+		<var name="sysImpulseCounter_as_FDI2" source="TGT" sid="V:TGT:sysImpulseCounter_as_FDI2"/>
+		<var name="sysImpulseCounter_ResetCounter2" source="TGT" sid="V:TGT:sysImpulseCounter_ResetCounter2"/>
+		<var name="sysParameter" source="TGT" sid="V:TGT:sysParameter"/>
+		<var name="sysRetainPars" source="TGT" sid="V:TGT:sysRetainPars"/>
+		<var name="sysTskBckExeTime" source="TGT" sid="V:TGT:sysTskBckExeTime"/>
+		<var name="sysTskTmdExeTime" source="TGT" sid="V:TGT:sysTskTmdExeTime"/>
+		<var name="sysTskSlowExeTime" source="TGT" sid="V:TGT:sysTskSlowExeTime"/>
+		<var name="sysTskBckScanTime" source="TGT" sid="V:TGT:sysTskBckScanTime"/>
+		<var name="sysTskTmdScanTime" source="TGT" sid="V:TGT:sysTskTmdScanTime"/>
+		<var name="sysTskSlowScanTime" source="TGT" sid="V:TGT:sysTskSlowScanTime"/>
+		<var name="sysTskBckMaxExeTime" source="TGT" sid="V:TGT:sysTskBckMaxExeTime"/>
+		<var name="sysTskTmdMaxExeTime" source="TGT" sid="V:TGT:sysTskTmdMaxExeTime"/>
+		<var name="sysTskSlowMaxExeTime" source="TGT" sid="V:TGT:sysTskSlowMaxExeTime"/>
+		<var name="sysTimer" source="TGT" sid="V:TGT:sysTimer"/>
+		<var name="sysUsbCommand" source="TGT" sid="V:TGT:sysUsbCommand"/>
+		<var name="sysUsbStatus" source="TGT" sid="V:TGT:sysUsbStatus"/>
+		<var name="sysUsbFileName" source="TGT" sid="V:TGT:sysUsbFileName"/>
+		<var name="sysUsbParamDatMinAddress" source="TGT" sid="V:TGT:sysUsbParamDatMinAddress"/>
+		<var name="sysUsbParamDatMaxAddress" source="TGT" sid="V:TGT:sysUsbParamDatMaxAddress"/>
+		<var name="sysMbRtuDiagnostics" source="AlModbusRTU" sid="V:AlModbusRTU:sysMbRtuDiagnostics"/>
+		<var name="sysMbMRtuStatus" source="AlModbusRTU" sid="V:AlModbusRTU:sysMbMRtuStatus"/>
+		<var name="sysCopmStatus" source="AlCOPM" sid="V:AlCOPM:sysCopmStatus"/>
+		<var name="sysCopmEvent" source="AlCOPM" sid="V:AlCOPM:sysCopmEvent"/>
+		<var name="sysCopmMonitor" source="AlCOPM" sid="V:AlCOPM:sysCopmMonitor"/>
+		<var name="sysCopsStatus" source="AlCOPS" sid="V:AlCOPS:sysCopsStatus"/>
+		<var name="$$STKLIMIT$$" sid="V::$$STKLIMIT$$"/>
+		<var name="$$STKPOINTER$$" sid="V::$$STKPOINTER$$"/>
+		<var name="$$DEBUGID$$" sid="V::$$DEBUGID$$"/>
+		<var name="$$RETSIGNATURE$$" sid="V::$$RETSIGNATURE$$"/>
+	</vars>
+</crossReference>
