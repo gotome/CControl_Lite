@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x9226E178" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x725474E5" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
-		<program name="main" source="MAIN" sid="P:MAIN:main"/>
+		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
+		<program name="BerechnungCyclic" sid="P::BerechnungCyclic"/>
+		<program name="AlarmCyclic" sid="P::AlarmCyclic"/>
+		<program name="AblaufstrgCyclic" sid="P::AblaufstrgCyclic"/>
+		<program name="LeistungCyclic" sid="P::LeistungCyclic"/>
+		<program name="aktorenMapping" sid="P::aktorenMapping"/>
+		<program name="BoxenMapping" sid="P::BoxenMapping"/>
 	</programs>
 	<functions>
 		<function name="sysOverwriteSerialDisplay" source="TGT" sid="F:TGT:sysOverwriteSerialDisplay"/>
@@ -80,15 +86,27 @@
 		<functionBlock name="sysCopm_SlaveGetObjBuffer" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveGetObjBuffer"/>
 	</functionBlocks>
 	<vars>
-		<var name="cnt" source="MAIN" sid="V:MAIN:cnt">
-			<ref op="RD" pos="P:MAIN:main#2"/>
-			<ref op="WR" pos="P:MAIN:main#2"/>
-		</var>
-		<var name="Ausgang1" source="Configuration_variables" sid="V:Configuration_variables:Ausgang1">
-			<ref op="RD" pos="P:MAIN:main#4"/>
-			<ref op="WR" pos="P:MAIN:main#5"/>
-			<ref op="WR" pos="P:MAIN:main#7"/>
-		</var>
+		<var name="cnt" source="MAIN" sid="V:MAIN:cnt"/>
+		<var name="NONAME" sid="V::NONAME"/>
+		<var name="diBox1Offen" source="Configuration_variables" sid="V:Configuration_variables:diBox1Offen"/>
+		<var name="diBox1Geschl" source="Configuration_variables" sid="V:Configuration_variables:diBox1Geschl"/>
+		<var name="diBox2Offen" source="Configuration_variables" sid="V:Configuration_variables:diBox2Offen"/>
+		<var name="diBox2Geschl" source="Configuration_variables" sid="V:Configuration_variables:diBox2Geschl"/>
+		<var name="diBetriebLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:diBetriebLuftaufbereitung"/>
+		<var name="diStoerungLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:diStoerungLuftaufbereitung"/>
+		<var name="doFrgLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:doFrgLuftaufbereitung"/>
+		<var name="doFrgBox1" source="Configuration_variables" sid="V:Configuration_variables:doFrgBox1"/>
+		<var name="doFrgBox2" source="Configuration_variables" sid="V:Configuration_variables:doFrgBox2"/>
+		<var name="doFrgAbluftventilator" source="Configuration_variables" sid="V:Configuration_variables:doFrgAbluftventilator"/>
+		<var name="aiFrischluftTemperatur" source="Configuration_variables" sid="V:Configuration_variables:aiFrischluftTemperatur"/>
+		<var name="aiFrischluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:aiFrischluftFeuchte"/>
+		<var name="ai3FreiProg" source="Configuration_variables" sid="V:Configuration_variables:ai3FreiProg"/>
+		<var name="ai4FreiProg" source="Configuration_variables" sid="V:Configuration_variables:ai4FreiProg"/>
+		<var name="aiAbluftTemperatur" source="Configuration_variables" sid="V:Configuration_variables:aiAbluftTemperatur"/>
+		<var name="aiAbluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:aiAbluftFeuchte"/>
+		<var name="aiStocktemperatur" source="Configuration_variables" sid="V:Configuration_variables:aiStocktemperatur"/>
+		<var name="aoLeistungsvorgLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:aoLeistungsvorgLuftaufbereitung"/>
+		<var name="aoFuVentilator" source="Configuration_variables" sid="V:Configuration_variables:aoFuVentilator"/>
 		<var name="sysMbMRtuNetList" source="Modbus_cfg" sid="V:Modbus_cfg:sysMbMRtuNetList"/>
 		<var name="MBMRTUNETLISTBOUND" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTBOUND"/>
 		<var name="MBMRTUNETLISTCOUNT" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTCOUNT"/>

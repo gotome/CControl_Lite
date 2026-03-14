@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- #DEFINE PREFIX CControl_Lite -->
 <devicetemplate>
-	<deviceinfo caption="Testproj" name="Testproj" version="0.0" icon="img\application.ico" deviceid="CControl_Lite" devicetype="application" PLCApplicationID="Testproj">
+	<deviceinfo caption="CControl_L" name="CControl_L" version="0.0" icon="img\application.ico" deviceid="CControl_Lite" devicetype="application" PLCApplicationID="CControl_L">
 		<description>CControl_Lite</description>
 		<protocols><protocol>TM173O_825p3_appl</protocol></protocols>
 	</deviceinfo>
