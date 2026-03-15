@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x725474E5" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x8076C9C0" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
-		<program name="BerechnungCyclic" sid="P::BerechnungCyclic"/>
-		<program name="AlarmCyclic" sid="P::AlarmCyclic"/>
-		<program name="AblaufstrgCyclic" sid="P::AblaufstrgCyclic"/>
-		<program name="LeistungCyclic" sid="P::LeistungCyclic"/>
-		<program name="aktorenMapping" sid="P::aktorenMapping"/>
-		<program name="BoxenMapping" sid="P::BoxenMapping"/>
+		<program name="BerechnungCyclic" source="MAIN" sid="P:MAIN:BerechnungCyclic"/>
+		<program name="AlarmCyclic" source="MAIN" sid="P:MAIN:AlarmCyclic"/>
+		<program name="AblaufstrgCyclic" source="MAIN" sid="P:MAIN:AblaufstrgCyclic"/>
+		<program name="LeistungCyclic" source="MAIN" sid="P:MAIN:LeistungCyclic"/>
+		<program name="aktorenMapping" source="MAIN" sid="P:MAIN:aktorenMapping"/>
+		<program name="BoxenMapping" source="MAIN" sid="P:MAIN:BoxenMapping"/>
 	</programs>
 	<functions>
 		<function name="sysOverwriteSerialDisplay" source="TGT" sid="F:TGT:sysOverwriteSerialDisplay"/>
@@ -67,6 +67,12 @@
 		<function name="sysCopm_GetSlaveHandle" source="AlCOPM" sid="F:AlCOPM:sysCopm_GetSlaveHandle"/>
 	</functions>
 	<functionBlocks>
+		<functionBlock name="FB_LimScal" sid="FB::FB_LimScal">
+			<ref op="DECL" pos="V::IOMappingCyclic.fbLimScal"/>
+		</functionBlock>
+		<functionBlock name="FB_MovAvgFlt" sid="FB::FB_MovAvgFlt">
+			<ref op="DECL" pos="V::IOMappingCyclic.fbMovAvgFlt"/>
+		</functionBlock>
 		<functionBlock name="sysMbMRtu_GetSlaveStatus" source="AlModbusRTU" sid="FB:AlModbusRTU:sysMbMRtu_GetSlaveStatus"/>
 		<functionBlock name="sysMbMRtu_GetMasterStatus" source="AlModbusRTU" sid="FB:AlModbusRTU:sysMbMRtu_GetMasterStatus"/>
 		<functionBlock name="ModbusRTU_WriteMultCoils2" source="AlModbusRTU" sid="FB:AlModbusRTU:ModbusRTU_WriteMultCoils2"/>
@@ -86,27 +92,133 @@
 		<functionBlock name="sysCopm_SlaveGetObjBuffer" source="AlCOPM" sid="FB:AlCOPM:sysCopm_SlaveGetObjBuffer"/>
 	</functionBlocks>
 	<vars>
-		<var name="cnt" source="MAIN" sid="V:MAIN:cnt"/>
-		<var name="NONAME" sid="V::NONAME"/>
-		<var name="diBox1Offen" source="Configuration_variables" sid="V:Configuration_variables:diBox1Offen"/>
-		<var name="diBox1Geschl" source="Configuration_variables" sid="V:Configuration_variables:diBox1Geschl"/>
-		<var name="diBox2Offen" source="Configuration_variables" sid="V:Configuration_variables:diBox2Offen"/>
-		<var name="diBox2Geschl" source="Configuration_variables" sid="V:Configuration_variables:diBox2Geschl"/>
-		<var name="diBetriebLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:diBetriebLuftaufbereitung"/>
-		<var name="diStoerungLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:diStoerungLuftaufbereitung"/>
-		<var name="doFrgLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:doFrgLuftaufbereitung"/>
-		<var name="doFrgBox1" source="Configuration_variables" sid="V:Configuration_variables:doFrgBox1"/>
-		<var name="doFrgBox2" source="Configuration_variables" sid="V:Configuration_variables:doFrgBox2"/>
-		<var name="doFrgAbluftventilator" source="Configuration_variables" sid="V:Configuration_variables:doFrgAbluftventilator"/>
-		<var name="aiFrischluftTemperatur" source="Configuration_variables" sid="V:Configuration_variables:aiFrischluftTemperatur"/>
-		<var name="aiFrischluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:aiFrischluftFeuchte"/>
-		<var name="ai3FreiProg" source="Configuration_variables" sid="V:Configuration_variables:ai3FreiProg"/>
-		<var name="ai4FreiProg" source="Configuration_variables" sid="V:Configuration_variables:ai4FreiProg"/>
-		<var name="aiAbluftTemperatur" source="Configuration_variables" sid="V:Configuration_variables:aiAbluftTemperatur"/>
-		<var name="aiAbluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:aiAbluftFeuchte"/>
-		<var name="aiStocktemperatur" source="Configuration_variables" sid="V:Configuration_variables:aiStocktemperatur"/>
-		<var name="aoLeistungsvorgLuftaufbereitung" source="Configuration_variables" sid="V:Configuration_variables:aoLeistungsvorgLuftaufbereitung"/>
-		<var name="aoFuVentilator" source="Configuration_variables" sid="V:Configuration_variables:aoFuVentilator"/>
+		<var name="cnt" sid="V::cnt"/>
+		<var name="NONAME" source="MAIN" sid="V:MAIN:NONAME"/>
+		<var name="diBox1Offen" sid="V::diBox1Offen">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#2"/>
+		</var>
+		<var name="diBox1Geschl" sid="V::diBox1Geschl">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#3"/>
+		</var>
+		<var name="diBox2Offen" sid="V::diBox2Offen">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#4"/>
+		</var>
+		<var name="diBox2Geschl" sid="V::diBox2Geschl">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#5"/>
+		</var>
+		<var name="diBetriebLuftaufber" sid="V::diBetriebLuftaufber">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#6"/>
+		</var>
+		<var name="diStoerLuftaufber" sid="V::diStoerLuftaufber">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#7"/>
+		</var>
+		<var name="diRes" sid="V::diRes"/>
+		<var name="doFrgLuftaufber" sid="V::doFrgLuftaufber">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#10"/>
+		</var>
+		<var name="doFrgBox1" sid="V::doFrgBox1">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#11"/>
+		</var>
+		<var name="doFrgBox2" sid="V::doFrgBox2">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#12"/>
+		</var>
+		<var name="doFrgAbluftventilator" sid="V::doFrgAbluftventilator">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#13"/>
+		</var>
+		<var name="doRes" sid="V::doRes"/>
+		<var name="aiFrischluftTemp" sid="V::aiFrischluftTemp">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#26"/>
+		</var>
+		<var name="aiFrischluftFeuchte" sid="V::aiFrischluftFeuchte"/>
+		<var name="aiAbluftBox1Temp" sid="V::aiAbluftBox1Temp">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#33"/>
+		</var>
+		<var name="aiAbluftBox1Feucht" sid="V::aiAbluftBox1Feucht">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#34"/>
+		</var>
+		<var name="aiTrockenluftTemp" sid="V::aiTrockenluftTemp">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#35"/>
+		</var>
+		<var name="aiTrockenluftFeucht" sid="V::aiTrockenluftFeucht">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#36"/>
+		</var>
+		<var name="aiAbluftBox2Temp" sid="V::aiAbluftBox2Temp">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#38"/>
+		</var>
+		<var name="aiAbluftBox2Feucht" sid="V::aiAbluftBox2Feucht">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#39"/>
+		</var>
+		<var name="aiStocktemp" sid="V::aiStocktemp">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#40"/>
+		</var>
+		<var name="aiRes" sid="V::aiRes"/>
+		<var name="aoLeistVorgLuftaufber" sid="V::aoLeistVorgLuftaufber">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#45"/>
+		</var>
+		<var name="aoFuVentilator" sid="V::aoFuVentilator">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#44"/>
+		</var>
+		<var name="aoRes" sid="V::aoRes"/>
+		<var name="di1" source="Configuration_variables" sid="V:Configuration_variables:di1">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#2"/>
+		</var>
+		<var name="di2" source="Configuration_variables" sid="V:Configuration_variables:di2">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#3"/>
+		</var>
+		<var name="di3" source="Configuration_variables" sid="V:Configuration_variables:di3">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#4"/>
+		</var>
+		<var name="di4" source="Configuration_variables" sid="V:Configuration_variables:di4">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#5"/>
+		</var>
+		<var name="di5" source="Configuration_variables" sid="V:Configuration_variables:di5">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#6"/>
+		</var>
+		<var name="di6" source="Configuration_variables" sid="V:Configuration_variables:di6">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#7"/>
+		</var>
+		<var name="do1" source="Configuration_variables" sid="V:Configuration_variables:do1">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#10"/>
+		</var>
+		<var name="do2" source="Configuration_variables" sid="V:Configuration_variables:do2">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#11"/>
+		</var>
+		<var name="do3" source="Configuration_variables" sid="V:Configuration_variables:do3">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#12"/>
+		</var>
+		<var name="do4" source="Configuration_variables" sid="V:Configuration_variables:do4">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#13"/>
+		</var>
+		<var name="do5" source="Configuration_variables" sid="V:Configuration_variables:do5"/>
+		<var name="ai1" source="Configuration_variables" sid="V:Configuration_variables:ai1">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#20"/>
+		</var>
+		<var name="ai2" source="Configuration_variables" sid="V:Configuration_variables:ai2"/>
+		<var name="ai3" source="Configuration_variables" sid="V:Configuration_variables:ai3">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#33"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#35"/>
+		</var>
+		<var name="ai4" source="Configuration_variables" sid="V:Configuration_variables:ai4">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#34"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#36"/>
+		</var>
+		<var name="ai5" source="Configuration_variables" sid="V:Configuration_variables:ai5">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#38"/>
+		</var>
+		<var name="ai6" source="Configuration_variables" sid="V:Configuration_variables:ai6">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#39"/>
+		</var>
+		<var name="ai7" source="Configuration_variables" sid="V:Configuration_variables:ai7">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#40"/>
+		</var>
+		<var name="ao1" source="Configuration_variables" sid="V:Configuration_variables:ao1">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#44"/>
+		</var>
+		<var name="ao2" source="Configuration_variables" sid="V:Configuration_variables:ao2"/>
+		<var name="ao3" source="Configuration_variables" sid="V:Configuration_variables:ao3"/>
+		<var name="ao4" source="Configuration_variables" sid="V:Configuration_variables:ao4">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#45"/>
+		</var>
 		<var name="sysMbMRtuNetList" source="Modbus_cfg" sid="V:Modbus_cfg:sysMbMRtuNetList"/>
 		<var name="MBMRTUNETLISTBOUND" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTBOUND"/>
 		<var name="MBMRTUNETLISTCOUNT" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTCOUNT"/>

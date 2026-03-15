@@ -1,0 +1,73 @@
+﻿	(***************************)
+	(*                         *)
+	(*     FUNCTION BLOCKS     *)
+	(*                         *)
+	(***************************)
+
+
+FUNCTION_BLOCK FB_SCALING
+
+        VAR_INPUT
+xEnable : BOOL;	{ DE:"Baustein aktiv" }
+xLimit : BOOL;	{ DE:"Ausgang auf Min/Max begrenzen" }
+rIn : REAL;	{ DE:"Eingangswert" }
+rInMin : REAL;	{ DE:"Eingangsbereich Minimum" }
+rInMax : REAL;	{ DE:"Eingangsbereich Maximum" }
+rOutMin : REAL;	{ DE:"Ausgangsbereich Minimum" }
+rOutMax : REAL;	{ DE:"Ausgangsbereich Maximum" }
+	END_VAR
+
+        VAR_OUTPUT
+xBusy : BOOL;	{ DE:"TRUE wenn aktiv" }
+xError : BOOL;	{ DE:"TRUE bei Fehler" }
+iErrorId : INT;	{ DE:"Fehlercode" }
+rOut : REAL;	{ DE:"Skalierter Ausgangswert" }
+rNorm : REAL;	{ DE:"Normierter Wert 0.0 .. 1.0" }
+	END_VAR
+
+        VAR
+rTemp : REAL;
+	END_VAR
+
+	{ CODE:ST }xBusy := FALSE;
+xError := FALSE;
+iErrorId := 0;
+
+IF NOT xEnable THEN
+    RETURN;
+END_IF;
+
+xBusy := TRUE;
+
+IF rInMax = rInMin THEN
+    xError := TRUE;
+    iErrorId := 1;
+    rOut := rOutMin;
+    rNorm := 0.0;
+    RETURN;
+END_IF;
+
+rNorm := (rIn - rInMin) / (rInMax - rInMin);
+
+rTemp := rOutMin + (rNorm * (rOutMax - rOutMin));
+
+IF xLimit THEN
+    IF rOutMin <= rOutMax THEN
+        IF rTemp < rOutMin THEN
+            rTemp := rOutMin;
+        ELSIF rTemp > rOutMax THEN
+            rTemp := rOutMax;
+        END_IF;
+    ELSE
+        IF rTemp > rOutMin THEN
+            rTemp := rOutMin;
+        ELSIF rTemp < rOutMax THEN
+            rTemp := rOutMax;
+        END_IF;
+    END_IF;
+END_IF;
+
+rOut := rTemp;
+
+END_FUNCTION_BLOCK
+

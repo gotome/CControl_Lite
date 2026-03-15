@@ -77,6 +77,6 @@
 		</datadef>
 		<parameters/>
 		<enums><enum id="1000"><elem value="0" descr="Hidden"/><elem value="1" descr="Visible"/><elem value="2" descr="VisibleRow1Blink"/><elem value="3" descr="VisibleRow2Blink"/><elem value="4" descr="VisibleAllBlink"/></enum></enums>
-		<redefPars/>
+		<redefPars><redefPar ipa="15726" defval="3" max="11"/><redefPar ipa="15727" defval="3" max="11"/><redefPar ipa="15728" defval="3" max="11"/><redefPar ipa="15729" defval="3" max="11"/><redefPar ipa="15730" defval="3" max="11"/><redefPar ipa="15731" defval="3" max="11"/><redefPar ipa="15732" defval="6" max="9"/><redefPar ipa="15737" defval="9999" min="-9999" max="9999"/><redefPar ipa="15739" defval="9999" min="-9999" max="9999"/><redefPar ipa="15741" defval="9999" min="-9999" max="9999"/><redefPar ipa="15743" defval="9999" min="-9999" max="9999"/><redefPar ipa="15745" defval="9999" min="-9999" max="9999"/><redefPar ipa="15747" defval="9999" min="-9999" max="9999"/><redefPar ipa="15757" defval="9999" min="-9999" max="9999"/></redefPars>
 	</deviceconfig>
 </devicetemplate>
