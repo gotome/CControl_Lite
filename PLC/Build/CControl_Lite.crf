@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x6C7AF916" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x0A60C54E" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -102,10 +102,10 @@
 		</functionBlock>
 	</functionBlocks>
 	<vars>
-		<var name="gAktModus" sid="V::gAktModus">
+		<var name="gAktModus" source="MAIN" sid="V:MAIN:gAktModus">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#128"/>
 		</var>
-		<var name="gBetriebsparameter" sid="V::gBetriebsparameter">
+		<var name="gBetriebsparameter" source="MAIN" sid="V:MAIN:gBetriebsparameter">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#53"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#54"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#61"/>
@@ -190,7 +190,7 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#465"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#474"/>
 		</var>
-		<var name="gIoTest" sid="V::gIoTest">
+		<var name="gIoTest" source="MAIN" sid="V:MAIN:gIoTest">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#349"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#350"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#351"/>
@@ -219,67 +219,67 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#491"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#500"/>
 		</var>
-		<var name="diBox1Offen" sid="V::diBox1Offen">
+		<var name="diBox1Offen" source="MAIN" sid="V:MAIN:diBox1Offen">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#144"/>
 		</var>
-		<var name="diBox1Geschl" sid="V::diBox1Geschl">
+		<var name="diBox1Geschl" source="MAIN" sid="V:MAIN:diBox1Geschl">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#145"/>
 		</var>
-		<var name="diBox2Offen" sid="V::diBox2Offen">
+		<var name="diBox2Offen" source="MAIN" sid="V:MAIN:diBox2Offen">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#146"/>
 		</var>
-		<var name="diBox2Geschl" sid="V::diBox2Geschl">
+		<var name="diBox2Geschl" source="MAIN" sid="V:MAIN:diBox2Geschl">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#147"/>
 		</var>
-		<var name="diBetriebLuftaufber" sid="V::diBetriebLuftaufber">
+		<var name="diBetriebLuftaufber" source="MAIN" sid="V:MAIN:diBetriebLuftaufber">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#148"/>
 		</var>
-		<var name="diStoerLuftaufber" sid="V::diStoerLuftaufber">
+		<var name="diStoerLuftaufber" source="MAIN" sid="V:MAIN:diStoerLuftaufber">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#149"/>
 		</var>
-		<var name="aiFrischluftTemp" sid="V::aiFrischluftTemp">
+		<var name="aiFrischluftTemp" source="MAIN" sid="V:MAIN:aiFrischluftTemp">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#195"/>
 		</var>
-		<var name="aiFrischluftFeuchte" sid="V::aiFrischluftFeuchte">
+		<var name="aiFrischluftFeuchte" source="MAIN" sid="V:MAIN:aiFrischluftFeuchte">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#209"/>
 		</var>
-		<var name="aiAbluftBox1Temp" sid="V::aiAbluftBox1Temp">
+		<var name="aiAbluftBox1Temp" source="MAIN" sid="V:MAIN:aiAbluftBox1Temp">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#223"/>
 		</var>
-		<var name="aiAbluftBox1Feucht" sid="V::aiAbluftBox1Feucht">
+		<var name="aiAbluftBox1Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox1Feucht">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#232"/>
 		</var>
-		<var name="aiTrockenluftTemp" sid="V::aiTrockenluftTemp">
+		<var name="aiTrockenluftTemp" source="MAIN" sid="V:MAIN:aiTrockenluftTemp">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#249"/>
 		</var>
-		<var name="aiTrockenluftFeucht" sid="V::aiTrockenluftFeucht">
+		<var name="aiTrockenluftFeucht" source="MAIN" sid="V:MAIN:aiTrockenluftFeucht">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#258"/>
 		</var>
-		<var name="aiAbluftBox2Temp" sid="V::aiAbluftBox2Temp">
+		<var name="aiAbluftBox2Temp" source="MAIN" sid="V:MAIN:aiAbluftBox2Temp">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#272"/>
 		</var>
-		<var name="aiAbluftBox2Feucht" sid="V::aiAbluftBox2Feucht">
+		<var name="aiAbluftBox2Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox2Feucht">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#281"/>
 		</var>
-		<var name="aiStocktemp" sid="V::aiStocktemp">
+		<var name="aiStocktemp" source="MAIN" sid="V:MAIN:aiStocktemp">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#295"/>
 		</var>
-		<var name="doFrgLuftaufber" sid="V::doFrgLuftaufber">
+		<var name="doFrgLuftaufber" source="MAIN" sid="V:MAIN:doFrgLuftaufber">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#304"/>
 		</var>
-		<var name="doFrgBox1" sid="V::doFrgBox1">
+		<var name="doFrgBox1" source="MAIN" sid="V:MAIN:doFrgBox1">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#305"/>
 		</var>
-		<var name="doFrgBox2" sid="V::doFrgBox2">
+		<var name="doFrgBox2" source="MAIN" sid="V:MAIN:doFrgBox2">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#306"/>
 		</var>
-		<var name="doFrgAbluftventilator" sid="V::doFrgAbluftventilator">
+		<var name="doFrgAbluftventilator" source="MAIN" sid="V:MAIN:doFrgAbluftventilator">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#307"/>
 		</var>
-		<var name="aoFuVentilator" sid="V::aoFuVentilator">
+		<var name="aoFuVentilator" source="MAIN" sid="V:MAIN:aoFuVentilator">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#316"/>
 		</var>
-		<var name="aoLeistVorgLuftaufber" sid="V::aoLeistVorgLuftaufber">
+		<var name="aoLeistVorgLuftaufber" source="MAIN" sid="V:MAIN:aoLeistVorgLuftaufber">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#332"/>
 		</var>
 		<var name="NONAME" source="MAIN" sid="V:MAIN:NONAME"/>
