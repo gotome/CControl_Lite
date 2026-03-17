@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<plcLibrary schemaVersion="2.11">
+	<lib version="1.0.0" name="MathLib" fullXml="true">
+		<descr>Mathematic library</descr>
+		<libWorkspace>
+			<folder name="MathLib">
+				<folder name="Functions">
+					<Pou name="FC_LinearizationInput" genHidden="false"/>
+					<Pou name="FC_DOtoAO_10V" genHidden="false"/>
+					<Pou name="FC_Linearization" genHidden="false"/>
+					<Pou name="FC_NtcConv" genHidden="false"/>
+					<Pou name="FC_PT100Conv" genHidden="false"/>
+					<Pou name="FC_PT1000Conv" genHidden="false"/>
+				</folder>
+				<folder name="Function_Blocks">
+					<Pou name="FB_LimScal" genHidden="false"/>
+					<Pou name="FB_MovAvgFlt" genHidden="false"/>
+				</folder>
+				<folder name="types">
+					<Definition name="ARR_RealPoint16"/>
+				</folder>
+				<folder name="struct">
+					<Definition name="strRealPoint"/>
+				</folder>
+			</folder>
+		</libWorkspace>
+		<globalVars/>
+		<retainVars/>
+		<constantVars/>
+		<iecVarsDeclaration/>
+		<functions>
+			<function name="FC_LinearizationInput" version="1.0.0" creationDate="1773605080" lastModifiedDate="1773605198">
+				<descr>Beschreibung:
+
+
+Skaliert zunächst einen Rohwert von einem Eingangsbereich auf einen 
+Arbeitsbereich und führt anschließend eine Linearisierung über eine 
+Kennlinie aus.
+Die Funktion eignet sich für Sensoren oder Messwerte, 
+die zuerst normiert und danach über eine Kennlinie in technische 
+Werte umgerechnet werden müssen.
+
+
+
+Hinweis:
+
+Sowohl das Eingangsscaling als auch die Kennlinienauswertung können optional begrenzt werden.</descr>
+				<returnValue>REAL</returnValue>
+				<vars>
+					<inputVars>
+						<var name="rRawIn" type="REAL"/>
+						<var name="rRawMin" type="REAL"/>
+						<var name="rRawMax" type="REAL"/>
+						<var name="rScaledMin" type="REAL"/>
+						<var name="rScaledMax" type="REAL"/>
+						<var name="xLimitInput" type="BOOL"/>
+						<var name="xLimitCurve" type="BOOL"/>
+						<var name="iPointCount" type="INT"/>
+						<var name="aPoints" type="ARR_RealPoint16"/>
+					</inputVars>
+					<localVars>
+						<var name="rScaled" type="REAL"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION FC_LinearizationInput : REAL
+
+VAR_INPUT
+    rRawIn          : REAL;
+    rRawMin         : REAL;
+    rRawMax         : REAL;
+    rScaledMin      : REAL;
+    rScaledMax      : REAL;
+    xLimitInput     : BOOL;
+    xLimitCurve     : BOOL;
+    iPointCount     : INT;
+    aPoints         : ARR_RealPoint16;
+END_VAR
+VAR
+    rScaled : REAL;
+END_VAR
+]]>
+				</iecDeclaration>
+				<sourceCode type="ST">
+					<![CDATA[
+
+IF rRawMax = rRawMin THEN
+    FC_LinearizationInput := rScaledMin;
+    RETURN;
+END_IF;
+
+rScaled := ((rRawIn - rRawMin) * (rScaledMax - rScaledMin) / (rRawMax - rRawMin)) + rScaledMin;
+
+IF xLimitInput THEN
+    IF rScaledMin <= rScaledMax THEN
+        IF rScaled < rScaledMin THEN
+            rScaled := rScaledMin;
+        ELSIF rScaled > rScaledMax THEN
+            rScaled := rScaledMax;
+        END_IF;
+    ELSE
+        IF rScaled > rScaledMin THEN
+            rScaled := rScaledMin;
+        ELSIF rScaled < rScaledMax THEN
+            rScaled := rScaledMax;
+        END_IF;
+    END_IF;
+END_IF;
+
+FC_LinearizationInput := F_LINEARIZATION(
+    rIn := rScaled,
+    xLimit := xLimitCurve,
+    iPointCount := iPointCount,
+    aPoints := aPoints
+);
+]]>
+				</sourceCode>
+			</function>
+			<function name="FC_DOtoAO_10V" version="1.0.0" creationDate="1773605290" lastModifiedDate="1773605319">
+				<descr>Beschreibung:
+
+
+Wandelt ein digitales Eingangssignal (BOOL) in einen analogen 
+Ausgangswert um.
+Bei TRUE wird rHighLevel ausgegeben, 
+bei FALSE wird rLowLevel ausgegeben.
+
+Die Funktion eignet sich zur einfachen Abbildung von binären Zuständen 
+auf analoge Sollwerte, z. B. 0 V / 10 V.</descr>
+				<returnValue>REAL</returnValue>
+				<vars>
+					<inputVars>
+						<var name="xIn" type="BOOL"/>
+						<var name="rLowLevel" type="REAL"/>
+						<var name="rHighLevel" type="REAL"/>
+					</inputVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION FC_DOtoAO_10V : REAL
+VAR_INPUT
+    xIn        : BOOL;
+    rLowLevel  : REAL;
+    rHighLevel : REAL;
+END_VAR
+]]>
+				</iecDeclaration>
+				<sourceCode type="ST">
+					<![CDATA[
+IF xIn THEN
+    F_DOtoAO_10V := rHighLevel;
+ELSE
+    F_DOtoAO_10V := rLowLevel;
+END_IF;
+]]>
+				</sourceCode>
+			</function>
+			<function name="FC_Linearization" version="1.0.0" creationDate="1773603364" lastModifiedDate="1773605245">
+				<descr>Beschreibung:
+
+
+Linearisierung eines Eingangswertes anhand einer Kennlinie aus Stützpunkten.
+
+Die Funktion interpoliert zwischen den übergebenen Punkten linear und
+liefert den zugehörigen Ausgangswert zurück.
+
+Optional kann der Wert auf den Bereich der Kennlinie begrenzt werden.
+
+
+
+Hinweis:
+
+
+Die Stützpunkte müssen in aufsteigender Reihenfolge nach x sortiert sein.</descr>
+				<returnValue>REAL</returnValue>
+				<vars>
+					<inputVars>
+						<var name="rIn" type="REAL"/>
+						<var name="xLimit" type="BOOL"/>
+						<var name="iPointCount" type="INT"/>
+						<var name="aPoints" type="ARR_RealPoint16"/>
+					</inputVars>
+					<localVars>
+						<var name="i" type="INT"/>
+						<var name="x1" type="REAL"/>
+						<var name="x2" type="REAL"/>
+						<var name="y1" type="REAL"/>
+						<var name="y2" type="REAL"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION FC_Linearization : REAL
+VAR_INPUT
+    rIn         : REAL;
+    xLimit      : BOOL;
+    iPointCount : INT;
+    aPoints     : ARR_RealPoint16;
+END_VAR
+VAR
+    i   : INT;
+    x1  : REAL;
+    x2  : REAL;
+    y1  : REAL;
+    y2  : REAL;
+END_VAR
+]]>
+				</iecDeclaration>
+				<sourceCode type="ST">
+					<![CDATA[
+
+IF iPointCount < 2 THEN
+    FC_Linearization := 0.0;
+    RETURN;
+END_IF;
+
+IF rIn <= aPoints[1].x THEN
+    IF xLimit THEN
+        FC_Linearization := aPoints[1].y;
+        RETURN;
+    END_IF;
+END_IF;
+
+IF rIn >= aPoints[iPointCount].x THEN
+    IF xLimit THEN
+        FC_Linearization := aPoints[iPointCount].y;
+        RETURN;
+    END_IF;
+END_IF;
+
+FOR i := 1 TO iPointCount - 1 DO
+    IF (rIn >= aPoints[i].x) AND (rIn <= aPoints[i + 1].x) THEN
+        x1 := aPoints[i].x;
+        x2 := aPoints[i + 1].x;
+        y1 := aPoints[i].y;
+        y2 := aPoints[i + 1].y;
+
+        IF x2 = x1 THEN
+            FC_Linearization := y1;
+            RETURN;
+        END_IF;
+
+        FC_Linearization := y1 + ((rIn - x1) * (y2 - y1) / (x2 - x1));
+        RETURN;
+    END_IF;
+END_FOR;
+
+// Extrapolation
+IF rIn < aPoints[1].x THEN
+    x1 := aPoints[1].x;
+    x2 := aPoints[2].x;
+    y1 := aPoints[1].y;
+    y2 := aPoints[2].y;
+ELSE
+    x1 := aPoints[iPointCount - 1].x;
+    x2 := aPoints[iPointCount].x;
+    y1 := aPoints[iPointCount - 1].y;
+    y2 := aPoints[iPointCount].y;
+END_IF;
+
+IF x2 = x1 THEN
+    FC_Linearization := y1;
+ELSE
+    FC_Linearization := y1 + ((rIn - x1) * (y2 - y1) / (x2 - x1));
+END_IF;
+]]>
+				</sourceCode>
+			</function>
+			<function name="FC_NtcConv" version="1.0.0" creationDate="1773605341" lastModifiedDate="1773605348">
+				<descr>Beschreibung:
+
+
+Berechnet aus dem Widerstand eines NTC-Sensors die Temperatur in 
+Grad Celsius.
+
+Die Umrechnung erfolgt über das Beta-Modell unter Verwendung 
+des Nennwiderstands bei 25 °C (rR25_Ohm) und des Beta-Werts (rBeta).
+
+Die Funktion eignet sich für die Auswertung von NTC-Temperatursensoren.
+
+
+
+Hinweis:
+
+Die Genauigkeit hängt von den verwendeten Sensordaten und der Parametrierung des NTC ab.</descr>
+				<returnValue>REAL</returnValue>
+				<vars>
+					<inputVars>
+						<var name="rResistance_Ohm" type="REAL"/>
+						<var name="rR25_Ohm" type="REAL"/>
+						<var name="rBeta" type="REAL"/>
+					</inputVars>
+					<localVars>
+						<var name="rLn" type="REAL"/>
+						<var name="rTempK" type="REAL"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION FC_NtcConv : REAL
+VAR_INPUT
+    rResistance_Ohm : REAL;
+    rR25_Ohm        : REAL;
+    rBeta           : REAL;
+END_VAR
+VAR
+    rLn    : REAL;
+    rTempK : REAL;
+END_VAR
+
+
+]]>
+				</iecDeclaration>
+				<sourceCode type="ST">
+					<![CDATA[
+IF (rResistance_Ohm <= 0.0) OR (rR25_Ohm <= 0.0) OR (rBeta <= 0.0) THEN
+    F_NTC_CONV := 0.0;
+    RETURN;
+END_IF;
+
+rLn := LN(rResistance_Ohm / rR25_Ohm);
+rTempK := 1.0 / ((1.0 / 298.15) + (rLn / rBeta));
+
+F_NTC_CONV := rTempK - 273.15;
+]]>
+				</sourceCode>
+			</function>
+			<function name="FC_PT100Conv" version="1.0.0" creationDate="1773605464" lastModifiedDate="1773605556">
+				<descr>Beschreibung:
+
+
+Berechnet aus dem Widerstand eines PT100-Sensors die Temperatur 
+in Grad Celsius.
+
+Die Umrechnung erfolgt auf Basis der Callendar-van-Dusen-Gleichung.
+
+Die Funktion unterstützt sowohl positive als auch negative Temperaturen 
+und eignet sich zur Auswertung von PT100-Widerstandsthermometern.</descr>
+				<returnValue>REAL</returnValue>
+				<vars>
+					<inputVars>
+						<var name="rResistance_Ohm" type="REAL"/>
+					</inputVars>
+					<localVars>
+						<var name="R0" type="REAL">
+							<initValue>100.0</initValue>
+						</var>
+						<var name="A" type="REAL">
+							<initValue>3.9083E-3</initValue>
+						</var>
+						<var name="B" type="REAL">
+							<initValue>-5.775E-7</initValue>
+						</var>
+						<var name="C" type="REAL">
+							<initValue>-4.183E-12</initValue>
+						</var>
+						<var name="t" type="REAL"/>
+						<var name="f" type="REAL"/>
+						<var name="df" type="REAL"/>
+						<var name="i" type="INT"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="FALSE"/>
+				<sourceCode type="ST">
+					<![CDATA[
+
+IF rResistance_Ohm <= 0.0 THEN
+    FC_PT100Conv := 0.0;
+    RETURN;
+END_IF;
+
+// Startwert
+t := (rResistance_Ohm - 100.0) / 0.385;
+
+// Newton-Iteration
+FOR i := 1 TO 12 DO
+    IF t >= 0.0 THEN
+        f := R0 * (1.0 + A * t + B * t * t) - rResistance_Ohm;
+        df := R0 * (A + 2.0 * B * t);
+    ELSE
+        f := R0 * (1.0 + A * t + B * t * t + C * (t - 100.0) * t * t * t) - rResistance_Ohm;
+        df := R0 * (
+              A
+            + 2.0 * B * t
+            + C * (4.0 * t * t * t - 300.0 * t * t)
+        );
+    END_IF;
+
+    IF df <> 0.0 THEN
+        t := t - (f / df);
+    END_IF;
+END_FOR;
+
+FC_PT100Conv := t;
+]]>
+				</sourceCode>
+			</function>
+			<function name="FC_PT1000Conv" version="1.0.0" creationDate="1773605577" lastModifiedDate="1773605603">
+				<descr>Beschreibung:
+
+
+Berechnet aus dem Widerstand eines PT1000-Sensors die Temperatur 
+in Grad Celsius.
+
+Die Umrechnung erfolgt auf Basis der Callendar-van-Dusen-Gleichung.
+
+Die Funktion unterstützt sowohl positive als auch negative Temperaturen 
+und eignet sich zur Auswertung von PT1000-Widerstandsthermometern.</descr>
+				<returnValue>REAL</returnValue>
+				<vars>
+					<inputVars>
+						<var name="rResistance_Ohm" type="REAL"/>
+					</inputVars>
+					<localVars>
+						<var name="R0" type="REAL">
+							<initValue>1000.0</initValue>
+						</var>
+						<var name="A" type="REAL">
+							<initValue>3.9083E-3</initValue>
+						</var>
+						<var name="B" type="REAL">
+							<initValue>-5.775E-7</initValue>
+						</var>
+						<var name="C" type="REAL">
+							<initValue>-4.183E-12</initValue>
+						</var>
+						<var name="t" type="REAL"/>
+						<var name="f" type="REAL"/>
+						<var name="df" type="REAL"/>
+						<var name="i" type="INT"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION FC_PT1000Conv : REAL
+VAR_INPUT
+    rResistance_Ohm : REAL;
+END_VAR
+VAR
+    R0      : REAL := 1000.0;
+    A       : REAL := 3.9083E-3;
+    B       : REAL := -5.775E-7;
+    C       : REAL := -4.183E-12;
+    t       : REAL;
+    f       : REAL;
+    df      : REAL;
+    i       : INT;
+END_VAR
+
+]]>
+				</iecDeclaration>
+				<sourceCode type="ST">
+					<![CDATA[
+
+IF rResistance_Ohm <= 0.0 THEN
+    FC_PT1000Conv := 0.0;
+    RETURN;
+END_IF;
+
+// Startwert grob
+t := (rResistance_Ohm - 1000.0) / 3.85;
+
+// Newton-Iteration
+FOR i := 1 TO 12 DO
+    IF t >= 0.0 THEN
+        f := R0 * (1.0 + A * t + B * t * t) - rResistance_Ohm;
+        df := R0 * (A + 2.0 * B * t);
+    ELSE
+        f := R0 * (1.0 + A * t + B * t * t + C * (t - 100.0) * t * t * t) - rResistance_Ohm;
+        df := R0 * (
+              A
+            + 2.0 * B * t
+            + C * (4.0 * t * t * t - 300.0 * t * t)
+        );
+    END_IF;
+
+    IF df <> 0.0 THEN
+        t := t - (f / df);
+    END_IF;
+END_FOR;
+
+FC_PT1000Conv := t;
+]]>
+				</sourceCode>
+			</function>
+		</functions>
+		<functionBlocks>
+			<functionBlock name="FB_LimScal" version="1.0.0" creationDate="1773604888" lastModifiedDate="1773604949">
+				<descr>Beschreibung:
+
+
+Skaliert einen Eingangswert x linear von einem Eingangsbereich (x1..x2) auf einen Ausgangsbereich (y1..y2).
+
+Der Ausgangswert wird auf den Zielbereich begrenzt.
+
+Der Baustein eignet sich zur Umrechnung von Rohwerten aus Analogkanälen in technische Einheiten wie Temperatur,
+Druck, Prozent oder Spannung.
+
+Hinweis:
+Liegt der Eingangswert außerhalb des Eingangsbereichs, 
+wird der Ausgang entsprechend auf den Minimal- oder Maximalwert des Zielbereichs begrenzt.</descr>
+				<vars>
+					<inputVars>
+						<var name="x" type="REAL"/>
+						<var name="x1" type="REAL"/>
+						<var name="y1" type="REAL"/>
+						<var name="x2" type="REAL"/>
+						<var name="y2" type="REAL"/>
+					</inputVars>
+					<outputVars>
+						<var name="y" type="REAL"/>
+					</outputVars>
+					<localVars>
+						<var name="rTemp" type="REAL"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION_BLOCK FB_LimScal
+VAR_INPUT
+    x  : REAL;
+    x1 : REAL;
+    y1 : REAL;
+    x2 : REAL;
+    y2 : REAL;
+END_VAR
+
+VAR_OUTPUT
+    y : REAL;
+END_VAR
+
+VAR
+    rTemp : REAL;
+END_VAR
+]]>
+				</iecDeclaration>
+				<interfaces/>
+				<methods/>
+				<sourceCode type="ST">
+					<![CDATA[
+IF x2 = x1 THEN
+    y := y1;
+ELSE
+    rTemp := ((x - x1) * (y2 - y1) / (x2 - x1)) + y1;
+
+    IF y1 <= y2 THEN
+        IF rTemp < y1 THEN
+            rTemp := y1;
+        ELSIF rTemp > y2 THEN
+            rTemp := y2;
+        END_IF;
+    ELSE
+        IF rTemp > y1 THEN
+            rTemp := y1;
+        ELSIF rTemp < y2 THEN
+            rTemp := y2;
+        END_IF;
+    END_IF;
+
+    y := rTemp;
+END_IF;
+]]>
+				</sourceCode>
+			</functionBlock>
+			<functionBlock name="FB_MovAvgFlt" version="1.0.0" creationDate="1773604989" lastModifiedDate="1773608170">
+				<descr>Beschreibung:
+
+Bildet einen gleitenden Mittelwert über die letzten Eingangswerte.
+
+Der Baustein dient zur Glättung von verrauschten oder schwankenden 
+Analogsignalen. 
+Die Anzahl der gemittelten Werte wird über base vorgegeben.
+
+Der Baustein speichert intern die letzten Messwerte und berechnet daraus den 
+aktuellen Mittelwert am Ausgang y.
+
+Hinweis:
+
+Die wirksame Filterzeit ergibt sich aus der Anzahl der Samples (base) und der Aufrufperiode des Bausteins.</descr>
+				<vars>
+					<inputVars>
+						<var name="enable" type="BOOL"/>
+						<var name="x" type="REAL"/>
+						<var name="base" type="UINT">
+							<descr>Anzahl Samples, 1..128</descr>
+						</var>
+					</inputVars>
+					<outputVars>
+						<var name="y" type="REAL"/>
+					</outputVars>
+					<localVars>
+						<var name="aBuf" type="REAL" dim0="128"/>
+						<var name="idx" type="UINT"/>
+						<var name="cnt" type="UINT"/>
+						<var name="i" type="UINT"/>
+						<var name="sum" type="REAL"/>
+						<var name="lastBase" type="UINT"/>
+					</localVars>
+				</vars>
+				<iecDeclaration active="TRUE" valid="TRUE">
+					<![CDATA[FUNCTION_BLOCK FB_MovAvgFlt
+VAR_INPUT
+    enable : BOOL;
+    x      : REAL;
+    base   : UINT;     // Anzahl Samples, 1..128
+END_VAR
+
+VAR_OUTPUT
+    y      : REAL;
+END_VAR
+
+VAR
+    aBuf   : ARRAY[0..127] OF REAL;
+    idx    : UINT;
+    cnt    : UINT;
+    i      : UINT;
+    sum    : REAL;
+    lastBase: UINT;
+END_VAR
+
+]]>
+				</iecDeclaration>
+				<interfaces/>
+				<methods/>
+				<sourceCode type="ST">
+					<![CDATA[
+IF NOT enable THEN
+    RETURN;
+END_IF;
+
+// base absichern
+IF base < 1 THEN
+    y := x;
+    RETURN;
+END_IF;
+
+// wenn sich base ändert, Filter neu initialisieren
+IF lastBase <> base THEN
+    FOR i := 0 TO 127 DO
+        aBuf[i] := 0.0;
+    END_FOR;
+    idx := 0;
+    cnt := 0;
+    sum := 0.0;
+    lastBase := base;
+END_IF;
+
+// max. Puffergröße begrenzen
+IF base > 128 THEN
+    lastBase := 128;
+ELSE
+    lastBase := base;
+END_IF;
+
+// solange noch nicht voll
+IF cnt < lastBase THEN
+    aBuf[idx] := x;
+    sum := sum + x;
+    cnt := cnt + 1;
+ELSE
+    sum := sum - aBuf[idx];
+    aBuf[idx] := x;
+    sum := sum + x;
+END_IF;
+
+// Index weiterschalten
+idx := idx + 1;
+IF idx >= lastBase THEN
+    idx := 0;
+END_IF;
+
+// Mittelwert
+IF cnt > 0 THEN
+    y := sum / TO_REAL(cnt);
+ELSE
+    y := x;
+END_IF;
+]]>
+				</sourceCode>
+			</functionBlock>
+		</functionBlocks>
+		<programs/>
+		<macros/>
+		<structs>
+			<struct name="strRealPoint" version="1.0.0">
+				<vars>
+					<var name="x" type="REAL"/>
+					<var name="y" type="BOOL"/>
+				</vars>
+				<iecDeclaration active="FALSE"/>
+			</struct>
+		</structs>
+		<typedefs>
+			<typedef name="ARR_RealPoint16" type="strRealPoint" idxMin0="1" idx0="16">
+				<iecDeclaration active="FALSE"/>
+			</typedef>
+		</typedefs>
+		<enums/>
+		<subranges/>
+		<interfaces/>
+	</lib>
+</plcLibrary>
