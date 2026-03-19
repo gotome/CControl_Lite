@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0xFEDD524D" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0xFBCBD013" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -8,7 +8,7 @@
 		<program name="AblaufstrgCyclic" source="MAIN" sid="P:MAIN:AblaufstrgCyclic"/>
 		<program name="LeistungCyclic" source="MAIN" sid="P:MAIN:LeistungCyclic"/>
 		<program name="aktorenMapping" source="MAIN" sid="P:MAIN:aktorenMapping"/>
-		<program name="BoxenMapping" source="MAIN" sid="P:MAIN:BoxenMapping"/>
+		<program name="HmiMappingCyclic" source="MAIN" sid="P:MAIN:HmiMappingCyclic"/>
 	</programs>
 	<functions>
 		<function name="sysOverwriteSerialDisplay" source="TGT" sid="F:TGT:sysOverwriteSerialDisplay"/>
@@ -103,6 +103,7 @@
 	</functionBlocks>
 	<vars>
 		<var name="gAktModus" source="MAIN" sid="V:MAIN:gAktModus">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#44"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#127"/>
 		</var>
 		<var name="gBetriebsparameter" source="MAIN" sid="V:MAIN:gBetriebsparameter">
@@ -191,6 +192,27 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#473"/>
 		</var>
 		<var name="gIoTest" source="MAIN" sid="V:MAIN:gIoTest">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#106"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#107"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#108"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#109"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#111"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#112"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#114"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#115"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#116"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#117"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#118"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#119"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#121"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#122"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#123"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#124"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#125"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#126"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#127"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#128"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#129"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#348"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#349"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#350"/>
@@ -220,66 +242,87 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#499"/>
 		</var>
 		<var name="diBox1Offen" source="MAIN" sid="V:MAIN:diBox1Offen">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#51"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#143"/>
 		</var>
 		<var name="diBox1Geschl" source="MAIN" sid="V:MAIN:diBox1Geschl">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#52"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#144"/>
 		</var>
 		<var name="diBox2Offen" source="MAIN" sid="V:MAIN:diBox2Offen">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#53"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#145"/>
 		</var>
 		<var name="diBox2Geschl" source="MAIN" sid="V:MAIN:diBox2Geschl">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#54"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#146"/>
 		</var>
 		<var name="diBetriebLuftaufber" source="MAIN" sid="V:MAIN:diBetriebLuftaufber">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#55"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#147"/>
 		</var>
 		<var name="diStoerLuftaufber" source="MAIN" sid="V:MAIN:diStoerLuftaufber">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#56"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#148"/>
 		</var>
 		<var name="aiFrischluftTemp" source="MAIN" sid="V:MAIN:aiFrischluftTemp">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#65"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#194"/>
 		</var>
 		<var name="aiFrischluftFeuchte" source="MAIN" sid="V:MAIN:aiFrischluftFeuchte">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#66"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#208"/>
 		</var>
 		<var name="aiAbluftBox1Temp" source="MAIN" sid="V:MAIN:aiAbluftBox1Temp">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#67"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#222"/>
 		</var>
 		<var name="aiAbluftBox1Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox1Feucht">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#68"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#231"/>
 		</var>
 		<var name="aiTrockenluftTemp" source="MAIN" sid="V:MAIN:aiTrockenluftTemp">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#69"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#248"/>
 		</var>
 		<var name="aiTrockenluftFeucht" source="MAIN" sid="V:MAIN:aiTrockenluftFeucht">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#70"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#257"/>
 		</var>
 		<var name="aiAbluftBox2Temp" source="MAIN" sid="V:MAIN:aiAbluftBox2Temp">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#71"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#271"/>
 		</var>
 		<var name="aiAbluftBox2Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox2Feucht">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#72"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#280"/>
 		</var>
 		<var name="aiStocktemp" source="MAIN" sid="V:MAIN:aiStocktemp">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#73"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#294"/>
 		</var>
 		<var name="doFrgLuftaufber" source="MAIN" sid="V:MAIN:doFrgLuftaufber">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#82"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#303"/>
 		</var>
 		<var name="doFrgBox1" source="MAIN" sid="V:MAIN:doFrgBox1">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#83"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#304"/>
 		</var>
 		<var name="doFrgBox2" source="MAIN" sid="V:MAIN:doFrgBox2">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#84"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#305"/>
 		</var>
 		<var name="doFrgAbluftventilator" source="MAIN" sid="V:MAIN:doFrgAbluftventilator">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#85"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#306"/>
 		</var>
 		<var name="aoFuVentilator" source="MAIN" sid="V:MAIN:aoFuVentilator">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#95"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#315"/>
 		</var>
 		<var name="aoLeistVorgLuftaufber" source="MAIN" sid="V:MAIN:aoLeistVorgLuftaufber">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#96"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#331"/>
 		</var>
 		<var name="NONAME" source="MAIN" sid="V:MAIN:NONAME"/>
@@ -375,6 +418,169 @@
 		</var>
 		<var name="Sensoren_FrischlFeuchteMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlFeuchteMessberMax">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#63"/>
+		</var>
+		<var name="HMI_TEST_doFrgLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#106"/>
+		</var>
+		<var name="HMI_TEST_doFrgBox1" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgBox1">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#107"/>
+		</var>
+		<var name="HMI_TEST_doFrgBox2" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgBox2">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#108"/>
+		</var>
+		<var name="HMI_TEST_doFrgAbluftventilator" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgAbluftventilator">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#109"/>
+		</var>
+		<var name="HMI_TEST_diBox1Offen" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diBox1Offen">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#114"/>
+		</var>
+		<var name="HMI_TEST_diBox1Geschl" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diBox1Geschl">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#115"/>
+		</var>
+		<var name="HMI_TEST_diBox2Offen" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diBox2Offen">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#116"/>
+		</var>
+		<var name="HMI_TEST_diBox2Geschl" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diBox2Geschl">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#117"/>
+		</var>
+		<var name="HMI_TEST_diLuftaufberBetrieb" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diLuftaufberBetrieb"/>
+		<var name="HMI_TEST_diLuftaufberStoer" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diLuftaufberStoer"/>
+		<var name="HMI_TEST_diBetriebLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diBetriebLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#118"/>
+		</var>
+		<var name="HMI_TEST_diStoerLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diStoerLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#119"/>
+		</var>
+		<var name="HMI_TEST_di3" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_di3"/>
+		<var name="HMI_TEST_di4" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_di4"/>
+		<var name="HMI_TEST_IoTestAkt" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_IoTestAkt">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#44"/>
+		</var>
+		<var name="HMI_TEST_do1" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_do1"/>
+		<var name="HMI_TEST_do2" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_do2"/>
+		<var name="HMI_TEST_do3" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_do3"/>
+		<var name="HMI_TEST_do4" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_do4"/>
+		<var name="HMI_TEST_do5" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_do5"/>
+		<var name="HMI_IN_diBox1Offen" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_diBox1Offen">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#51"/>
+		</var>
+		<var name="HMI_IN_diBox1Geschl" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_diBox1Geschl">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#52"/>
+		</var>
+		<var name="HMI_IN_diBox2Offen" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_diBox2Offen">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#53"/>
+		</var>
+		<var name="HMI_IN_diBox2Geschl" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_diBox2Geschl">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#54"/>
+		</var>
+		<var name="HMI_IN_diBetriebLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_diBetriebLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#55"/>
+		</var>
+		<var name="HMI_IN_diStoerLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_diStoerLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#56"/>
+		</var>
+		<var name="HMI_IN_doFrgLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_doFrgLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#82"/>
+		</var>
+		<var name="HMI_IN_doFrgBox1" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_doFrgBox1">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#83"/>
+		</var>
+		<var name="HMI_IN_doFrgBox2" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_doFrgBox2">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#84"/>
+		</var>
+		<var name="HMI_IN_doFrgAbluftvent" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_doFrgAbluftvent">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#85"/>
+		</var>
+		<var name="HMI_IN_1" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_1"/>
+		<var name="HMI_IN_2" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_2"/>
+		<var name="HMI_IN_3" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_3"/>
+		<var name="HMI_IN_4" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_4"/>
+		<var name="HMI_IN_5" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_5"/>
+		<var name="HMI_IN_6" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_6"/>
+		<var name="HMI_IN_7" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_7"/>
+		<var name="HMI_IN_8" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_8"/>
+		<var name="HMI_IN_9" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_9"/>
+		<var name="HMI_IN_10" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_10"/>
+		<var name="HMI_IN_11" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_11"/>
+		<var name="HMI_IN_12" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_12"/>
+		<var name="HMI_IN_13" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_13"/>
+		<var name="HMI_IN_14" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_14"/>
+		<var name="HMI_IN_15" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_15"/>
+		<var name="HMI_IN_17" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_17"/>
+		<var name="HMI_IN_18" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_18"/>
+		<var name="HMI_IN_19" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_19"/>
+		<var name="HMI_IN_20" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_20"/>
+		<var name="HMI_IN_aiFrischluftTemp" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiFrischluftTemp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#65"/>
+		</var>
+		<var name="HMI_IN_aiFrischluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiFrischluftFeuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#66"/>
+		</var>
+		<var name="HMI_IN_aiAbluftBox1Temp" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiAbluftBox1Temp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#67"/>
+		</var>
+		<var name="HMI_IN_aiAbluftBox1Feuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiAbluftBox1Feuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#68"/>
+		</var>
+		<var name="HMI_IN_aiTrockenluftTemp" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiTrockenluftTemp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#69"/>
+		</var>
+		<var name="HMI_IN_aiTrockenluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiTrockenluftFeuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#70"/>
+		</var>
+		<var name="HMI_IN_aiAbluftBox2Temp" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiAbluftBox2Temp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#71"/>
+		</var>
+		<var name="HMI_IN_aiAbluftBox2Feuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiAbluftBox2Feuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#72"/>
+		</var>
+		<var name="HMI_IN_aiStockTemp" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aiStockTemp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#73"/>
+		</var>
+		<var name="HMI_IN_aoFuVentilator" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aoFuVentilator">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#95"/>
+		</var>
+		<var name="HMI_IN_aoLeistVorgLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_aoLeistVorgLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#96"/>
+		</var>
+		<var name="HMI_IN_ai3" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ai3"/>
+		<var name="HMI_IN_ai4" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ai4"/>
+		<var name="HMI_IN_ai5" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ai5"/>
+		<var name="HMI_TEST_aoFuVentilator" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aoFuVentilator">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#111"/>
+		</var>
+		<var name="HMI_TEST_aoLeistVorgLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aoLeistVorgLuftaufber">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#112"/>
+		</var>
+		<var name="HMI_TEST_ao1" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_ao1"/>
+		<var name="HMI_TEST_ao2" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_ao2"/>
+		<var name="HMI_TEST_ao3" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_ao3"/>
+		<var name="HMI_TEST_aiFrischluftTemp" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiFrischluftTemp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#121"/>
+		</var>
+		<var name="HMI_TEST_aiFrischluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiFrischluftFeuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#122"/>
+		</var>
+		<var name="HMI_TEST_aiAbluftBox1Temp" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiAbluftBox1Temp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#123"/>
+		</var>
+		<var name="HMI_TEST_aiAbluftBox1Feuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiAbluftBox1Feuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#124"/>
+		</var>
+		<var name="HMI_TEST_aiTrockenluftTemp" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiTrockenluftTemp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#125"/>
+		</var>
+		<var name="HMI_TEST_aiTrockenluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiTrockenluftFeuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#126"/>
+		</var>
+		<var name="HMI_TEST_aiAbluftBox2Temp" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiAbluftBox2Temp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#127"/>
+		</var>
+		<var name="HMI_TEST_aiAbluftBox2Feuchte" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiAbluftBox2Feuchte">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#128"/>
+		</var>
+		<var name="HMI_TEST_aiStocktemp" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_aiStocktemp">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#129"/>
 		</var>
 		<var name="hw_di1" source="Configuration_variables" sid="V:Configuration_variables:hw_di1">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#143"/>
