@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x0A60C54E" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0xFEDD524D" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -103,23 +103,24 @@
 	</functionBlocks>
 	<vars>
 		<var name="gAktModus" source="MAIN" sid="V:MAIN:gAktModus">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#128"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#127"/>
 		</var>
 		<var name="gBetriebsparameter" source="MAIN" sid="V:MAIN:gBetriebsparameter">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#52"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#53"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#54"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#60"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#61"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#62"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#63"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#64"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#70"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#71"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#72"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#73"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#74"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#80"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#81"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#82"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#83"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#84"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#90"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#91"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#92"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#93"/>
@@ -128,7 +129,7 @@
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#96"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#97"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#98"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#99"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#108"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#109"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#110"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#111"/>
@@ -136,328 +137,327 @@
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#113"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#114"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#115"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#116"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#176"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#190"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#192"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#195"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#204"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#206"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#209"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#218"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#220"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#223"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#227"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#229"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#232"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#244"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#246"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#249"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#253"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#255"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#258"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#267"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#269"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#272"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#276"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#278"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#281"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#295"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#391"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#397"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#399"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#402"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#406"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#408"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#411"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#415"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#417"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#420"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#424"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#426"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#429"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#433"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#435"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#438"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#442"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#444"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#447"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#451"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#453"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#456"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#460"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#462"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#465"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#474"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#175"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#189"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#191"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#194"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#203"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#205"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#208"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#217"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#219"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#222"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#226"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#228"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#231"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#243"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#245"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#248"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#252"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#254"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#257"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#266"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#268"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#271"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#275"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#277"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#280"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#294"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#390"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#396"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#398"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#401"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#405"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#407"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#410"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#414"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#416"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#419"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#423"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#425"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#428"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#432"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#434"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#437"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#441"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#443"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#446"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#450"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#452"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#455"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#459"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#461"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#464"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#473"/>
 		</var>
 		<var name="gIoTest" source="MAIN" sid="V:MAIN:gIoTest">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#348"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#349"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#350"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#351"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#352"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#353"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#354"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#355"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#373"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#374"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#375"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#376"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#377"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#378"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#379"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#402"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#411"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#420"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#429"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#438"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#447"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#456"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#465"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#474"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#401"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#410"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#419"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#428"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#437"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#446"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#455"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#464"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#473"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#480"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#481"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#482"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#483"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#484"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#491"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#500"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#490"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#499"/>
 		</var>
 		<var name="diBox1Offen" source="MAIN" sid="V:MAIN:diBox1Offen">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#144"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#143"/>
 		</var>
 		<var name="diBox1Geschl" source="MAIN" sid="V:MAIN:diBox1Geschl">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#145"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#144"/>
 		</var>
 		<var name="diBox2Offen" source="MAIN" sid="V:MAIN:diBox2Offen">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#146"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#145"/>
 		</var>
 		<var name="diBox2Geschl" source="MAIN" sid="V:MAIN:diBox2Geschl">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#147"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#146"/>
 		</var>
 		<var name="diBetriebLuftaufber" source="MAIN" sid="V:MAIN:diBetriebLuftaufber">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#148"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#147"/>
 		</var>
 		<var name="diStoerLuftaufber" source="MAIN" sid="V:MAIN:diStoerLuftaufber">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#149"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#148"/>
 		</var>
 		<var name="aiFrischluftTemp" source="MAIN" sid="V:MAIN:aiFrischluftTemp">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#195"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#194"/>
 		</var>
 		<var name="aiFrischluftFeuchte" source="MAIN" sid="V:MAIN:aiFrischluftFeuchte">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#209"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#208"/>
 		</var>
 		<var name="aiAbluftBox1Temp" source="MAIN" sid="V:MAIN:aiAbluftBox1Temp">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#223"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#222"/>
 		</var>
 		<var name="aiAbluftBox1Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox1Feucht">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#232"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#231"/>
 		</var>
 		<var name="aiTrockenluftTemp" source="MAIN" sid="V:MAIN:aiTrockenluftTemp">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#249"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#248"/>
 		</var>
 		<var name="aiTrockenluftFeucht" source="MAIN" sid="V:MAIN:aiTrockenluftFeucht">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#258"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#257"/>
 		</var>
 		<var name="aiAbluftBox2Temp" source="MAIN" sid="V:MAIN:aiAbluftBox2Temp">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#272"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#271"/>
 		</var>
 		<var name="aiAbluftBox2Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox2Feucht">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#281"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#280"/>
 		</var>
 		<var name="aiStocktemp" source="MAIN" sid="V:MAIN:aiStocktemp">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#295"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#294"/>
 		</var>
 		<var name="doFrgLuftaufber" source="MAIN" sid="V:MAIN:doFrgLuftaufber">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#304"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#303"/>
 		</var>
 		<var name="doFrgBox1" source="MAIN" sid="V:MAIN:doFrgBox1">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#305"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#304"/>
 		</var>
 		<var name="doFrgBox2" source="MAIN" sid="V:MAIN:doFrgBox2">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#306"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#305"/>
 		</var>
 		<var name="doFrgAbluftventilator" source="MAIN" sid="V:MAIN:doFrgAbluftventilator">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#307"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#306"/>
 		</var>
 		<var name="aoFuVentilator" source="MAIN" sid="V:MAIN:aoFuVentilator">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#316"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#315"/>
 		</var>
 		<var name="aoLeistVorgLuftaufber" source="MAIN" sid="V:MAIN:aoLeistVorgLuftaufber">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#332"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#331"/>
 		</var>
 		<var name="NONAME" source="MAIN" sid="V:MAIN:NONAME"/>
 		<var name="Ausstattung_Box2" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_Box2">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#109"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#108"/>
 		</var>
 		<var name="Ausstattung_Luftaufbereiter" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_Luftaufbereiter">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#110"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#109"/>
 		</var>
 		<var name="Ausstattung_SensorFrischluft" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorFrischluft">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#112"/>
-		</var>
-		<var name="Ausstattung_SensorAbluftBox1" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorAbluftBox1">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#113"/>
-		</var>
-		<var name="Ausstattung_SensorAbluftBox2" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorAbluftBox2">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#114"/>
-		</var>
-		<var name="Ausstattung_SensorTrockenluft" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorTrockenluft">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#115"/>
-		</var>
-		<var name="Ausstattung_SensorStocktemp" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorStocktemp">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#116"/>
-		</var>
-		<var name="Sensoren_FilterzeitFrischluft" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FilterzeitFrischluft">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#53"/>
-		</var>
-		<var name="Sensoren_FilterzeitAbluft" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FilterzeitAbluft">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#54"/>
-		</var>
-		<var name="Sensoren_FrischlTempMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlTempMessberMin">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#61"/>
-		</var>
-		<var name="Sensoren_FrischlTempMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlTempMessberMax">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#62"/>
-		</var>
-		<var name="Sensoren_AbluftTempMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftTempMessberMin">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#71"/>
-		</var>
-		<var name="Sensoren_AbluftTempMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftTempMessberMax">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#72"/>
-		</var>
-		<var name="Sensoren_AbluftFeuchtMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftFeuchtMessberMin">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#73"/>
-		</var>
-		<var name="Sensoren_AbluftFeuchtMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftFeuchtMessberMax">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#74"/>
-		</var>
-		<var name="Sensoren_TrockenlTempMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlTempMessberMin">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#81"/>
-		</var>
-		<var name="Sensoren_TrockenlTempMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlTempMessberMax">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#82"/>
-		</var>
-		<var name="Sensoren_TrockenlFeuchtMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlFeuchtMessberMin">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#83"/>
-		</var>
-		<var name="Sensoren_TrockenlFeuchtMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlFeuchtMessberMax">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#84"/>
-		</var>
-		<var name="Sensoren_OffsetFrischluftTemp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetFrischluftTemp">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#91"/>
-		</var>
-		<var name="Sensoren_OffsetFrischluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetFrischluftFeuchte">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#92"/>
-		</var>
-		<var name="Sensoren_OffsetAbluftBox1Temp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox1Temp">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#93"/>
-		</var>
-		<var name="Sensoren_OffsetAbluftBox1Feuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox1Feuchte">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#94"/>
-		</var>
-		<var name="Sensoren_OffsetAbluftBox2Temp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox2Temp">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#95"/>
-		</var>
-		<var name="Sensoren_OffsetAbluftBox2Feuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox2Feuchte">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#96"/>
-		</var>
-		<var name="Sensoren_OffsetTrockenluftTemp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetTrockenluftTemp">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#97"/>
-		</var>
-		<var name="Sensoren_OffsetTrockenluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetTrockenluftFeuchte">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#98"/>
-		</var>
-		<var name="Sensoren_OffsetStocktemp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetStocktemp">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#99"/>
-		</var>
-		<var name="Ausstattung_Abluftventilator" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_Abluftventilator">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#111"/>
 		</var>
+		<var name="Ausstattung_SensorAbluftBox1" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorAbluftBox1">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#112"/>
+		</var>
+		<var name="Ausstattung_SensorAbluftBox2" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorAbluftBox2">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#113"/>
+		</var>
+		<var name="Ausstattung_SensorTrockenluft" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorTrockenluft">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#114"/>
+		</var>
+		<var name="Ausstattung_SensorStocktemp" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_SensorStocktemp">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#115"/>
+		</var>
+		<var name="Sensoren_FilterzeitFrischluft" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FilterzeitFrischluft">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#52"/>
+		</var>
+		<var name="Sensoren_FilterzeitAbluft" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FilterzeitAbluft">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#53"/>
+		</var>
+		<var name="Sensoren_FrischlTempMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlTempMessberMin">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#60"/>
+		</var>
+		<var name="Sensoren_FrischlTempMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlTempMessberMax">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#61"/>
+		</var>
+		<var name="Sensoren_AbluftTempMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftTempMessberMin">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#70"/>
+		</var>
+		<var name="Sensoren_AbluftTempMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftTempMessberMax">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#71"/>
+		</var>
+		<var name="Sensoren_AbluftFeuchtMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftFeuchtMessberMin">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#72"/>
+		</var>
+		<var name="Sensoren_AbluftFeuchtMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_AbluftFeuchtMessberMax">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#73"/>
+		</var>
+		<var name="Sensoren_TrockenlTempMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlTempMessberMin">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#80"/>
+		</var>
+		<var name="Sensoren_TrockenlTempMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlTempMessberMax">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#81"/>
+		</var>
+		<var name="Sensoren_TrockenlFeuchtMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlFeuchtMessberMin">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#82"/>
+		</var>
+		<var name="Sensoren_TrockenlFeuchtMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_TrockenlFeuchtMessberMax">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#83"/>
+		</var>
+		<var name="Sensoren_OffsetFrischluftTemp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetFrischluftTemp">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#90"/>
+		</var>
+		<var name="Sensoren_OffsetFrischluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetFrischluftFeuchte">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#91"/>
+		</var>
+		<var name="Sensoren_OffsetAbluftBox1Temp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox1Temp">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#92"/>
+		</var>
+		<var name="Sensoren_OffsetAbluftBox1Feuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox1Feuchte">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#93"/>
+		</var>
+		<var name="Sensoren_OffsetAbluftBox2Temp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox2Temp">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#94"/>
+		</var>
+		<var name="Sensoren_OffsetAbluftBox2Feuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetAbluftBox2Feuchte">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#95"/>
+		</var>
+		<var name="Sensoren_OffsetTrockenluftTemp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetTrockenluftTemp">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#96"/>
+		</var>
+		<var name="Sensoren_OffsetTrockenluftFeuchte" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetTrockenluftFeuchte">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#97"/>
+		</var>
+		<var name="Sensoren_OffsetStocktemp" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_OffsetStocktemp">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#98"/>
+		</var>
+		<var name="Ausstattung_Abluftventilator" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_Abluftventilator">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#110"/>
+		</var>
 		<var name="Sensoren_FrischlFeuchteMessberMin" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlFeuchteMessberMin">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#63"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#62"/>
 		</var>
 		<var name="Sensoren_FrischlFeuchteMessberMax" source="Configuration_variables" sid="V:Configuration_variables:Sensoren_FrischlFeuchteMessberMax">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#64"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#63"/>
 		</var>
 		<var name="hw_di1" source="Configuration_variables" sid="V:Configuration_variables:hw_di1">
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#143"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#373"/>
+		</var>
+		<var name="hw_di2" source="Configuration_variables" sid="V:Configuration_variables:hw_di2">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#144"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#374"/>
 		</var>
-		<var name="hw_di2" source="Configuration_variables" sid="V:Configuration_variables:hw_di2">
+		<var name="hw_di3" source="Configuration_variables" sid="V:Configuration_variables:hw_di3">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#145"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#375"/>
 		</var>
-		<var name="hw_di3" source="Configuration_variables" sid="V:Configuration_variables:hw_di3">
+		<var name="hw_di4" source="Configuration_variables" sid="V:Configuration_variables:hw_di4">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#146"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#376"/>
 		</var>
-		<var name="hw_di4" source="Configuration_variables" sid="V:Configuration_variables:hw_di4">
+		<var name="hw_di5" source="Configuration_variables" sid="V:Configuration_variables:hw_di5">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#147"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#377"/>
 		</var>
-		<var name="hw_di5" source="Configuration_variables" sid="V:Configuration_variables:hw_di5">
+		<var name="hw_di6" source="Configuration_variables" sid="V:Configuration_variables:hw_di6">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#148"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#378"/>
 		</var>
-		<var name="hw_di6" source="Configuration_variables" sid="V:Configuration_variables:hw_di6">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#149"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#379"/>
-		</var>
 		<var name="hw_do1" source="Configuration_variables" sid="V:Configuration_variables:hw_do1">
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#303"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#480"/>
+		</var>
+		<var name="hw_do2" source="Configuration_variables" sid="V:Configuration_variables:hw_do2">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#304"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#481"/>
 		</var>
-		<var name="hw_do2" source="Configuration_variables" sid="V:Configuration_variables:hw_do2">
+		<var name="hw_do3" source="Configuration_variables" sid="V:Configuration_variables:hw_do3">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#305"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#482"/>
 		</var>
-		<var name="hw_do3" source="Configuration_variables" sid="V:Configuration_variables:hw_do3">
+		<var name="hw_do4" source="Configuration_variables" sid="V:Configuration_variables:hw_do4">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#306"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#483"/>
 		</var>
-		<var name="hw_do4" source="Configuration_variables" sid="V:Configuration_variables:hw_do4">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#307"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#484"/>
-		</var>
 		<var name="hw_do5" source="Configuration_variables" sid="V:Configuration_variables:hw_do5"/>
 		<var name="hw_ai1" source="Configuration_variables" sid="V:Configuration_variables:hw_ai1">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#156"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#390"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#155"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#389"/>
 		</var>
 		<var name="hw_ai2" source="Configuration_variables" sid="V:Configuration_variables:hw_ai2">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#157"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#404"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#156"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#403"/>
 		</var>
 		<var name="hw_ai3" source="Configuration_variables" sid="V:Configuration_variables:hw_ai3">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#158"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#160"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#413"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#431"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#157"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#159"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#412"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#430"/>
 		</var>
 		<var name="hw_ai4" source="Configuration_variables" sid="V:Configuration_variables:hw_ai4">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#159"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#161"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#422"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#440"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#158"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#160"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#421"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#439"/>
 		</var>
 		<var name="hw_ai5" source="Configuration_variables" sid="V:Configuration_variables:hw_ai5">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#162"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#449"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#161"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#448"/>
 		</var>
 		<var name="hw_ai6" source="Configuration_variables" sid="V:Configuration_variables:hw_ai6">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#163"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#458"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#162"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#457"/>
 		</var>
 		<var name="hw_ai7" source="Configuration_variables" sid="V:Configuration_variables:hw_ai7">
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#164"/>
-			<ref op="RD" pos="P:MAIN:IOMappingCyclic#467"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#163"/>
+			<ref op="RD" pos="P:MAIN:IOMappingCyclic#466"/>
 		</var>
 		<var name="hw_ao1" source="Configuration_variables" sid="V:Configuration_variables:hw_ao1">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#323"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#498"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#322"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#497"/>
 		</var>
 		<var name="hw_ao2" source="Configuration_variables" sid="V:Configuration_variables:hw_ao2"/>
 		<var name="hw_ao3" source="Configuration_variables" sid="V:Configuration_variables:hw_ao3"/>
 		<var name="hw_ao4" source="Configuration_variables" sid="V:Configuration_variables:hw_ao4">
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#339"/>
-			<ref op="WR" pos="P:MAIN:IOMappingCyclic#507"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#338"/>
+			<ref op="WR" pos="P:MAIN:IOMappingCyclic#506"/>
 		</var>
 		<var name="sysMbMRtuNetList" source="Modbus_cfg" sid="V:Modbus_cfg:sysMbMRtuNetList"/>
 		<var name="MBMRTUNETLISTBOUND" source="Modbus_cfg" sid="V:Modbus_cfg:MBMRTUNETLISTBOUND"/>
