@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type ="text/xsl" href="file://C:/Users/gries/AppData/Local/Temp/LLSymTab.xsl" version="1.0"?>
-<LLSymbolTable Version="1.4" Name="CControl_Lite" TargetID="TM173O_825p3" CodeId="0xFBCBD013" DebugMemoId="0x0000DB6B" MemoId="0x0000B3C5" DataRelocation="none" DbRelocation="none" FunctRelocation="none" dataAddrMode="byte" codeAddrMode="byte" NoIncrAlloc="false" is64bit="false" isBigEndian="false" dataSignature="0x19A59044">
+<LLSymbolTable Version="1.4" Name="CControl_Lite" TargetID="TM173O_825p3" CodeId="0x6CD28174" DebugMemoId="0x0000DB6B" MemoId="0x0000B3C5" DataRelocation="none" DbRelocation="none" FunctRelocation="none" dataAddrMode="byte" codeAddrMode="byte" NoIncrAlloc="false" is64bit="false" isBigEndian="false" dataSignature="0xA26877D2">
 	<Resource Name="TM173O" Proc="ARMThumb2_VFP2_SP"/>
 	<CaseSensitive>false</CaseSensitive>
 	<CompilerOptions FBExtCheck="true"/>
@@ -312,15 +312,15 @@
 		<Var Name="$MENU_30004" OrigName="$MENU_30004" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200640AC" Group="Menu_vars" idxMin0="1" idx0="7" hidden="true"/>
 		<Var Name="$MENU_30005" OrigName="$MENU_30005" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200640E4" Group="Menu_vars" idxMin0="1" idx0="15" hidden="true"/>
 		<Var Name="$MENU_30006" OrigName="$MENU_30006" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2006415C" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
-		<Var Name="$MENU_30007" OrigName="$MENU_30007" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2006417C" Group="Menu_vars" idxMin0="1" idx0="6" hidden="true"/>
-		<Var Name="$MENU_30008" OrigName="$MENU_30008" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200641AC" Group="Menu_vars" idxMin0="1" idx0="3" hidden="true"/>
-		<Var Name="$MENU_30009" OrigName="$MENU_30009" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200641C4" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
-		<Var Name="$MENU_30010" OrigName="$MENU_30010" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200641E4" Group="Menu_vars" idxMin0="1" idx0="2" hidden="true"/>
+		<Var Name="$MENU_30007" OrigName="$MENU_30007" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2006417C" Group="Menu_vars" idxMin0="1" idx0="5" hidden="true"/>
+		<Var Name="$MENU_30008" OrigName="$MENU_30008" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200641A4" Group="Menu_vars" idxMin0="1" idx0="3" hidden="true"/>
+		<Var Name="$MENU_30009" OrigName="$MENU_30009" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200641BC" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
+		<Var Name="$MENU_30010" OrigName="$MENU_30010" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x200641DC" Group="Menu_vars" idxMin0="1" idx0="2" hidden="true"/>
 		<Var Name="$$CODEBASE$$" OrigName="$$CODEBASE$$" Type="UDINT" OrigType="UDINT" Addr="0x8100000"/>
 		<Var Name="$$CODESTART$$" OrigName="$$CODESTART$$" Type="UDINT" OrigType="UDINT" Addr="0x810C09C"/>
-		<Var Name="$$CODESIZE$$" OrigName="$$CODESIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x8117310"/>
+		<Var Name="$$CODESIZE$$" OrigName="$$CODESIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x81172F0"/>
 		<Var Name="$$CODEEND$$" OrigName="$$CODEEND$$" Type="UDINT" OrigType="UDINT" Addr="0x8200000"/>
-		<Var Name="$$DATASIZE$$" OrigName="$$DATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x200641F4"/>
+		<Var Name="$$DATASIZE$$" OrigName="$$DATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x200641EC"/>
 		<Var Name="$$AUXDATASIZE$$" OrigName="$$AUXDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x0"/>
 		<Var Name="$$BITDATASIZE$$" OrigName="$$BITDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x0"/>
 		<Var Name="$$RITDATASIZE$$" OrigName="$$RITDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x2005E688"/>
@@ -862,7 +862,7 @@
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$GETMENUSIZE" OrigName="$GetMenuSize" SrcType="3" CodeAddr="0x810C4C4" HashCode="5E5E76E6">
+		<Fun Name="$GETMENUSIZE" OrigName="$GetMenuSize" SrcType="3" CodeAddr="0x810C4C4" HashCode="9F20C585">
 			<Res Name="$GETMENUSIZE" OrigName="$GetMenuSize" Type="UINT" OrigType="UINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="$MENUID" OrigName="$menuId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current menu identifier"/>
 			<TmpVar Name="$$INPT$MENUID" OrigName="$$inpt$menuId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current menu identifier"/>
