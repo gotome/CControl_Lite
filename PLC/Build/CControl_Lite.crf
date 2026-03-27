@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x6CD28174" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0xBFDC38FA" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -266,7 +266,6 @@
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#148"/>
 		</var>
 		<var name="aiFrischluftTemp" source="MAIN" sid="V:MAIN:aiFrischluftTemp">
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#65"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#194"/>
 		</var>
 		<var name="aiFrischluftFeuchte" source="MAIN" sid="V:MAIN:aiFrischluftFeuchte">
@@ -302,7 +301,6 @@
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#294"/>
 		</var>
 		<var name="doFrgLuftaufber" source="MAIN" sid="V:MAIN:doFrgLuftaufber">
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#82"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#303"/>
 		</var>
 		<var name="doFrgBox1" source="MAIN" sid="V:MAIN:doFrgBox1">
