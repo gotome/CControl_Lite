@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0xFB497345" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x2ED178F9" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -197,8 +197,6 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#483"/>
 		</var>
 		<var name="gIoTest" source="MAIN" sid="V:MAIN:gIoTest">
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#118"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#119"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#120"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#121"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#122"/>
@@ -426,6 +424,8 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#139"/>
 		</var>
 		<var name="HMI_TEST_doFrgBox1" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgBox1">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#118"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#119"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#140"/>
 		</var>
 		<var name="HMI_TEST_doFrgBox2" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgBox2">
