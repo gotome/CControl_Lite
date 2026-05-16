@@ -113,12 +113,11 @@ Stoerungseingang: `diBox1Offen AND diBox1Geschl` (beide Endlagen gleichzeitig = 
 
 ## Bekannte offene Punkte / TODOs
 
-1. `AblaufstrgCyclic`, `BerechnungCyclic`, `LeistungCyclic`, `AlarmCyclic` noch leer.
-2. `gBetriebsparameter.Ausstattung.*` Flags werden in HmiMappingCyclic gesetzt, aber in der Steuerlogik noch nicht ausgewertet.
-3. `EndlagenVhd` in aktorenMapping ist hardcoded TRUE – Ausstattungsflags noch nicht angebunden.
-4. `HMI_TEST_doFrgVentilator` wird im Normalbetrieb nicht zurückgesetzt (Fehler).
-5. `gAktoren.xFrgVentilator` etc. sind in der Struktur vorhanden aber werden noch nicht genutzt (stattdessen direkte globale do*-Variablen).
-6. Trockenluft-Sensor: aktuell auf hw_ai3/ai4 (= AbluftBox1). Klären ob eigener Sensor geplant ist.
+1. `gBetriebsparameter.Ausstattung.*` Flags werden in HmiMappingCyclic gesetzt, aber in der Steuerlogik noch nicht ausgewertet.
+2. `EndlagenVhd` in aktorenMapping ist hardcoded TRUE – Ausstattungsflags noch nicht angebunden.
+3. `HMI_TEST_doFrgVentilator` wird im Normalbetrieb nicht zurückgesetzt (Fehler).
+4. `gAktoren.xFrgVentilator` etc. sind in der Struktur vorhanden aber werden noch nicht genutzt (stattdessen direkte globale do*-Variablen).
+5. Trockenluft-Sensor: aktuell auf hw_ai3/ai4 (= AbluftBox1). Klären ob eigener Sensor geplant ist.
 
 ---
 
