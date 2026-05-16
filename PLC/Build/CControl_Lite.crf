@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x022CF25F" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x010D91E3" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -9,7 +9,7 @@
 		<program name="LeistungCyclic" source="MAIN" sid="P:MAIN:LeistungCyclic"/>
 		<program name="aktorenMapping" source="MAIN" sid="P:MAIN:aktorenMapping"/>
 		<program name="HmiMappingCyclic" source="MAIN" sid="P:MAIN:HmiMappingCyclic"/>
-		<program name="StartStoppCyclic" sid="P::StartStoppCyclic"/>
+		<program name="StartStoppCyclic" source="MAIN" sid="P:MAIN:StartStoppCyclic"/>
 	</programs>
 	<functions>
 		<function name="sysOverwriteSerialDisplay" source="TGT" sid="F:TGT:sysOverwriteSerialDisplay"/>
@@ -111,34 +111,34 @@
 		</functionBlock>
 	</functionBlocks>
 	<vars>
-		<var name="gAktModus" sid="V::gAktModus">
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#57"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#68"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#107"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#150"/>
+		<var name="gAktModus" source="MAIN" sid="V:MAIN:gAktModus">
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#53"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#63"/>
 			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#100"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#143"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#164"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#141"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#93"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#134"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#155"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#62"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#125"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#62"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#32"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#59"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#142"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#23"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#50"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#128"/>
 		</var>
-		<var name="gStatusAnlage" sid="V::gStatusAnlage">
+		<var name="gStatusAnlage" source="MAIN" sid="V:MAIN:gStatusAnlage">
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#33"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#34"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#35"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#36"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#37"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#38"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#39"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#40"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#41"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#42"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#43"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#44"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#72"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#111"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#154"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#67"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#104"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#145"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#82"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#84"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#86"/>
@@ -160,6 +160,9 @@
 			<ref op="WR" pos="P:MAIN:aktorenMapping#180"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#196"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#198"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#78"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#81"/>
+			<ref op="WR" pos="P:MAIN:AlarmCyclic#172"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#63"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#146"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#147"/>
@@ -171,11 +174,18 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#153"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#154"/>
 		</var>
-		<var name="gBetriebsparameter" sid="V::gBetriebsparameter">
+		<var name="gBetriebsparameter" source="MAIN" sid="V:MAIN:gBetriebsparameter">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#65"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#66"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#109"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#110"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#43"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#50"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#57"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#65"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#72"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#81"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#86"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#20"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#37"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#49"/>
@@ -266,25 +276,21 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#399"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#402"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#411"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#61"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#62"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#64"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#133"/>
-			<ref op="RD" pos="P::StartStoppCyclic#17"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#52"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#53"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#55"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#119"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#17"/>
 		</var>
-		<var name="gAktoren" sid="V::gAktoren">
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#78"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#79"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#80"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#81"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#82"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#83"/>
+		<var name="gAktoren" source="MAIN" sid="V:MAIN:gAktoren">
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#73"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#74"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#75"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#76"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#113"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#114"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#117"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#120"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#121"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#122"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#123"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#126"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#129"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#32"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#60"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#61"/>
@@ -296,25 +302,25 @@
 			<ref op="RD" pos="P:MAIN:aktorenMapping#184"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#195"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#202"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#27"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#28"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#33"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#34"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#35"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#60"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#61"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#62"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#132"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#143"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#144"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#145"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#167"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#168"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#169"/>
-			<ref op="RD" pos="P::StartStoppCyclic#15"/>
-			<ref op="RD" pos="P::StartStoppCyclic#18"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#17"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#18"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#24"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#25"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#26"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#51"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#52"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#53"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#118"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#129"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#130"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#131"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#153"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#154"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#155"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#15"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#18"/>
 		</var>
-		<var name="gIoTest" sid="V::gIoTest">
+		<var name="gIoTest" source="MAIN" sid="V:MAIN:gIoTest">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#193"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#194"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#195"/>
@@ -360,36 +366,46 @@
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#429"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#438"/>
 		</var>
-		<var name="gCmdAnlage" sid="V::gCmdAnlage">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#50"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#51"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#52"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#132"/>
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#133"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#13"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#20"/>
-			<ref op="WR" pos="P::StartStoppCyclic#11"/>
-			<ref op="WR" pos="P::StartStoppCyclic#12"/>
-			<ref op="RD" pos="P::StartStoppCyclic#26"/>
-			<ref op="RD" pos="P::StartStoppCyclic#27"/>
-			<ref op="WR" pos="P::StartStoppCyclic#30"/>
-			<ref op="RD" pos="P::StartStoppCyclic#33"/>
-			<ref op="WR" pos="P::StartStoppCyclic#33"/>
-			<ref op="RD" pos="P::StartStoppCyclic#37"/>
-			<ref op="WR" pos="P::StartStoppCyclic#37"/>
+		<var name="gCmdAnlage" source="MAIN" sid="V:MAIN:gCmdAnlage">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#46"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#47"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#48"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#123"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#124"/>
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#129"/>
+			<ref op="WR" pos="P:MAIN:AlarmCyclic#168"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#14"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#15"/>
+			<ref op="WR" pos="P:MAIN:StartStoppCyclic#11"/>
+			<ref op="WR" pos="P:MAIN:StartStoppCyclic#12"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#26"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#27"/>
+			<ref op="WR" pos="P:MAIN:StartStoppCyclic#30"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#33"/>
+			<ref op="WR" pos="P:MAIN:StartStoppCyclic#33"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#37"/>
+			<ref op="WR" pos="P:MAIN:StartStoppCyclic#37"/>
 		</var>
-		<var name="gQuitErr" sid="V::gQuitErr">
+		<var name="gQuitErr" source="MAIN" sid="V:MAIN:gQuitErr">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#32"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#98"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#104"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#110"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#116"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#122"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#128"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#134"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#140"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#52"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#71"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#62"/>
 		</var>
-		<var name="IBN_FALSE" sid="V::IBN_FALSE">
+		<var name="IBN_FALSE" source="MAIN" sid="V:MAIN:IBN_FALSE">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#36"/>
 		</var>
-		<var name="IBN_TRUE" sid="V::IBN_TRUE">
+		<var name="IBN_TRUE" source="MAIN" sid="V:MAIN:IBN_TRUE">
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#35"/>
 		</var>
-		<var name="diBox1Offen" sid="V::diBox1Offen">
+		<var name="diBox1Offen" source="MAIN" sid="V:MAIN:diBox1Offen">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#62"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#67"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#81"/>
@@ -397,9 +413,9 @@
 			<ref op="RD" pos="P:MAIN:aktorenMapping#87"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#132"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#78"/>
-			<ref op="RD" pos="P::StartStoppCyclic#15"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#15"/>
 		</var>
-		<var name="diBox1Geschl" sid="V::diBox1Geschl">
+		<var name="diBox1Geschl" source="MAIN" sid="V:MAIN:diBox1Geschl">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#63"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#67"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#81"/>
@@ -408,7 +424,7 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#133"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#79"/>
 		</var>
-		<var name="diBox2Offen" sid="V::diBox2Offen">
+		<var name="diBox2Offen" source="MAIN" sid="V:MAIN:diBox2Offen">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#106"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#111"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#125"/>
@@ -416,9 +432,9 @@
 			<ref op="RD" pos="P:MAIN:aktorenMapping#131"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#134"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#80"/>
-			<ref op="RD" pos="P::StartStoppCyclic#18"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#18"/>
 		</var>
-		<var name="diBox2Geschl" sid="V::diBox2Geschl">
+		<var name="diBox2Geschl" source="MAIN" sid="V:MAIN:diBox2Geschl">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#107"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#111"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#125"/>
@@ -427,135 +443,143 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#135"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#81"/>
 		</var>
-		<var name="diBetriebLuftaufber" sid="V::diBetriebLuftaufber">
+		<var name="diBetriebLuftaufber" source="MAIN" sid="V:MAIN:diBetriebLuftaufber">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#171"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#136"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#82"/>
 		</var>
-		<var name="diStoerLuftaufber" sid="V::diStoerLuftaufber">
+		<var name="diStoerLuftaufber" source="MAIN" sid="V:MAIN:diStoerLuftaufber">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#169"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#177"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#86"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#137"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#83"/>
 		</var>
-		<var name="aiFrischluftTemp" sid="V::aiFrischluftTemp">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#36"/>
+		<var name="aiFrischluftTemp" source="MAIN" sid="V:MAIN:aiFrischluftTemp">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#33"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#43"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#11"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#32"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#38"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#130"/>
 		</var>
-		<var name="aiFrischluftFeucht" sid="V::aiFrischluftFeucht">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#37"/>
+		<var name="aiFrischluftFeucht" source="MAIN" sid="V:MAIN:aiFrischluftFeucht">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#34"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#43"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#12"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#44"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#50"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#144"/>
 		</var>
-		<var name="aiAbluftBox1Temp" sid="V::aiAbluftBox1Temp">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#40"/>
+		<var name="aiAbluftBox1Temp" source="MAIN" sid="V:MAIN:aiAbluftBox1Temp">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#37"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#50"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#14"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#32"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#158"/>
 		</var>
-		<var name="aiAbluftBox1Feucht" sid="V::aiAbluftBox1Feucht">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#41"/>
+		<var name="aiAbluftBox1Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox1Feucht">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#38"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#50"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#15"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#44"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#167"/>
 		</var>
-		<var name="aiTrockenluftTemp" sid="V::aiTrockenluftTemp">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#38"/>
+		<var name="aiTrockenluftTemp" source="MAIN" sid="V:MAIN:aiTrockenluftTemp">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#35"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#65"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#17"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#184"/>
 		</var>
-		<var name="aiTrockenluftFeucht" sid="V::aiTrockenluftFeucht">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#39"/>
+		<var name="aiTrockenluftFeucht" source="MAIN" sid="V:MAIN:aiTrockenluftFeucht">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#36"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#65"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#18"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#193"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#42"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#64"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#78"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#107"/>
-			<ref op="RD" pos="P:MAIN:LeistungCyclic#149"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#33"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#55"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#69"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#93"/>
+			<ref op="RD" pos="P:MAIN:LeistungCyclic#135"/>
 		</var>
-		<var name="aiAbluftBox2Temp" sid="V::aiAbluftBox2Temp">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#42"/>
+		<var name="aiAbluftBox2Temp" source="MAIN" sid="V:MAIN:aiAbluftBox2Temp">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#39"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#57"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#21"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#38"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#207"/>
 		</var>
-		<var name="aiAbluftBox2Feucht" sid="V::aiAbluftBox2Feucht">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#43"/>
+		<var name="aiAbluftBox2Feucht" source="MAIN" sid="V:MAIN:aiAbluftBox2Feucht">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#40"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#57"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#22"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#50"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#216"/>
 		</var>
-		<var name="aiStocktemp" sid="V::aiStocktemp">
-			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#44"/>
+		<var name="aiStocktemp" source="MAIN" sid="V:MAIN:aiStocktemp">
+			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#41"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#72"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#28"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#230"/>
 		</var>
-		<var name="doFrgLuftaufber" sid="V::doFrgLuftaufber">
+		<var name="doFrgLuftaufber" source="MAIN" sid="V:MAIN:doFrgLuftaufber">
 			<ref op="WR" pos="P:MAIN:aktorenMapping#184"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#164"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#239"/>
 		</var>
-		<var name="doFrgBox1" sid="V::doFrgBox1">
+		<var name="doFrgBox1" source="MAIN" sid="V:MAIN:doFrgBox1">
 			<ref op="WR" pos="P:MAIN:aktorenMapping#73"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#165"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#240"/>
 		</var>
-		<var name="doFrgBox2" sid="V::doFrgBox2">
+		<var name="doFrgBox2" source="MAIN" sid="V:MAIN:doFrgBox2">
 			<ref op="WR" pos="P:MAIN:aktorenMapping#117"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#166"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#241"/>
 		</var>
-		<var name="doFrgAbluftventilator" sid="V::doFrgAbluftventilator">
+		<var name="doFrgAbluftventilator" source="MAIN" sid="V:MAIN:doFrgAbluftventilator">
 			<ref op="WR" pos="P:MAIN:aktorenMapping#202"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#167"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#242"/>
 		</var>
-		<var name="doFrgVentilator" sid="V::doFrgVentilator">
+		<var name="doFrgVentilator" source="MAIN" sid="V:MAIN:doFrgVentilator">
 			<ref op="RD" pos="P:MAIN:aktorenMapping#150"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#168"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#243"/>
 		</var>
-		<var name="aoFuVentilator" sid="V::aoFuVentilator">
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#85"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#132"/>
+		<var name="aoFuVentilator" source="MAIN" sid="V:MAIN:aoFuVentilator">
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#78"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#123"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#39"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#40"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#41"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#42"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#178"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#252"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#37"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#98"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#100"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#102"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#123"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#170"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#28"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#87"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#109"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#156"/>
 		</var>
-		<var name="aoLeistVorgLuftaufber" sid="V::aoLeistVorgLuftaufber">
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#86"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#133"/>
+		<var name="aoLeistVorgLuftaufber" source="MAIN" sid="V:MAIN:aoLeistVorgLuftaufber">
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#79"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#124"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#45"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#46"/>
 			<ref op="RD" pos="P:MAIN:aktorenMapping#47"/>
 			<ref op="WR" pos="P:MAIN:aktorenMapping#48"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#179"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#268"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#38"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#134"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#136"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#139"/>
-			<ref op="WR" pos="P:MAIN:LeistungCyclic#171"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#29"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#120"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#122"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#125"/>
+			<ref op="WR" pos="P:MAIN:LeistungCyclic#157"/>
 		</var>
 		<var name="NONAME" source="MAIN" sid="V:MAIN:NONAME"/>
 		<var name="hmiNutzungsdaten" source="MAIN" sid="V:MAIN:hmiNutzungsdaten">
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#112"/>
-			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#139"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#105"/>
+			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#130"/>
 		</var>
 		<var name="Ausstattung_Box2" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_Box2">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#100"/>
@@ -702,8 +726,8 @@
 		<var name="HMI_TEST_di4" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_di4"/>
 		<var name="HMI_TEST_diIoTestAktiv" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_diIoTestAktiv">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#125"/>
-			<ref op="RD" pos="P::StartStoppCyclic#11"/>
-			<ref op="RD" pos="P::StartStoppCyclic#12"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#11"/>
+			<ref op="RD" pos="P:MAIN:StartStoppCyclic#12"/>
 		</var>
 		<var name="HMI_TEST_doIoTestAktivieren" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doIoTestAktivieren"/>
 		<var name="HMI_TEST_doFrgVentilator" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgVentilator">

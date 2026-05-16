@@ -886,7 +886,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1778429852">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1778965491">
 					<vars>
 						<localVars>
 							<var name="xFrischluftTempOk" type="BOOL"/>
@@ -980,28 +980,210 @@ ELSE
     rDeltaFeuchteBox2 := 0.0;
 END_IF;
 
-(* Sammelstörung auf Schrittkette, wenn Sensorik unplausibel *)
-IF NOT (xFrischluftTempOk AND xFrischluftFeuchtOk
-        AND xAbluft1TempOk AND xAbluft1FeuchtOk
-        AND xTrockenTempOk AND xTrockenFeuchtOk
-        AND xAbluft2TempOk AND xAbluft2FeuchtOk
-        AND xStockTempOk) THEN
+// Stoerungen werden in AlarmCyclic behandelt
+]]>
+					</sourceCode>
+				</program>
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1778965419">
+					<vars>
+						<localVars>
+							<var name="xF_SensorFrischluft" type="BOOL"/>
+							<var name="xF_SensorAbluftBox1" type="BOOL"/>
+							<var name="xF_SensorAbluftBox2" type="BOOL"/>
+							<var name="xF_SensorTrockenluft" type="BOOL"/>
+							<var name="xF_SensorStocktemp" type="BOOL"/>
+							<var name="xF_KlappeBox1" type="BOOL"/>
+							<var name="xF_KlappeBox2" type="BOOL"/>
+							<var name="xF_Luftaufbereiter" type="BOOL"/>
+							<var name="xFL_SensorFrischluft" type="BOOL"/>
+							<var name="xFL_SensorAbluftBox1" type="BOOL"/>
+							<var name="xFL_SensorAbluftBox2" type="BOOL"/>
+							<var name="xFL_SensorTrockenluft" type="BOOL"/>
+							<var name="xFL_SensorStocktemp" type="BOOL"/>
+							<var name="xFL_KlappeBox1" type="BOOL"/>
+							<var name="xFL_KlappeBox2" type="BOOL"/>
+							<var name="xFL_Luftaufbereiter" type="BOOL"/>
+							<var name="xSummeFehler" type="BOOL"/>
+							<var name="xSummeWarnung" type="BOOL"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<sourceCode type="ST">
+						<![CDATA[(*
+================================================================================
+ File        : AlarmCyclic.st
+ Project     : CControl_Lite
+ Controller  : Schneider Electric TM173O / EcoStruxure Machine Expert HVAC
+ Author      : RIG Automation
+ Version     : V0.01
+ Created     : 2026-05-16
 
-    IF gAktModus <> IOTEST THEN
-        gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_STOERUNG;
-    END_IF;
+ Description :
+   Zentrale Alarmverarbeitung für CControl_Lite.
+
+   Jeder Fehler wird als SR-Latch implementiert:
+     - Setzen:   Fehlerbedingung aktiv
+     - Rücksetzen: gQuitErr = TRUE  UND  Fehlerbedingung nicht mehr aktiv
+   Solange die Ursache ansteht, kann der Fehler nicht quittiert werden.
+
+   Fehlerklassen:
+     Fehler   → latchend, führt zu gCmdAnlage.FehlerStopp (Anlage stoppt)
+     Warnung  → nicht latchend, nur Anzeige (kein Stopp)
+
+   Hinweis:
+     BerechnungCyclic setzt gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] ebenfalls
+     auf STATUS_STOERUNG diese Zeile dort kann entfernt werden, da
+     AlarmCyclic diesen Status hier zentral verwaltet.
+
+ Change History
+--------------------------------------------------------------------------------
+ Version | Date       | Author         | Description
+--------------------------------------------------------------------------------
+ V0.01   | 2026-05-16 | RIG Automation | Erstversion
+================================================================================
+*)
+
+
+// =============================================================================
+// 1) Fehlerbedingungen ermitteln
+//    Plausibilitätsgrenzen identisch zu BerechnungCyclic.
+//    Nur aktiv wenn entsprechender Sensor laut Ausstattung vorhanden.
+// =============================================================================
+
+// F01 Sensor Frischluft
+xF_SensorFrischluft :=
+    gBetriebsparameter.Ausstattung.SensorFrischluft AND (
+        (aiFrischluftTemp   < -40.0) OR (aiFrischluftTemp   > 80.0)  OR
+        (aiFrischluftFeucht <   0.0) OR (aiFrischluftFeucht > 100.0)
+    );
+
+// F02 Sensor Abluft Box 1
+xF_SensorAbluftBox1 :=
+    gBetriebsparameter.Ausstattung.SensorAbluftBox1 AND (
+        (aiAbluftBox1Temp   < -40.0) OR (aiAbluftBox1Temp   > 100.0) OR
+        (aiAbluftBox1Feucht <   0.0) OR (aiAbluftBox1Feucht > 100.0)
+    );
+
+// F03 Sensor Abluft Box 2 (nur wenn Box 2 vorhanden)
+xF_SensorAbluftBox2 :=
+    gBetriebsparameter.Ausstattung.Box2 AND
+    gBetriebsparameter.Ausstattung.SensorAbluftBox2 AND (
+        (aiAbluftBox2Temp   < -40.0) OR (aiAbluftBox2Temp   > 100.0) OR
+        (aiAbluftBox2Feucht <   0.0) OR (aiAbluftBox2Feucht > 100.0)
+    );
+
+// F04 Sensor Trockenluft
+xF_SensorTrockenluft :=
+    gBetriebsparameter.Ausstattung.SensorTrockenluft AND (
+        (aiTrockenluftTemp   < -40.0) OR (aiTrockenluftTemp   > 100.0) OR
+        (aiTrockenluftFeucht <   0.0) OR (aiTrockenluftFeucht > 100.0)
+    );
+
+// F05 Sensor Stocktemperatur
+xF_SensorStocktemp :=
+    gBetriebsparameter.Ausstattung.SensorStocktemp AND (
+        (aiStocktemp < -40.0) OR (aiStocktemp > 140.0)
+    );
+
+// F06 Laufzeit Boxenklappe 1 (Status wird von aktorenMapping gesetzt)
+xF_KlappeBox1 := gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] = STATUS_STOERUNG;
+
+// F07 Laufzeit Boxenklappe 2
+xF_KlappeBox2 := gBetriebsparameter.Ausstattung.Box2 AND 
+	(gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_STOERUNG);
+
+// F08 Störmeldung Luftaufbereiter
+xF_Luftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter AND diStoerLuftaufber;
+
+
+// =============================================================================
+// 2) SR-Latches
+//    Setzen: Fehlerbedingung aktiv
+//    Rücksetzen: Quit UND Fehler nicht mehr aktiv
+// =============================================================================
+
+IF xF_SensorFrischluft THEN 
+	xFL_SensorFrischluft  := TRUE;
+ELSIF gQuitErr AND NOT xF_SensorFrischluft THEN 
+	xFL_SensorFrischluft  := FALSE; 
+END_IF;
+
+IF xF_SensorAbluftBox1  THEN 
+	xFL_SensorAbluftBox1  := TRUE;
+ELSIF gQuitErr AND NOT xF_SensorAbluftBox1 THEN 
+	xFL_SensorAbluftBox1  := FALSE; 
+END_IF;
+
+IF xF_SensorAbluftBox2  THEN 
+	xFL_SensorAbluftBox2  := TRUE;
+ELSIF gQuitErr AND NOT xF_SensorAbluftBox2 THEN 
+	xFL_SensorAbluftBox2  := FALSE; 
+END_IF;
+
+IF xF_SensorTrockenluft THEN 
+	xFL_SensorTrockenluft := TRUE;
+ELSIF gQuitErr AND NOT xF_SensorTrockenluft THEN 
+	xFL_SensorTrockenluft := FALSE; 
+END_IF;
+
+IF xF_SensorStocktemp   THEN 
+	xFL_SensorStocktemp   := TRUE;
+ELSIF gQuitErr AND NOT xF_SensorStocktemp THEN 
+	xFL_SensorStocktemp   := FALSE; 
+END_IF;
+
+IF xF_KlappeBox1 THEN 
+	xFL_KlappeBox1 := TRUE;
+ELSIF gQuitErr AND NOT xF_KlappeBox1 THEN 
+	xFL_KlappeBox1 := FALSE; 
+END_IF;
+
+IF xF_KlappeBox2        THEN 
+	xFL_KlappeBox2        := TRUE;
+ELSIF gQuitErr AND NOT xF_KlappeBox2 THEN 
+	xFL_KlappeBox2 := FALSE;
+END_IF;
+
+IF xF_Luftaufbereiter THEN 
+	xFL_Luftaufbereiter := TRUE;
+ELSIF gQuitErr AND NOT xF_Luftaufbereiter THEN 
+	xFL_Luftaufbereiter   := FALSE; 
+END_IF;
+
+
+// =============================================================================
+// 3) Sammelausgänge bilden
+// =============================================================================
+
+xSummeFehler :=
+    xFL_SensorFrischluft  OR
+    xFL_SensorAbluftBox1  OR
+    xFL_SensorAbluftBox2  OR
+    xFL_SensorTrockenluft OR
+    xFL_SensorStocktemp   OR
+    xFL_KlappeBox1        OR
+    xFL_KlappeBox2        OR
+    xFL_Luftaufbereiter;
+
+// Warnungen (nicht latchend) Erweiterungspunkt für zukünftige Warnungen
+xSummeWarnung := FALSE;
+
+
+// =============================================================================
+// 4) Fehleraktionen
+// =============================================================================
+
+// Fehlerstopp anfordern AblaufstrgCyclic wertet gCmdAnlage.FehlerStopp aus
+gCmdAnlage.FehlerStopp := xSummeFehler;
+
+// Schrittketten-Status für HMI (zentraler Status der Anlage)
+IF xSummeFehler THEN
+    gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_STOERUNG;
 END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1773514141">
-					<vars/>
-					<iecDeclaration active="FALSE"/>
-					<sourceCode type="ST">
-						<![CDATA[]]>
-					</sourceCode>
-				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1778403036">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1778965298">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -1044,22 +1226,18 @@ END_IF;
 ================================================================================
 *)
 
-
 // =============================================================================
 // 1) Statusaktualisierung
 // =============================================================================
-
-// Analoge Istwerte auf Status schreiben
-gStatusAnlage.FrischluftTemperatur 	:= aiFrischluftTemp;
-gStatusAnlage.FrischluftFeuchte 	:= aiFrischluftFeucht;
+gStatusAnlage.FrischluftTemperatur  := aiFrischluftTemp;
+gStatusAnlage.FrischluftFeuchte     := aiFrischluftFeucht;
 gStatusAnlage.TrockenluftTemperatur := aiTrockenluftTemp;
-gStatusAnlage.TrockenluftFeuchte 	:= aiTrockenluftFeucht;
-gStatusAnlage.AbluftBox1Temp 		:= aiAbluftBox1Temp;
-gStatusAnlage.AbluftBox1Feuchte 	:= aiAbluftBox1Feucht;
-gStatusAnlage.AbluftBox2Temp 		:= aiAbluftBox2Temp;
-gStatusAnlage.AbluftBox2Feuchte 	:= aiAbluftBox2Feucht;
-gStatusAnlage.StockTemperatur 		:= aiStocktemp;
-
+gStatusAnlage.TrockenluftFeuchte    := aiTrockenluftFeucht;
+gStatusAnlage.AbluftBox1Temp        := aiAbluftBox1Temp;
+gStatusAnlage.AbluftBox1Feuchte     := aiAbluftBox1Feucht;
+gStatusAnlage.AbluftBox2Temp        := aiAbluftBox2Temp;
+gStatusAnlage.AbluftBox2Feuchte     := aiAbluftBox2Feucht;
+gStatusAnlage.StockTemperatur       := aiStocktemp;
 
 // =============================================================================
 // 2) Bedienbefehle auswerten
@@ -1072,7 +1250,6 @@ xTestbetrieb     := gCmdAnlage.Test AND NOT gCmdAnlage.Auto;
 // 3) Aktuellen Zustand übernehmen
 // =============================================================================
 gAktModus := nextModus;
-
 
 // =============================================================================
 // 4) Schrittkette
@@ -1093,8 +1270,6 @@ CASE gAktModus OF
         // Stillstandslogik - nur vorhandene Aktoren
         // ------------------------------------------------------------
         gAktoren.Box[1].xSollOffen := FALSE;
-        gAktoren.Box[1].xSollOffen := FALSE;
-        gAktoren.Box[2].xSollOffen := FALSE;
         gAktoren.Box[2].xSollOffen := FALSE;
         gAktoren.xFrgLuftaufbereiter := FALSE;
         gAktoren.xFrgAbluftventilator := FALSE;
@@ -1135,8 +1310,6 @@ CASE gAktModus OF
 
         // Boxfreigaben
         gAktoren.Box[1].xSollOffen := FALSE;
-        gAktoren.Box[1].xSollOffen := FALSE;
-        gAktoren.Box[2].xSollOffen := FALSE;
         gAktoren.Box[2].xSollOffen := FALSE;
 
         // Luftaufbereiter freigeben
@@ -1152,7 +1325,7 @@ CASE gAktModus OF
         // ------------------------------------------------------------
         // Zustandswechsel
         // ------------------------------------------------------------
-        IF xStopAnforderung THEN
+        IF xStopAnforderung OR gCmdAnlage.FehlerStopp THEN
             hmiNutzungsdaten.LetzterModus := STILLSTAND;
             nextModus := STILLSTAND;
             stateEntry := TRUE;
@@ -1185,7 +1358,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1778429829">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1778964343">
 					<vars>
 						<localVars>
 							<var name="rVentSollMan" type="REAL"/>
@@ -1241,23 +1414,14 @@ Description :
 ================================================================================
 *)
 
+
 (* Sollwerte begrenzen *)
-rVentSollMan := gCmdAnlage.Leistung.DrehzahlVentilator;
-IF rVentSollMan < 0.0 THEN
-    rVentSollMan := 0.0;
-ELSIF rVentSollMan > 100.0 THEN
-    rVentSollMan := 100.0;
-END_IF;
+rVentSollMan  := LIMIT(gCmdAnlage.Leistung.DrehzahlVentilator, 0.0, 100.0);
+rLuftaufbSoll := LIMIT(gCmdAnlage.Leistung.DrehzahlLuftaufbereitung, 0.0, 100.0);
 
-rLuftaufbSoll := gCmdAnlage.Leistung.DrehzahlLuftaufbereitung;
-IF rLuftaufbSoll < 0.0 THEN
-    rLuftaufbSoll := 0.0;
-ELSIF rLuftaufbSoll > 100.0 THEN
-    rLuftaufbSoll := 100.0;
-END_IF;
+gAktoren.rVentilatorSollwert       := rVentSollMan;
+gAktoren.rLuftaufbereiterSollwert  := rLuftaufbSoll;
 
-gAktoren.rVentilatorSollwert := rVentSollMan;
-gAktoren.rLuftaufbereiterSollwert := rLuftaufbSoll;
 
 CASE gAktModus OF
 
@@ -1292,7 +1456,7 @@ CASE gAktModus OF
         gAktoren.xFrgVentilator := TRUE;
         gAktoren.xFrgLuftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter;
         gAktoren.xFrgAbluftventilator := gBetriebsparameter.Ausstattung.Abluftventilator;
-
+        
         xVentPidFreigabe := gBetriebsparameter.Ausstattung.SensorTrockenluft
                             AND (aiTrockenluftFeucht >= 0.0)
                             AND (aiTrockenluftFeucht <= 100.0);
@@ -1324,15 +1488,10 @@ CASE gAktModus OF
                 xReset := xPidResetPulse
             );
 
-            rVentPidOut := fbPidVent.rAnalog;
+            rVentPidOut    := fbPidVent.rAnalog;
+            aoFuVentilator := LIMIT(rVentPidOut, 0.0, 100.0);
 
-            IF rVentPidOut < 0.0 THEN
-                aoFuVentilator := 0.0;
-            ELSIF rVentPidOut > 100.0 THEN
-                aoFuVentilator := 100.0;
-            ELSE
-                aoFuVentilator := rVentPidOut;
-            END_IF;
+            
         ELSE
             (* kein gültiger Prozesswert -> manueller Fallback *)
             fbPidVent(
@@ -73829,7 +73988,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="4767">
+			<root name="CControl_Lite" nextID="4861">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
