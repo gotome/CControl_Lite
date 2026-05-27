@@ -23,7 +23,7 @@
 					<program>StartStoppCyclic</program>
 					<program>LeistungCyclic</program>
 					<program>AblaufstrgCyclic</program>
-					<program>aktorenMapping</program>
+					<program>AktorenMappingCyclic</program>
 					<program>IOMappingCyclic</program>
 					<program>HmiMappingCyclic</program>
 				</task>
@@ -67,10 +67,10 @@
 						<descr>Rückmeldung Box 2 geschlossen</descr>
 					</var>
 					<var name="diBetriebLuftaufber" type="BOOL">
-						<descr>Rückmeldung Luftaufbereiter in Betrieb</descr>
+						<descr>Betriebsmeldung Luftaufbereitung</descr>
 					</var>
-					<var name="diStoerLuftaufber" type="BOOL">
-						<descr>Störmeldung Luftaufbereiter</descr>
+					<var name="diBetriebVentilator" type="BOOL">
+						<descr>Betriebsmeldung Ventilator</descr>
 					</var>
 					<var name="aiFrischluftTemp" type="REAL">
 						<descr>Frischlufttemperatur</descr>
@@ -122,7 +122,7 @@
 					</var>
 				</group>
 				<group name="varAlarm" version="1.0.0">
-					<var name="NONAME" type="BOOL"/>
+					<var name="gAlarmBetriebLuftaufber" type="BOOL"/>
 				</group>
 				<group name="var_VisuIo" version="1.0.0">
 					<var name="hmiNutzungsdaten" type="ST_HmiNutzungsdaten"/>
@@ -147,8 +147,8 @@
 	diBox1Geschl : BOOL;	(* Rückmeldung Box 1 geschlossen *)
 	diBox2Offen : BOOL;	(* Rückmeldung Box 2 offen *)
 	diBox2Geschl : BOOL;	(* Rückmeldung Box 2 geschlossen *)
-	diBetriebLuftaufber : BOOL;	(* Rückmeldung Luftaufbereiter in Betrieb *)
-	diStoerLuftaufber : BOOL;	(* Störmeldung Luftaufbereiter *)
+	diBetriebLuftaufber : BOOL;	(* Betriebsmeldung Luftaufbereitung *)
+	diBetriebVentilator : BOOL;	(* Betriebsmeldung Ventilator *)
 	aiFrischluftTemp : REAL;	(* Frischlufttemperatur *)
 	aiFrischluftFeucht : REAL;	(* Frischluftfeuchte *)
 	aiAbluftBox1Temp : REAL;	(* Ablufttemperatur Box 1 *)
@@ -405,7 +405,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1778402929">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1779871344">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -518,7 +518,7 @@ IF gAktModus <> IOTEST THEN
     diBox2Offen         := hw_di3;
     diBox2Geschl        := hw_di4;
     diBetriebLuftaufber := hw_di5;
-    diStoerLuftaufber   := hw_di6;
+    diBetriebVentilator := hw_di6;
 
     (*
     ---------------------------------------------------------------------------
@@ -751,7 +751,7 @@ ELSE
     gIoTest.DigitalIn.diBox2Offen         := hw_di3;
     gIoTest.DigitalIn.diBox2Geschl        := hw_di4;
     gIoTest.DigitalIn.diBetriebLuftaufber := hw_di5;
-    gIoTest.DigitalIn.diStoerLuftaufber   := hw_di6;
+    gIoTest.DigitalIn.diBetriebVentilator := hw_di6;
 
     (*
     ---------------------------------------------------------------------------
@@ -984,7 +984,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1778965419">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1779874773">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -1005,6 +1005,7 @@ END_IF;
 							<var name="xFL_Luftaufbereiter" type="BOOL"/>
 							<var name="xSummeFehler" type="BOOL"/>
 							<var name="xSummeWarnung" type="BOOL"/>
+							<var name="Ton_FaultBetriebLuftafber" type="TON"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="FALSE"/>
@@ -1093,7 +1094,9 @@ xF_KlappeBox2 := gBetriebsparameter.Ausstattung.Box2 AND
 	(gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_STOERUNG);
 
 // F08 Störmeldung Luftaufbereiter
-xF_Luftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter AND diStoerLuftaufber;
+Ton_FaultBetriebLuftafber(IN := gAktoren.xFrgLuftaufbereiter AND NOT diBetriebLuftaufber, PT := 2000);
+gAlarmBetriebLuftaufber := Ton_FaultBetriebLuftafber.Q;
+xF_Luftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter AND gAlarmBetriebLuftaufber;
 
 
 // =============================================================================
@@ -1556,7 +1559,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="aktorenMapping" version="1.0.0" creationDate="1773515395" lastModifiedDate="1776109705">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1779873263">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -1622,7 +1625,7 @@ END_CASE;
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[PROGRAM aktorenMapping
+						<![CDATA[PROGRAM AktorenMappingCyclic
 
 VAR
 	xStateEntryBox1 : BOOL := TRUE;
@@ -1822,7 +1825,7 @@ END_IF;
 *)
 
 IF gAktoren.xFrgLuftaufbereiter THEN
-    IF diStoerLuftaufber THEN
+    IF gAlarmBetriebLuftaufber THEN
         gStatusAnlage.Aktor[AKTOR_LUFTAUFBER] := STATUS_STOERUNG;
     ELSIF diBetriebLuftaufber THEN
         gStatusAnlage.Aktor[AKTOR_LUFTAUFBER] := STATUS_AKTIV;
@@ -1830,7 +1833,7 @@ IF gAktoren.xFrgLuftaufbereiter THEN
         gStatusAnlage.Aktor[AKTOR_LUFTAUFBER] := STATUS_BEREIT;
     END_IF;
 ELSE
-    IF diStoerLuftaufber THEN
+    IF gAlarmBetriebLuftaufber THEN
         gStatusAnlage.Aktor[AKTOR_LUFTAUFBER] := STATUS_STOERUNG;
     ELSE
         gStatusAnlage.Aktor[AKTOR_LUFTAUFBER] := STATUS_NICHT_AKTIV;
@@ -1859,7 +1862,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1778402739">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1779874608">
 					<vars/>
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
@@ -1999,7 +2002,7 @@ HMI_IN_diBox1Geschl  		:= diBox1Geschl;
 HMI_IN_diBox2Offen  		:= diBox2Offen;
 HMI_IN_diBox2Geschl 		:= diBox2Geschl;
 HMI_IN_diBetriebLuftaufber 	:= diBetriebLuftaufber;
-HMI_IN_diStoerLuftaufber  	:= diStoerLuftaufber;
+HMI_IN_diBetriebVentilator 	:= diBetriebVentilator;
 
 (*
 -------------------------------------------------------------------------------
@@ -2054,15 +2057,15 @@ HMI_IN_aoLeistVorgLuftaufber  := aoLeistVorgLuftaufber;
 
 (* PLC OUT - HMI IN *)
 
-//analog
+//digital
 HMI_TEST_diBox1Offen     		:= gIoTest.DigitalIn.diBox1Offen;
 HMI_TEST_diBox1Geschl  	 		:= gIoTest.DigitalIn.diBox1Geschl;
 HMI_TEST_diBox2Offen   		 	:= gIoTest.DigitalIn.diBox2Offen;
 HMI_TEST_diBox2Geschl    		:= gIoTest.DigitalIn.diBox2Geschl;
 HMI_TEST_diBetriebLuftaufber  	:= gIoTest.DigitalIn.diBetriebLuftaufber;
-HMI_TEST_diStoerLuftaufber  	:= gIoTest.DigitalIn.diStoerLuftaufber;
+HMI_TEST_diBetriebVentilator 	:= gIoTest.DigitalIn.diBetriebVentilator;
 
-//digital
+//analog
 HMI_TEST_aiFrischluftTemp  		:= gIoTest.AnalogIn.aiFrischluftTemp;
 HMI_TEST_aiFrischluftFeuchte  	:= gIoTest.AnalogIn.aiFrischluftFeuchte;
 HMI_TEST_aiAbluftBox1Temp     	:= gIoTest.AnalogIn.aiAbluftBox1Temp;
@@ -2220,7 +2223,7 @@ END_STRUCT;
 						<var name="diBox2Offen" type="BOOL"/>
 						<var name="diBox2Geschl" type="BOOL"/>
 						<var name="diBetriebLuftaufber" type="BOOL"/>
-						<var name="diStoerLuftaufber" type="BOOL"/>
+						<var name="diBetriebVentilator" type="BOOL"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -71113,145 +71116,141 @@ END_IF;
 		{G:"Variables"}
 	HMI_TEST_diBox2Geschl AT %MW201.7 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_diLuftaufberBetrieb AT %MW201.8 : BOOL := 0;
+	HMI_TEST_diBetriebLuftaufber AT %MW201.8 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_diLuftaufberStoer AT %MW201.9 : BOOL := 0;
+	HMI_TEST_diBetriebVentilator AT %MW201.9 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_diBetriebLuftaufber AT %MW201.10 : BOOL := 0;
+	HMI_TEST_di3 AT %MW201.10 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_diStoerLuftaufber AT %MW201.11 : BOOL := 0;
+	HMI_TEST_di4 AT %MW201.11 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_di3 AT %MW201.12 : BOOL := 0;
+	HMI_TEST_diIoTestAktiv AT %MW201.12 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_di4 AT %MW201.13 : BOOL := 0;
+	HMI_TEST_doIoTestAktivieren AT %MW201.13 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_diIoTestAktiv AT %MW201.14 : BOOL := 0;
+	HMI_TEST_doFrgVentilator AT %MW201.14 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_doIoTestAktivieren AT %MW201.15 : BOOL := 0;
+	HMI_TEST_do3 AT %MW201.15 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_doFrgVentilator AT %MW201.16 : BOOL := 0;
+	HMI_TEST_do4 AT %MW201.16 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_do3 AT %MW201.17 : BOOL := 0;
+	HMI_TEST_do5 AT %MW201.17 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_do4 AT %MW201.18 : BOOL := 0;
+	HMI_IN_diBox1Offen AT %MW201.18 : BOOL := 0;
 		{G:"Variables"}
-	HMI_TEST_do5 AT %MW201.19 : BOOL := 0;
+	HMI_IN_diBox1Geschl AT %MW201.19 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diBox1Offen AT %MW201.20 : BOOL := 0;
+	HMI_IN_diBox2Offen AT %MW201.20 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diBox1Geschl AT %MW201.21 : BOOL := 0;
+	HMI_IN_diBox2Geschl AT %MW201.21 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diBox2Offen AT %MW201.22 : BOOL := 0;
+	HMI_IN_diBetriebLuftaufber AT %MW201.22 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diBox2Geschl AT %MW201.23 : BOOL := 0;
+	HMI_IN_diBetriebVentilator AT %MW201.23 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diBetriebLuftaufber AT %MW201.24 : BOOL := 0;
+	HMI_IN_doFrgLuftaufber AT %MW201.24 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diStoerLuftaufber AT %MW201.25 : BOOL := 0;
+	HMI_IN_doFrgBox1 AT %MW201.25 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_doFrgLuftaufber AT %MW201.26 : BOOL := 0;
+	HMI_IN_doFrgBox2 AT %MW201.26 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_doFrgBox1 AT %MW201.27 : BOOL := 0;
+	HMI_IN_doFrgAbluftvent AT %MW201.27 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_doFrgBox2 AT %MW201.28 : BOOL := 0;
+	HMI_IN_doFrgVentilator AT %MW201.28 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_doFrgAbluftvent AT %MW201.29 : BOOL := 0;
+	HMI_IN_diQuitErr AT %MW201.29 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_doFrgVentilator AT %MW201.30 : BOOL := 0;
+	HMI_IN_3 AT %MW201.30 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_diQuitErr AT %MW201.31 : BOOL := 0;
+	HMI_IN_4 AT %MW201.31 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_3 AT %MW201.32 : BOOL := 0;
+	HMI_IN_5 AT %MW201.32 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_4 AT %MW201.33 : BOOL := 0;
+	HMI_IN_6 AT %MW201.33 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_5 AT %MW201.34 : BOOL := 0;
+	HMI_IN_7 AT %MW201.34 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_6 AT %MW201.35 : BOOL := 0;
+	HMI_IN_8 AT %MW201.35 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_7 AT %MW201.36 : BOOL := 0;
+	HMI_IN_9 AT %MW201.36 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_8 AT %MW201.37 : BOOL := 0;
+	HMI_IN_10 AT %MW201.37 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_9 AT %MW201.38 : BOOL := 0;
+	HMI_IN_11 AT %MW201.38 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_10 AT %MW201.39 : BOOL := 0;
+	HMI_IN_12 AT %MW201.39 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_11 AT %MW201.40 : BOOL := 0;
+	HMI_IN_13 AT %MW201.40 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_12 AT %MW201.41 : BOOL := 0;
+	HMI_IN_14 AT %MW201.41 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_13 AT %MW201.42 : BOOL := 0;
+	HMI_IN_15 AT %MW201.42 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_14 AT %MW201.43 : BOOL := 0;
+	HMI_IN_17 AT %MW201.43 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_15 AT %MW201.44 : BOOL := 0;
+	HMI_IN_18 AT %MW201.44 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_17 AT %MW201.45 : BOOL := 0;
+	HMI_IN_19 AT %MW201.45 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_18 AT %MW201.46 : BOOL := 0;
+	HMI_IN_20 AT %MW201.46 : BOOL := 0;
 		{G:"Variables"}
-	HMI_IN_19 AT %MW201.47 : BOOL := 0;
+	HMI_IN_aiFrischluftTemp AT %MW201.48 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_20 AT %MW201.48 : BOOL := 0;
+	HMI_IN_aiFrischluftFeuchte AT %MW201.50 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiFrischluftTemp AT %MW201.50 : REAL := 0;
+	HMI_IN_aiAbluftBox1Temp AT %MW201.52 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiFrischluftFeuchte AT %MW201.52 : REAL := 0;
+	HMI_IN_aiAbluftBox1Feuchte AT %MW201.54 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiAbluftBox1Temp AT %MW201.54 : REAL := 0;
+	HMI_IN_aiTrockenluftTemp AT %MW201.56 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiAbluftBox1Feuchte AT %MW201.56 : REAL := 0;
+	HMI_IN_aiTrockenluftFeuchte AT %MW201.58 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiTrockenluftTemp AT %MW201.58 : REAL := 0;
+	HMI_IN_aiAbluftBox2Temp AT %MW201.60 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiTrockenluftFeuchte AT %MW201.60 : REAL := 0;
+	HMI_IN_aiAbluftBox2Feuchte AT %MW201.62 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiAbluftBox2Temp AT %MW201.62 : REAL := 0;
+	HMI_IN_aiStockTemp AT %MW201.64 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiAbluftBox2Feuchte AT %MW201.64 : REAL := 0;
+	HMI_IN_aoFuVentilator AT %MW201.66 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aiStockTemp AT %MW201.66 : REAL := 0;
+	HMI_IN_aoLeistVorgLuftaufber AT %MW201.68 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aoFuVentilator AT %MW201.68 : REAL := 0;
+	HMI_IN_ai3 AT %MW201.70 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_aoLeistVorgLuftaufber AT %MW201.70 : REAL := 0;
+	HMI_IN_ai4 AT %MW201.72 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_ai3 AT %MW201.72 : REAL := 0;
+	HMI_IN_ai5 AT %MW201.74 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_ai4 AT %MW201.74 : REAL := 0;
+	HMI_TEST_aoFuVentilator AT %MW201.76 : REAL := 0;
 		{G:"Variables"}
-	HMI_IN_ai5 AT %MW201.76 : REAL := 0;
+	HMI_TEST_aoLeistVorgLuftaufber AT %MW201.78 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aoFuVentilator AT %MW201.78 : REAL := 0;
+	HMI_TEST_ao1 AT %MW201.80 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aoLeistVorgLuftaufber AT %MW201.80 : REAL := 0;
+	HMI_TEST_ao2 AT %MW201.82 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_ao1 AT %MW201.82 : REAL := 0;
+	HMI_TEST_ao3 AT %MW201.84 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_ao2 AT %MW201.84 : REAL := 0;
+	HMI_TEST_aiFrischluftTemp AT %MW201.86 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_ao3 AT %MW201.86 : REAL := 0;
+	HMI_TEST_aiFrischluftFeuchte AT %MW201.88 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiFrischluftTemp AT %MW201.88 : REAL := 0;
+	HMI_TEST_aiAbluftBox1Temp AT %MW201.90 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiFrischluftFeuchte AT %MW201.90 : REAL := 0;
+	HMI_TEST_aiAbluftBox1Feuchte AT %MW201.92 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiAbluftBox1Temp AT %MW201.92 : REAL := 0;
+	HMI_TEST_aiTrockenluftTemp AT %MW201.94 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiAbluftBox1Feuchte AT %MW201.94 : REAL := 0;
+	HMI_TEST_aiTrockenluftFeuchte AT %MW201.96 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiTrockenluftTemp AT %MW201.96 : REAL := 0;
+	HMI_TEST_aiAbluftBox2Temp AT %MW201.98 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiTrockenluftFeuchte AT %MW201.98 : REAL := 0;
+	HMI_TEST_aiAbluftBox2Feuchte AT %MW201.100 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiAbluftBox2Temp AT %MW201.100 : REAL := 0;
+	HMI_TEST_aiStocktemp AT %MW201.102 : REAL := 0;
 		{G:"Variables"}
-	HMI_TEST_aiAbluftBox2Feuchte AT %MW201.102 : REAL := 0;
-		{G:"Variables"}
-	HMI_TEST_aiStocktemp AT %MW201.104 : REAL := 0;
-		{G:"Variables"}
-	HMI_ALARM_ AT %MW201.106 : INT := 0;
+	HMI_ALARM_ AT %MW201.104 : INT := 0;
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -73895,8 +73894,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..4519 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 113; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..4439 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 111; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -73909,9 +73908,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 2011158337;
+	dummyCrc32 := 495328634;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 60, 2, 201, TO_DWORD( ADR(%MW201.0) ), 107, 2, 2011158337 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 60, 2, 201, TO_DWORD( ADR(%MW201.0) ), 105, 2, 495328634 );
 
 END_PROGRAM
 
@@ -73980,11 +73979,11 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="5199">
+			<root name="CControl_Lite" nextID="5615">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
-					<Pou name="aktorenMapping" id="31"/>
+					<Pou name="AktorenMappingCyclic" id="31"/>
 					<Pou name="HmiMappingCyclic" id="33"/>
 				</folder>
 				<folder name="alarm" id="14">
@@ -76185,7 +76184,7 @@ END_PROGRAM
 							<param>
 								<ipa>8968</ipa>
 								<address>8968</address>
-								<name>HMI_TEST_diLuftaufberBetrieb</name>
+								<name>HMI_TEST_diBetriebLuftaufber</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76234,7 +76233,7 @@ END_PROGRAM
 							<param>
 								<ipa>8969</ipa>
 								<address>8969</address>
-								<name>HMI_TEST_diLuftaufberStoer</name>
+								<name>HMI_TEST_diBetriebVentilator</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76283,7 +76282,7 @@ END_PROGRAM
 							<param>
 								<ipa>8970</ipa>
 								<address>8970</address>
-								<name>HMI_TEST_diBetriebLuftaufber</name>
+								<name>HMI_TEST_di3</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76332,7 +76331,7 @@ END_PROGRAM
 							<param>
 								<ipa>8971</ipa>
 								<address>8971</address>
-								<name>HMI_TEST_diStoerLuftaufber</name>
+								<name>HMI_TEST_di4</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76381,7 +76380,7 @@ END_PROGRAM
 							<param>
 								<ipa>8972</ipa>
 								<address>8972</address>
-								<name>HMI_TEST_di3</name>
+								<name>HMI_TEST_diIoTestAktiv</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76430,7 +76429,7 @@ END_PROGRAM
 							<param>
 								<ipa>8973</ipa>
 								<address>8973</address>
-								<name>HMI_TEST_di4</name>
+								<name>HMI_TEST_doIoTestAktivieren</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76479,7 +76478,7 @@ END_PROGRAM
 							<param>
 								<ipa>8974</ipa>
 								<address>8974</address>
-								<name>HMI_TEST_diIoTestAktiv</name>
+								<name>HMI_TEST_doFrgVentilator</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76528,7 +76527,7 @@ END_PROGRAM
 							<param>
 								<ipa>8975</ipa>
 								<address>8975</address>
-								<name>HMI_TEST_doIoTestAktivieren</name>
+								<name>HMI_TEST_do3</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76577,7 +76576,7 @@ END_PROGRAM
 							<param>
 								<ipa>8976</ipa>
 								<address>8976</address>
-								<name>HMI_TEST_doFrgVentilator</name>
+								<name>HMI_TEST_do4</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76626,7 +76625,7 @@ END_PROGRAM
 							<param>
 								<ipa>8977</ipa>
 								<address>8977</address>
-								<name>HMI_TEST_do3</name>
+								<name>HMI_TEST_do5</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76675,7 +76674,7 @@ END_PROGRAM
 							<param>
 								<ipa>8978</ipa>
 								<address>8978</address>
-								<name>HMI_TEST_do4</name>
+								<name>HMI_IN_diBox1Offen</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76724,7 +76723,7 @@ END_PROGRAM
 							<param>
 								<ipa>8979</ipa>
 								<address>8979</address>
-								<name>HMI_TEST_do5</name>
+								<name>HMI_IN_diBox1Geschl</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76773,7 +76772,7 @@ END_PROGRAM
 							<param>
 								<ipa>8980</ipa>
 								<address>8980</address>
-								<name>HMI_IN_diBox1Offen</name>
+								<name>HMI_IN_diBox2Offen</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76822,7 +76821,7 @@ END_PROGRAM
 							<param>
 								<ipa>8981</ipa>
 								<address>8981</address>
-								<name>HMI_IN_diBox1Geschl</name>
+								<name>HMI_IN_diBox2Geschl</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76871,7 +76870,7 @@ END_PROGRAM
 							<param>
 								<ipa>8982</ipa>
 								<address>8982</address>
-								<name>HMI_IN_diBox2Offen</name>
+								<name>HMI_IN_diBetriebLuftaufber</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76920,7 +76919,7 @@ END_PROGRAM
 							<param>
 								<ipa>8983</ipa>
 								<address>8983</address>
-								<name>HMI_IN_diBox2Geschl</name>
+								<name>HMI_IN_diBetriebVentilator</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -76969,7 +76968,7 @@ END_PROGRAM
 							<param>
 								<ipa>8984</ipa>
 								<address>8984</address>
-								<name>HMI_IN_diBetriebLuftaufber</name>
+								<name>HMI_IN_doFrgLuftaufber</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77018,7 +77017,7 @@ END_PROGRAM
 							<param>
 								<ipa>8985</ipa>
 								<address>8985</address>
-								<name>HMI_IN_diStoerLuftaufber</name>
+								<name>HMI_IN_doFrgBox1</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77067,7 +77066,7 @@ END_PROGRAM
 							<param>
 								<ipa>8986</ipa>
 								<address>8986</address>
-								<name>HMI_IN_doFrgLuftaufber</name>
+								<name>HMI_IN_doFrgBox2</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77116,7 +77115,7 @@ END_PROGRAM
 							<param>
 								<ipa>8987</ipa>
 								<address>8987</address>
-								<name>HMI_IN_doFrgBox1</name>
+								<name>HMI_IN_doFrgAbluftvent</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77165,7 +77164,7 @@ END_PROGRAM
 							<param>
 								<ipa>8988</ipa>
 								<address>8988</address>
-								<name>HMI_IN_doFrgBox2</name>
+								<name>HMI_IN_doFrgVentilator</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77214,7 +77213,7 @@ END_PROGRAM
 							<param>
 								<ipa>8989</ipa>
 								<address>8989</address>
-								<name>HMI_IN_doFrgAbluftvent</name>
+								<name>HMI_IN_diQuitErr</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77263,7 +77262,7 @@ END_PROGRAM
 							<param>
 								<ipa>8990</ipa>
 								<address>8990</address>
-								<name>HMI_IN_doFrgVentilator</name>
+								<name>HMI_IN_3</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77312,7 +77311,7 @@ END_PROGRAM
 							<param>
 								<ipa>8991</ipa>
 								<address>8991</address>
-								<name>HMI_IN_diQuitErr</name>
+								<name>HMI_IN_4</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77361,7 +77360,7 @@ END_PROGRAM
 							<param>
 								<ipa>8992</ipa>
 								<address>8992</address>
-								<name>HMI_IN_3</name>
+								<name>HMI_IN_5</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77410,7 +77409,7 @@ END_PROGRAM
 							<param>
 								<ipa>8993</ipa>
 								<address>8993</address>
-								<name>HMI_IN_4</name>
+								<name>HMI_IN_6</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77459,7 +77458,7 @@ END_PROGRAM
 							<param>
 								<ipa>8994</ipa>
 								<address>8994</address>
-								<name>HMI_IN_5</name>
+								<name>HMI_IN_7</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77508,7 +77507,7 @@ END_PROGRAM
 							<param>
 								<ipa>8995</ipa>
 								<address>8995</address>
-								<name>HMI_IN_6</name>
+								<name>HMI_IN_8</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77557,7 +77556,7 @@ END_PROGRAM
 							<param>
 								<ipa>8996</ipa>
 								<address>8996</address>
-								<name>HMI_IN_7</name>
+								<name>HMI_IN_9</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77606,7 +77605,7 @@ END_PROGRAM
 							<param>
 								<ipa>8997</ipa>
 								<address>8997</address>
-								<name>HMI_IN_8</name>
+								<name>HMI_IN_10</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77655,7 +77654,7 @@ END_PROGRAM
 							<param>
 								<ipa>8998</ipa>
 								<address>8998</address>
-								<name>HMI_IN_9</name>
+								<name>HMI_IN_11</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77704,7 +77703,7 @@ END_PROGRAM
 							<param>
 								<ipa>8999</ipa>
 								<address>8999</address>
-								<name>HMI_IN_10</name>
+								<name>HMI_IN_12</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77753,7 +77752,7 @@ END_PROGRAM
 							<param>
 								<ipa>9000</ipa>
 								<address>9000</address>
-								<name>HMI_IN_11</name>
+								<name>HMI_IN_13</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77802,7 +77801,7 @@ END_PROGRAM
 							<param>
 								<ipa>9001</ipa>
 								<address>9001</address>
-								<name>HMI_IN_12</name>
+								<name>HMI_IN_14</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77851,7 +77850,7 @@ END_PROGRAM
 							<param>
 								<ipa>9002</ipa>
 								<address>9002</address>
-								<name>HMI_IN_13</name>
+								<name>HMI_IN_15</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77900,7 +77899,7 @@ END_PROGRAM
 							<param>
 								<ipa>9003</ipa>
 								<address>9003</address>
-								<name>HMI_IN_14</name>
+								<name>HMI_IN_17</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77949,7 +77948,7 @@ END_PROGRAM
 							<param>
 								<ipa>9004</ipa>
 								<address>9004</address>
-								<name>HMI_IN_15</name>
+								<name>HMI_IN_18</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77998,7 +77997,7 @@ END_PROGRAM
 							<param>
 								<ipa>9005</ipa>
 								<address>9005</address>
-								<name>HMI_IN_17</name>
+								<name>HMI_IN_19</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -78047,7 +78046,7 @@ END_PROGRAM
 							<param>
 								<ipa>9006</ipa>
 								<address>9006</address>
-								<name>HMI_IN_18</name>
+								<name>HMI_IN_20</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -78096,58 +78095,9 @@ END_PROGRAM
 							<param>
 								<ipa>9007</ipa>
 								<address>9007</address>
-								<name>HMI_IN_19</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW201.47</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>9008</ipa>
-								<address>9008</address>
-								<name>HMI_IN_20</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
+								<name>HMI_IN_aiFrischluftTemp</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -78194,7 +78144,7 @@ END_PROGRAM
 							<param>
 								<ipa>9009</ipa>
 								<address>9009</address>
-								<name>HMI_IN_aiFrischluftTemp</name>
+								<name>HMI_IN_aiFrischluftFeuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78243,7 +78193,7 @@ END_PROGRAM
 							<param>
 								<ipa>9011</ipa>
 								<address>9011</address>
-								<name>HMI_IN_aiFrischluftFeuchte</name>
+								<name>HMI_IN_aiAbluftBox1Temp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78292,7 +78242,7 @@ END_PROGRAM
 							<param>
 								<ipa>9013</ipa>
 								<address>9013</address>
-								<name>HMI_IN_aiAbluftBox1Temp</name>
+								<name>HMI_IN_aiAbluftBox1Feuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78341,7 +78291,7 @@ END_PROGRAM
 							<param>
 								<ipa>9015</ipa>
 								<address>9015</address>
-								<name>HMI_IN_aiAbluftBox1Feuchte</name>
+								<name>HMI_IN_aiTrockenluftTemp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78390,7 +78340,7 @@ END_PROGRAM
 							<param>
 								<ipa>9017</ipa>
 								<address>9017</address>
-								<name>HMI_IN_aiTrockenluftTemp</name>
+								<name>HMI_IN_aiTrockenluftFeuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78439,7 +78389,7 @@ END_PROGRAM
 							<param>
 								<ipa>9019</ipa>
 								<address>9019</address>
-								<name>HMI_IN_aiTrockenluftFeuchte</name>
+								<name>HMI_IN_aiAbluftBox2Temp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78488,7 +78438,7 @@ END_PROGRAM
 							<param>
 								<ipa>9021</ipa>
 								<address>9021</address>
-								<name>HMI_IN_aiAbluftBox2Temp</name>
+								<name>HMI_IN_aiAbluftBox2Feuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78537,7 +78487,7 @@ END_PROGRAM
 							<param>
 								<ipa>9023</ipa>
 								<address>9023</address>
-								<name>HMI_IN_aiAbluftBox2Feuchte</name>
+								<name>HMI_IN_aiStockTemp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78586,7 +78536,7 @@ END_PROGRAM
 							<param>
 								<ipa>9025</ipa>
 								<address>9025</address>
-								<name>HMI_IN_aiStockTemp</name>
+								<name>HMI_IN_aoFuVentilator</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78635,7 +78585,7 @@ END_PROGRAM
 							<param>
 								<ipa>9027</ipa>
 								<address>9027</address>
-								<name>HMI_IN_aoFuVentilator</name>
+								<name>HMI_IN_aoLeistVorgLuftaufber</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78684,7 +78634,7 @@ END_PROGRAM
 							<param>
 								<ipa>9029</ipa>
 								<address>9029</address>
-								<name>HMI_IN_aoLeistVorgLuftaufber</name>
+								<name>HMI_IN_ai3</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78733,7 +78683,7 @@ END_PROGRAM
 							<param>
 								<ipa>9031</ipa>
 								<address>9031</address>
-								<name>HMI_IN_ai3</name>
+								<name>HMI_IN_ai4</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78782,7 +78732,7 @@ END_PROGRAM
 							<param>
 								<ipa>9033</ipa>
 								<address>9033</address>
-								<name>HMI_IN_ai4</name>
+								<name>HMI_IN_ai5</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78831,7 +78781,7 @@ END_PROGRAM
 							<param>
 								<ipa>9035</ipa>
 								<address>9035</address>
-								<name>HMI_IN_ai5</name>
+								<name>HMI_TEST_aoFuVentilator</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78880,7 +78830,7 @@ END_PROGRAM
 							<param>
 								<ipa>9037</ipa>
 								<address>9037</address>
-								<name>HMI_TEST_aoFuVentilator</name>
+								<name>HMI_TEST_aoLeistVorgLuftaufber</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78929,7 +78879,7 @@ END_PROGRAM
 							<param>
 								<ipa>9039</ipa>
 								<address>9039</address>
-								<name>HMI_TEST_aoLeistVorgLuftaufber</name>
+								<name>HMI_TEST_ao1</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78978,7 +78928,7 @@ END_PROGRAM
 							<param>
 								<ipa>9041</ipa>
 								<address>9041</address>
-								<name>HMI_TEST_ao1</name>
+								<name>HMI_TEST_ao2</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79027,7 +78977,7 @@ END_PROGRAM
 							<param>
 								<ipa>9043</ipa>
 								<address>9043</address>
-								<name>HMI_TEST_ao2</name>
+								<name>HMI_TEST_ao3</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79076,7 +79026,7 @@ END_PROGRAM
 							<param>
 								<ipa>9045</ipa>
 								<address>9045</address>
-								<name>HMI_TEST_ao3</name>
+								<name>HMI_TEST_aiFrischluftTemp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79125,7 +79075,7 @@ END_PROGRAM
 							<param>
 								<ipa>9047</ipa>
 								<address>9047</address>
-								<name>HMI_TEST_aiFrischluftTemp</name>
+								<name>HMI_TEST_aiFrischluftFeuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79174,7 +79124,7 @@ END_PROGRAM
 							<param>
 								<ipa>9049</ipa>
 								<address>9049</address>
-								<name>HMI_TEST_aiFrischluftFeuchte</name>
+								<name>HMI_TEST_aiAbluftBox1Temp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79223,7 +79173,7 @@ END_PROGRAM
 							<param>
 								<ipa>9051</ipa>
 								<address>9051</address>
-								<name>HMI_TEST_aiAbluftBox1Temp</name>
+								<name>HMI_TEST_aiAbluftBox1Feuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79272,7 +79222,7 @@ END_PROGRAM
 							<param>
 								<ipa>9053</ipa>
 								<address>9053</address>
-								<name>HMI_TEST_aiAbluftBox1Feuchte</name>
+								<name>HMI_TEST_aiTrockenluftTemp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79321,7 +79271,7 @@ END_PROGRAM
 							<param>
 								<ipa>9055</ipa>
 								<address>9055</address>
-								<name>HMI_TEST_aiTrockenluftTemp</name>
+								<name>HMI_TEST_aiTrockenluftFeuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79370,7 +79320,7 @@ END_PROGRAM
 							<param>
 								<ipa>9057</ipa>
 								<address>9057</address>
-								<name>HMI_TEST_aiTrockenluftFeuchte</name>
+								<name>HMI_TEST_aiAbluftBox2Temp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79419,7 +79369,7 @@ END_PROGRAM
 							<param>
 								<ipa>9059</ipa>
 								<address>9059</address>
-								<name>HMI_TEST_aiAbluftBox2Temp</name>
+								<name>HMI_TEST_aiAbluftBox2Feuchte</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79468,7 +79418,7 @@ END_PROGRAM
 							<param>
 								<ipa>9061</ipa>
 								<address>9061</address>
-								<name>HMI_TEST_aiAbluftBox2Feuchte</name>
+								<name>HMI_TEST_aiStocktemp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -79517,55 +79467,6 @@ END_PROGRAM
 							<param>
 								<ipa>9063</ipa>
 								<address>9063</address>
-								<name>HMI_TEST_aiStocktemp</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW201.104</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>9065</ipa>
-								<address>9065</address>
 								<name>HMI_ALARM_</name>
 								<typepar>5</typepar>
 								<typetarg>INT</typetarg>
@@ -79584,7 +79485,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW201.106</dataBlock>
+								<dataBlock>%MW201.104</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -80741,7 +80642,7 @@ END_PROGRAM
 						<biosParams>
 							<biosParam>
 								<ipa>15726</ipa>
-								<defval>4</defval>
+								<defval>3</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -80750,7 +80651,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15727</ipa>
-								<defval>4</defval>
+								<defval>3</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -81504,7 +81405,6 @@ END_PROGRAM
 								<value ipa="9005" subidx="0">0</value>
 								<value ipa="9006" subidx="0">0</value>
 								<value ipa="9007" subidx="0">0</value>
-								<value ipa="9008" subidx="0">0</value>
 								<value ipa="9009" subidx="0">0</value>
 								<value ipa="9011" subidx="0">0</value>
 								<value ipa="9013" subidx="0">0</value>
@@ -81533,7 +81433,6 @@ END_PROGRAM
 								<value ipa="9059" subidx="0">0</value>
 								<value ipa="9061" subidx="0">0</value>
 								<value ipa="9063" subidx="0">0</value>
-								<value ipa="9065" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>
