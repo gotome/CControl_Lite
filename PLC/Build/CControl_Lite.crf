@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0xA9ECA239" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x1E9090AB" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -687,6 +687,18 @@
 		<var name="Klappen_Boxen_Box2_Laufzeit" source="Configuration_variables" sid="V:Configuration_variables:Klappen_Boxen_Box2_Laufzeit">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#117"/>
 		</var>
+		<var name="Konfig_idNameSteuerung" source="Configuration_variables" sid="V:Configuration_variables:Konfig_idNameSteuerung"/>
+		<var name="Ausstattung_EntfeuchterTyp" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_EntfeuchterTyp"/>
+		<var name="Konfig_SoftwareVersionPLC" source="Configuration_variables" sid="V:Configuration_variables:Konfig_SoftwareVersionPLC"/>
+		<var name="Parameter_Allgemein_StandortHoehe" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Allgemein_StandortHoehe"/>
+		<var name="Parameter_Tarifabschaltung_Start_Std" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Tarifabschaltung_Start_Std"/>
+		<var name="Parameter_Tarifabschaltung_Start_Min" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Tarifabschaltung_Start_Min"/>
+		<var name="Parameter_Tarifabschaltung_Stopp_Std" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Tarifabschaltung_Stopp_Std"/>
+		<var name="Parameter_Tarifabschaltung_Stopp_Min" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Tarifabschaltung_Stopp_Min"/>
+		<var name="Parameter_Boxen_1_Trockengut" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Boxen_1_Trockengut"/>
+		<var name="Parameter_Boxen_2_Trockengut" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Boxen_2_Trockengut"/>
+		<var name="Parameter_Boxen_1_SchlechtwetterSensorGrenzwert" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Boxen_1_SchlechtwetterSensorGrenzwert"/>
+		<var name="Parameter_Boxen_2_SchlechtwetterSensorGrenzwert" source="Configuration_variables" sid="V:Configuration_variables:Parameter_Boxen_2_SchlechtwetterSensorGrenzwert"/>
 		<var name="HMI_TEST_doFrgLuftaufber" source="Configuration_variables" sid="V:Configuration_variables:HMI_TEST_doFrgLuftaufber">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#214"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#286"/>
@@ -863,6 +875,12 @@
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#209"/>
 		</var>
 		<var name="HMI_ALARM_" source="Configuration_variables" sid="V:Configuration_variables:HMI_ALARM_"/>
+		<var name="HMI_Allgemein_Entfeuchter" source="Configuration_variables" sid="V:Configuration_variables:HMI_Allgemein_Entfeuchter"/>
+		<var name="HMI_Zusatzmeldung_Statustext" source="Configuration_variables" sid="V:Configuration_variables:HMI_Zusatzmeldung_Statustext"/>
+		<var name="HMI_Zusatzmeldung_Sanduhr" source="Configuration_variables" sid="V:Configuration_variables:HMI_Zusatzmeldung_Sanduhr"/>
+		<var name="HMI_Zusatzmeldung_Restzeit" source="Configuration_variables" sid="V:Configuration_variables:HMI_Zusatzmeldung_Restzeit"/>
+		<var name="HMI_Ventilator1_FarbeIcon" source="Configuration_variables" sid="V:Configuration_variables:HMI_Ventilator1_FarbeIcon"/>
+		<var name="HMI_Ventilator1_IstDrehzahl" source="Configuration_variables" sid="V:Configuration_variables:HMI_Ventilator1_IstDrehzahl"/>
 		<var name="hw_di1" source="Configuration_variables" sid="V:Configuration_variables:hw_di1">
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#78"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#311"/>
