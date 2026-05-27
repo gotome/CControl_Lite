@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"z:\\\\SharedFolder\\\\CControl\" -type f \\\\\\( -name \"*.xlsx\" -o -name \"*.xls\" \\\\\\) 2>/dev/null | grep -v \".git\")",
+      "Read(//z/SharedFolder/CControl/**)",
+      "Bash(xargs grep -l \"STRUCT\\\\|TYPE\\\\|Betrieb\\\\|Parameter\\\\|Alarm\\\\|Fehler\")"
+    ]
+  }
+}

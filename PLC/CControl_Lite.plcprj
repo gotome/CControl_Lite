@@ -1183,7 +1183,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1778965298">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1779306796">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -1271,8 +1271,6 @@ CASE gAktModus OF
         // ------------------------------------------------------------
         gAktoren.Box[1].xSollOffen := FALSE;
         gAktoren.Box[2].xSollOffen := FALSE;
-        gAktoren.xFrgLuftaufbereiter := FALSE;
-        gAktoren.xFrgAbluftventilator := FALSE;
 
         aoFuVentilator := 0.0;
         aoLeistVorgLuftaufber := 0.0;
@@ -1304,19 +1302,13 @@ CASE gAktModus OF
             hmiNutzungsdaten.LetzterModus := BETRIEB;
         END_IF;
 
-        // ------------------------------------------------------------
+        // --------------------------------------------------------	----
         // Betriebslogik - nur vorhandene Aktoren
         // ------------------------------------------------------------
 
         // Boxfreigaben
-        gAktoren.Box[1].xSollOffen := FALSE;
-        gAktoren.Box[2].xSollOffen := FALSE;
-
-        // Luftaufbereiter freigeben
-        gAktoren.xFrgLuftaufbereiter := FALSE;
-
-        // Abluftventilator freigeben
-        gAktoren.xFrgAbluftventilator := FALSE;
+        gAktoren.Box[1].xSollOffen := TRUE;
+        gAktoren.Box[2].xSollOffen := gBetriebsparameter.Ausstattung.Box2;
 
         // Analoge Sollwerte
         aoFuVentilator := gCmdAnlage.Leistung.DrehzahlVentilator;
@@ -73988,7 +73980,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="4861">
+			<root name="CControl_Lite" nextID="5199">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
