@@ -27,7 +27,7 @@ CControl_Lite ist eine abgespeckte Version von CControl für einfache Anlagen mi
 | diBox2Offen | hw_di3 | Endlage Box 2 offen |
 | diBox2Geschl | hw_di4 | Endlage Box 2 geschlossen |
 | diBetriebLuftaufber | hw_di5 | Rückmeldung Luftaufbereiter läuft |
-| diStoerLuftaufber | hw_di6 | Störmeldung Luftaufbereiter |
+| diBetriebVentilator | hw_di6 | Rückmeldung Ventilator läuft |
 
 **Digitale Ausgänge:**
 | Signal | HW-Pin | Beschreibung |
