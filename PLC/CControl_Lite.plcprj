@@ -405,7 +405,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781783050">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781784228">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -744,7 +744,7 @@ IF gAktModus <> IOTEST THEN
     fbStockTempAvg(
         enable := TRUE,
         x := rStocktempRaw,
-        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+        base := gBetriebsparameter.Sensoren.FilterzeitStocktemp
     );
 
     (*
@@ -2362,7 +2362,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781783920">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781784148">
 					<vars/>
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
@@ -2411,6 +2411,7 @@ Standard-Filterzeiten
 *)
 gBetriebsparameter.Sensoren.FilterzeitFrischluft := Sensoren_FilterzeitFrischluft;
 gBetriebsparameter.Sensoren.FilterzeitAbluft := Sensoren_FilterzeitAbluft;
+gBetriebsparameter.Sensoren.FilterzeitTrockenluft := Sensoren_FilterzeitTrockenluft;
 gBetriebsparameter.Sensoren.FilterzeitStocktemp := Sensoren_FilterzeitStocktemp;
 
 (*
@@ -2442,6 +2443,14 @@ gBetriebsparameter.Sensoren.TrockenlTempMessberMin := Sensoren_TrockenlTempMessb
 gBetriebsparameter.Sensoren.TrockenlTempMessberMax := Sensoren_TrockenlTempMessberMax;
 gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMin := Sensoren_TrockenlFeuchtMessberMin;
 gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMax := Sensoren_TrockenlFeuchtMessberMax;
+
+(*
+---------------------------------------------------------------------------
+Messbereiche Stocktemperatur
+---------------------------------------------------------------------------
+*)
+gBetriebsparameter.Sensoren.StocktempMessberMin := Sensoren_StockTempMessberMin;
+gBetriebsparameter.Sensoren.StocktempMessberMax := Sensoren_StockTempMessberMax;
 
 (*
 ---------------------------------------------------------------------------
@@ -74658,7 +74667,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="7458">
+			<root name="CControl_Lite" nextID="7484">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
