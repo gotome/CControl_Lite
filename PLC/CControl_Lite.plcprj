@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <plcProject caseSensitive="false" extendedIdNames="false" useCustomWorkspace="true" debugMode="false" extcheck="true" SFCControl="false" strictPointerCheck="true" strictInitValuesCheck="false" verboseWarningMode="false" iecTypeConversionRules="false" PNContactsOnEachNetwork="false" LocalVarsFBAccess="false" strictEnumsCheck="true" copyWarningThreshold="0" version="2.11" useLD2="true" useXPLCFiles="false" useFBMethods="false" customSortOfProjectTree="false" autoDerefPointers="false">
 	<image>CControl_Lite.imgx</image>
-	<commSettings>Modbus:1,1000,M6#COM:8,19200,E,8,1,H</commSettings>
+	<commSettings>Modbus:1,1000,M6#RSUSBX:1,19200,E,8,1,H</commSettings>
 	<sources>
 		<main>
 			<resources>
@@ -74523,7 +74523,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="6909">
+			<root name="CControl_Lite" nextID="7026">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -83370,7 +83370,7 @@ END_PROGRAM
 					<CANopen id="0" protocol="" mode="0" nodeID="127" baudRate="500000" hbTime="0" syncCOBID="128" syncCycle="0" networkID="0" slaveNodeID="1" slaveDeviceType="301" slaveSyncCOBID="128" slaveSyncCycle="0" slaveManufacturerDeviceName="" slaveManufacturerHardwareVer="" slaveManufacturerSoftwareVer="" slaveGuardTime="200" slaveLifeTimeFactor="3" slaveConsumerHeartbeatTime="0" slaveProducerHeartbeatTime="0" slaveVendorID="0" slaveProductCode="0" slaveRevisionNumber="0" slaveSerialNumber="0" slaveCfgGranularity="8" slaveCfgCOBIDAutoAssignment="1" slaveCfgMaxTPDONum="8" slaveCfgMaxRPDONum="8" maxSlaves="2"/>
 					<cfgConfig>
 						<config>
-							<commstring>Modbus:1,1000,M6#COM:8,19200,E,8,1,H</commstring>
+							<commstring>Modbus:1,1000,M6#RSUSBX:1,19200,E,8,1,H</commstring>
 							<values stopNodeParsing="true">
 								<value ipa="15716" subidx="0">0</value>
 								<value ipa="15717" subidx="0">2049</value>
