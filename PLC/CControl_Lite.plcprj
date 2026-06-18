@@ -405,7 +405,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781778328">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781783050">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -732,17 +732,32 @@ IF gAktModus <> IOTEST THEN
     );
     aiAbluftBox2Feucht := fbAbluftBox2FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox2Feuchte;
 
+
+    (*
+    ---------------------------------------------------------------------------
+    Stocktemperatur filtern
+    ---------------------------------------------------------------------------
+    Die Stocktemperatur wird mit gleitendem Mittelwert geglättet.
+    Dies entspricht dem Prinzip der alten B&R-Steuerung.
+    ---------------------------------------------------------------------------
+    *)
+    fbStockTempAvg(
+        enable := TRUE,
+        x := rStocktempRaw,
+        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+    );
+
     (*
     ---------------------------------------------------------------------------
     Stocktemperatur skalieren
     ---------------------------------------------------------------------------
     *)
     fbStocktempScal(
-        x := rStocktempRaw,
+        x := fbStockTempAvg.y,
         x1 := 0.0,
-        y1 := 0.0,
+        y1 := gBetriebsparameter.Sensoren.StocktempMessberMin,
         x2 := 9999.0,
-        y2 := 100.0
+        y2 := gBetriebsparameter.Sensoren.StocktempMessberMax
     );
     aiStocktemp := fbStocktempScal.y + gBetriebsparameter.Sensoren.OffsetStocktemp;
 
@@ -845,12 +860,6 @@ ELSE
         x := TO_REAL(hw_ai1),
         base := gBetriebsparameter.Sensoren.FilterzeitFrischluft
     );
-    
-    fbAbluftBox1TempAvg(
-        enable := TRUE,
-        x := TO_REAL(hw_ai1),
-        base := gBetriebsparameter.Sensoren.FilterzeitFrischluft
-    );
 
     fbFrischluftTempScal(
         x := fbFrischluftTempAvg.y,
@@ -860,7 +869,7 @@ ELSE
         y2 := gBetriebsparameter.Sensoren.FrischlTempMessberMax
     );
     gIoTest.AnalogIn.aiFrischluftTemp := fbFrischluftTempScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftTemp;
-
+    
     fbFrischluftFeuchtScal(
         x := TO_REAL(hw_ai2),
         x1 := 0.0,
@@ -870,26 +879,14 @@ ELSE
     );
     gIoTest.AnalogIn.aiFrischluftFeuchte := fbFrischluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftFeuchte;
 
-    fbAbluftBox1TempScal(
+    fbTrockenluftTempAvg(
+        enable := TRUE,
         x := TO_REAL(hw_ai3),
-        x1 := 0.0,
-        y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
-        x2 := 9999.0,
-        y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
+        base := gBetriebsparameter.Sensoren.FilterzeitTrockenluft
     );
-    gIoTest.AnalogIn.aiAbluftBox1Temp := fbAbluftBox1TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Temp;
-
-    fbAbluftBox1FeuchtScal(
-        x := TO_REAL(hw_ai4),
-        x1 := 0.0,
-        y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
-        x2 := 9999.0,
-        y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
-    );
-    gIoTest.AnalogIn.aiAbluftBox1Feucht := fbAbluftBox1FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Feuchte;
 
     fbTrockenluftTempScal(
-        x := TO_REAL(hw_ai3),
+        x := fbTrockenluftTempAvg.y,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.TrockenlTempMessberMin,
         x2 := 9999.0,
@@ -906,8 +903,40 @@ ELSE
     );
     gIoTest.AnalogIn.aiTrockenluftFeucht := fbTrockenluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetTrockenluftFeuchte;
 
-    fbAbluftBox2TempScal(
+
+    fbAbluftBox1TempAvg(
+        enable := TRUE,
+        x := TO_REAL(hw_ai3),
+        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+    );
+
+    fbAbluftBox1TempScal(
+        x := fbAbluftBox1TempAvg.y,
+        x1 := 0.0,
+        y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
+        x2 := 9999.0,
+        y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
+    );
+    gIoTest.AnalogIn.aiAbluftBox1Temp := fbAbluftBox1TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Temp;
+
+    fbAbluftBox1FeuchtScal(
+        x := TO_REAL(hw_ai4),
+        x1 := 0.0,
+        y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
+        x2 := 9999.0,
+        y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
+    );
+    gIoTest.AnalogIn.aiAbluftBox1Feucht := fbAbluftBox1FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Feuchte;
+
+
+    fbAbluftBox2TempAvg(
+        enable := TRUE,
         x := TO_REAL(hw_ai5),
+        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+    );
+
+    fbAbluftBox2TempScal(
+        x := fbAbluftBox2TempAvg.y,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
         x2 := 9999.0,
@@ -923,6 +952,12 @@ ELSE
         y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
     );
     gIoTest.AnalogIn.aiAbluftBox2Feucht := fbAbluftBox2FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox2Feuchte;
+
+    fbStockTempAvg(
+        enable := TRUE,
+        x := TO_REAL(hw_ai7),
+        base := gBetriebsparameter.Sensoren.FilterzeitStocktemp
+    );
 
     fbStocktempScal(
         x := TO_REAL(hw_ai7),
@@ -2692,6 +2727,8 @@ END_STRUCT;
 					<vars>
 						<var name="FilterzeitFrischluft" type="UINT"/>
 						<var name="FilterzeitAbluft" type="UINT"/>
+						<var name="FilterzeitTrockenluft" type="UINT"/>
+						<var name="FilterzeitStocktemp" type="UINT"/>
 						<var name="FrischlTempMessberMin" type="REAL"/>
 						<var name="FrischlTempMessberMax" type="REAL"/>
 						<var name="FrischlFeuchtMessberMin" type="REAL"/>
@@ -2704,6 +2741,8 @@ END_STRUCT;
 						<var name="TrockenlTempMessberMax" type="REAL"/>
 						<var name="TrockenlFeuchtMessberMin" type="REAL"/>
 						<var name="TrockenlFeuchtMessberMax" type="REAL"/>
+						<var name="StocktempMessberMin" type="REAL"/>
+						<var name="StocktempMessberMax" type="REAL"/>
 						<var name="OffsetFrischluftTemp" type="REAL"/>
 						<var name="OffsetFrischluftFeuchte" type="REAL"/>
 						<var name="OffsetAbluftBox1Temp" type="REAL"/>
@@ -74618,7 +74657,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="7314">
+			<root name="CControl_Lite" nextID="7399">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
