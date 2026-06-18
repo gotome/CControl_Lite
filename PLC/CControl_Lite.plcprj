@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <plcProject caseSensitive="false" extendedIdNames="false" useCustomWorkspace="true" debugMode="false" extcheck="true" SFCControl="false" strictPointerCheck="true" strictInitValuesCheck="false" verboseWarningMode="false" iecTypeConversionRules="false" PNContactsOnEachNetwork="false" LocalVarsFBAccess="false" strictEnumsCheck="true" copyWarningThreshold="0" version="2.11" useLD2="true" useXPLCFiles="false" useFBMethods="false" customSortOfProjectTree="false" autoDerefPointers="false">
 	<image>CControl_Lite.imgx</image>
-	<commSettings>Modbus:1,1000,M6#RSUSBX:1,19200,E,8,1,H</commSettings>
+	<commSettings>Modbus:1,1000,M6#COM:8,19200,E,8,1,H</commSettings>
 	<sources>
 		<main>
 			<resources>
@@ -405,10 +405,14 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1780063452">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781778328">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
+							<var name="fbAbluftBox1TempAvg" type="FB_MovAvgFlt"/>
+							<var name="fbAbluftBox2TempAvg" type="FB_MovAvgFlt"/>
+							<var name="fbTrockenluftTempAvg" type="FB_MovAvgFlt"/>
+							<var name="fbStockTempAvg" type="FB_MovAvgFlt"/>
 							<var name="fbFrischluftTempScal" type="FB_LimScal"/>
 							<var name="fbFrischluftFeuchtScal" type="FB_LimScal"/>
 							<var name="fbAbluftBox1TempScal" type="FB_LimScal"/>
@@ -434,7 +438,40 @@ END_IF;
 							</var>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM IOMappingCyclic
+
+VAR
+	fbFrischluftTempAvg : FB_MovAvgFlt;
+	fbAbluftBox1TempAvg : FB_MovAvgFlt;
+	fbAbluftBox2TempAvg : FB_MovAvgFlt;
+	fbTrockenluftTempAvg : FB_MovAvgFlt;
+	fbStockTempAvg : FB_MovAvgFlt;
+	fbFrischluftTempScal : FB_LimScal;
+	fbFrischluftFeuchtScal : FB_LimScal;
+	fbAbluftBox1TempScal : FB_LimScal;
+	fbAbluftBox1FeuchtScal : FB_LimScal;
+	fbTrockenluftTempScal : FB_LimScal;
+	fbTrockenluftFeuchtScal : FB_LimScal;
+	fbAbluftBox2TempScal : FB_LimScal;
+	fbAbluftBox2FeuchtScal : FB_LimScal;
+	fbStocktempScal : FB_LimScal;
+	fbAoFuVentilatorScal : FB_LimScal;
+	fbAoLuftaufberLeistungScal : FB_LimScal;
+	rFrischluftTempRaw : REAL;
+	rFrischluftFeuchtRaw : REAL;
+	rAbluftBox1TempRaw : REAL;
+	rAbluftBox1FeuchtRaw : REAL;
+	rAbluftBox2TempRaw : REAL;
+	rAbluftBox2FeuchtRaw : REAL;
+	rTrockenluftTempRaw : REAL;
+	rTrockenluftFeuchtRaw : REAL;
+	rStocktempRaw : REAL;
+	gInitDone : BOOL := FALSE;
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -562,7 +599,7 @@ IF gAktModus <> IOTEST THEN
         x := fbFrischluftTempAvg.y,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.FrischlTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.FrischlTempMessberMax
     );
     aiFrischluftTemp := fbFrischluftTempScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftTemp;
@@ -576,33 +613,24 @@ IF gAktModus <> IOTEST THEN
         x := rFrischluftFeuchtRaw,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.FrischlFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.FrischlFeuchtMessberMax
     );
     aiFrischluftFeucht := fbFrischluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftFeuchte;
 
     (*
     ---------------------------------------------------------------------------
-    Abluft Box 1 skalieren
+    Trockenluft filtern
+    ---------------------------------------------------------------------------
+    Die Ablufttemperatur wird mit gleitendem Mittelwert geglättet.
+    Dies entspricht dem Prinzip der alten B&R-Steuerung.
     ---------------------------------------------------------------------------
     *)
-    fbAbluftBox1TempScal(
-        x := rAbluftBox1TempRaw,
-        x1 := 0.0,
-        y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
-        x2 := 32767.0,
-        y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
+    fbTrockenluftTempAvg(
+        enable := TRUE,
+        x := rTrockenluftTempRaw,
+        base := gBetriebsparameter.Sensoren.FilterzeitTrockenluft
     );
-    aiAbluftBox1Temp := fbAbluftBox1TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Temp;
-
-    fbAbluftBox1FeuchtScal(
-        x := rAbluftBox1FeuchtRaw,
-        x1 := 0.0,
-        y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
-        x2 := 32767.0,
-        y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
-    );
-    aiAbluftBox1Feucht := fbAbluftBox1FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Feuchte;
 
     (*
     ---------------------------------------------------------------------------
@@ -616,7 +644,7 @@ IF gAktModus <> IOTEST THEN
         x := rTrockenluftTempRaw,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.TrockenlTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.TrockenlTempMessberMax
     );
     aiTrockenluftTemp := fbTrockenluftTempScal.y + gBetriebsparameter.Sensoren.OffsetTrockenluftTemp;
@@ -625,10 +653,61 @@ IF gAktModus <> IOTEST THEN
         x := rTrockenluftFeuchtRaw,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMax
     );
     aiTrockenluftFeucht := fbTrockenluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetTrockenluftFeuchte;
+
+    (*
+    ---------------------------------------------------------------------------
+    Abluft Box 1 filtern
+    ---------------------------------------------------------------------------
+    Die Ablufttemperatur wird mit gleitendem Mittelwert geglättet.
+    Dies entspricht dem Prinzip der alten B&R-Steuerung.
+    ---------------------------------------------------------------------------
+    *)
+    fbAbluftBox1TempAvg(
+        enable := TRUE,
+        x := rAbluftBox1TempRaw,
+        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+    );
+
+    (*
+    ---------------------------------------------------------------------------
+    Abluft Box 1 skalieren
+    ---------------------------------------------------------------------------
+    *)
+    fbAbluftBox1TempScal(
+        x := fbAbluftBox1TempAvg.y,
+        x1 := 0.0,
+        y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
+        x2 := 9999.0,
+        y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
+    );
+    aiAbluftBox1Temp := fbAbluftBox1TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Temp;
+
+    fbAbluftBox1FeuchtScal(
+        x := rAbluftBox1FeuchtRaw,
+        x1 := 0.0,
+        y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
+        x2 := 9999.0,
+        y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
+    );
+    aiAbluftBox1Feucht := fbAbluftBox1FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Feuchte;
+
+    (*
+    ---------------------------------------------------------------------------
+    Abluft Box 2 filtern
+    ---------------------------------------------------------------------------
+    Die Ablufttemperatur wird mit gleitendem Mittelwert geglättet.
+    Dies entspricht dem Prinzip der alten B&R-Steuerung.
+    ---------------------------------------------------------------------------
+    *)
+    fbAbluftBox2TempAvg(
+        enable := TRUE,
+        x := rAbluftBox2TempRaw,
+        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+    );
 
     (*
     ---------------------------------------------------------------------------
@@ -636,10 +715,10 @@ IF gAktModus <> IOTEST THEN
     ---------------------------------------------------------------------------
     *)
     fbAbluftBox2TempScal(
-        x := rAbluftBox2TempRaw,
+        x := fbAbluftBox2TempAvg.y,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
     );
     aiAbluftBox2Temp := fbAbluftBox2TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox2Temp;
@@ -648,7 +727,7 @@ IF gAktModus <> IOTEST THEN
         x := rAbluftBox2FeuchtRaw,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
     );
     aiAbluftBox2Feucht := fbAbluftBox2FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox2Feuchte;
@@ -662,7 +741,7 @@ IF gAktModus <> IOTEST THEN
         x := rStocktempRaw,
         x1 := 0.0,
         y1 := 0.0,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := 100.0
     );
     aiStocktemp := fbStocktempScal.y + gBetriebsparameter.Sensoren.OffsetStocktemp;
@@ -692,7 +771,7 @@ IF gAktModus <> IOTEST THEN
         x1 := 0.0,
         y1 := 0.0,
         x2 := 100.0,
-        y2 := 32767.0
+        y2 := 1000.0
     );
     hw_ao1 := TO_INT(fbAoFuVentilatorScal.y);
 
@@ -708,7 +787,7 @@ IF gAktModus <> IOTEST THEN
         x1 := 0.0,
         y1 := 0.0,
         x2 := 100.0,
-        y2 := 32767.0
+        y2 := 1000.0
     );
     hw_ao4 := TO_INT(fbAoLuftaufberLeistungScal.y);
 
@@ -766,12 +845,18 @@ ELSE
         x := TO_REAL(hw_ai1),
         base := gBetriebsparameter.Sensoren.FilterzeitFrischluft
     );
+    
+    fbAbluftBox1TempAvg(
+        enable := TRUE,
+        x := TO_REAL(hw_ai1),
+        base := gBetriebsparameter.Sensoren.FilterzeitFrischluft
+    );
 
     fbFrischluftTempScal(
         x := fbFrischluftTempAvg.y,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.FrischlTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.FrischlTempMessberMax
     );
     gIoTest.AnalogIn.aiFrischluftTemp := fbFrischluftTempScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftTemp;
@@ -780,7 +865,7 @@ ELSE
         x := TO_REAL(hw_ai2),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.FrischlFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.FrischlFeuchtMessberMax
     );
     gIoTest.AnalogIn.aiFrischluftFeuchte := fbFrischluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftFeuchte;
@@ -789,7 +874,7 @@ ELSE
         x := TO_REAL(hw_ai3),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
     );
     gIoTest.AnalogIn.aiAbluftBox1Temp := fbAbluftBox1TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Temp;
@@ -798,7 +883,7 @@ ELSE
         x := TO_REAL(hw_ai4),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
     );
     gIoTest.AnalogIn.aiAbluftBox1Feucht := fbAbluftBox1FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox1Feuchte;
@@ -807,7 +892,7 @@ ELSE
         x := TO_REAL(hw_ai3),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.TrockenlTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.TrockenlTempMessberMax
     );
     gIoTest.AnalogIn.aiTrockenluftTemp := fbTrockenluftTempScal.y + gBetriebsparameter.Sensoren.OffsetTrockenluftTemp;
@@ -816,7 +901,7 @@ ELSE
         x := TO_REAL(hw_ai4),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMax
     );
     gIoTest.AnalogIn.aiTrockenluftFeucht := fbTrockenluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetTrockenluftFeuchte;
@@ -825,7 +910,7 @@ ELSE
         x := TO_REAL(hw_ai5),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftTempMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.AbluftTempMessberMax
     );
     gIoTest.AnalogIn.aiAbluftBox2Temp := fbAbluftBox2TempScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox2Temp;
@@ -834,7 +919,7 @@ ELSE
         x := TO_REAL(hw_ai6),
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax
     );
     gIoTest.AnalogIn.aiAbluftBox2Feucht := fbAbluftBox2FeuchtScal.y + gBetriebsparameter.Sensoren.OffsetAbluftBox2Feuchte;
@@ -843,7 +928,7 @@ ELSE
         x := TO_REAL(hw_ai7),
         x1 := 0.0,
         y1 := 0.0,
-        x2 := 32767.0,
+        x2 := 9999.0,
         y2 := 100.0
     );
     gIoTest.AnalogIn.aiStocktemp := fbStocktempScal.y + gBetriebsparameter.Sensoren.OffsetStocktemp;
@@ -869,7 +954,7 @@ ELSE
         x1 := 0.0,
         y1 := 0.0,
         x2 := 100.0,
-        y2 := 32767.0
+        y2 := 1000.0
     );
     hw_ao1 := TO_INT(fbAoFuVentilatorScal.y);
 
@@ -878,7 +963,7 @@ ELSE
         x1 := 0.0,
         y1 := 0.0,
         x2 := 100.0,
-        y2 := 32767.0
+        y2 := 1000.0
     );
     hw_ao4 := TO_INT(fbAoLuftaufberLeistungScal.y);
 
@@ -1186,7 +1271,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1781709724">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1781770210">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -1195,7 +1280,9 @@ END_IF;
 							<var name="xStartFreigabe" type="BOOL"/>
 							<var name="xStopAnforderung" type="BOOL"/>
 							<var name="xTestbetrieb" type="BOOL"/>
-							<var name="nextModus" type="eBetriebsmodus"/>
+							<var name="nextModus" type="eBetriebsmodus">
+								<initValue>STILLSTAND</initValue>
+							</var>
 						</localVars>
 					</vars>
 					<iecDeclaration active="FALSE"/>
@@ -1262,7 +1349,7 @@ CASE gAktModus OF
     // *************************************************************************
     // STILLSTAND
     // *************************************************************************
-    0:
+    STILLSTAND:
         IF stateEntry THEN
             stateEntry := FALSE;
 
@@ -1294,7 +1381,7 @@ CASE gAktModus OF
     // *************************************************************************
     // BETRIEB
     // *************************************************************************
-    1:
+    BETRIEB:
         IF stateEntry THEN
             stateEntry := FALSE;
 
@@ -1307,7 +1394,7 @@ CASE gAktModus OF
         // ------------------------------------------------------------
 
         // Boxfreigaben
-        gAktoren.Box[1].xSollOffen := TRUE;
+        gAktoren.Box[1].xSollOffen := IBN_FALSE;
         gAktoren.Box[2].xSollOffen := gBetriebsparameter.Ausstattung.Box2;
 
         // ------------------------------------------------------------
@@ -1325,7 +1412,7 @@ CASE gAktModus OF
     // *************************************************************************
     // IOTEST
     // *************************************************************************
-    2:
+    IOTEST:
         IF stateEntry THEN
             stateEntry := FALSE;
 
@@ -2240,7 +2327,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781707998">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781773978">
 					<vars/>
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
@@ -2352,7 +2439,7 @@ gBetriebsparameter.Ausstattung.SensorTrockenluft := Ausstattung_SensorTrockenluf
 gBetriebsparameter.Ausstattung.SensorStocktemp := Ausstattung_SensorStocktemp;
 gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe1 := Ausstattung_EndlagenVhdBoxenklappe1;
 gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe2 := Ausstattung_EndlagenVhdBoxenklappe2;
-gBetriebsparameter.Ausstattung.Luftaufbereiter := Par_Luftaufbereiter_Typ <> KEINER;
+gBetriebsparameter.Ausstattung.Luftaufbereiter := Ausstattung_Luftaufbereiter_Typ <> KEINER;
 
 (*
 ---------------------------------------------------------------------------
@@ -2367,7 +2454,7 @@ gBetriebsparameter.KlappenBoxen[2].Laufzeit := Klappen_Boxen_Box2_Laufzeit;
 Luftaufbereitung Allgemein
 ---------------------------------------------------------------------------
 *)
-gBetriebsparameter.Luftaufbereitung.Typ := Par_Luftaufbereiter_Typ;
+gBetriebsparameter.Luftaufbereitung.Typ := Ausstattung_Luftaufbereiter_Typ;
 
 (*
 ---------------------------------------------------------------------------
@@ -2504,7 +2591,7 @@ gIoTest.AnalogOut.aoLeistVorgLuftaufber 	:= HMI_TEST_aoLeistVorgLuftaufber;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1781708188">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1781770430">
 					<vars>
 						<localVars>
 							<var name="xBox1Aktiv" type="BOOL"/>
@@ -2549,7 +2636,7 @@ ELSE
     xBox2Aktiv := FALSE;
 END_IF;
 
-xMindEineBoxAktiv := xBox1Aktiv OR xBox2Aktiv OR IBN_TRUE; //TODO RIG: Boxenkonfig muss noch implementiert werden!
+xMindEineBoxAktiv := xBox1Aktiv OR xBox2Aktiv; //TODO RIG: Boxenkonfig muss noch implementiert werden!
 
 (* externe Signale optional, muessen beschrieben werden wenn gewuenscht *)
 xExternStart := gCmdAnlage.StartExtern;
@@ -71630,7 +71717,15 @@ END_IF;
 		{G:"Parameters"}
 	Par_Entfeuchter_Ausschaltverz AT %MW200.136 : UDINT;
 		{G:"Parameters"}
-	Par_Luftaufbereiter_Typ AT %MW200.138 : BYTE;
+	Ausstattung_Luftaufbereiter_Typ AT %MW200.138 : BYTE;
+		{G:"Parameters"}
+	Sensoren_FilterzeitTrockenluft AT %MW200.139 : UINT;
+		{G:"Parameters"}
+	Sensoren_FilterzeitStocktemp AT %MW200.140 : UINT;
+		{G:"Parameters"}
+	Sensoren_StockTempMessberMin AT %MW200.142 : REAL;
+		{G:"Parameters"}
+	Sensoren_StockTempMessberMax AT %MW200.144 : REAL;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -74438,8 +74533,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..6039 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 151; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..6199 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 155; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -74452,9 +74547,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 2749713513;
+	dummyCrc32 := 543555484;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 139, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 2749713513 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 146, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 543555484 );
 
 END_PROGRAM
 
@@ -74523,7 +74618,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="7026">
+			<root name="CControl_Lite" nextID="7314">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77955,7 +78050,7 @@ END_PROGRAM
 							<param>
 								<ipa>16521</ipa>
 								<address>16521</address>
-								<name>Par_Luftaufbereiter_Typ</name>
+								<name>Ausstattung_Luftaufbereiter_Typ</name>
 								<typepar>6</typepar>
 								<typetarg>BYTE</typetarg>
 								<value>0</value>
@@ -77974,6 +78069,202 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.138</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16522</ipa>
+								<address>16522</address>
+								<name>Sensoren_FilterzeitTrockenluft</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.139</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16524</ipa>
+								<address>16524</address>
+								<name>Sensoren_FilterzeitStocktemp</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.140</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16526</ipa>
+								<address>16526</address>
+								<name>Sensoren_StockTempMessberMin</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.142</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16528</ipa>
+								<address>16528</address>
+								<name>Sensoren_StockTempMessberMax</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.144</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -83213,7 +83504,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15737</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83222,7 +83513,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15736</ipa>
-								<defval/>
+								<defval>0</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83231,7 +83522,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15740</ipa>
-								<defval/>
+								<defval>0</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83240,7 +83531,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15739</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83249,7 +83540,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15741</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83258,7 +83549,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15743</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83267,7 +83558,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15745</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83276,7 +83567,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15747</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83285,7 +83576,7 @@ END_PROGRAM
 							</biosParam>
 							<biosParam>
 								<ipa>15757</ipa>
-								<defval/>
+								<defval>9999</defval>
 								<min/>
 								<max/>
 								<um/>
@@ -83364,13 +83655,67 @@ END_PROGRAM
 								<accesslevel/>
 								<addToTelevis>0</addToTelevis>
 							</biosParam>
+							<biosParam>
+								<ipa>15748</ipa>
+								<defval/>
+								<min/>
+								<max/>
+								<um/>
+								<accesslevel/>
+								<addToTelevis>0</addToTelevis>
+							</biosParam>
+							<biosParam>
+								<ipa>15738</ipa>
+								<defval>0</defval>
+								<min/>
+								<max/>
+								<um/>
+								<accesslevel/>
+								<addToTelevis>0</addToTelevis>
+							</biosParam>
+							<biosParam>
+								<ipa>15742</ipa>
+								<defval>0</defval>
+								<min/>
+								<max/>
+								<um/>
+								<accesslevel/>
+								<addToTelevis>0</addToTelevis>
+							</biosParam>
+							<biosParam>
+								<ipa>15744</ipa>
+								<defval>0</defval>
+								<min/>
+								<max/>
+								<um/>
+								<accesslevel/>
+								<addToTelevis>0</addToTelevis>
+							</biosParam>
+							<biosParam>
+								<ipa>15746</ipa>
+								<defval>0</defval>
+								<min/>
+								<max/>
+								<um/>
+								<accesslevel/>
+								<addToTelevis>0</addToTelevis>
+							</biosParam>
+							<biosParam>
+								<ipa>15756</ipa>
+								<defval>0</defval>
+								<min/>
+								<max/>
+								<um/>
+								<accesslevel/>
+								<addToTelevis>0</addToTelevis>
+							</biosParam>
 						</biosParams>
 					</config>
 					<RS485 protocol="" mode="2" baudRate="19200" serialMode="even,8,1" slaveAddress="1" COMnumber="2" rsmode="2" rsmodeEditable="false" netId="1" maxSlaves="32" serCfg="1"/>
 					<CANopen id="0" protocol="" mode="0" nodeID="127" baudRate="500000" hbTime="0" syncCOBID="128" syncCycle="0" networkID="0" slaveNodeID="1" slaveDeviceType="301" slaveSyncCOBID="128" slaveSyncCycle="0" slaveManufacturerDeviceName="" slaveManufacturerHardwareVer="" slaveManufacturerSoftwareVer="" slaveGuardTime="200" slaveLifeTimeFactor="3" slaveConsumerHeartbeatTime="0" slaveProducerHeartbeatTime="0" slaveVendorID="0" slaveProductCode="0" slaveRevisionNumber="0" slaveSerialNumber="0" slaveCfgGranularity="8" slaveCfgCOBIDAutoAssignment="1" slaveCfgMaxTPDONum="8" slaveCfgMaxRPDONum="8" maxSlaves="2"/>
 					<cfgConfig>
 						<config>
-							<commstring>Modbus:1,1000,M6#RSUSBX:1,19200,E,8,1,H</commstring>
+							<commstring>Modbus:1,1000,M6#COM:8,19200,E,8,1,H</commstring>
 							<values stopNodeParsing="true">
 								<value ipa="15716" subidx="0">0</value>
 								<value ipa="15717" subidx="0">2049</value>
@@ -83405,19 +83750,19 @@ END_PROGRAM
 								<value ipa="15731" subidx="0">3</value>
 								<value ipa="15732" subidx="0">6</value>
 								<value ipa="15736" subidx="0">0</value>
-								<value ipa="15737" subidx="0">1000</value>
+								<value ipa="15737" subidx="0">9999</value>
 								<value ipa="15738" subidx="0">0</value>
-								<value ipa="15739" subidx="0">1000</value>
+								<value ipa="15739" subidx="0">9999</value>
 								<value ipa="15740" subidx="0">0</value>
-								<value ipa="15741" subidx="0">1000</value>
+								<value ipa="15741" subidx="0">9999</value>
 								<value ipa="15742" subidx="0">0</value>
-								<value ipa="15743" subidx="0">1000</value>
+								<value ipa="15743" subidx="0">9999</value>
 								<value ipa="15744" subidx="0">0</value>
-								<value ipa="15745" subidx="0">1000</value>
+								<value ipa="15745" subidx="0">9999</value>
 								<value ipa="15746" subidx="0">0</value>
-								<value ipa="15747" subidx="0">1000</value>
+								<value ipa="15747" subidx="0">9999</value>
 								<value ipa="15756" subidx="0">0</value>
-								<value ipa="15757" subidx="0">1000</value>
+								<value ipa="15757" subidx="0">9999</value>
 								<value ipa="15748" subidx="0">0</value>
 								<value ipa="15749" subidx="0">0</value>
 								<value ipa="15750" subidx="0">0</value>
@@ -83899,6 +84244,10 @@ END_PROGRAM
 								<value ipa="16517" subidx="0">0</value>
 								<value ipa="16519" subidx="0">0</value>
 								<value ipa="16521" subidx="0">0</value>
+								<value ipa="16522" subidx="0">0</value>
+								<value ipa="16524" subidx="0">0</value>
+								<value ipa="16526" subidx="0">0</value>
+								<value ipa="16528" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
