@@ -2362,7 +2362,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781773978">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781783920">
 					<vars/>
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
@@ -2411,6 +2411,7 @@ Standard-Filterzeiten
 *)
 gBetriebsparameter.Sensoren.FilterzeitFrischluft := Sensoren_FilterzeitFrischluft;
 gBetriebsparameter.Sensoren.FilterzeitAbluft := Sensoren_FilterzeitAbluft;
+gBetriebsparameter.Sensoren.FilterzeitStocktemp := Sensoren_FilterzeitStocktemp;
 
 (*
 ---------------------------------------------------------------------------
@@ -74657,7 +74658,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="7399">
+			<root name="CControl_Lite" nextID="7458">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
