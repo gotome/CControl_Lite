@@ -557,62 +557,73 @@ END_IF;
 ]]>
 				</sourceCode>
 			</functionBlock>
-			<functionBlock name="FB_MovAvgFlt" version="1.0.0" creationDate="1773604989" lastModifiedDate="1773608170">
+			<functionBlock name="FB_MovAvgFlt" version="1.0.0" creationDate="1773604989" lastModifiedDate="1750204800">
 				<descr>Beschreibung:
 
-Bildet einen gleitenden Mittelwert über die letzten Eingangswerte.
+Bildet einen gleitenden Mittelwert über ein Zeitfenster.
 
-Der Baustein dient zur Glättung von verrauschten oder schwankenden 
-Analogsignalen. 
-Die Anzahl der gemittelten Werte wird über base vorgegeben.
+Der Baustein dient zur Glättung von verrauschten oder schwankenden
+Analogsignalen.
+Das Mittelungsfenster wird über tWindow (z.B. T#5S) und die
+Task-Zykluszeit tCycle (z.B. T#10MS) vorgegeben.
 
-Der Baustein speichert intern die letzten Messwerte und berechnet daraus den 
+Der Baustein speichert intern die letzten Messwerte und berechnet daraus den
 aktuellen Mittelwert am Ausgang y.
 
 Hinweis:
 
-Die wirksame Filterzeit ergibt sich aus der Anzahl der Samples (base) und der Aufrufperiode des Bausteins.</descr>
+Die maximale Puffergröße beträgt 5000 Samples (5000).
+Wird tWindow/tCycle > 5000, wird die Fenstergröße auf 5000 begrenzt.</descr>
 				<vars>
 					<inputVars>
 						<var name="enable" type="BOOL"/>
 						<var name="x" type="REAL"/>
-						<var name="base" type="UINT">
-							<descr>Anzahl Samples, 1..128</descr>
+						<var name="nWindow_ms" type="UDINT">
+							<descr>Mittelungsfenster in Millisekunden, z.B. 5000</descr>
+						</var>
+						<var name="nCycle_ms" type="UDINT">
+							<descr>Task-Zykluszeit in Millisekunden, z.B. 10</descr>
 						</var>
 					</inputVars>
 					<outputVars>
 						<var name="y" type="REAL"/>
+						<var name="nSamples" type="UDINT">
+							<descr>aktuell gemittelte Anzahl Samples (Diagnose)</descr>
+						</var>
 					</outputVars>
 					<localVars>
-						<var name="aBuf" type="REAL" dim0="128"/>
-						<var name="idx" type="UINT"/>
-						<var name="cnt" type="UINT"/>
-						<var name="i" type="UINT"/>
+						<var name="aBuf" type="REAL" dim0="5000"/>
+						<var name="idx" type="UDINT"/>
+						<var name="cnt" type="UDINT"/>
+						<var name="i" type="UDINT"/>
 						<var name="sum" type="REAL"/>
-						<var name="lastBase" type="UINT"/>
+						<var name="win" type="UDINT"/>
+						<var name="lastWin" type="UDINT"/>
 					</localVars>
 				</vars>
 				<iecDeclaration active="TRUE" valid="TRUE">
 					<![CDATA[FUNCTION_BLOCK FB_MovAvgFlt
 VAR_INPUT
-    enable : BOOL;
-    x      : REAL;
-    base   : UINT;     // Anzahl Samples, 1..128
+    enable     : BOOL;
+    x          : REAL;
+    nWindow_ms : UDINT;     // Mittelungsfenster in ms, z.B. 5000
+    nCycle_ms  : UDINT;     // Task-Zykluszeit in ms, z.B. 10
 END_VAR
 
 VAR_OUTPUT
-    y      : REAL;
+    y        : REAL;
+    nSamples : UDINT;   // aktuell gemittelte Anzahl Samples (Diagnose)
 END_VAR
 
 VAR
-    aBuf   : ARRAY[0..127] OF REAL;
-    idx    : UINT;
-    cnt    : UINT;
-    i      : UINT;
-    sum    : REAL;
-    lastBase: UINT;
+    aBuf    : ARRAY[0..4999] OF REAL;
+    idx     : UDINT;
+    cnt     : UDINT;
+    i       : UDINT;
+    sum     : REAL;
+    win     : UDINT;    // berechnete Fenstergröße in Samples
+    lastWin : UDINT;    // zur Erkennung von Fensteränderungen
 END_VAR
-
 ]]>
 				</iecDeclaration>
 				<interfaces/>
@@ -623,53 +634,61 @@ IF NOT enable THEN
     RETURN;
 END_IF;
 
-// base absichern
-IF base < 1 THEN
+// Zykluszeit absichern (Division)
+IF nCycle_ms = 0 THEN
     y := x;
     RETURN;
 END_IF;
 
-// wenn sich base ändert, Filter neu initialisieren
-IF lastBase <> base THEN
-    FOR i := 0 TO 127 DO
+// Fenstergröße in Samples = Fensterzeit / Zykluszeit
+win := nWindow_ms / nCycle_ms;
+
+// auf gültigen Bereich begrenzen
+IF win < 1 THEN
+    win := 1;
+END_IF;
+IF win > 5000 THEN
+    win := 5000;
+END_IF;
+
+// wenn sich das Fenster ändert, Filter neu initialisieren
+IF win <> lastWin THEN
+    FOR i := 0 TO 5000 - 1 DO
         aBuf[i] := 0.0;
     END_FOR;
-    idx := 0;
-    cnt := 0;
-    sum := 0.0;
-    lastBase := base;
+    idx     := 0;
+    cnt     := 0;
+    sum     := 0.0;
+    lastWin := win;
 END_IF;
 
-// max. Puffergröße begrenzen
-IF base > 128 THEN
-    lastBase := 128;
-ELSE
-    lastBase := base;
-END_IF;
-
-// solange noch nicht voll
-IF cnt < lastBase THEN
+// neues Sample in den Ringpuffer
+IF cnt < win THEN
+    // Fenster noch nicht voll: nur aufaddieren
     aBuf[idx] := x;
     sum := sum + x;
     cnt := cnt + 1;
 ELSE
+    // Fenster voll: ältesten Wert ersetzen (gleitender Mittelwert)
     sum := sum - aBuf[idx];
     aBuf[idx] := x;
     sum := sum + x;
 END_IF;
 
-// Index weiterschalten
+// Index weiterschalten (Ringpuffer)
 idx := idx + 1;
-IF idx >= lastBase THEN
+IF idx >= win THEN
     idx := 0;
 END_IF;
 
-// Mittelwert
+// Mittelwert über die gesammelten Samples
 IF cnt > 0 THEN
     y := sum / TO_REAL(cnt);
 ELSE
     y := x;
 END_IF;
+
+nSamples := cnt;
 ]]>
 				</sourceCode>
 			</functionBlock>

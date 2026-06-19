@@ -405,7 +405,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781784228">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1781791239">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -583,7 +583,8 @@ IF gAktModus <> IOTEST THEN
     fbFrischluftTempAvg(
         enable := TRUE,
         x := rFrischluftTempRaw,
-        base := gBetriebsparameter.Sensoren.FilterzeitFrischluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitFrischluft * 1000,
+        nCycle_ms := 40
     );
 
     (*
@@ -629,7 +630,8 @@ IF gAktModus <> IOTEST THEN
     fbTrockenluftTempAvg(
         enable := TRUE,
         x := rTrockenluftTempRaw,
-        base := gBetriebsparameter.Sensoren.FilterzeitTrockenluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitTrockenluft * 1000,
+        nCycle_ms := 40
     );
 
     (*
@@ -669,7 +671,8 @@ IF gAktModus <> IOTEST THEN
     fbAbluftBox1TempAvg(
         enable := TRUE,
         x := rAbluftBox1TempRaw,
-        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitAbluft * 1000,
+        nCycle_ms := 40
     );
 
     (*
@@ -706,7 +709,8 @@ IF gAktModus <> IOTEST THEN
     fbAbluftBox2TempAvg(
         enable := TRUE,
         x := rAbluftBox2TempRaw,
-        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitAbluft * 1000,
+        nCycle_ms := 40
     );
 
     (*
@@ -744,7 +748,8 @@ IF gAktModus <> IOTEST THEN
     fbStockTempAvg(
         enable := TRUE,
         x := rStocktempRaw,
-        base := gBetriebsparameter.Sensoren.FilterzeitStocktemp
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitStocktemp * 1000,
+        nCycle_ms := 40
     );
 
     (*
@@ -756,7 +761,7 @@ IF gAktModus <> IOTEST THEN
         x := fbStockTempAvg.y,
         x1 := 0.0,
         y1 := gBetriebsparameter.Sensoren.StocktempMessberMin,
-        x2 := 9999.0,
+        x2 := 1000.0,
         y2 := gBetriebsparameter.Sensoren.StocktempMessberMax
     );
     aiStocktemp := fbStocktempScal.y + gBetriebsparameter.Sensoren.OffsetStocktemp;
@@ -858,7 +863,8 @@ ELSE
     fbFrischluftTempAvg(
         enable := TRUE,
         x := TO_REAL(hw_ai1),
-        base := gBetriebsparameter.Sensoren.FilterzeitFrischluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitFrischluft * 1000,
+        nCycle_ms := 40
     );
 
     fbFrischluftTempScal(
@@ -882,7 +888,8 @@ ELSE
     fbTrockenluftTempAvg(
         enable := TRUE,
         x := TO_REAL(hw_ai3),
-        base := gBetriebsparameter.Sensoren.FilterzeitTrockenluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitTrockenluft * 1000,
+        nCycle_ms := 40
     );
 
     fbTrockenluftTempScal(
@@ -907,7 +914,8 @@ ELSE
     fbAbluftBox1TempAvg(
         enable := TRUE,
         x := TO_REAL(hw_ai3),
-        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitAbluft * 1000,
+        nCycle_ms := 40
     );
 
     fbAbluftBox1TempScal(
@@ -932,7 +940,8 @@ ELSE
     fbAbluftBox2TempAvg(
         enable := TRUE,
         x := TO_REAL(hw_ai5),
-        base := gBetriebsparameter.Sensoren.FilterzeitAbluft
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitAbluft * 1000,
+        nCycle_ms := 40
     );
 
     fbAbluftBox2TempScal(
@@ -956,14 +965,15 @@ ELSE
     fbStockTempAvg(
         enable := TRUE,
         x := TO_REAL(hw_ai7),
-        base := gBetriebsparameter.Sensoren.FilterzeitStocktemp
+        nWindow_ms := gBetriebsparameter.Sensoren.FilterzeitStocktemp * 1000,
+        nCycle_ms := 40
     );
 
     fbStocktempScal(
         x := TO_REAL(hw_ai7),
-        x1 := 0.0,
+        x1 := gBetriebsparameter.Sensoren.StocktempMessberMin,
         y1 := 0.0,
-        x2 := 9999.0,
+        x2 := gBetriebsparameter.Sensoren.StocktempMessberMax,
         y2 := 100.0
     );
     gIoTest.AnalogIn.aiStocktemp := fbStocktempScal.y + gBetriebsparameter.Sensoren.OffsetStocktemp;
@@ -1468,40 +1478,10 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1781709144">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1781808581">
 					<vars>
 						<localVars>
 							<var name="rVentSollMan" type="REAL"/>
-							<var name="rLuftaufbSoll" type="REAL"/>
-							<var name="xVentPidFreigabe" type="BOOL"/>
-							<var name="rFeuchteSoll" type="REAL"/>
-							<var name="rVentPidOut" type="REAL"/>
-							<var name="rTrockenluftFeuchteSoll" type="REAL">
-								<descr>%rF</descr>
-								<initValue>55.0</initValue>
-							</var>
-							<var name="rVentKp" type="REAL">
-								<descr>negativ = reverse/cooling</descr>
-								<initValue>-2.0</initValue>
-							</var>
-							<var name="uiVentTi" type="UINT">
-								<descr>30.0 s, Skalierung 0.1 s</descr>
-								<initValue>300</initValue>
-							</var>
-							<var name="uiVentTd" type="UINT">
-								<descr>D aus</descr>
-								<initValue>0</initValue>
-							</var>
-							<var name="rVentDeadband" type="REAL">
-								<descr>%rF</descr>
-								<initValue>1.0</initValue>
-							</var>
-							<var name="rVentLowLimit" type="REAL">
-								<initValue>0.0</initValue>
-							</var>
-							<var name="rVentHighLimit" type="REAL">
-								<initValue>100.0</initValue>
-							</var>
 							<var name="fbPidVent" type="PIDAdvanced"/>
 							<var name="rPidErr" type="REAL"/>
 							<var name="uiPidAlarm" type="UINT"/>
@@ -1534,17 +1514,6 @@ END_CASE;
 
 VAR
 	rVentSollMan : REAL;
-	rLuftaufbSoll : REAL;
-	xVentPidFreigabe : BOOL;
-	rFeuchteSoll : REAL;
-	rVentPidOut : REAL;
-	rTrockenluftFeuchteSoll : REAL := 55.0;	(* %rF *)
-	rVentKp : REAL := -2.0;	(* negativ = reverse/cooling *)
-	uiVentTi : UINT := 300;	(* 30.0 s, Skalierung 0.1 s *)
-	uiVentTd : UINT := 0;	(* D aus *)
-	rVentDeadband : REAL := 1.0;	(* %rF *)
-	rVentLowLimit : REAL := 0.0;
-	rVentHighLimit : REAL := 100.0;
 	fbPidVent : PIDAdvanced;
 	rPidErr : REAL;
 	uiPidAlarm : UINT;
@@ -1638,10 +1607,6 @@ CASE gAktModus OF
         gAktoren.xFrgVentilator       := TRUE;
         gAktoren.xFrgAbluftventilator := gBetriebsparameter.Ausstattung.Abluftventilator;
 
-        (* --- Ventilator PID --- *)
-        xVentPidFreigabe := gBetriebsparameter.Ausstattung.SensorTrockenluft
-                            AND (aiTrockenluftFeucht >= 0.0)
-                            AND (aiTrockenluftFeucht <= 100.0);
 		//Solltrockenluftfeuchte beschreiben
         rFeuchteSoll     := rTrockenluftFeuchteSoll;
 
@@ -71487,62 +71452,73 @@ END_IF;
 ]]>
 						</sourceCode>
 					</functionBlock>
-					<functionBlock name="FB_MovAvgFlt" version="1.0.0" creationDate="1773604989" lastModifiedDate="1773608170">
+					<functionBlock name="FB_MovAvgFlt" version="1.0.0" creationDate="1773604989" lastModifiedDate="1750204800">
 						<descr>Beschreibung:
 
-Bildet einen gleitenden Mittelwert über die letzten Eingangswerte.
+Bildet einen gleitenden Mittelwert über ein Zeitfenster.
 
-Der Baustein dient zur Glättung von verrauschten oder schwankenden 
-Analogsignalen. 
-Die Anzahl der gemittelten Werte wird über base vorgegeben.
+Der Baustein dient zur Glättung von verrauschten oder schwankenden
+Analogsignalen.
+Das Mittelungsfenster wird über tWindow (z.B. T#5S) und die
+Task-Zykluszeit tCycle (z.B. T#10MS) vorgegeben.
 
-Der Baustein speichert intern die letzten Messwerte und berechnet daraus den 
+Der Baustein speichert intern die letzten Messwerte und berechnet daraus den
 aktuellen Mittelwert am Ausgang y.
 
 Hinweis:
 
-Die wirksame Filterzeit ergibt sich aus der Anzahl der Samples (base) und der Aufrufperiode des Bausteins.</descr>
+Die maximale Puffergröße beträgt 5000 Samples (5000).
+Wird tWindow/tCycle &gt; 5000, wird die Fenstergröße auf 5000 begrenzt.</descr>
 						<vars>
 							<inputVars>
 								<var name="enable" type="BOOL"/>
 								<var name="x" type="REAL"/>
-								<var name="base" type="UINT">
-									<descr>Anzahl Samples, 1..128</descr>
+								<var name="nWindow_ms" type="UDINT">
+									<descr>Mittelungsfenster in Millisekunden, z.B. 5000</descr>
+								</var>
+								<var name="nCycle_ms" type="UDINT">
+									<descr>Task-Zykluszeit in Millisekunden, z.B. 10</descr>
 								</var>
 							</inputVars>
 							<outputVars>
 								<var name="y" type="REAL"/>
+								<var name="nSamples" type="UDINT">
+									<descr>aktuell gemittelte Anzahl Samples (Diagnose)</descr>
+								</var>
 							</outputVars>
 							<localVars>
-								<var name="aBuf" type="REAL" dim0="128"/>
-								<var name="idx" type="UINT"/>
-								<var name="cnt" type="UINT"/>
-								<var name="i" type="UINT"/>
+								<var name="aBuf" type="REAL" dim0="5000"/>
+								<var name="idx" type="UDINT"/>
+								<var name="cnt" type="UDINT"/>
+								<var name="i" type="UDINT"/>
 								<var name="sum" type="REAL"/>
-								<var name="lastBase" type="UINT"/>
+								<var name="win" type="UDINT"/>
+								<var name="lastWin" type="UDINT"/>
 							</localVars>
 						</vars>
 						<iecDeclaration active="TRUE" valid="TRUE">
 							<![CDATA[FUNCTION_BLOCK FB_MovAvgFlt
 VAR_INPUT
-    enable : BOOL;
-    x      : REAL;
-    base   : UINT;     // Anzahl Samples, 1..128
+    enable     : BOOL;
+    x          : REAL;
+    nWindow_ms : UDINT;     // Mittelungsfenster in ms, z.B. 5000
+    nCycle_ms  : UDINT;     // Task-Zykluszeit in ms, z.B. 10
 END_VAR
 
 VAR_OUTPUT
-    y      : REAL;
+    y        : REAL;
+    nSamples : UDINT;   // aktuell gemittelte Anzahl Samples (Diagnose)
 END_VAR
 
 VAR
-    aBuf   : ARRAY[0..127] OF REAL;
-    idx    : UINT;
-    cnt    : UINT;
-    i      : UINT;
-    sum    : REAL;
-    lastBase: UINT;
+    aBuf    : ARRAY[0..4999] OF REAL;
+    idx     : UDINT;
+    cnt     : UDINT;
+    i       : UDINT;
+    sum     : REAL;
+    win     : UDINT;    // berechnete Fenstergröße in Samples
+    lastWin : UDINT;    // zur Erkennung von Fensteränderungen
 END_VAR
-
 ]]>
 						</iecDeclaration>
 						<interfaces/>
@@ -71553,53 +71529,61 @@ IF NOT enable THEN
     RETURN;
 END_IF;
 
-// base absichern
-IF base < 1 THEN
+// Zykluszeit absichern (Division)
+IF nCycle_ms = 0 THEN
     y := x;
     RETURN;
 END_IF;
 
-// wenn sich base ändert, Filter neu initialisieren
-IF lastBase <> base THEN
-    FOR i := 0 TO 127 DO
+// Fenstergröße in Samples = Fensterzeit / Zykluszeit
+win := nWindow_ms / nCycle_ms;
+
+// auf gültigen Bereich begrenzen
+IF win < 1 THEN
+    win := 1;
+END_IF;
+IF win > 5000 THEN
+    win := 5000;
+END_IF;
+
+// wenn sich das Fenster ändert, Filter neu initialisieren
+IF win <> lastWin THEN
+    FOR i := 0 TO 5000 - 1 DO
         aBuf[i] := 0.0;
     END_FOR;
-    idx := 0;
-    cnt := 0;
-    sum := 0.0;
-    lastBase := base;
+    idx     := 0;
+    cnt     := 0;
+    sum     := 0.0;
+    lastWin := win;
 END_IF;
 
-// max. Puffergröße begrenzen
-IF base > 128 THEN
-    lastBase := 128;
-ELSE
-    lastBase := base;
-END_IF;
-
-// solange noch nicht voll
-IF cnt < lastBase THEN
+// neues Sample in den Ringpuffer
+IF cnt < win THEN
+    // Fenster noch nicht voll: nur aufaddieren
     aBuf[idx] := x;
     sum := sum + x;
     cnt := cnt + 1;
 ELSE
+    // Fenster voll: ältesten Wert ersetzen (gleitender Mittelwert)
     sum := sum - aBuf[idx];
     aBuf[idx] := x;
     sum := sum + x;
 END_IF;
 
-// Index weiterschalten
+// Index weiterschalten (Ringpuffer)
 idx := idx + 1;
-IF idx >= lastBase THEN
+IF idx >= win THEN
     idx := 0;
 END_IF;
 
-// Mittelwert
+// Mittelwert über die gesammelten Samples
 IF cnt > 0 THEN
     y := sum / TO_REAL(cnt);
 ELSE
     y := x;
 END_IF;
+
+nSamples := cnt;
 ]]>
 						</sourceCode>
 					</functionBlock>
@@ -71722,59 +71706,77 @@ END_IF;
 		{G:"Parameters"}
 	Para_Boxen_2_SchlechtwetterSensorGrenzwert AT %MW200.99 : INT;
 		{G:"Parameters"}
-	Par_Heizregister_LeistungMin AT %MW200.100 : REAL;
+	Par_Heizregister_VerzWetterwechsel AT %MW200.100 : UDINT;
 		{G:"Parameters"}
-	Par_Heizregister_LeistungMax AT %MW200.102 : REAL;
+	Par_Heizregister_SaettigungFrischlEin AT %MW200.102 : REAL;
 		{G:"Parameters"}
 	Par_Heizregister_Hyst AT %MW200.104 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_FeuchteSoll AT %MW200.106 : REAL;
+	Par_Heizregister_TrockenluftTempSoll AT %MW200.106 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_TrockenluftTempSoll AT %MW200.108 : REAL;
+	Par_Heizregister_P AT %MW200.108 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_P AT %MW200.110 : REAL;
+	Par_Heizregister_I AT %MW200.110 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_I AT %MW200.112 : REAL;
+	Par_Heizregister_D AT %MW200.112 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_D AT %MW200.114 : REAL;
+	Par_Heizregister_DrehzahlVorgabeMin AT %MW200.114 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_rRes1 AT %MW200.116 : REAL;
+	Par_Heizregister_DrehzahlVorgabeMax AT %MW200.116 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_rRes2 AT %MW200.118 : REAL;
+	Par_Heizregister_AutomatikbetriebEin AT %MW200.118 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_AutomatikbetriebEin AT %MW200.120 : BOOL;
+	Par_Heizregister_DauerbetriebEin AT %MW200.119 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_DauerbetriebEin AT %MW200.121 : BOOL;
+	Par_Heizregister_Aus AT %MW200.120 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_xRes1 AT %MW200.122 : BOOL;
+	Par_Heizregister_xRes2 AT %MW200.121 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_xRes2 AT %MW200.123 : BOOL;
+	Par_Entfeuchter_FeuchteEinschalt AT %MW200.122 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_FeuchteEinschalt AT %MW200.124 : REAL;
+	Par_Entfeuchter_FeuchteAusschalt AT %MW200.124 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_FeuchteAusschalt AT %MW200.126 : REAL;
+	Par_Entfeuchter_rRes1 AT %MW200.126 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_rRes1 AT %MW200.128 : REAL;
+	Par_Entfeuchter_rRes2 AT %MW200.128 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_rRes2 AT %MW200.130 : REAL;
+	Par_Entfeuchter_DauerbetriebEin AT %MW200.130 : BOOL;
 		{G:"Parameters"}
-	Par_Entfeuchter_DauerbetriebEin AT %MW200.132 : BOOL;
+	Par_Entfeuchter_AutomatikbetriebEin AT %MW200.131 : BOOL;
 		{G:"Parameters"}
-	Par_Entfeuchter_AutomatikbetriebEin AT %MW200.133 : BOOL;
+	Par_Entfeuchter_Einschaltverz AT %MW200.132 : UDINT;
 		{G:"Parameters"}
-	Par_Entfeuchter_Einschaltverz AT %MW200.134 : UDINT;
+	Par_Entfeuchter_Ausschaltverz AT %MW200.134 : UDINT;
 		{G:"Parameters"}
-	Par_Entfeuchter_Ausschaltverz AT %MW200.136 : UDINT;
+	Ausstattung_Luftaufbereiter_Typ AT %MW200.136 : BYTE;
 		{G:"Parameters"}
-	Ausstattung_Luftaufbereiter_Typ AT %MW200.138 : BYTE;
+	Sensoren_FilterzeitTrockenluft AT %MW200.137 : UINT;
 		{G:"Parameters"}
-	Sensoren_FilterzeitTrockenluft AT %MW200.139 : UINT;
+	Sensoren_FilterzeitStocktemp AT %MW200.138 : UINT;
 		{G:"Parameters"}
-	Sensoren_FilterzeitStocktemp AT %MW200.140 : UINT;
+	Sensoren_StockTempMessberMin AT %MW200.140 : REAL;
 		{G:"Parameters"}
-	Sensoren_StockTempMessberMin AT %MW200.142 : REAL;
+	Sensoren_StockTempMessberMax AT %MW200.142 : REAL;
 		{G:"Parameters"}
-	Sensoren_StockTempMessberMax AT %MW200.144 : REAL;
+	Par_Ventilator_DrehzahlMin AT %MW200.144 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrehzahlMax AT %MW200.146 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrehzahlBeiAuskuehlphase AT %MW200.148 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrzUmschaltung AT %MW200.150 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrehzahlFixUmluft AT %MW200.152 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrehzahlFixFrischluft AT %MW200.154 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrehzahlStrombegrenzung AT %MW200.156 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_DrehzahlLeistungsreduz AT %MW200.158 : REAL;
+		{G:"Parameters"}
+	Par_Ventilator_ZeitRampeUp AT %MW200.160 : UDINT;
+		{G:"Parameters"}
+	Par_Ventilator_ZeitRampeDown AT %MW200.162 : UDINT;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -74582,8 +74584,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..6199 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 155; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..6559 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 164; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -74596,9 +74598,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 543555484;
+	dummyCrc32 := 4262499249;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 146, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 543555484 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 164, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 4262499249 );
 
 END_PROGRAM
 
@@ -74667,7 +74669,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="7484">
+			<root name="CControl_Lite" nextID="7732">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -75064,7 +75066,7 @@ END_PROGRAM
 								<name>Sensoren_FilterzeitFrischluft</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
-								<value>0</value>
+								<value>5</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75113,7 +75115,7 @@ END_PROGRAM
 								<name>Sensoren_FilterzeitAbluft</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
-								<value>0</value>
+								<value>5</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75162,7 +75164,7 @@ END_PROGRAM
 								<name>Sensoren_FrischlTempMessberMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>-30</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75211,7 +75213,7 @@ END_PROGRAM
 								<name>Sensoren_FrischlTempMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>70</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75260,7 +75262,7 @@ END_PROGRAM
 								<name>Sensoren_AbluftTempMessberMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>-30</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75309,7 +75311,7 @@ END_PROGRAM
 								<name>Sensoren_AbluftTempMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>70</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75407,7 +75409,7 @@ END_PROGRAM
 								<name>Sensoren_AbluftFeuchtMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>100</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75456,7 +75458,7 @@ END_PROGRAM
 								<name>Sensoren_TrockenlTempMessberMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>-30</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75505,7 +75507,7 @@ END_PROGRAM
 								<name>Sensoren_TrockenlTempMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>70</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -75603,7 +75605,7 @@ END_PROGRAM
 								<name>Sensoren_TrockenlFeuchtMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>100</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -76191,7 +76193,7 @@ END_PROGRAM
 								<name>Sensoren_FrischlFeuchteMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>0</value>
+								<value>100</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -77021,9 +77023,9 @@ END_PROGRAM
 							<param>
 								<ipa>16483</ipa>
 								<address>16483</address>
-								<name>Par_Heizregister_LeistungMin</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
+								<name>Par_Heizregister_VerzWetterwechsel</name>
+								<typepar>2</typepar>
+								<typetarg>UDINT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -77070,7 +77072,7 @@ END_PROGRAM
 							<param>
 								<ipa>16485</ipa>
 								<address>16485</address>
-								<name>Par_Heizregister_LeistungMax</name>
+								<name>Par_Heizregister_SaettigungFrischlEin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77166,55 +77168,6 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16489</ipa>
-								<address>16489</address>
-								<name>Par_Heizregister_FeuchteSoll</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.106</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
 								<ipa>16491</ipa>
 								<address>16491</address>
 								<name>Par_Heizregister_TrockenluftTempSoll</name>
@@ -77235,7 +77188,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.108</dataBlock>
+								<dataBlock>%MW200.106</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77284,7 +77237,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.110</dataBlock>
+								<dataBlock>%MW200.108</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77333,7 +77286,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.112</dataBlock>
+								<dataBlock>%MW200.110</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77382,7 +77335,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.114</dataBlock>
+								<dataBlock>%MW200.112</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77413,7 +77366,7 @@ END_PROGRAM
 							<param>
 								<ipa>16499</ipa>
 								<address>16499</address>
-								<name>Par_Heizregister_rRes1</name>
+								<name>Par_Heizregister_DrehzahlVorgabeMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77431,7 +77384,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.116</dataBlock>
+								<dataBlock>%MW200.114</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77462,7 +77415,7 @@ END_PROGRAM
 							<param>
 								<ipa>16501</ipa>
 								<address>16501</address>
-								<name>Par_Heizregister_rRes2</name>
+								<name>Par_Heizregister_DrehzahlVorgabeMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77480,7 +77433,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.118</dataBlock>
+								<dataBlock>%MW200.116</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77529,7 +77482,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.120</dataBlock>
+								<dataBlock>%MW200.118</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77578,7 +77531,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.121</dataBlock>
+								<dataBlock>%MW200.119</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77609,7 +77562,7 @@ END_PROGRAM
 							<param>
 								<ipa>16505</ipa>
 								<address>16505</address>
-								<name>Par_Heizregister_xRes1</name>
+								<name>Par_Heizregister_Aus</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77627,7 +77580,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.122</dataBlock>
+								<dataBlock>%MW200.120</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77676,7 +77629,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.123</dataBlock>
+								<dataBlock>%MW200.121</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77725,7 +77678,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.124</dataBlock>
+								<dataBlock>%MW200.122</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77774,7 +77727,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.126</dataBlock>
+								<dataBlock>%MW200.124</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77823,7 +77776,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.128</dataBlock>
+								<dataBlock>%MW200.126</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77872,7 +77825,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.130</dataBlock>
+								<dataBlock>%MW200.128</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77921,7 +77874,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.132</dataBlock>
+								<dataBlock>%MW200.130</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -77970,7 +77923,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.133</dataBlock>
+								<dataBlock>%MW200.131</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -78019,7 +77972,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.134</dataBlock>
+								<dataBlock>%MW200.132</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -78068,7 +78021,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.136</dataBlock>
+								<dataBlock>%MW200.134</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -78117,7 +78070,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.138</dataBlock>
+								<dataBlock>%MW200.136</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -78151,7 +78104,7 @@ END_PROGRAM
 								<name>Sensoren_FilterzeitTrockenluft</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
-								<value/>
+								<value>5</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78166,7 +78119,7 @@ END_PROGRAM
 								<readonly>0</readonly>
 								<shortname/>
 								<size>0</size>
-								<dataBlock>%MW200.139</dataBlock>
+								<dataBlock>%MW200.137</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -78200,7 +78153,56 @@ END_PROGRAM
 								<name>Sensoren_FilterzeitStocktemp</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
-								<value/>
+								<value>5</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.138</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16526</ipa>
+								<address>16526</address>
+								<name>Sensoren_StockTempMessberMin</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78244,12 +78246,12 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16526</ipa>
-								<address>16526</address>
-								<name>Sensoren_StockTempMessberMin</name>
+								<ipa>16528</ipa>
+								<address>16528</address>
+								<name>Sensoren_StockTempMessberMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value/>
+								<value>70</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78293,12 +78295,12 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16528</ipa>
-								<address>16528</address>
-								<name>Sensoren_StockTempMessberMax</name>
+								<ipa>16530</ipa>
+								<address>16530</address>
+								<name>Par_Ventilator_DrehzahlMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value/>
+								<value>0</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78314,6 +78316,447 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.144</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16532</ipa>
+								<address>16532</address>
+								<name>Par_Ventilator_DrehzahlMax</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.146</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16534</ipa>
+								<address>16534</address>
+								<name>Par_Ventilator_DrehzahlBeiAuskuehlphase</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.148</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16536</ipa>
+								<address>16536</address>
+								<name>Par_Ventilator_DrzUmschaltung</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.150</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16538</ipa>
+								<address>16538</address>
+								<name>Par_Ventilator_DrehzahlFixUmluft</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.152</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16540</ipa>
+								<address>16540</address>
+								<name>Par_Ventilator_DrehzahlFixFrischluft</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.154</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16542</ipa>
+								<address>16542</address>
+								<name>Par_Ventilator_DrehzahlStrombegrenzung</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.156</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16544</ipa>
+								<address>16544</address>
+								<name>Par_Ventilator_DrehzahlLeistungsreduz</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.158</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16546</ipa>
+								<address>16546</address>
+								<name>Par_Ventilator_ZeitRampeUp</name>
+								<typepar>2</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.160</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16547</ipa>
+								<address>16547</address>
+								<name>Par_Ventilator_ZeitRampeDown</name>
+								<typepar>2</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.162</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -84230,18 +84673,18 @@ END_PROGRAM
 								<value ipa="16387" subidx="0">0</value>
 								<value ipa="16388" subidx="0">0</value>
 								<value ipa="16389" subidx="0">0</value>
-								<value ipa="16390" subidx="0">0</value>
-								<value ipa="16391" subidx="0">0</value>
-								<value ipa="16392" subidx="0">0</value>
-								<value ipa="16394" subidx="0">0</value>
-								<value ipa="16396" subidx="0">0</value>
-								<value ipa="16398" subidx="0">0</value>
+								<value ipa="16390" subidx="0">5</value>
+								<value ipa="16391" subidx="0">5</value>
+								<value ipa="16392" subidx="0">-30</value>
+								<value ipa="16394" subidx="0">70</value>
+								<value ipa="16396" subidx="0">-30</value>
+								<value ipa="16398" subidx="0">70</value>
 								<value ipa="16400" subidx="0">0</value>
-								<value ipa="16402" subidx="0">0</value>
-								<value ipa="16404" subidx="0">0</value>
-								<value ipa="16406" subidx="0">0</value>
+								<value ipa="16402" subidx="0">100</value>
+								<value ipa="16404" subidx="0">-30</value>
+								<value ipa="16406" subidx="0">70</value>
 								<value ipa="16408" subidx="0">0</value>
-								<value ipa="16410" subidx="0">0</value>
+								<value ipa="16410" subidx="0">100</value>
 								<value ipa="16412" subidx="0">0</value>
 								<value ipa="16414" subidx="0">0</value>
 								<value ipa="16416" subidx="0">0</value>
@@ -84253,7 +84696,7 @@ END_PROGRAM
 								<value ipa="16428" subidx="0">0</value>
 								<value ipa="16430" subidx="0">0</value>
 								<value ipa="16431" subidx="0">0</value>
-								<value ipa="16433" subidx="0">0</value>
+								<value ipa="16433" subidx="0">100</value>
 								<value ipa="16435" subidx="0">0</value>
 								<value ipa="16436" subidx="0">0</value>
 								<value ipa="16437" subidx="0">0</value>
@@ -84273,7 +84716,6 @@ END_PROGRAM
 								<value ipa="16483" subidx="0">0</value>
 								<value ipa="16485" subidx="0">0</value>
 								<value ipa="16487" subidx="0">0</value>
-								<value ipa="16489" subidx="0">0</value>
 								<value ipa="16491" subidx="0">0</value>
 								<value ipa="16493" subidx="0">0</value>
 								<value ipa="16495" subidx="0">0</value>
@@ -84293,10 +84735,20 @@ END_PROGRAM
 								<value ipa="16517" subidx="0">0</value>
 								<value ipa="16519" subidx="0">0</value>
 								<value ipa="16521" subidx="0">0</value>
-								<value ipa="16522" subidx="0">0</value>
-								<value ipa="16524" subidx="0">0</value>
+								<value ipa="16522" subidx="0">5</value>
+								<value ipa="16524" subidx="0">5</value>
 								<value ipa="16526" subidx="0">0</value>
-								<value ipa="16528" subidx="0">0</value>
+								<value ipa="16528" subidx="0">70</value>
+								<value ipa="16530" subidx="0">0</value>
+								<value ipa="16532" subidx="0">0</value>
+								<value ipa="16534" subidx="0">0</value>
+								<value ipa="16536" subidx="0">0</value>
+								<value ipa="16538" subidx="0">0</value>
+								<value ipa="16540" subidx="0">0</value>
+								<value ipa="16542" subidx="0">0</value>
+								<value ipa="16544" subidx="0">0</value>
+								<value ipa="16546" subidx="0">0</value>
+								<value ipa="16547" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
