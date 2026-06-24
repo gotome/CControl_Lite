@@ -42,6 +42,9 @@
 					<var name="gAktoren" type="T_Aktor"/>
 					<var name="gIoTest" type="T_IoTest"/>
 					<var name="gCmdAnlage" type="T_CmdAnlage"/>
+					<var name="Strombegrenzung" type="fbTrockStrombegr">
+						<descr>Strombegrenzung Logik</descr>
+					</var>
 					<var name="gQuitErr" type="BOOL">
 						<descr>Fehler quittieren</descr>
 						<initValue>false</initValue>
@@ -140,7 +143,8 @@
 	gAktoren : T_Aktor;
 	gIoTest : T_IoTest;
 	gCmdAnlage : T_CmdAnlage;
-	gQuitErr : BOOL := false;  (* Fehler quittieren *)
+	Strombegrenzung : fbTrockStrombegr;	(* Strombegrenzung Logik *)
+	gQuitErr : BOOL := false;	(* Fehler quittieren *)
 	IBN_FALSE : BOOL := false;	(* Inbetriebnahmemerker false *)
 	IBN_TRUE : BOOL := true;	(* Inbetriebnahmemerker true *)
 	diBox1Offen : BOOL;	(* Rückmeldung Box 1 offen *)
@@ -399,6 +403,611 @@ ELSE
     KlappeIstGeschlOut := FALSE;
     KlappeIstOffenOut := FALSE;
     uiStep := 0;
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
+				<functionBlock name="fbTrockStrombegr" version="1.0.0" creationDate="1781864266" lastModifiedDate="1781865764">
+					<vars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL">
+								<descr>Freigabe Strombegrenzung</descr>
+							</var>
+							<var name="StartZeit1" type="REAL">
+								<descr>Startzeit Zeitfenster 1</descr>
+							</var>
+							<var name="StoppZeit1" type="REAL">
+								<descr>Stoppzeit Zeitfenster 1</descr>
+							</var>
+							<var name="AktZeit" type="REAL">
+								<descr>aktuelle Uhrzeit</descr>
+							</var>
+							<var name="StartZeit2" type="REAL"/>
+							<var name="StoppZeit2" type="REAL"/>
+							<var name="StartZeit3" type="REAL"/>
+							<var name="StoppZeit3" type="REAL"/>
+							<var name="DrehzahlBegrenzung1" type="REAL">
+								<descr>Drehzahlbegrenzung Zeitfenster 1</descr>
+							</var>
+							<var name="DrehzahlBegrenzung2" type="REAL">
+								<descr>Drehzahlbegrenzung Zeitfenster 2</descr>
+							</var>
+							<var name="DrehzahlBegrenzung3" type="REAL">
+								<descr>Drehzahlbegrenzung Zeitfenster 3</descr>
+							</var>
+						</inputVars>
+						<outputVars>
+							<var name="StrombegrenzungEin" type="BOOL">
+								<descr>Strombegrenzung aktiv</descr>
+							</var>
+							<var name="DrehzahlBegrenzung" type="REAL">
+								<descr>wirksame Drehzahlbegrenzung</descr>
+							</var>
+						</outputVars>
+						<localVars>
+							<var name="FreigZeitfenster1" type="BOOL"/>
+							<var name="FreigZeitfenster2" type="BOOL"/>
+							<var name="FreigZeitfenster3" type="BOOL"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[IF (Freigabe = TRUE) THEN
+    // Zeitfenster 1 ********************************************************
+    FreigZeitfenster1 := FALSE;
+    IF (StartZeit1 > StoppZeit1) THEN
+        IF (AktZeit >= StartZeit1) OR (AktZeit < StoppZeit1) THEN
+            FreigZeitfenster1 := TRUE;
+        END_IF;
+    ELSE
+        IF (AktZeit >= StartZeit1) AND (AktZeit < StoppZeit1) THEN
+            FreigZeitfenster1 := TRUE;
+        END_IF;
+    END_IF;
+    // Zeitfenster 2 ********************************************************
+    FreigZeitfenster2 := FALSE;
+    IF (StartZeit2 > StoppZeit2) THEN
+        IF (AktZeit >= StartZeit2) OR (AktZeit < StoppZeit2) THEN
+            FreigZeitfenster2 := TRUE;
+        END_IF;
+    ELSE
+        IF (AktZeit >= StartZeit2) AND (AktZeit < StoppZeit2) THEN
+            FreigZeitfenster2 := TRUE;
+        END_IF;
+    END_IF;
+    // Zeitfenster 3 ********************************************************
+    FreigZeitfenster3 := FALSE;
+    IF (StartZeit3 > StoppZeit3) THEN
+        IF (AktZeit >= StartZeit3) OR (AktZeit < StoppZeit3) THEN
+            FreigZeitfenster3 := TRUE;
+        END_IF;
+    ELSE
+        IF (AktZeit >= StartZeit3) AND (AktZeit < StoppZeit3) THEN
+            FreigZeitfenster3 := TRUE;
+        END_IF;
+    END_IF;
+    // Drehzahlbegrenzungen 1 - 3
+    IF (FreigZeitfenster1) THEN
+        DrehzahlBegrenzung := DrehzahlBegrenzung1;
+    ELSIF (FreigZeitfenster2) THEN
+        DrehzahlBegrenzung := DrehzahlBegrenzung2;
+    ELSIF (FreigZeitfenster3) THEN
+        DrehzahlBegrenzung := DrehzahlBegrenzung3;
+    ELSE
+        DrehzahlBegrenzung := 0.0;
+    END_IF;
+    StrombegrenzungEin := FreigZeitfenster1 OR FreigZeitfenster2 OR FreigZeitfenster3;
+ELSE
+    FreigZeitfenster1  := FALSE;
+    FreigZeitfenster2  := FALSE;
+    FreigZeitfenster3  := FALSE;
+    StrombegrenzungEin := FALSE;
+    DrehzahlBegrenzung := 0.0;
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
+				<functionBlock name="fbBoxenWLO" version="1.0.0" creationDate="1782317384" lastModifiedDate="1782319420">
+					<vars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL">
+								<descr>Grundfreigabe Baustein</descr>
+							</var>
+							<var name="Automatikbetrieb" type="BOOL">
+								<descr>Betriebsart Automatik (witterungsgeführt)</descr>
+							</var>
+							<var name="Dauerbetrieb" type="BOOL">
+								<descr>Betriebsart Dauerbetrieb</descr>
+							</var>
+							<var name="FehlerSensorAussenluft" type="BOOL">
+								<descr>Eingang Sensorfehler Frischluft</descr>
+							</var>
+							<var name="FrischluftSattDefizitIst" type="REAL">
+								<descr>Ist-Sättigungsdefizit</descr>
+							</var>
+							<var name="FrischluftSattDefizitSoll" type="REAL">
+								<descr>Soll-Sättigungsdefizit</descr>
+							</var>
+							<var name="Hysterese" type="REAL">
+								<descr>Hysterese Sättigungsdefizit</descr>
+							</var>
+							<var name="UmschaltverzWitterung" type="UDINT">
+								<descr>Umschaltverzögerung gut/schlecht [ms]</descr>
+							</var>
+							<var name="WarmlufttemperaturVorgabe" type="REAL">
+								<descr>Solltemperatur-Vorgabe (HMI)</descr>
+							</var>
+							<var name="OptionBetriebsmldgVhd" type="BOOL">
+								<descr>Option Betriebsmeldung vorhanden</descr>
+							</var>
+							<var name="BetriebsmeldungWarmluftofen" type="BOOL">
+								<descr>Rückmeldung Brenner/Ofen läuft</descr>
+							</var>
+							<var name="VerzBetriebsmeldung" type="UDINT">
+								<descr>Zündzeit / Überwachungsverzögerung [ms]</descr>
+							</var>
+							<var name="Auskuehlzeit" type="UDINT">
+								<descr>Nachlauf-/Auskühlzeit [ms]</descr>
+							</var>
+							<var name="QuitFehler" type="BOOL">
+								<descr>Fehlerquittierung</descr>
+							</var>
+							<var name="WetterIstSchlecht" type="BOOL">
+								<descr>externe Vorgabe  Wetter schlecht </descr>
+							</var>
+						</inputVars>
+						<outputVars>
+							<var name="FreigabeWarmluftofenOut" type="BOOL">
+								<descr>Freigabe an Ofen</descr>
+							</var>
+							<var name="WarmlufttempSollOut" type="REAL">
+								<descr>ausgegebene Solltemperatur</descr>
+							</var>
+							<var name="FehlerBetriebsmeldungOut" type="BOOL">
+								<descr>gespeicherter Fehler Betriebsmeldung</descr>
+							</var>
+							<var name="FehlerSensorAussenluftOut" type="BOOL">
+								<descr>gespeicherter Sensorfehler</descr>
+							</var>
+							<var name="WarmluftofenAktiv" type="BOOL">
+								<descr>Ofen aktiv (inkl. Auskühlung)</descr>
+							</var>
+							<var name="RestAuskuehlzeit" type="UDINT">
+								<descr>Restlaufzeit Auskühlung [ms] für Visu</descr>
+							</var>
+						</outputVars>
+						<localVars>
+							<var name="uStep" type="USINT">
+								<descr>Schrittkette 0..2</descr>
+							</var>
+							<var name="stateEntry" type="BOOL">
+								<descr>Entry-Flag Schritt</descr>
+							</var>
+							<var name="TON_VerzBetriebsmeldung" type="TON"/>
+							<var name="TOF_Auskuehlzeit" type="TOF"/>
+							<var name="loc_WetterIstSchlecht" type="BOOL"/>
+							<var name="loc_WetterIstGut" type="BOOL"/>
+							<var name="TON_WetterIstGut" type="TON"/>
+							<var name="TON_WetterIstSchlecht" type="TON"/>
+							<var name="R_TRIG_WetterIstGut" type="R_TRIG">
+								<descr>ersetzt EDGEPOS</descr>
+							</var>
+							<var name="R_TRIG_WetterIstSchlecht" type="R_TRIG">
+								<descr>ersetzt EDGEPOS</descr>
+							</var>
+						</localVars>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[FUNCTION_BLOCK fbBoxenWLO
+
+VAR_INPUT
+    Freigabe                    : BOOL;    // Grundfreigabe Baustein
+    Automatikbetrieb            : BOOL;    // Betriebsart Automatik (witterungsgeführt)
+    Dauerbetrieb                : BOOL;    // Betriebsart Dauerbetrieb
+    FehlerSensorAussenluft      : BOOL;    // Eingang Sensorfehler Frischluft
+    FrischluftSattDefizitIst    : REAL;    // Ist-Sättigungsdefizit
+    FrischluftSattDefizitSoll   : REAL;    // Soll-Sättigungsdefizit
+    Hysterese                   : REAL;    // Hysterese Sättigungsdefizit
+    UmschaltverzWitterung       : UDINT;   // Umschaltverzögerung gut/schlecht [ms]
+    WarmlufttemperaturVorgabe   : REAL;    // Solltemperatur-Vorgabe (HMI)
+    OptionBetriebsmldgVhd       : BOOL;    // Option Betriebsmeldung vorhanden
+    BetriebsmeldungWarmluftofen : BOOL;    // Rückmeldung Brenner/Ofen läuft
+    VerzBetriebsmeldung         : UDINT;   // Zündzeit / Überwachungsverzögerung [ms]
+    Auskuehlzeit                : UDINT;   // Nachlauf-/Auskühlzeit [ms]
+    QuitFehler                  : BOOL;    // Fehlerquittierung
+    WetterIstSchlecht           : BOOL;    // externe Vorgabe "Wetter schlecht"
+END_VAR
+
+VAR_OUTPUT
+    FreigabeWarmluftofenOut     : BOOL;    // Freigabe an Ofen
+    WarmlufttempSollOut         : REAL;    // ausgegebene Solltemperatur
+    FehlerBetriebsmeldungOut    : BOOL;    // gespeicherter Fehler Betriebsmeldung
+    FehlerSensorAussenluftOut   : BOOL;    // gespeicherter Sensorfehler
+    WarmluftofenAktiv           : BOOL;    // Ofen aktiv (inkl. Auskühlung)
+    RestAuskuehlzeit            : UDINT;   // Restlaufzeit Auskühlung [ms] für Visu
+END_VAR
+
+VAR
+    uStep                     : USINT;      // Schrittkette 0..2
+    stateEntry               : BOOL;       // Entry-Flag Schritt
+    TON_VerzBetriebsmeldung  : TON;
+    TOF_Auskuehlzeit         : TOF;
+    loc_WetterIstSchlecht    : BOOL;
+    loc_WetterIstGut         : BOOL;
+    TON_WetterIstGut         : TON;
+    TON_WetterIstSchlecht    : TON;
+    R_TRIG_WetterIstGut      : R_TRIG;     // ersetzt EDGEPOS
+    R_TRIG_WetterIstSchlecht : R_TRIG;     // ersetzt EDGEPOS
+END_VAR
+
+]]>
+					</iecDeclaration>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[
+//Auskühlzeit Warmluftofen, wenn Option Betriebsmeldung nicht vorhanden
+TOF_Auskuehlzeit(IN := FreigabeWarmluftofenOut, PT := Auskuehlzeit);
+
+//Restlaufzeit Auskühlung berechnen (für Visu)
+RestAuskuehlzeit := Auskuehlzeit - TO_UDINT(TOF_Auskuehlzeit.ET);
+
+//Ausgang für Warmluftofen aktiv
+WarmluftofenAktiv := (TOF_Auskuehlzeit.Q AND NOT OptionBetriebsmldgVhd)
+                     OR (BetriebsmeldungWarmluftofen AND OptionBetriebsmldgVhd)
+                     OR FreigabeWarmluftofenOut;
+
+//Fehlerquittierung
+IF QuitFehler THEN
+    FehlerSensorAussenluftOut := FALSE;
+    FehlerBetriebsmeldungOut  := FALSE;
+END_IF;
+
+
+IF Freigabe THEN
+
+    CASE uStep OF
+
+        //AUS *********************************************************************************************
+        0:
+            IF stateEntry THEN
+                stateEntry              := FALSE;
+                FreigabeWarmluftofenOut := FALSE;
+                WarmlufttempSollOut     := 0.0;
+                TON_VerzBetriebsmeldung(IN := FALSE, PT := 0);
+            END_IF;
+
+            //Automatikbetrieb aktiviert
+            IF Automatikbetrieb AND NOT FehlerSensorAussenluftOut AND NOT FehlerBetriebsmeldungOut AND NOT FehlerSensorAussenluft THEN
+                stateEntry := TRUE;
+                uStep       := 1;
+            ELSIF Dauerbetrieb AND NOT FehlerSensorAussenluftOut AND NOT FehlerBetriebsmeldungOut THEN
+                stateEntry := TRUE;
+                uStep       := 2;
+            END_IF;
+
+
+        //AUTOMATIKBETRIEB ********************************************************************************
+        1:
+            IF stateEntry THEN
+                stateEntry := FALSE;
+                TON_VerzBetriebsmeldung(IN := FALSE, PT := 0);
+            END_IF;
+
+            //Bei Neustart (Wetter nicht gut oder schlecht) ohne Verzögerung umschalten
+            IF NOT loc_WetterIstSchlecht AND NOT loc_WetterIstGut THEN
+                IF (FrischluftSattDefizitIst < FrischluftSattDefizitSoll) THEN
+                    loc_WetterIstSchlecht := TRUE;
+                ELSIF (FrischluftSattDefizitIst >= FrischluftSattDefizitSoll) THEN
+                    loc_WetterIstGut := TRUE;
+                END_IF;
+            END_IF;
+
+            //Umschaltverzögerung gutes Wetter / schlechtes Wetter
+            TON_WetterIstGut(IN := loc_WetterIstSchlecht AND (FrischluftSattDefizitIst >= (FrischluftSattDefizitSoll + Hysterese)), PT := UmschaltverzWitterung);
+            TON_WetterIstSchlecht(IN := loc_WetterIstGut AND (FrischluftSattDefizitIst < (FrischluftSattDefizitSoll - Hysterese)), PT := UmschaltverzWitterung);
+
+            //Flankenauswertung (ersetzt EDGEPOS)
+            R_TRIG_WetterIstGut(CLK := TON_WetterIstGut.Q);
+            R_TRIG_WetterIstSchlecht(CLK := TON_WetterIstSchlecht.Q);
+
+            IF R_TRIG_WetterIstGut.Q THEN
+                loc_WetterIstGut      := TRUE;
+                loc_WetterIstSchlecht := FALSE;
+            ELSIF R_TRIG_WetterIstSchlecht.Q THEN
+                loc_WetterIstGut      := FALSE;
+                loc_WetterIstSchlecht := TRUE;
+            END_IF;
+
+            //Freigabe Warmluftofen
+            FreigabeWarmluftofenOut := loc_WetterIstSchlecht OR WetterIstSchlecht;
+            WarmlufttempSollOut     := WarmlufttemperaturVorgabe;
+
+            //Verzögerung Überwachung Betriebsmeldung (Zündzeit)
+            TON_VerzBetriebsmeldung(IN := FreigabeWarmluftofenOut AND OptionBetriebsmldgVhd AND NOT BetriebsmeldungWarmluftofen, PT := VerzBetriebsmeldung);
+
+            //Fehler keine Betriebsmeldung
+            IF TON_VerzBetriebsmeldung.Q THEN
+                FehlerBetriebsmeldungOut := TRUE;
+                stateEntry := TRUE;
+                uStep       := 0;
+            //Fehler Sensor Frischluft
+            ELSIF FehlerSensorAussenluft THEN
+                FehlerSensorAussenluftOut := TRUE;
+                stateEntry := TRUE;
+                uStep       := 0;
+            //Dauerbetrieb aktiv
+            ELSIF Dauerbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 2;
+            //Kein Automatikbetrieb
+            ELSIF NOT Automatikbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 0;
+            END_IF;
+
+
+        //DAUERBETRIEB ***********************************************************************************
+        2:
+            IF stateEntry THEN
+                stateEntry := FALSE;
+                TON_VerzBetriebsmeldung(IN := FALSE, PT := 0);
+            END_IF;
+
+            //Freigabe Warmluftofen
+            FreigabeWarmluftofenOut := TRUE;
+            WarmlufttempSollOut     := WarmlufttemperaturVorgabe;
+
+            //Verzögerung Überwachung Betriebsmeldung (Zündzeit)
+            TON_VerzBetriebsmeldung(IN := FreigabeWarmluftofenOut AND OptionBetriebsmldgVhd AND NOT BetriebsmeldungWarmluftofen, PT := VerzBetriebsmeldung);
+
+            //Fehler
+            IF TON_VerzBetriebsmeldung.Q THEN
+                FehlerBetriebsmeldungOut := TRUE;
+                stateEntry := TRUE;
+                uStep       := 0;
+            //Automatikbetrieb aktiv
+            ELSIF Automatikbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 1;
+            //Kein Dauerbetrieb
+            ELSIF NOT Dauerbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 0;
+            END_IF;
+
+    END_CASE;
+
+ELSE
+
+    FreigabeWarmluftofenOut   := FALSE;
+    WarmlufttempSollOut       := 0.0;
+    uStep                      := 0;
+    stateEntry                := TRUE;
+    FehlerSensorAussenluftOut := FALSE;
+    FehlerBetriebsmeldungOut  := FALSE;
+
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
+				<functionBlock name="fbHeizregister" version="1.0.0" creationDate="1782321390" lastModifiedDate="1782321668">
+					<vars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL">
+								<descr>Grundfreigabe Baustein</descr>
+							</var>
+							<var name="QuitFehler" type="BOOL">
+								<descr>Fehlerquittierung</descr>
+							</var>
+							<var name="Automatikbetrieb" type="BOOL">
+								<descr>Betriebsart Automatik (witterungsgeführt)</descr>
+							</var>
+							<var name="Dauerbetrieb" type="BOOL">
+								<descr>Betriebsart Dauerbetrieb</descr>
+							</var>
+							<var name="FehlerSensorAussenluft" type="BOOL">
+								<descr>Eingang Sensorfehler Frischluft</descr>
+							</var>
+							<var name="FrischluftSattDefizitIst" type="REAL">
+								<descr>Ist-Sättigungsdefizit</descr>
+							</var>
+							<var name="FrischluftSattDefizitSoll" type="REAL">
+								<descr>Soll-Sättigungsdefizit</descr>
+							</var>
+							<var name="Hysterese" type="REAL">
+								<descr>Hysterese Sättigungsdefizit</descr>
+							</var>
+							<var name="UmschaltverzWitterung" type="UDINT">
+								<descr>Umschaltverzögerung gut/schlecht [ms]</descr>
+							</var>
+							<var name="WetterIstSchlecht" type="BOOL">
+								<descr>externe Vorgabe  Wetter schlecht </descr>
+							</var>
+							<var name="DrehzahlHeizregisterSoll" type="REAL">
+								<descr>Drehzahlvorgabe Heizungspumpe (Soll)</descr>
+							</var>
+						</inputVars>
+						<outputVars>
+							<var name="FreigabeHeizregisterOut" type="BOOL">
+								<descr>Freigabe an Heizregister</descr>
+							</var>
+							<var name="DrehzahlHeizregisterOut" type="REAL">
+								<descr>ausgegebene Drehzahl Heizungspumpe</descr>
+							</var>
+							<var name="FehlerOut" type="BOOL">
+								<descr>gespeicherter Fehler</descr>
+							</var>
+						</outputVars>
+						<localVars>
+							<var name="uStep" type="USINT">
+								<descr>Schrittkette 0..2</descr>
+							</var>
+							<var name="stateEntry" type="BOOL">
+								<descr>Entry-Flag Schritt</descr>
+							</var>
+							<var name="loc_WetterIstSchlecht" type="BOOL"/>
+							<var name="loc_WetterIstGut" type="BOOL"/>
+							<var name="TON_WetterIstGut" type="TON"/>
+							<var name="TON_WetterIstSchlecht" type="TON"/>
+							<var name="R_TRIG_WetterIstGut" type="R_TRIG">
+								<descr>ersetzt EDGEPOS</descr>
+							</var>
+							<var name="R_TRIG_WetterIstSchlecht" type="R_TRIG">
+								<descr>ersetzt EDGEPOS</descr>
+							</var>
+						</localVars>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[FUNCTION_BLOCK fbHeizregister
+
+VAR_INPUT
+    Freigabe                  : BOOL;    // Grundfreigabe Baustein
+    QuitFehler                : BOOL;    // Fehlerquittierung
+    Automatikbetrieb          : BOOL;    // Betriebsart Automatik (witterungsgeführt)
+    Dauerbetrieb              : BOOL;    // Betriebsart Dauerbetrieb
+    FehlerSensorAussenluft    : BOOL;    // Eingang Sensorfehler Frischluft
+    FrischluftSattDefizitIst  : REAL;    // Ist-Sättigungsdefizit
+    FrischluftSattDefizitSoll : REAL;    // Soll-Sättigungsdefizit
+    Hysterese                 : REAL;    // Hysterese Sättigungsdefizit
+    UmschaltverzWitterung     : UDINT;   // Umschaltverzögerung gut/schlecht [ms]
+    WetterIstSchlecht         : BOOL;    // externe Vorgabe "Wetter schlecht"
+    DrehzahlHeizregisterSoll  : REAL;    // Drehzahlvorgabe Heizungspumpe (Soll)
+END_VAR
+
+VAR_OUTPUT
+    FreigabeHeizregisterOut   : BOOL;    // Freigabe an Heizregister
+    DrehzahlHeizregisterOut   : REAL;    // ausgegebene Drehzahl Heizungspumpe
+    FehlerOut                 : BOOL;    // gespeicherter Fehler
+END_VAR
+
+VAR
+    uStep                    : USINT;    // Schrittkette 0..2
+    stateEntry               : BOOL;     // Entry-Flag Schritt
+    loc_WetterIstSchlecht    : BOOL;
+    loc_WetterIstGut         : BOOL;
+    TON_WetterIstGut         : TON;
+    TON_WetterIstSchlecht    : TON;
+    R_TRIG_WetterIstGut      : R_TRIG;   // ersetzt EDGEPOS
+    R_TRIG_WetterIstSchlecht : R_TRIG;   // ersetzt EDGEPOS
+END_VAR
+]]>
+					</iecDeclaration>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[IF Freigabe THEN
+
+    //Fehlerquittierung
+    IF QuitFehler THEN
+        FehlerOut := FALSE;
+    END_IF;
+
+
+    CASE uStep OF
+
+        //AUS *********************************************************************************************
+        0:
+            IF stateEntry THEN
+                stateEntry              := FALSE;
+                FreigabeHeizregisterOut := FALSE;
+                DrehzahlHeizregisterOut := 0.0;
+            END_IF;
+
+            //Automatikbetrieb aktiviert
+            IF Automatikbetrieb AND NOT FehlerOut AND NOT FehlerSensorAussenluft THEN
+                stateEntry := TRUE;
+                uStep       := 1;
+            ELSIF Dauerbetrieb AND NOT FehlerOut THEN
+                stateEntry := TRUE;
+                uStep       := 2;
+            END_IF;
+
+
+        //AUTOMATIKBETRIEB ********************************************************************************
+        1:
+            IF stateEntry THEN
+                stateEntry := FALSE;
+            END_IF;
+
+            //Bei Neustart (Wetter nicht gut oder schlecht) ohne Verzögerung umschalten
+            IF NOT loc_WetterIstSchlecht AND NOT loc_WetterIstGut THEN
+                IF (FrischluftSattDefizitIst < FrischluftSattDefizitSoll) THEN
+                    loc_WetterIstSchlecht := TRUE;
+                ELSIF (FrischluftSattDefizitIst >= FrischluftSattDefizitSoll) THEN
+                    loc_WetterIstGut := TRUE;
+                END_IF;
+            END_IF;
+
+            //Umschaltverzögerung gutes Wetter / schlechtes Wetter
+            TON_WetterIstGut(IN := loc_WetterIstSchlecht AND (FrischluftSattDefizitIst >= (FrischluftSattDefizitSoll + Hysterese)), PT := UmschaltverzWitterung);
+            TON_WetterIstSchlecht(IN := loc_WetterIstGut AND (FrischluftSattDefizitIst < (FrischluftSattDefizitSoll - Hysterese)), PT := UmschaltverzWitterung);
+
+            //Flankenauswertung (ersetzt EDGEPOS)
+            R_TRIG_WetterIstGut(CLK := TON_WetterIstGut.Q);
+            R_TRIG_WetterIstSchlecht(CLK := TON_WetterIstSchlecht.Q);
+
+            IF R_TRIG_WetterIstGut.Q THEN
+                loc_WetterIstGut      := TRUE;
+                loc_WetterIstSchlecht := FALSE;
+            ELSIF R_TRIG_WetterIstSchlecht.Q THEN
+                loc_WetterIstGut      := FALSE;
+                loc_WetterIstSchlecht := TRUE;
+            END_IF;
+
+            //Freigabe Heizregister
+            FreigabeHeizregisterOut := loc_WetterIstSchlecht OR WetterIstSchlecht;
+            DrehzahlHeizregisterOut := DrehzahlHeizregisterSoll;
+
+            //Fehler
+            IF FehlerSensorAussenluft THEN
+                FehlerOut  := TRUE;
+                stateEntry := TRUE;
+                uStep       := 0;
+            //Dauerbetrieb aktiv
+            ELSIF Dauerbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 2;
+            //Kein Automatikbetrieb
+            ELSIF NOT Automatikbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 0;
+            END_IF;
+
+
+        //DAUERBETRIEB ***********************************************************************************
+        2:
+            IF stateEntry THEN
+                stateEntry := FALSE;
+            END_IF;
+
+            //Freigabe Heizregister
+            FreigabeHeizregisterOut := TRUE;
+            DrehzahlHeizregisterOut := DrehzahlHeizregisterSoll;
+
+            //Automatikbetrieb aktiv
+            IF Automatikbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 1;
+            //Kein Dauerbetrieb
+            ELSIF NOT Dauerbetrieb THEN
+                stateEntry := TRUE;
+                uStep       := 0;
+            END_IF;
+
+    END_CASE;
+
+
+ELSE
+
+    FreigabeHeizregisterOut := FALSE;
+    DrehzahlHeizregisterOut := 0.0;
+    uStep                    := 0;
+    stateEntry              := TRUE;
+    FehlerOut               := FALSE;
+
 END_IF;
 ]]>
 					</sourceCode>
@@ -1316,7 +1925,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1781770210">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1782321647">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -1328,6 +1937,8 @@ END_IF;
 							<var name="nextModus" type="eBetriebsmodus">
 								<initValue>STILLSTAND</initValue>
 							</var>
+							<var name="uStromBegrStart1" type="UINT"/>
+							<var name="uStromBegrStopp1" type="UINT"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="FALSE"/>
@@ -1397,7 +2008,7 @@ CASE gAktModus OF
     STILLSTAND:
         IF stateEntry THEN
             stateEntry := FALSE;
-
+			Strombegrenzung.Freigabe	:= FALSE;
             gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_STILLSTAND;
         END_IF;
 
@@ -1433,6 +2044,11 @@ CASE gAktModus OF
             gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_ANLAGE_IN_BETRIEB;
             hmiNutzungsdaten.LetzterModus := BETRIEB;
         END_IF;
+        
+        
+		//Funktionsbaustein Strombegrenzung
+		Strombegrenzung.Freigabe	:= TRUE;
+		Strombegrenzung.AktZeit		:= sysClock.hours * 100 + sysClock.minutes;
 
         // ------------------------------------------------------------
         // Betriebslogik - nur vorhandene Aktoren
@@ -1460,7 +2076,7 @@ CASE gAktModus OF
     IOTEST:
         IF stateEntry THEN
             stateEntry := FALSE;
-
+			Strombegrenzung.Freigabe	:= FALSE;
             gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_TESTBETRIEB;
         END_IF;
 
@@ -1475,36 +2091,45 @@ CASE gAktModus OF
         END_IF;
 
 END_CASE;
+
+//Funktionsbausteine aufrufen
+uStromBegrStart1 := (gBetriebsparameter.Strombegrenzung.StartStd * 100) + gBetriebsparameter.Strombegrenzung.StartMin;
+uStromBegrStopp1 := (gBetriebsparameter.Strombegrenzung.StoppStd * 100) + gBetriebsparameter.Strombegrenzung.StoppMin;
+Strombegrenzung.StartZeit1 := TO_REAL(uStromBegrStart1);
+Strombegrenzung.StoppZeit1 := TO_REAL(uStromBegrStopp1);
+Strombegrenzung();
+
+gAktoren.Heizregister();
+gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1781808581">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1782316593">
 					<vars>
 						<localVars>
 							<var name="rVentSollMan" type="REAL"/>
-							<var name="fbPidVent" type="PIDAdvanced"/>
 							<var name="rPidErr" type="REAL"/>
 							<var name="uiPidAlarm" type="UINT"/>
 							<var name="uiPidAlert" type="UINT"/>
-							<var name="xHeizregHystEin" type="BOOL">
+							<var name="xLuftaufbHystEin" type="BOOL">
 								<descr>Hysterese-Merker Automatikbetrieb</descr>
 							</var>
-							<var name="rHeizregLeistung" type="REAL">
+							<var name="rLuftaufbLeistung" type="REAL">
 								<descr>berechnete Leistungsvorgabe</descr>
 							</var>
-							<var name="fbPidLuftaufbereitung" type="PIDAdvanced"/>
-							<var name="xHeizregPidEn" type="BOOL"/>
-							<var name="xEntfAnforderung" type="BOOL"/>
-							<var name="xEntfFeuchteReq" type="BOOL">
+							<var name="fbPidLuftaufb" type="PIDAdvanced"/>
+							<var name="xLuftaufbPidEn" type="BOOL"/>
+							<var name="xLuftaufbAnf" type="BOOL"/>
+							<var name="xLuftaufbHystMerker" type="BOOL">
 								<descr>Feuchte-Hysterese Merker</descr>
 							</var>
-							<var name="iEntfSchritt" type="INT">
+							<var name="iLuftaufbSchritt" type="INT">
 								<descr>Schrittkennung 0..2</descr>
 							</var>
-							<var name="tonEntfEin" type="TON">
+							<var name="tonLuftaufbEin" type="TON">
 								<descr>Einschaltverzögerung</descr>
 							</var>
-							<var name="tonEntfMin" type="TON">
+							<var name="tonLuftaufbMin" type="TON">
 								<descr>Mindestlaufzeit</descr>
 							</var>
 						</localVars>
@@ -1514,19 +2139,18 @@ END_CASE;
 
 VAR
 	rVentSollMan : REAL;
-	fbPidVent : PIDAdvanced;
 	rPidErr : REAL;
 	uiPidAlarm : UINT;
 	uiPidAlert : UINT;
-	xHeizregHystEin : BOOL;	(* Hysterese-Merker Automatikbetrieb *)
-	rHeizregLeistung : REAL;	(* berechnete Leistungsvorgabe *)
-	fbPidLuftaufbereitung    : PIDAdvanced;
-	xHeizregPidEn   : BOOL;
-	xEntfAnforderung : BOOL;
-	xEntfFeuchteReq : BOOL;	(* Feuchte-Hysterese Merker *)
-	iEntfSchritt : INT;	(* Schrittkennung 0..2 *)
-	tonEntfEin : TON;	(* Einschaltverzögerung *)
-	tonEntfMin : TON;	(* Mindestlaufzeit *)
+	xLuftaufbHystEin : BOOL;	(* Hysterese-Merker Automatikbetrieb *)
+	rLuftaufbLeistung : REAL;	(* berechnete Leistungsvorgabe *)
+	fbPidLuftaufb    : PIDAdvanced;
+	xLuftaufbPidEn   : BOOL;
+	xLuftaufbAnf : BOOL;
+	xLuftaufbHystMerker : BOOL;	(* Feuchte-Hysterese Merker *)
+	iLuftaufbSchritt : INT;	(* Schrittkennung 0..2 *)
+	tonLuftaufbEin : TON;	(* Einschaltverzögerung *)
+	tonLuftaufbMin : TON;	(* Mindestlaufzeit *)
 END_VAR
 
 ]]>
@@ -1540,7 +2164,7 @@ Description :
     Leistungsregelung Lite ohne Luftgeschwindigkeitssensor.
     Ventilator regelt auf Trockenluft-Feuchte (PIDAdvanced), falls verfügbar.
     Sonst manuelle Vorgabe.
-    Luftaufbereitung: KEINER / HEIZREGISTER / ENTFEUCHTER (HMI-konfigurierbar).
+    Luftaufbereitung: KEINER / HEIZREGISTER / OFEN (HMI-konfigurierbar).
     Heizregister Automatik: Hysterese EIN/AUS auf Frischluft-Feuchte,
                             PID Leistung auf Trockenluft-Temperatur.
     Entfeuchter: Schrittsteuerung mit Einschaltverzögerung + Mindestlaufzeit.
@@ -1552,361 +2176,185 @@ CASE gAktModus OF
     STILLSTAND:
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
-        gAktoren.xFrgAbluftventilator := FALSE;
 
-		gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
-		gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
+        gCmdAnlage.Leistung.DrehzahlVentilator       := gBetriebsparameter.Ventilator.DrehzahlMin;
+        gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
 
-        xHeizregHystEin  := FALSE;
-        xHeizregPidEn    := FALSE;
-        rHeizregLeistung := 0.0;
-        iEntfSchritt     := 0;
-        xEntfFeuchteReq  := FALSE;
-        xEntfAnforderung := FALSE;
-        tonEntfEin(IN := FALSE, PT := 0);
-        tonEntfMin(IN := FALSE, PT := 0);
-		
-		//Aufruf Regler Ventilator
-        fbPidVent(
-            xEn            := FALSE,
-            rPv            := aiTrockenluftFeucht,
-            rSetp          := rTrockenluftFeuchteSoll,
-            xManualMode    := TRUE,
-            rManualValue   := 0.0,
-            xHold          := FALSE,
-            rHighLimit     := rVentHighLimit,
-            rLowLimit      := rVentLowLimit,
-            rDeadband      := rVentDeadband,
-            xAutoTune      := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp            := rVentKp,
-            uiTi           := uiVentTi,
-            uiTd           := uiVentTd,
-            xReset         := FALSE
-        );
-        
-        fbPidLuftaufbereitung(
-            xEn            := FALSE,
-            rPv            := aiTrockenluftTemp,
-            rSetp          := 0.0,
-            xManualMode    := TRUE,
-            rManualValue   := 0.0,
-            xHold          := FALSE,
-            rHighLimit     := 100.0,
-            rLowLimit      := 0.0,
-            rDeadband      := 0.5,
-            xAutoTune      := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp            := 1.0,
-            uiTi           := 1,
-            uiTd           := 0,
-            xReset         := FALSE
-        );
+        xLuftaufbHystEin     := FALSE;
+        xLuftaufbPidEn       := FALSE;
+        rLuftaufbLeistung    := 0.0;
+        iLuftaufbSchritt     := 0;
+        xLuftaufbHystMerker  := FALSE;
+        xLuftaufbAnf         := FALSE;
+        tonLuftaufbEin(IN := FALSE, PT := 0);
+        tonLuftaufbMin(IN := FALSE, PT := 0);
+
 
     BETRIEB:
-        gAktoren.xFrgVentilator       := TRUE;
-        gAktoren.xFrgAbluftventilator := gBetriebsparameter.Ausstattung.Abluftventilator;
+        gAktoren.xFrgVentilator  := TRUE;
 
-		//Solltrockenluftfeuchte beschreiben
-        rFeuchteSoll     := rTrockenluftFeuchteSoll;
-
-        //Aufruf Regler Ventilator
-        fbPidVent(
-            xEn            := TRUE,
-            rPv            := aiTrockenluftFeucht,
-            rSetp          := rFeuchteSoll,
-            xManualMode    := NOT xVentPidFreigabe,
-            rManualValue   := rVentSollMan,
-            xHold          := FALSE,
-            rHighLimit     := rVentHighLimit,
-            rLowLimit      := rVentLowLimit,
-            rDeadband      := rVentDeadband,
-            xAutoTune      := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp            := rVentKp,
-            uiTi           := uiVentTi,
-            uiTd           := uiVentTd,
-            xReset         := gQuitErr
-        );
-
-        IF xVentPidFreigabe THEN
-            rVentPidOut    := fbPidVent.rAnalog;
-            gCmdAnlage.Leistung.DrehzahlVentilator := LIMIT(rVentPidOut, 0.0, 100.0);
+        //*** Drehzahlvorgabe Ventilator 1 ***
+        IF Strombegrenzung.StrombegrenzungEin THEN
+            IF (gBetriebsparameter.Ventilator.DrehzahlFixFrischluft > gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung) THEN
+                gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung;
+            ELSE
+                gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
+            END_IF;
+        //Notbetrieb Ventilator -> Drehzahl Auskühlphase
+        ELSIF IBN_FALSE THEN // Notbetrieb Boxen und Boxenlogik
+            gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlBeiAuskuehlphase;
+        //Betrieb mit Fixdrehzahlen
         ELSE
-            gCmdAnlage.Leistung.DrehzahlVentilator := rVentSollMan;
+            gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
         END_IF;
-
-        rPidErr    := fbPidVent.rError;
-        uiPidAlarm := fbPidVent.uiAlarmID;
-        uiPidAlert := fbPidVent.uiAlertID;
 
         (* --- Luftaufbereitung --- *)
         CASE gBetriebsparameter.Luftaufbereitung.Typ OF
 
             KEINER:
-            	//Variablen zuruecksetzen
+                //Variablen zuruecksetzen
                 gAktoren.xFrgLuftaufbereiter := FALSE;
-                xHeizregHystEin              := FALSE;
-                xHeizregPidEn                := FALSE;
-                rHeizregLeistung             := 0.0;
-                iEntfSchritt                 := 0;
-                xEntfFeuchteReq              := FALSE;
-                xEntfAnforderung             := FALSE;
-                tonEntfEin(IN := FALSE, PT := 0);
-                tonEntfMin(IN := FALSE, PT := 0);
-                
+                xLuftaufbHystEin     := FALSE;
+                xLuftaufbPidEn       := FALSE;
+                rLuftaufbLeistung    := 0.0;
+                iLuftaufbSchritt     := 0;
+                xLuftaufbHystMerker  := FALSE;
+                xLuftaufbAnf         := FALSE;
+                tonLuftaufbEin(IN := FALSE, PT := 0);
+                tonLuftaufbMin(IN := FALSE, PT := 0);
+
                 //Aufruf Regler
-                fbPidLuftaufbereitung(
-                    xEn := FALSE, 
-                    rPv := aiTrockenluftTemp, 
+                fbPidLuftaufb(
+                    xEn := FALSE,
+                    rPv := aiTrockenluftTemp,
                     rSetp := 0.0,
-                    xManualMode := TRUE, 
-                    rManualValue := 0.0, 
+                    xManualMode := TRUE,
+                    rManualValue := 0.0,
                     xHold := FALSE,
-                    rHighLimit := 100.0, 
-                    rLowLimit := 0.0, 
+                    rHighLimit := 100.0,
+                    rLowLimit := 0.0,
                     rDeadband := 0.5,
-                    xAutoTune := FALSE, 
+                    xAutoTune := FALSE,
                     rAutoTuneValue := 0.0,
-                    rKp := 1.0, 
-                    uiTi := 1, 
-                    uiTd := 0, 
+                    rKp := 1.0,
+                    uiTi := 1,
+                    uiTd := 0,
                     xReset := FALSE
                 );
 
 
             HEIZREGISTER:
-                iEntfSchritt     := 0;
-                xEntfFeuchteReq  := FALSE;
-                xEntfAnforderung := FALSE;
-                tonEntfEin(IN := FALSE, PT := 0);
-                tonEntfMin(IN := FALSE, PT := 0);
+                iLuftaufbSchritt    := 0;
+                xLuftaufbAnf        := FALSE;
+                xLuftaufbHystMerker := FALSE;
+                tonLuftaufbEin(IN := FALSE, PT := 0);
+                tonLuftaufbMin(IN := FALSE, PT := 0);
 
-                IF gBetriebsparameter.Luftaufbereitung.Heizregister.DauerbetriebEin THEN
+                IF gBetriebsparameter.Luftaufbereitung.DauerbetriebEin THEN
                     (* Dauerbetrieb: fixer Sollwert, kein PID *)
-                    xHeizregHystEin              := FALSE;
-                    xHeizregPidEn                := FALSE;
+                    xLuftaufbHystEin             := FALSE;
+                    xLuftaufbPidEn               := FALSE;
                     gAktoren.xFrgLuftaufbereiter := TRUE;
                     //Manuellen Sollwert begrenzen
-                    rHeizregLeistung := LIMIT(rLuftaufbSoll, 
-                    	gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin,
-                        gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMax);
+                    rLuftaufbLeistung := gCmdAnlage.Leistung.DrehzahlLuftaufbereitung;
                     //Aufruf PID Heizregister
-                    fbPidLuftaufbereitung(
-                        xEn := FALSE, 
-                        rPv := aiTrockenluftTemp, 
+                    fbPidLuftaufb(
+                        xEn := FALSE,
+                        rPv := aiTrockenluftTemp,
                         rSetp := 0.0,
-                        xManualMode := TRUE, 
-                        rManualValue := rHeizregLeistung, 
+                        xManualMode := TRUE,
+                        rManualValue := rLuftaufbLeistung,
                         xHold := FALSE,
-                        rHighLimit := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMax,
-                        rLowLimit  := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin,
-                        rDeadband := 0.5, 
-                        xAutoTune := FALSE, 
+                        rHighLimit := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
+                        rLowLimit  := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
+                        rDeadband := 0.5,
+                        xAutoTune := FALSE,
                         rAutoTuneValue := 0.0,
-                        rKp := gBetriebsparameter.Luftaufbereitung.Heizregister.P,
-                        uiTi := TO_UINT(gBetriebsparameter.Luftaufbereitung.Heizregister.I * 10.0),
-                        uiTd := TO_UINT(gBetriebsparameter.Luftaufbereitung.Heizregister.D * 10.0),
-                        xReset := FALSE);
+                        rKp := gBetriebsparameter.Luftaufbereitung.P,
+                        uiTi := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
+                        uiTd := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
+                        xReset := FALSE
+                    );
 
-                ELSIF gBetriebsparameter.Luftaufbereitung.Heizregister.AutomatikbetriebEin
+                ELSIF gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin
                       AND gBetriebsparameter.Ausstattung.SensorFrischluft
                       AND (aiFrischluftFeucht >= 0.0) AND (aiFrischluftFeucht <= 100.0) THEN
                     (* Automatik: Hysterese EIN/AUS auf Frischluft-Feuchte *)
                     (*            PID Leistung auf Trockenluft-Temperatur  *)
-                    IF NOT xHeizregHystEin THEN
-                        IF aiFrischluftFeucht >= (gBetriebsparameter.Luftaufbereitung.Heizregister.FeuchteSoll
-                                                  + gBetriebsparameter.Luftaufbereitung.Heizregister.Hysterese) THEN
-                            xHeizregHystEin := TRUE;
+                    IF NOT xLuftaufbHystEin THEN
+                        IF aiFrischluftFeucht >= (gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll
+                                                  + gBetriebsparameter.Luftaufbereitung.Hysterese) THEN
+                            xLuftaufbHystEin := TRUE;
                         END_IF;
                     ELSE
-                        IF aiFrischluftFeucht < (gBetriebsparameter.Luftaufbereitung.Heizregister.FeuchteSoll
-                                                 - gBetriebsparameter.Luftaufbereitung.Heizregister.Hysterese) THEN
-                            xHeizregHystEin := FALSE;
+                        IF aiFrischluftFeucht < (gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll
+                                                 - gBetriebsparameter.Luftaufbereitung.Hysterese) THEN
+                            xLuftaufbHystEin := FALSE;
                         END_IF;
                     END_IF;
 
-                    xHeizregPidEn := xHeizregHystEin
-                                     AND gBetriebsparameter.Ausstattung.SensorTrockenluft
-                                     AND (aiTrockenluftTemp >= -50.0)
-                                     AND (aiTrockenluftTemp <= 100.0);
-					//Aufruf Regler
-                    fbPidLuftaufbereitung(
-                        xEn            := xHeizregPidEn,
+                    xLuftaufbPidEn := xLuftaufbHystEin AND gBetriebsparameter.Ausstattung.SensorTrockenluft;
+                    //Aufruf Regler
+                    fbPidLuftaufb(
+                        xEn            := xLuftaufbPidEn,
                         rPv            := aiTrockenluftTemp,
-                        rSetp          := gBetriebsparameter.Luftaufbereitung.Heizregister.TrockenluftTempSoll,
-                        xManualMode    := NOT xHeizregPidEn,
-                        rManualValue   := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin,
+                        rSetp          := gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll,
+                        xManualMode    := NOT xLuftaufbPidEn,
+                        rManualValue   := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
                         xHold          := FALSE,
-                        rHighLimit     := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMax,
-                        rLowLimit      := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin,
+                        rHighLimit     := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
+                        rLowLimit      := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
                         rDeadband      := 0.5,
                         xAutoTune      := FALSE,
                         rAutoTuneValue := 0.0,
-                        rKp            := gBetriebsparameter.Luftaufbereitung.Heizregister.P,
-                        uiTi           := TO_UINT(gBetriebsparameter.Luftaufbereitung.Heizregister.I * 10.0),
-                        uiTd           := TO_UINT(gBetriebsparameter.Luftaufbereitung.Heizregister.D * 10.0),
+                        rKp            := gBetriebsparameter.Luftaufbereitung.P,
+                        uiTi           := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
+                        uiTd           := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
                         xReset         := gQuitErr
                     );
-					//Sollwert beschreiben
-                    gAktoren.xFrgLuftaufbereiter := xHeizregHystEin;
+                    //Sollwert beschreiben
+                    gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;
                     //Grenzen festlegen
-                    rHeizregLeistung := fbPidLuftaufbereitung.rAnalog;
-
-                ELSE
-                    (* Manuell: Leistungsvorgabe aus HMI, Freigabe permanent *)
-                    xHeizregHystEin              := FALSE;
-                    xHeizregPidEn                := FALSE;
-                    gAktoren.xFrgLuftaufbereiter := TRUE;
-                    //Manuellen Sollwert begrenzen                    
-                    rHeizregLeistung := LIMIT(rLuftaufbSoll,
-                    	gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin,
-                        gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMax);
-                    //Aufruf Regler
-                    fbPidLuftaufbereitung(
-                        xEn := FALSE, 
-                        rPv := aiTrockenluftTemp, 
-                        rSetp := 0.0,
-                        xManualMode := TRUE, 
-                        rManualValue := rHeizregLeistung, 
-                        xHold := FALSE,
-                        rHighLimit := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMax,
-                        rLowLimit  := gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin,
-                        rDeadband := 0.5, 
-                        xAutoTune := FALSE, 
-                        rAutoTuneValue := 0.0,
-                        rKp := gBetriebsparameter.Luftaufbereitung.Heizregister.P,
-                        uiTi := TO_UINT(gBetriebsparameter.Luftaufbereitung.Heizregister.I * 10.0),
-                        uiTd := TO_UINT(gBetriebsparameter.Luftaufbereitung.Heizregister.D * 10.0),
-                        xReset := FALSE
-                    );
+                    rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
                 END_IF;
 
-            ENTFEUCHTER:
-                xHeizregHystEin  := FALSE;
-                xHeizregPidEn    := FALSE;
-                rHeizregLeistung := 0.0;
-                //Aufruf Regler
-                fbPidLuftaufbereitung(
-                    xEn := FALSE, 
-                    rPv := aiTrockenluftTemp, 
-                    rSetp := 0.0,
-                    xManualMode := TRUE, 
-                    rManualValue := 0.0, 
-                    xHold := FALSE,
-                    rHighLimit := 100.0, 
-                    rLowLimit := 0.0, 
-                    rDeadband := 0.5,
-                    xAutoTune := FALSE, 
-                    rAutoTuneValue := 0.0,
-                    rKp := 1.0, 
-                    uiTi := 1, 
-                    uiTd := 0, 
-                    xReset := FALSE
-                );
-
-                (* Anforderung berechnen *)
-                IF gBetriebsparameter.Luftaufbereitung.Entfeuchter.AutomatikbetriebEin
-                   AND gBetriebsparameter.Ausstattung.SensorTrockenluft
-                   AND (aiTrockenluftFeucht >= 0.0) AND (aiTrockenluftFeucht <= 100.0) THEN
-                    IF NOT xEntfFeuchteReq THEN
-                        IF aiTrockenluftFeucht >= gBetriebsparameter.Luftaufbereitung.Entfeuchter.FeuchteEinschalt THEN
-                            xEntfFeuchteReq := TRUE;
-                        END_IF;
-                    ELSE
-                        IF aiTrockenluftFeucht < gBetriebsparameter.Luftaufbereitung.Entfeuchter.FeuchteAusschalt THEN
-                            xEntfFeuchteReq := FALSE;
-                        END_IF;
-                    END_IF;
-                    xEntfAnforderung := gAktoren.xFrgVentilator AND xEntfFeuchteReq;
-
-                ELSIF gBetriebsparameter.Luftaufbereitung.Entfeuchter.DauerbetriebEin THEN
-                    xEntfFeuchteReq  := FALSE;
-                    xEntfAnforderung := gAktoren.xFrgVentilator;
-
-                ELSE
-                    xEntfFeuchteReq  := FALSE;
-                    xEntfAnforderung := FALSE;
-                END_IF;
-
-                (* Schrittsteuerung *)
-                CASE iEntfSchritt OF
-
-                    0: (* AUS - warten auf Anforderung *)
-                        gAktoren.xFrgLuftaufbereiter := FALSE;
-                        tonEntfEin(IN := FALSE, PT := 0);
-                        tonEntfMin(IN := FALSE, PT := 0);
-                        IF xEntfAnforderung THEN
-                            iEntfSchritt := 1;
-                        END_IF;
-
-                    1: (* Einschaltverzögerung *)
-                        gAktoren.xFrgLuftaufbereiter := FALSE;
-                        tonEntfEin(
-                            IN := xEntfAnforderung,
-                            PT := gBetriebsparameter.Luftaufbereitung.Entfeuchter.EinschaltverzMS);
-                        IF NOT xEntfAnforderung
-                           OR NOT gAktoren.xFrgVentilator
-                           OR gAlarmBetriebLuftaufber THEN
-                            tonEntfEin(IN := FALSE, PT := 0);
-                            iEntfSchritt := 0;
-                        ELSIF tonEntfEin.Q THEN
-                            tonEntfEin(IN := FALSE, PT := 0);
-                            iEntfSchritt := 2;
-                        END_IF;
-
-                    2: (* Betrieb + Mindestlaufzeit *)
-                        gAktoren.xFrgLuftaufbereiter := TRUE;
-                        tonEntfMin(
-                            IN := TRUE,
-                            PT := gBetriebsparameter.Luftaufbereitung.Entfeuchter.MindestlaufzeitMS);
-                        IF NOT gAktoren.xFrgVentilator OR gAlarmBetriebLuftaufber THEN
-                            (* Sofortabschaltung: Ventilator weg oder Störung *)
-                            tonEntfMin(IN := FALSE, PT := 0);
-                            iEntfSchritt := 0;
-                        ELSIF NOT xEntfAnforderung AND tonEntfMin.Q THEN
-                            (* Anforderung weg + Mindestlaufzeit abgelaufen *)
-                            tonEntfMin(IN := FALSE, PT := 0);
-                            iEntfSchritt := 0;
-                        END_IF;
-
-                ELSE
-                    iEntfSchritt := 0;
-                END_CASE;
+            OFEN:
+                
 
         ELSE
             gAktoren.xFrgLuftaufbereiter := FALSE;
-            xHeizregHystEin              := FALSE;
-            xHeizregPidEn                := FALSE;
-            rHeizregLeistung             := 0.0;
-            iEntfSchritt                 := 0;
-            xEntfFeuchteReq              := FALSE;
-            xEntfAnforderung             := FALSE;
-            tonEntfEin(IN := FALSE, PT := 0);
-            tonEntfMin(IN := FALSE, PT := 0);
+            xLuftaufbHystEin     := FALSE;
+            xLuftaufbPidEn       := FALSE;
+            rLuftaufbLeistung    := 0.0;
+            iLuftaufbSchritt     := 0;
+            xLuftaufbHystMerker  := FALSE;
+            xLuftaufbAnf         := FALSE;
+            tonLuftaufbEin(IN := FALSE, PT := 0);
+            tonLuftaufbMin(IN := FALSE, PT := 0);
+
             //Aufruf Regler
-            fbPidLuftaufbereitung(
-                xEn := FALSE, 
-                rPv := aiTrockenluftTemp, 
+            fbPidLuftaufb(
+                xEn := FALSE,
+                rPv := aiTrockenluftTemp,
                 rSetp := 0.0,
-                xManualMode := TRUE, 
-                rManualValue := 0.0, 
+                xManualMode := TRUE,
+                rManualValue := 0.0,
                 xHold := FALSE,
-                rHighLimit := 100.0, 
-                rLowLimit := 0.0, 
+                rHighLimit := 100.0,
+                rLowLimit := 0.0,
                 rDeadband := 0.5,
-                xAutoTune := FALSE, 
+                xAutoTune := FALSE,
                 rAutoTuneValue := 0.0,
-                rKp := 1.0, 
-                uiTi := 1, 
-                uiTd := 0, 
+                rKp := 1.0,
+                uiTi := 1,
+                uiTd := 0,
                 xReset := FALSE
             );
         END_CASE;
 
         (* IO-Ausgang Luftaufbereitung *)
         IF gAktoren.xFrgLuftaufbereiter THEN
-            gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := rHeizregLeistung;
+            gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := rLuftaufbLeistung;
         ELSE
             gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
         END_IF;
@@ -1914,93 +2362,57 @@ CASE gAktModus OF
     IOTEST:
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
-        gAktoren.xFrgAbluftventilator := FALSE;
 
-        xHeizregHystEin  := FALSE;
-        xHeizregPidEn    := FALSE;
-        rHeizregLeistung := 0.0;
-        iEntfSchritt     := 0;
-        xEntfFeuchteReq  := FALSE;
-        xEntfAnforderung := FALSE;
-        tonEntfEin(IN := FALSE, PT := 0);
-        tonEntfMin(IN := FALSE, PT := 0);
+        xLuftaufbHystEin     := FALSE;
+        xLuftaufbPidEn       := FALSE;
+        rLuftaufbLeistung    := 0.0;
+        iLuftaufbSchritt     := 0;
+        xLuftaufbHystMerker  := FALSE;
+        xLuftaufbAnf         := FALSE;
+        tonLuftaufbEin(IN := FALSE, PT := 0);
+        tonLuftaufbMin(IN := FALSE, PT := 0);
 
-		//Aufruf Regler Ventilator
-        fbPidVent(
-            xEn            := FALSE,
-            rPv            := aiTrockenluftFeucht,
-            rSetp          := rTrockenluftFeuchteSoll,
-            xManualMode    := TRUE,
-            rManualValue   := 0.0,
-            xHold          := FALSE,
-            rHighLimit     := rVentHighLimit,
-            rLowLimit      := rVentLowLimit,
-            rDeadband      := rVentDeadband,
-            xAutoTune      := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp            := rVentKp,
-            uiTi           := uiVentTi,
-            uiTd           := uiVentTd,
-            xReset         := FALSE
-        );
-        
+        gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
+        gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
+
         //Aufruf Regler Heizregister
-        fbPidLuftaufbereitung(
-            xEn := FALSE, 
-            rPv := aiTrockenluftTemp, 
+        fbPidLuftaufb(
+            xEn := FALSE,
+            rPv := aiTrockenluftTemp,
             rSetp := 0.0,
-            xManualMode := TRUE, 
-            rManualValue := 0.0, 
+            xManualMode := TRUE,
+            rManualValue := 0.0,
             xHold := FALSE,
-            rHighLimit := 100.0, 
-            rLowLimit := 0.0, 
+            rHighLimit := 100.0,
+            rLowLimit := 0.0,
             rDeadband := 0.5,
-            xAutoTune := FALSE, 
+            xAutoTune := FALSE,
             rAutoTuneValue := 0.0,
-            rKp := 1.0, 
-            uiTi := 1, 
-            uiTd := 0, 
+            rKp := 1.0,
+            uiTi := 1,
+            uiTd := 0,
             xReset := FALSE
-         );
+        );
 
-ELSE
+    ELSE
 
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
         gAktoren.xFrgAbluftventilator := FALSE;
-        
-		gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
-		gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
 
-        xHeizregHystEin  := FALSE;
-        xHeizregPidEn    := FALSE;
-        rHeizregLeistung := 0.0;
-        iEntfSchritt     := 0;
-        xEntfFeuchteReq  := FALSE;
-        xEntfAnforderung := FALSE;
-        tonEntfEin(IN := FALSE, PT := 0);
-        tonEntfMin(IN := FALSE, PT := 0);
-		
-		//Aufruf Regler Ventilator
-        fbPidVent(
-            xEn            := FALSE,
-            rPv            := aiTrockenluftFeucht,
-            rSetp          := rTrockenluftFeuchteSoll,
-            xManualMode    := TRUE,
-            rManualValue   := 0.0,
-            xHold          := FALSE,
-            rHighLimit     := rVentHighLimit,
-            rLowLimit      := rVentLowLimit,
-            rDeadband      := rVentDeadband,
-            xAutoTune      := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp            := rVentKp,
-            uiTi           := uiVentTi,
-            uiTd           := uiVentTd,
-            xReset         := FALSE
-        );
-        
-        fbPidLuftaufbereitung(
+        gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
+        gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
+
+        xLuftaufbHystEin     := FALSE;
+        xLuftaufbPidEn       := FALSE;
+        rLuftaufbLeistung    := 0.0;
+        iLuftaufbSchritt     := 0;
+        xLuftaufbHystMerker  := FALSE;
+        xLuftaufbAnf         := FALSE;
+        tonLuftaufbEin(IN := FALSE, PT := 0);
+        tonLuftaufbMin(IN := FALSE, PT := 0);
+
+        fbPidLuftaufb(
             xEn            := FALSE,
             rPv            := aiTrockenluftTemp,
             rSetp          := 0.0,
@@ -2018,17 +2430,10 @@ ELSE
             xReset         := FALSE
         );
 END_CASE;
-
-(* Sollwerte Regler begrenzen *)
-rVentSollMan  := LIMIT(gCmdAnlage.Leistung.DrehzahlVentilator, 0.0, 100.0);
-rLuftaufbSoll := LIMIT(gCmdAnlage.Leistung.DrehzahlLuftaufbereitung, 0.0, 100.0);
-
-gAktoren.rVentilatorSollwert      := rVentSollMan;
-gAktoren.rLuftaufbereiterSollwert := rLuftaufbSoll;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1781709366">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1781854831">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -2251,9 +2656,13 @@ END_IF;
 ===============================================================================
  FU
 ===============================================================================
- Sollwerte werden in LeistungCyclic beschrieben und begrenzt.
+
 -------------------------------------------------------------------------------
 *)
+
+gAktoren.rVentilatorSollwert      := gCmdAnlage.Leistung.DrehzahlVentilator;
+gAktoren.rLuftaufbereiterSollwert := gCmdAnlage.Leistung.DrehzahlLuftaufbereitung;
+
 aoFuVentilator := gAktoren.rVentilatorSollwert;
 aoLeistVorgLuftaufber := gAktoren.rLuftaufbereiterSollwert;
 
@@ -2327,7 +2736,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1781784148">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1782320486">
 					<vars/>
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
@@ -2453,6 +2862,49 @@ gBetriebsparameter.Ausstattung.Luftaufbereiter := Ausstattung_Luftaufbereiter_Ty
 
 (*
 ---------------------------------------------------------------------------
+Ventilator
+---------------------------------------------------------------------------
+*)
+gBetriebsparameter.Ventilator.DrehzahlMin := Par_Ventilator_DrehzahlMin;
+gBetriebsparameter.Ventilator.DrehzahlMax := Par_Ventilator_DrehzahlMax;
+gBetriebsparameter.Ventilator.DrehzahlBeiAuskuehlphase := Par_Ventilator_DrehzahlBeiAuskuehlphase;
+gBetriebsparameter.Ventilator.DrzUmschaltung := Par_Ventilator_DrzUmschaltung;
+gBetriebsparameter.Ventilator.DrehzahlFixLuftaufbereiter := Par_Ventilator_DrehzahlFixLuftaufbereiter;
+gBetriebsparameter.Ventilator.DrehzahlFixFrischluft := Par_Ventilator_DrehzahlFixFrischluft;
+gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung := Par_Ventilator_DrehzahlStrombegrenzung;
+gBetriebsparameter.Ventilator.DrehzahlLeistungsreduziert := Par_Ventilator_DrehzahlLeistungsreduz;
+gBetriebsparameter.Ventilator.ZeitRampeUp := Par_Ventilator_ZeitRampeUp;
+gBetriebsparameter.Ventilator.ZeitRampeDown := Par_Ventilator_ZeitRampeDown;
+
+
+(*
+---------------------------------------------------------------------------
+Luftaufbereitung
+---------------------------------------------------------------------------
+*)
+
+//Allgemein
+gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel := Par_Luftaufbereitung_VerzWetterwechsel;
+gBetriebsparameter.Luftaufbereitung.SaettigungFrischluftEin := Par_Luftaufbereitung_SaettigungFrischlEin;
+gBetriebsparameter.Luftaufbereitung.Hysterese := Par_Luftaufbereitung_Hysterese;
+gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin:= Par_Luftaufbereitung_AutomatikbetriebEin;
+gBetriebsparameter.Luftaufbereitung.DauerbetriebEin := Par_Luftaufbereitung_DauerbetriebEin;
+gBetriebsparameter.Luftaufbereitung.Aus := Par_Luftaufbereitung_Aus;
+//Spezifisch Heizregister
+gBetriebsparameter.Luftaufbereitung.P := Par_Luftaufbereitung_P;
+gBetriebsparameter.Luftaufbereitung.I := Par_Luftaufbereitung_I;
+gBetriebsparameter.Luftaufbereitung.D := Par_Luftaufbereitung_D;
+gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin := Par_Luftaufbereitung_DrehzahlVorgabeMin;
+gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax := Par_Luftaufbereitung_DrehzahlVorgabeMax;
+gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll := Par_Luftaufbereitung_TempVorgabeSoll;
+//Spezifisch Ofen
+gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung := Par_Luftaufbereitung_VerzBetriebsmeldung;
+gBetriebsparameter.Luftaufbereitung.Auskuehlzeit := Par_Luftaufbereitung_Auskuehlzeit;
+
+
+
+(*
+---------------------------------------------------------------------------
 Klappen/Boxen
 ---------------------------------------------------------------------------
 *)
@@ -2468,32 +2920,23 @@ gBetriebsparameter.Luftaufbereitung.Typ := Ausstattung_Luftaufbereiter_Typ;
 
 (*
 ---------------------------------------------------------------------------
-Heizregister
+Strombegrenzung
 ---------------------------------------------------------------------------
 *)
-gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMin := Par_Heizregister_LeistungMin;
-gBetriebsparameter.Luftaufbereitung.Heizregister.LeistungMax := Par_Heizregister_LeistungMax;
-gBetriebsparameter.Luftaufbereitung.Heizregister.Hysterese := Par_Heizregister_Hyst;
-gBetriebsparameter.Luftaufbereitung.Heizregister.FeuchteSoll := Par_Heizregister_FeuchteSoll;
-gBetriebsparameter.Luftaufbereitung.Heizregister.TrockenluftTempSoll := Par_Heizregister_TrockenluftTempSoll;
-gBetriebsparameter.Luftaufbereitung.Heizregister.AutomatikbetriebEin:= Par_Heizregister_AutomatikbetriebEin;
-gBetriebsparameter.Luftaufbereitung.Heizregister.DauerbetriebEin := Par_Heizregister_DauerbetriebEin;
-gBetriebsparameter.Luftaufbereitung.Heizregister.P := Par_Heizregister_P;
-gBetriebsparameter.Luftaufbereitung.Heizregister.I := Par_Heizregister_I;
-gBetriebsparameter.Luftaufbereitung.Heizregister.D := Par_Heizregister_D;
+gBetriebsparameter.Strombegrenzung.StartStd := Par_Strombegrenzung_StartMin;
+gBetriebsparameter.Strombegrenzung.StartMin := Par_Strombegrenzung_StartStd;
+gBetriebsparameter.Strombegrenzung.StoppStd := Par_Strombegrenzung_StoppMin;
+gBetriebsparameter.Strombegrenzung.StoppMin := Par_Strombegrenzung_StoppStd;
 
 (*
 ---------------------------------------------------------------------------
-Entfeuchter
+Tarifabschaltung
 ---------------------------------------------------------------------------
 *)
-gBetriebsparameter.Luftaufbereitung.Entfeuchter.DauerbetriebEin := Par_Entfeuchter_DauerbetriebEin;
-gBetriebsparameter.Luftaufbereitung.Entfeuchter.AutomatikbetriebEin := Par_Entfeuchter_AutomatikbetriebEin;
-gBetriebsparameter.Luftaufbereitung.Entfeuchter.FeuchteEinschalt := Par_Entfeuchter_FeuchteEinschalt;
-gBetriebsparameter.Luftaufbereitung.Entfeuchter.FeuchteAusschalt := Par_Entfeuchter_FeuchteAusschalt;
-gBetriebsparameter.Luftaufbereitung.Entfeuchter.EinschaltverzMS := Par_Entfeuchter_Einschaltverz;
-gBetriebsparameter.Luftaufbereitung.Entfeuchter.MindestlaufzeitMS := Par_Entfeuchter_Ausschaltverz;
-
+gBetriebsparameter.Tarifabschaltung.Zeitfenster.StartStd := Par_Tarifabschaltung_Start_Std;
+gBetriebsparameter.Tarifabschaltung.Zeitfenster.StartMin := Par_Tarifabschaltung_Start_Min;
+gBetriebsparameter.Tarifabschaltung.Zeitfenster.StoppStd := Par_Tarifabschaltung_Stopp_Std;
+gBetriebsparameter.Tarifabschaltung.Zeitfenster.StoppMin := Par_Tarifabschaltung_Stopp_Min;
 
 (*
 -------------------------------------------------------------------------------
@@ -2808,6 +3251,9 @@ END_STRUCT;
 						<var name="Ausstattung" type="ST_Ausstattung"/>
 						<var name="KlappenBoxen" type="ST_KlappenBoxen" idxMin0="1" idx0="2"/>
 						<var name="Luftaufbereitung" type="ST_ParLuftaufber"/>
+						<var name="Ventilator" type="ST_ParVentilator"/>
+						<var name="Strombegrenzung" type="ST_ParZeitfenster"/>
+						<var name="Tarifabschaltung" type="ST_ParTarifabschaltung"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -2836,6 +3282,7 @@ END_STRUCT;
 						<var name="AbluftBox2Temp" type="REAL"/>
 						<var name="AbluftBox2Feuchte" type="REAL"/>
 						<var name="LuftaufberTyp" type="UINT"/>
+						<var name="WetterIstSchlecht" type="BOOL"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -2854,6 +3301,12 @@ END_STRUCT;
 				<struct name="ST_Aktor_Allgemein" version="1.0.0">
 					<vars>
 						<var name="Box" type="ST_Aktor_Box" idxMin0="1" idx0="2"/>
+						<var name="Warmluftofen" type="fbBoxenWLO">
+							<descr>Warmluftofen Logik</descr>
+						</var>
+						<var name="Heizregister" type="fbHeizregister">
+							<descr>Heizregister Logik</descr>
+						</var>
 						<var name="xFrgVentilator" type="BOOL"/>
 						<var name="xFrgLuftaufbereiter" type="BOOL"/>
 						<var name="xFrgAbluftventilator" type="BOOL"/>
@@ -2862,9 +3315,24 @@ END_STRUCT;
 						<var name="rLuftaufbereiterSollwert" type="REAL"/>
 						<var name="eStatusVentilator" type="eStatus"/>
 						<var name="eStatusLuftaufbereiter" type="eStatus"/>
-						<var name="eStatusAbluftventilator" type="eStatus"/>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_Aktor_Allgemein: STRUCT
+	Box : ARRAY[1..2] OF ST_Aktor_Box;
+	Warmluftofen : fbBoxenWLO;	(* Warmluftofen Logik *)
+	Heizregister : fbHeizregister;	(* Heizregister Logik *)
+	xFrgVentilator : BOOL;
+	xFrgLuftaufbereiter : BOOL;
+	xFrgAbluftventilator : BOOL;
+	xQuitFehler : BOOL;
+	rVentilatorSollwert : REAL;
+	rLuftaufbereiterSollwert : REAL;
+	eStatusVentilator : eStatus;
+	eStatusLuftaufbereiter : eStatus;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
 				</struct>
 				<struct name="ST_CmdAnlage" version="1.0.0">
 					<vars>
@@ -2892,53 +3360,76 @@ END_STRUCT;
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
-				<struct name="ST_ParHeizregister" version="1.0.0">
-					<vars>
-						<var name="LeistungMin" type="REAL"/>
-						<var name="LeistungMax" type="REAL"/>
-						<var name="Hysterese" type="REAL"/>
-						<var name="FeuchteSoll" type="REAL"/>
-						<var name="TrockenluftTempSoll" type="REAL">
-							<descr>°C Solltemperatur – NEU</descr>
-						</var>
-						<var name="AutomatikbetriebEin" type="BOOL"/>
-						<var name="DauerbetriebEin" type="BOOL"/>
-						<var name="P" type="REAL">
-							<descr>jetzt tatsächlich genutzt</descr>
-						</var>
-						<var name="I" type="REAL">
-							<descr>in Sekunden</descr>
-						</var>
-						<var name="D" type="REAL">
-							<descr>in Sekunden</descr>
-						</var>
-					</vars>
-					<iecDeclaration active="FALSE"/>
-				</struct>
-				<struct name="ST_ParEntfeuchter" version="1.0.0">
-					<vars>
-						<var name="DauerbetriebEin" type="BOOL"/>
-						<var name="AutomatikbetriebEin" type="BOOL"/>
-						<var name="FeuchteEinschalt" type="REAL">
-							<descr>%rF Einschaltschwelle</descr>
-						</var>
-						<var name="FeuchteAusschalt" type="REAL">
-							<descr>%rF Ausschaltschwelle</descr>
-						</var>
-						<var name="EinschaltverzMS" type="UDINT">
-							<descr>ms Verzögerung bis Freigabe</descr>
-						</var>
-						<var name="MindestlaufzeitMS" type="UDINT">
-							<descr>ms Mindestlaufzeit nach Einschalten</descr>
-						</var>
-					</vars>
-					<iecDeclaration active="FALSE"/>
-				</struct>
 				<struct name="ST_ParLuftaufber" version="1.0.0">
 					<vars>
 						<var name="Typ" type="UINT"/>
-						<var name="Heizregister" type="ST_ParHeizregister"/>
-						<var name="Entfeuchter" type="ST_ParEntfeuchter"/>
+						<var name="VerzWetterwechsel" type="UDINT"/>
+						<var name="TempVorgabeSoll" type="REAL">
+							<descr>°C Solltemperatur – NEU</descr>
+						</var>
+						<var name="Hysterese" type="REAL"/>
+						<var name="AutomatikbetriebEin" type="BOOL"/>
+						<var name="DauerbetriebEin" type="BOOL"/>
+						<var name="Aus" type="BOOL"/>
+						<var name="SaettigungFrischluftEin" type="REAL"/>
+						<var name="DrehzahlVorgabeMin" type="REAL"/>
+						<var name="DrehzahlVorgabeMax" type="REAL"/>
+						<var name="P" type="REAL">
+							<descr>P Anteil Regler</descr>
+						</var>
+						<var name="I" type="REAL">
+							<descr>I Anteil Regler</descr>
+						</var>
+						<var name="D" type="REAL">
+							<descr>D Anteil Regler</descr>
+						</var>
+						<var name="Auskuehlzeit" type="UDINT"/>
+						<var name="VerzBetriebsmeldung" type="UDINT"/>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+				</struct>
+				<struct name="ST_ParVentilator" version="1.0.0">
+					<vars>
+						<var name="DrehzahlMin" type="REAL"/>
+						<var name="DrehzahlMax" type="REAL"/>
+						<var name="DrehzahlBeiAuskuehlphase" type="REAL"/>
+						<var name="DrzUmschaltung" type="REAL"/>
+						<var name="DrehzahlFixLuftaufbereiter" type="REAL"/>
+						<var name="DrehzahlFixFrischluft" type="REAL"/>
+						<var name="DrehzahlStrombegrenzung" type="REAL"/>
+						<var name="DrehzahlLeistungsreduziert" type="REAL"/>
+						<var name="ZeitRampeUp" type="UDINT"/>
+						<var name="ZeitRampeDown" type="UDINT"/>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_ParVentilator: STRUCT
+ 	DrehzahlMin : REAL;
+	DrehzahlMax : REAL;
+	DrehzahlBeiAuskuehlphase : REAL;
+	DrzUmschaltung : REAL;
+	DrehzahlFixLuftaufbereiter : REAL;
+	DrehzahlFixFrischluft : REAL;
+	DrehzahlStrombegrenzung : REAL;
+	DrehzahlLeistungsreduziert : REAL;	
+	ZeitRampeUp : UDINT;
+	ZeitRampeDown : UDINT;
+END_STRUCT;
+]]>
+					</iecDeclaration>
+				</struct>
+				<struct name="ST_ParZeitfenster" version="1.0.0">
+					<vars>
+						<var name="StartStd" type="USINT"/>
+						<var name="StartMin" type="USINT"/>
+						<var name="StoppStd" type="USINT"/>
+						<var name="StoppMin" type="USINT"/>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+				</struct>
+				<struct name="ST_ParTarifabschaltung" version="1.0.0">
+					<vars>
+						<var name="Zeitfenster" type="ST_ParZeitfenster"/>
+						<var name="VorlaufzeitAbschaltungLuftaufb" type="USINT"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -3104,7 +3595,7 @@ END_STRUCT;
 						<element name="HEIZREGISTER">
 							<value>1</value>
 						</element>
-						<element name="ENTFEUCHTER">
+						<element name="OFEN">
 							<value>2</value>
 						</element>
 					</elements>
@@ -71688,95 +72179,97 @@ nSamples := cnt;
 		{G:"Parameters"}
 	Konfig_SoftwareVersionPLC AT %MW200.75 : STRING[ 31 ];
 		{G:"Parameters"}
-	Para_Allg_StandortHoehe AT %MW200.91 : UINT;
+	Par_Tarifabschaltung_Start_Std AT %MW200.91 : UINT;
 		{G:"Parameters"}
-	Para_Tarifabschaltung_Start_Std AT %MW200.92 : UINT;
+	Par_Tarifabschaltung_Start_Min AT %MW200.92 : UINT;
 		{G:"Parameters"}
-	Para_Tarifabschaltung_Start_Min AT %MW200.93 : UINT;
+	Par_Tarifabschaltung_Stopp_Std AT %MW200.93 : UINT;
 		{G:"Parameters"}
-	Para_Tarifabschaltung_Stopp_Std AT %MW200.94 : UINT;
+	Par_Tarifabschaltung_Stopp_Min AT %MW200.94 : UINT;
 		{G:"Parameters"}
-	Para_Tarifabschaltung_Stopp_Min AT %MW200.95 : UINT;
+	Par_Boxen_1_Trockengut AT %MW200.95 : UINT;
 		{G:"Parameters"}
-	Para_Boxen_1_Trockengut AT %MW200.96 : UINT;
+	Par_Boxen_2_Trockengut AT %MW200.96 : UINT;
 		{G:"Parameters"}
-	Para_Boxen_2_Trockengut AT %MW200.97 : UINT;
+	Par_Boxen_1_SchlechtwetterSensorGrenzwert AT %MW200.97 : INT;
 		{G:"Parameters"}
-	Para_Boxen_1_SchlechtwetterSensorGrenzwert AT %MW200.98 : INT;
+	Par_Boxen_2_SchlechtwetterSensorGrenzwert AT %MW200.98 : INT;
 		{G:"Parameters"}
-	Para_Boxen_2_SchlechtwetterSensorGrenzwert AT %MW200.99 : INT;
+	Par_Luftaufbereitung_VerzWetterwechsel AT %MW200.100 : UDINT;
 		{G:"Parameters"}
-	Par_Heizregister_VerzWetterwechsel AT %MW200.100 : UDINT;
+	Par_Luftaufbereitung_SaettigungFrischlEin AT %MW200.102 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_SaettigungFrischlEin AT %MW200.102 : REAL;
+	Par_Luftaufbereitung_TempVorgabeSoll AT %MW200.104 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_Hyst AT %MW200.104 : REAL;
+	Par_Luftaufbereitung_P AT %MW200.106 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_TrockenluftTempSoll AT %MW200.106 : REAL;
+	Par_Luftaufbereitung_I AT %MW200.108 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_P AT %MW200.108 : REAL;
+	Par_Luftaufbereitung_D AT %MW200.110 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_I AT %MW200.110 : REAL;
+	Par_Luftaufbereitung_DrehzahlVorgabeMin AT %MW200.112 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_D AT %MW200.112 : REAL;
+	Par_Luftaufbereitung_DrehzahlVorgabeMax AT %MW200.114 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_DrehzahlVorgabeMin AT %MW200.114 : REAL;
+	Par_Luftaufbereitung_AutomatikbetriebEin AT %MW200.116 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_DrehzahlVorgabeMax AT %MW200.116 : REAL;
+	Par_Luftaufbereitung_DauerbetriebEin AT %MW200.117 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_AutomatikbetriebEin AT %MW200.118 : BOOL;
+	Par_Luftaufbereitung_Aus AT %MW200.118 : BOOL;
 		{G:"Parameters"}
-	Par_Heizregister_DauerbetriebEin AT %MW200.119 : BOOL;
+	Par_Luftaufbereitung_Auskuehlzeit AT %MW200.120 : UDINT;
 		{G:"Parameters"}
-	Par_Heizregister_Aus AT %MW200.120 : BOOL;
+	Par_Luftaufbereitung_rRes1 AT %MW200.122 : REAL;
 		{G:"Parameters"}
-	Par_Heizregister_xRes2 AT %MW200.121 : BOOL;
+	Par_Luftaufbereitung_rRes2 AT %MW200.124 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_FeuchteEinschalt AT %MW200.122 : REAL;
+	Par_Luftaufbereitung_xRes1 AT %MW200.126 : BOOL;
 		{G:"Parameters"}
-	Par_Entfeuchter_FeuchteAusschalt AT %MW200.124 : REAL;
+	Par_Luftaufbereitung_Hysterese AT %MW200.128 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_rRes1 AT %MW200.126 : REAL;
+	Par_Luftaufbereitung_VerzBetriebsmeldung AT %MW200.130 : UDINT;
 		{G:"Parameters"}
-	Par_Entfeuchter_rRes2 AT %MW200.128 : REAL;
+	Ausstattung_Luftaufbereiter_Typ AT %MW200.132 : BYTE;
 		{G:"Parameters"}
-	Par_Entfeuchter_DauerbetriebEin AT %MW200.130 : BOOL;
+	Sensoren_FilterzeitTrockenluft AT %MW200.133 : UINT;
 		{G:"Parameters"}
-	Par_Entfeuchter_AutomatikbetriebEin AT %MW200.131 : BOOL;
+	Sensoren_FilterzeitStocktemp AT %MW200.134 : UINT;
 		{G:"Parameters"}
-	Par_Entfeuchter_Einschaltverz AT %MW200.132 : UDINT;
+	Sensoren_StockTempMessberMin AT %MW200.136 : REAL;
 		{G:"Parameters"}
-	Par_Entfeuchter_Ausschaltverz AT %MW200.134 : UDINT;
+	Sensoren_StockTempMessberMax AT %MW200.138 : REAL;
 		{G:"Parameters"}
-	Ausstattung_Luftaufbereiter_Typ AT %MW200.136 : BYTE;
+	Par_Ventilator_DrehzahlMin AT %MW200.140 : REAL;
 		{G:"Parameters"}
-	Sensoren_FilterzeitTrockenluft AT %MW200.137 : UINT;
+	Par_Ventilator_DrehzahlMax AT %MW200.142 : REAL;
 		{G:"Parameters"}
-	Sensoren_FilterzeitStocktemp AT %MW200.138 : UINT;
+	Par_Ventilator_DrehzahlBeiAuskuehlphase AT %MW200.144 : REAL;
 		{G:"Parameters"}
-	Sensoren_StockTempMessberMin AT %MW200.140 : REAL;
+	Par_Ventilator_DrzUmschaltung AT %MW200.146 : REAL;
 		{G:"Parameters"}
-	Sensoren_StockTempMessberMax AT %MW200.142 : REAL;
+	Par_Ventilator_DrehzahlFixLuftaufbereiter AT %MW200.148 : REAL;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlMin AT %MW200.144 : REAL;
+	Par_Ventilator_DrehzahlFixFrischluft AT %MW200.150 : REAL;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlMax AT %MW200.146 : REAL;
+	Par_Ventilator_DrehzahlStrombegrenzung AT %MW200.152 : REAL;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlBeiAuskuehlphase AT %MW200.148 : REAL;
+	Par_Ventilator_DrehzahlLeistungsreduz AT %MW200.154 : REAL;
 		{G:"Parameters"}
-	Par_Ventilator_DrzUmschaltung AT %MW200.150 : REAL;
+	Par_Ventilator_ZeitRampeUp AT %MW200.156 : UDINT;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlFixUmluft AT %MW200.152 : REAL;
+	Par_Ventilator_ZeitRampeDown AT %MW200.158 : UDINT;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlFixFrischluft AT %MW200.154 : REAL;
+	Par_Strombegrenzung_StartStd AT %MW200.160 : USINT;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlStrombegrenzung AT %MW200.156 : REAL;
+	Par_Strombegrenzung_StartMin AT %MW200.161 : USINT;
 		{G:"Parameters"}
-	Par_Ventilator_DrehzahlLeistungsreduz AT %MW200.158 : REAL;
+	Par_Strombegrenzung_StoppStd AT %MW200.162 : USINT;
 		{G:"Parameters"}
-	Par_Ventilator_ZeitRampeUp AT %MW200.160 : UDINT;
+	Par_Strombegrenzung_StoppMin AT %MW200.163 : USINT;
 		{G:"Parameters"}
-	Par_Ventilator_ZeitRampeDown AT %MW200.162 : UDINT;
+	Par_Luftaufbereitung_FarbeIcon AT %MW200.164 : BYTE;
+		{G:"Parameters"}
+	Par_Luftaufbereitung_BetriebsmeldungVorh AT %MW200.165 : BOOL;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -74584,8 +75077,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..6559 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 164; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..6599 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 165; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -74598,9 +75091,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 4262499249;
+	dummyCrc32 := 1888766046;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 164, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 4262499249 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 166, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 1888766046 );
 
 END_PROGRAM
 
@@ -74669,7 +75162,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="7732">
+			<root name="CControl_Lite" nextID="9435">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -74691,6 +75184,9 @@ END_PROGRAM
 				</folder>
 				<folder name="utils" id="51">
 					<Pou name="fbBoxenklappe" id="3023"/>
+					<Pou name="fbTrockStrombegr" id="8051"/>
+					<Pou name="fbBoxenWLO" id="8562"/>
+					<Pou name="fbHeizregister" id="9269"/>
 				</folder>
 				<folder name="struct" id="52">
 					<Definition name="ST_Ausstattung" id="56"/>
@@ -74708,9 +75204,10 @@ END_PROGRAM
 					<Definition name="ST_CmdAnlage" id="4186"/>
 					<Definition name="ST_CmdLeistung" id="4187"/>
 					<Definition name="ST_HmiNutzungsdaten" id="4244"/>
-					<Definition name="ST_ParHeizregister" id="5707"/>
-					<Definition name="ST_ParEntfeuchter" id="5708" genHidden="false"/>
 					<Definition name="ST_ParLuftaufber" id="5709"/>
+					<Definition name="ST_ParVentilator" id="7845"/>
+					<Definition name="ST_ParZeitfenster" id="8013"/>
+					<Definition name="ST_ParTarifabschaltung" id="9255"/>
 				</folder>
 				<folder name="types" id="910">
 					<Definition name="T_Betriebsparameter" id="912"/>
@@ -76582,7 +77079,7 @@ END_PROGRAM
 							<param>
 								<ipa>16474</ipa>
 								<address>16474</address>
-								<name>Para_Allg_StandortHoehe</name>
+								<name>Par_Tarifabschaltung_Start_Std</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -76631,7 +77128,7 @@ END_PROGRAM
 							<param>
 								<ipa>16475</ipa>
 								<address>16475</address>
-								<name>Para_Tarifabschaltung_Start_Std</name>
+								<name>Par_Tarifabschaltung_Start_Min</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -76680,7 +77177,7 @@ END_PROGRAM
 							<param>
 								<ipa>16476</ipa>
 								<address>16476</address>
-								<name>Para_Tarifabschaltung_Start_Min</name>
+								<name>Par_Tarifabschaltung_Stopp_Std</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -76729,7 +77226,7 @@ END_PROGRAM
 							<param>
 								<ipa>16477</ipa>
 								<address>16477</address>
-								<name>Para_Tarifabschaltung_Stopp_Std</name>
+								<name>Par_Tarifabschaltung_Stopp_Min</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -76778,7 +77275,7 @@ END_PROGRAM
 							<param>
 								<ipa>16478</ipa>
 								<address>16478</address>
-								<name>Para_Tarifabschaltung_Stopp_Min</name>
+								<name>Par_Boxen_1_Trockengut</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -76827,7 +77324,7 @@ END_PROGRAM
 							<param>
 								<ipa>16479</ipa>
 								<address>16479</address>
-								<name>Para_Boxen_1_Trockengut</name>
+								<name>Par_Boxen_2_Trockengut</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -76876,9 +77373,9 @@ END_PROGRAM
 							<param>
 								<ipa>16480</ipa>
 								<address>16480</address>
-								<name>Para_Boxen_2_Trockengut</name>
-								<typepar>2</typepar>
-								<typetarg>UINT</typetarg>
+								<name>Par_Boxen_1_SchlechtwetterSensorGrenzwert</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -76925,7 +77422,7 @@ END_PROGRAM
 							<param>
 								<ipa>16481</ipa>
 								<address>16481</address>
-								<name>Para_Boxen_1_SchlechtwetterSensorGrenzwert</name>
+								<name>Par_Boxen_2_SchlechtwetterSensorGrenzwert</name>
 								<typepar>0</typepar>
 								<typetarg>INT</typetarg>
 								<value>0</value>
@@ -76974,57 +77471,8 @@ END_PROGRAM
 							<param>
 								<ipa>16482</ipa>
 								<address>16482</address>
-								<name>Para_Boxen_2_SchlechtwetterSensorGrenzwert</name>
-								<typepar>0</typepar>
-								<typetarg>INT</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.99</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>16483</ipa>
-								<address>16483</address>
-								<name>Par_Heizregister_VerzWetterwechsel</name>
-								<typepar>2</typepar>
+								<name>Par_Luftaufbereitung_VerzWetterwechsel</name>
+								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
 								<value>0</value>
 								<min/>
@@ -77070,9 +77518,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16485</ipa>
-								<address>16485</address>
-								<name>Par_Heizregister_SaettigungFrischlEin</name>
+								<ipa>16484</ipa>
+								<address>16484</address>
+								<name>Par_Luftaufbereitung_SaettigungFrischlEin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77119,9 +77567,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16487</ipa>
-								<address>16487</address>
-								<name>Par_Heizregister_Hyst</name>
+								<ipa>16486</ipa>
+								<address>16486</address>
+								<name>Par_Luftaufbereitung_TempVorgabeSoll</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77168,9 +77616,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16491</ipa>
-								<address>16491</address>
-								<name>Par_Heizregister_TrockenluftTempSoll</name>
+								<ipa>16488</ipa>
+								<address>16488</address>
+								<name>Par_Luftaufbereitung_P</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77217,9 +77665,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16493</ipa>
-								<address>16493</address>
-								<name>Par_Heizregister_P</name>
+								<ipa>16490</ipa>
+								<address>16490</address>
+								<name>Par_Luftaufbereitung_I</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77266,9 +77714,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16495</ipa>
-								<address>16495</address>
-								<name>Par_Heizregister_I</name>
+								<ipa>16492</ipa>
+								<address>16492</address>
+								<name>Par_Luftaufbereitung_D</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77315,9 +77763,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16497</ipa>
-								<address>16497</address>
-								<name>Par_Heizregister_D</name>
+								<ipa>16494</ipa>
+								<address>16494</address>
+								<name>Par_Luftaufbereitung_DrehzahlVorgabeMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77364,9 +77812,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16499</ipa>
-								<address>16499</address>
-								<name>Par_Heizregister_DrehzahlVorgabeMin</name>
+								<ipa>16496</ipa>
+								<address>16496</address>
+								<name>Par_Luftaufbereitung_DrehzahlVorgabeMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77413,11 +77861,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16501</ipa>
-								<address>16501</address>
-								<name>Par_Heizregister_DrehzahlVorgabeMax</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
+								<ipa>16498</ipa>
+								<address>16498</address>
+								<name>Par_Luftaufbereitung_AutomatikbetriebEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -77462,9 +77910,58 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16503</ipa>
-								<address>16503</address>
-								<name>Par_Heizregister_AutomatikbetriebEin</name>
+								<ipa>16499</ipa>
+								<address>16499</address>
+								<name>Par_Luftaufbereitung_DauerbetriebEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.117</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16500</ipa>
+								<address>16500</address>
+								<name>Par_Luftaufbereitung_Aus</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
 								<value>0</value>
@@ -77511,60 +78008,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16504</ipa>
-								<address>16504</address>
-								<name>Par_Heizregister_DauerbetriebEin</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.119</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>16505</ipa>
-								<address>16505</address>
-								<name>Par_Heizregister_Aus</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
+								<ipa>16501</ipa>
+								<address>16501</address>
+								<name>Par_Luftaufbereitung_Auskuehlzeit</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -77609,58 +78057,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16506</ipa>
-								<address>16506</address>
-								<name>Par_Heizregister_xRes2</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.121</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>16507</ipa>
-								<address>16507</address>
-								<name>Par_Entfeuchter_FeuchteEinschalt</name>
+								<ipa>16503</ipa>
+								<address>16503</address>
+								<name>Par_Luftaufbereitung_rRes1</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77707,9 +78106,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16509</ipa>
-								<address>16509</address>
-								<name>Par_Entfeuchter_FeuchteAusschalt</name>
+								<ipa>16505</ipa>
+								<address>16505</address>
+								<name>Par_Luftaufbereitung_rRes2</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77756,11 +78155,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16511</ipa>
-								<address>16511</address>
-								<name>Par_Entfeuchter_rRes1</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
+								<ipa>16507</ipa>
+								<address>16507</address>
+								<name>Par_Luftaufbereitung_xRes1</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -77805,9 +78204,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16513</ipa>
-								<address>16513</address>
-								<name>Par_Entfeuchter_rRes2</name>
+								<ipa>16508</ipa>
+								<address>16508</address>
+								<name>Par_Luftaufbereitung_Hysterese</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -77854,11 +78253,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16515</ipa>
-								<address>16515</address>
-								<name>Par_Entfeuchter_DauerbetriebEin</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
+								<ipa>16510</ipa>
+								<address>16510</address>
+								<name>Par_Luftaufbereitung_VerzBetriebsmeldung</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -77903,60 +78302,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16516</ipa>
-								<address>16516</address>
-								<name>Par_Entfeuchter_AutomatikbetriebEin</name>
-								<typepar>5</typepar>
-								<typetarg>BOOL</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.131</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>16517</ipa>
-								<address>16517</address>
-								<name>Par_Entfeuchter_Einschaltverz</name>
-								<typepar>3</typepar>
-								<typetarg>UDINT</typetarg>
+								<ipa>16512</ipa>
+								<address>16512</address>
+								<name>Ausstattung_Luftaufbereiter_Typ</name>
+								<typepar>6</typepar>
+								<typetarg>BYTE</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -78001,12 +78351,61 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16519</ipa>
-								<address>16519</address>
-								<name>Par_Entfeuchter_Ausschaltverz</name>
-								<typepar>3</typepar>
-								<typetarg>UDINT</typetarg>
-								<value>0</value>
+								<ipa>16513</ipa>
+								<address>16513</address>
+								<name>Sensoren_FilterzeitTrockenluft</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>5</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.133</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16514</ipa>
+								<address>16514</address>
+								<name>Sensoren_FilterzeitStocktemp</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>5</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78050,11 +78449,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16521</ipa>
-								<address>16521</address>
-								<name>Ausstattung_Luftaufbereiter_Typ</name>
-								<typepar>6</typepar>
-								<typetarg>BYTE</typetarg>
+								<ipa>16515</ipa>
+								<address>16515</address>
+								<name>Sensoren_StockTempMessberMin</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -78099,61 +78498,12 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16522</ipa>
-								<address>16522</address>
-								<name>Sensoren_FilterzeitTrockenluft</name>
-								<typepar>2</typepar>
-								<typetarg>UINT</typetarg>
-								<value>5</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.137</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>16524</ipa>
-								<address>16524</address>
-								<name>Sensoren_FilterzeitStocktemp</name>
-								<typepar>2</typepar>
-								<typetarg>UINT</typetarg>
-								<value>5</value>
+								<ipa>16517</ipa>
+								<address>16517</address>
+								<name>Sensoren_StockTempMessberMax</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>70</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78197,9 +78547,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16526</ipa>
-								<address>16526</address>
-								<name>Sensoren_StockTempMessberMin</name>
+								<ipa>16519</ipa>
+								<address>16519</address>
+								<name>Par_Ventilator_DrehzahlMin</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78246,12 +78596,12 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16528</ipa>
-								<address>16528</address>
-								<name>Sensoren_StockTempMessberMax</name>
+								<ipa>16521</ipa>
+								<address>16521</address>
+								<name>Par_Ventilator_DrehzahlMax</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
-								<value>70</value>
+								<value>0</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78295,9 +78645,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16530</ipa>
-								<address>16530</address>
-								<name>Par_Ventilator_DrehzahlMin</name>
+								<ipa>16523</ipa>
+								<address>16523</address>
+								<name>Par_Ventilator_DrehzahlBeiAuskuehlphase</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78344,9 +78694,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16532</ipa>
-								<address>16532</address>
-								<name>Par_Ventilator_DrehzahlMax</name>
+								<ipa>16525</ipa>
+								<address>16525</address>
+								<name>Par_Ventilator_DrzUmschaltung</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78393,9 +78743,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16534</ipa>
-								<address>16534</address>
-								<name>Par_Ventilator_DrehzahlBeiAuskuehlphase</name>
+								<ipa>16527</ipa>
+								<address>16527</address>
+								<name>Par_Ventilator_DrehzahlFixLuftaufbereiter</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78442,9 +78792,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16536</ipa>
-								<address>16536</address>
-								<name>Par_Ventilator_DrzUmschaltung</name>
+								<ipa>16529</ipa>
+								<address>16529</address>
+								<name>Par_Ventilator_DrehzahlFixFrischluft</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78491,9 +78841,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16538</ipa>
-								<address>16538</address>
-								<name>Par_Ventilator_DrehzahlFixUmluft</name>
+								<ipa>16531</ipa>
+								<address>16531</address>
+								<name>Par_Ventilator_DrehzahlStrombegrenzung</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78540,9 +78890,9 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16540</ipa>
-								<address>16540</address>
-								<name>Par_Ventilator_DrehzahlFixFrischluft</name>
+								<ipa>16533</ipa>
+								<address>16533</address>
+								<name>Par_Ventilator_DrehzahlLeistungsreduz</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
 								<value>0</value>
@@ -78589,11 +78939,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16542</ipa>
-								<address>16542</address>
-								<name>Par_Ventilator_DrehzahlStrombegrenzung</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
+								<ipa>16535</ipa>
+								<address>16535</address>
+								<name>Par_Ventilator_ZeitRampeUp</name>
+								<typepar>2</typepar>
+								<typetarg>UDINT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -78638,11 +78988,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16544</ipa>
-								<address>16544</address>
-								<name>Par_Ventilator_DrehzahlLeistungsreduz</name>
-								<typepar>4</typepar>
-								<typetarg>REAL</typetarg>
+								<ipa>16536</ipa>
+								<address>16536</address>
+								<name>Par_Ventilator_ZeitRampeDown</name>
+								<typepar>2</typepar>
+								<typetarg>UDINT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -78687,12 +79037,12 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16546</ipa>
-								<address>16546</address>
-								<name>Par_Ventilator_ZeitRampeUp</name>
+								<ipa>16537</ipa>
+								<address>16537</address>
+								<name>Par_Strombegrenzung_StartStd</name>
 								<typepar>2</typepar>
-								<typetarg>UDINT</typetarg>
-								<value>0</value>
+								<typetarg>USINT</typetarg>
+								<value/>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78736,12 +79086,61 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16547</ipa>
-								<address>16547</address>
-								<name>Par_Ventilator_ZeitRampeDown</name>
+								<ipa>16538</ipa>
+								<address>16538</address>
+								<name>Par_Strombegrenzung_StartMin</name>
 								<typepar>2</typepar>
-								<typetarg>UDINT</typetarg>
-								<value>0</value>
+								<typetarg>USINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.161</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16539</ipa>
+								<address>16539</address>
+								<name>Par_Strombegrenzung_StoppStd</name>
+								<typepar>2</typepar>
+								<typetarg>USINT</typetarg>
+								<value/>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -78757,6 +79156,153 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.162</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16540</ipa>
+								<address>16540</address>
+								<name>Par_Strombegrenzung_StoppMin</name>
+								<typepar>2</typepar>
+								<typetarg>USINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.163</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16541</ipa>
+								<address>16541</address>
+								<name>Par_Luftaufbereitung_FarbeIcon</name>
+								<typepar>6</typepar>
+								<typetarg>BYTE</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.164</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16542</ipa>
+								<address>16542</address>
+								<name>Par_Luftaufbereitung_BetriebsmeldungVorh</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.165</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -84713,42 +85259,43 @@ END_PROGRAM
 								<value ipa="16480" subidx="0">0</value>
 								<value ipa="16481" subidx="0">0</value>
 								<value ipa="16482" subidx="0">0</value>
-								<value ipa="16483" subidx="0">0</value>
-								<value ipa="16485" subidx="0">0</value>
-								<value ipa="16487" subidx="0">0</value>
-								<value ipa="16491" subidx="0">0</value>
-								<value ipa="16493" subidx="0">0</value>
-								<value ipa="16495" subidx="0">0</value>
-								<value ipa="16497" subidx="0">0</value>
+								<value ipa="16484" subidx="0">0</value>
+								<value ipa="16486" subidx="0">0</value>
+								<value ipa="16488" subidx="0">0</value>
+								<value ipa="16490" subidx="0">0</value>
+								<value ipa="16492" subidx="0">0</value>
+								<value ipa="16494" subidx="0">0</value>
+								<value ipa="16496" subidx="0">0</value>
+								<value ipa="16498" subidx="0">0</value>
 								<value ipa="16499" subidx="0">0</value>
+								<value ipa="16500" subidx="0">0</value>
 								<value ipa="16501" subidx="0">0</value>
 								<value ipa="16503" subidx="0">0</value>
-								<value ipa="16504" subidx="0">0</value>
 								<value ipa="16505" subidx="0">0</value>
-								<value ipa="16506" subidx="0">0</value>
 								<value ipa="16507" subidx="0">0</value>
-								<value ipa="16509" subidx="0">0</value>
-								<value ipa="16511" subidx="0">0</value>
-								<value ipa="16513" subidx="0">0</value>
+								<value ipa="16508" subidx="0">0</value>
+								<value ipa="16510" subidx="0">0</value>
+								<value ipa="16512" subidx="0">0</value>
+								<value ipa="16513" subidx="0">5</value>
+								<value ipa="16514" subidx="0">5</value>
 								<value ipa="16515" subidx="0">0</value>
-								<value ipa="16516" subidx="0">0</value>
-								<value ipa="16517" subidx="0">0</value>
+								<value ipa="16517" subidx="0">70</value>
 								<value ipa="16519" subidx="0">0</value>
 								<value ipa="16521" subidx="0">0</value>
-								<value ipa="16522" subidx="0">5</value>
-								<value ipa="16524" subidx="0">5</value>
-								<value ipa="16526" subidx="0">0</value>
-								<value ipa="16528" subidx="0">70</value>
-								<value ipa="16530" subidx="0">0</value>
-								<value ipa="16532" subidx="0">0</value>
-								<value ipa="16534" subidx="0">0</value>
+								<value ipa="16523" subidx="0">0</value>
+								<value ipa="16525" subidx="0">0</value>
+								<value ipa="16527" subidx="0">0</value>
+								<value ipa="16529" subidx="0">0</value>
+								<value ipa="16531" subidx="0">0</value>
+								<value ipa="16533" subidx="0">0</value>
+								<value ipa="16535" subidx="0">0</value>
 								<value ipa="16536" subidx="0">0</value>
+								<value ipa="16537" subidx="0">0</value>
 								<value ipa="16538" subidx="0">0</value>
+								<value ipa="16539" subidx="0">0</value>
 								<value ipa="16540" subidx="0">0</value>
+								<value ipa="16541" subidx="0">0</value>
 								<value ipa="16542" subidx="0">0</value>
-								<value ipa="16544" subidx="0">0</value>
-								<value ipa="16546" subidx="0">0</value>
-								<value ipa="16547" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
