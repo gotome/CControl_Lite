@@ -555,7 +555,7 @@ END_IF;
 								<descr>Fehlerquittierung</descr>
 							</var>
 							<var name="WetterIstSchlecht" type="BOOL">
-								<descr>externe Vorgabe  Wetter schlecht </descr>
+								<descr>externe Vorgabe  Wetter schlecht</descr>
 							</var>
 						</inputVars>
 						<outputVars>
@@ -824,7 +824,7 @@ END_IF;
 								<descr>Umschaltverzögerung gut/schlecht [ms]</descr>
 							</var>
 							<var name="WetterIstSchlecht" type="BOOL">
-								<descr>externe Vorgabe  Wetter schlecht </descr>
+								<descr>externe Vorgabe  Wetter schlecht</descr>
 							</var>
 							<var name="DrehzahlHeizregisterSoll" type="REAL">
 								<descr>Drehzahlvorgabe Heizungspumpe (Soll)</descr>
@@ -1925,7 +1925,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1782321647">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1784556896">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -2054,9 +2054,14 @@ CASE gAktModus OF
         // Betriebslogik - nur vorhandene Aktoren
         // ------------------------------------------------------------
 
-        // Boxfreigaben
-        gAktoren.Box[1].xSollOffen := IBN_FALSE;
-        gAktoren.Box[2].xSollOffen := gBetriebsparameter.Ausstattung.Box2;
+        //BOX 1
+        gAktoren.Box[1].xSollOffen := gBetriebsparameter.Boxen[1].DauerbetriebEin OR 
+        							  gBetriebsparameter.Boxen[1].IntervallbetriebEin OR  
+        							  gBetriebsparameter.Boxen[1].NachtrocknungEin;
+      	//BOX 2 
+        gAktoren.Box[2].xSollOffen := gBetriebsparameter.Boxen[2].DauerbetriebEin OR 
+        							  gBetriebsparameter.Boxen[2].IntervallbetriebEin OR  
+        							  gBetriebsparameter.Boxen[2].NachtrocknungEin;
 
         // ------------------------------------------------------------
         // Zustandswechsel
@@ -2433,7 +2438,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1781854831">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1784485532">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -2550,8 +2555,7 @@ END_VAR
       - Abluftventilator
 
     Die Boxenklappen werden über den Funktionsbaustein fbBoxenklappe
-    angesteuert. Der Aufbau orientiert sich an der bewährten Vorlage
-    fbBoxenKlappenanst.
+    angesteuert.
 
 ================================================================================
  Change History
@@ -2736,7 +2740,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1782320486">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1784555745">
 					<vars/>
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
@@ -3041,6 +3045,137 @@ gIoTest.DigitalOut.doFrgVentilator			:= HMI_TEST_doFrgVentilator;
 //analog
 gIoTest.AnalogOut.aoFuVentilator			:= HMI_TEST_aoFuVentilator;
 gIoTest.AnalogOut.aoLeistVorgLuftaufber 	:= HMI_TEST_aoLeistVorgLuftaufber;
+
+
+(*
+-------------------------------------------------------------------------------
+ IO-MAPPING BOXEN 
+-------------------------------------------------------------------------------
+ Hier werden die Daten der Detailansichten der Boxen auf das allgemeine 
+ PopUp geschrieben. Das allgemeine PopUp wird immer angezeigt wenn auf eine
+ der Boxen geklickt wird. Die Daten der jeweiligen Box die ausgewählt wurde 
+ werden dann auf dieses PopUp gemappet.
+-------------------------------------------------------------------------------
+*)
+
+//======== Allgemein =========
+
+gBetriebsparameter.Boxen[1].NameBox := Par_Box1_Name;
+gBetriebsparameter.Boxen[2].NameBox := Par_Box2_Name;
+
+//Trockengut
+gBetriebsparameter.Boxen[1].Trockengut := Par_Boxen_1_Trockengut;
+gBetriebsparameter.Boxen[2].Trockengut := Par_Boxen_2_Trockengut;
+
+//Einstellung und Konfiguration Stellung Klappen
+gBetriebsparameter.Boxen[1].StellungKlappe1 := Par_Box1_StellungKlappe1;
+gBetriebsparameter.Boxen[1].StellungKlappe2 := Par_Box1_StellungKlappe2;
+gBetriebsparameter.Boxen[2].StellungKlappe1 := Par_Box2_StellungKlappe1;
+gBetriebsparameter.Boxen[2].StellungKlappe2 := Par_Box2_StellungKlappe2;
+
+//======== Box 2 =========
+HMI_IN_Box1_IconWitterung := gStatusAnlage.Box[1].IconWitterung;
+HMI_IN_Box1_LaufRestzeitMinuten := gStatusAnlage.Box[1].LaufRestzeitMinuten;
+HMI_IN_Box1_LaufRestzeitStunden := gStatusAnlage.Box[1].LaufRestzeitStunden;
+HMI_IN_Box1_Status := TO_UINT(gStatusAnlage.Box[1].Status);
+HMI_IN_Box1_TextIndexLaufzeit := gStatusAnlage.Box[1].TextIndexLaufzeit;
+HMI_IN_Box1_TrockengutIcon := gStatusAnlage.Box[1].TrockengutIcon;
+//TODO RIG: Noch zu verschalten
+//HMI_IN_Box1_RestzeitUmschVerzBetriebsart
+//HMI_IN_Box1_AnzeigeLaufRestzeit
+//HMI_IN_Box1_SperreDauerbetrieb
+//HMI_IN_Box1_SperreIntervallbetrieb
+
+//======== Box 2 =========
+HMI_IN_Box2_LaufRestzeitMinuten := gStatusAnlage.Box[2].LaufRestzeitMinuten;
+HMI_IN_Box2_LaufRestzeitStunden := gStatusAnlage.Box[2].LaufRestzeitStunden;
+HMI_IN_Box2_Status := TO_UINT(gStatusAnlage.Box[2].Status);
+HMI_IN_Box2_TextIndexLaufzeit := gStatusAnlage.Box[2].TextIndexLaufzeit;
+HMI_IN_Box2_TrockengutIcon := gStatusAnlage.Box[2].TrockengutIcon;
+//TODO RIG: Noch zu verschalten
+//HMI_IN_Box2_RestzeitUmschVerzBetriebsart
+//HMI_IN_Box2_AnzeigeLaufRestzeit
+//HMI_IN_Box2_SperreDauerbetrieb
+//HMI_IN_Box2_SperreIntervallbetrieb
+
+
+//Box 1 auf Aktualfenster PopUp schreiben
+IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
+	
+	//HMI -> PLC
+	gBetriebsparameter.Boxen[1].DauerbetriebEin := HMI_OUT_Box_Aktuell_DauerbetriebEin;
+	gBetriebsparameter.Boxen[1].IntervallbetriebEin := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+	gBetriebsparameter.Boxen[1].NachtrocknungEin := HMI_OUT_Box_Aktuell_NachtrocknungEin;
+	gBetriebsparameter.Boxen[1].Aus  :=  HMI_OUT_Box_Aktuell_Aus;
+	
+	//PLC -> HMI
+	HMI_IN_Box_Aktuell_Name := gBetriebsparameter.Boxen[1].NameBox;
+	HMI_IN_Box_Aktuell_Temp := gStatusAnlage.AbluftBox1Temp;
+	HMI_IN_Box_Aktuell_Feucht := gStatusAnlage.AbluftBox1Feuchte;	
+	HMI_IN_Box_Aktuell_TrockengutIcon := gStatusAnlage.Box[1].TrockengutIcon;
+	HMI_IN_Box_Aktuell_LaufRestzeitMinuten := gStatusAnlage.Box[1].LaufRestzeitMinuten;
+	HMI_IN_Box_Aktuell_LaufRestzeitStunden := gStatusAnlage.Box[1].LaufRestzeitStunden;
+	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[1].IconWitterung;
+	HMI_IN_Box_Aktuell_Status := TO_INT(gStatusAnlage.Box[1].Status);
+	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[1].TextIndexLaufzeit;
+	
+	
+	//TODO RIG: Parameter die noch zu verschalten sind!
+	//HMI_OUT_Box1_TrockengutfeuchteAktuell
+	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
+	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
+	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
+	//HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit
+		
+	
+	
+//Box 2 auf Aktualfenster PopUp schreiben
+ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
+
+	//HMI -> PLC
+	gBetriebsparameter.Boxen[2].DauerbetriebEin := HMI_OUT_Box_Aktuell_DauerbetriebEin;
+	gBetriebsparameter.Boxen[2].IntervallbetriebEin := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+	gBetriebsparameter.Boxen[2].NachtrocknungEin := HMI_OUT_Box_Aktuell_NachtrocknungEin;
+	gBetriebsparameter.Boxen[2].Aus  :=  HMI_OUT_Box_Aktuell_Aus;
+	
+	//PLC -> HMI
+	HMI_IN_Box_Aktuell_Name := gBetriebsparameter.Boxen[2].NameBox;
+	HMI_IN_Box_Aktuell_Temp := gStatusAnlage.AbluftBox2Temp;
+	HMI_IN_Box_Aktuell_Feucht := gStatusAnlage.AbluftBox2Feuchte;	
+	HMI_IN_Box_Aktuell_TrockengutIcon := gStatusAnlage.Box[2].TrockengutIcon;
+	HMI_IN_Box_Aktuell_LaufRestzeitMinuten := gStatusAnlage.Box[2].LaufRestzeitMinuten;
+	HMI_IN_Box_Aktuell_LaufRestzeitStunden := gStatusAnlage.Box[2].LaufRestzeitStunden;
+	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[2].IconWitterung;
+	HMI_IN_Box_Aktuell_Status := TO_INT(gStatusAnlage.Box[2].Status);
+	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[2].TextIndexLaufzeit;
+	
+	
+	//TODO RIG: Parameter die noch zu verschalten sind!
+	//HMI_OUT_Box1_TrockengutfeuchteAktuell
+	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
+	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
+	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
+	//HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit
+
+ELSE 
+	//Detailansicht Box 1
+	gBetriebsparameter.Boxen[1].DauerbetriebEin := HMI_OUT_Box1_DauerbetriebEin;
+	gBetriebsparameter.Boxen[1].IntervallbetriebEin := HMI_OUT_Box1_IntervallbetriebEin;
+	gBetriebsparameter.Boxen[1].NachtrocknungEin := HMI_OUT_Box1_NachtrocknungEin;
+	gBetriebsparameter.Boxen[1].Aus  :=  HMI_OUT_Box1_Aus;	
+	//Detailansicht Box 2
+	//BOX 2 EINFACH NUR GEH LOSSN!!! Wird in der VISU verwaltet
+END_IF;
+
+(*
+-------------------------------------------------------------------------------
+ SICHTBARKEITEN 
+-------------------------------------------------------------------------------
+*)
+
+//Lauf Restzeit einfach immer anzeigen
+HMI_IN_Box1_AnzeigeLaufRestzeit := ICON_VISIBLE;
+HMI_IN_Box2_AnzeigeLaufRestzeit := ICON_VISIBLE;
 ]]>
 					</sourceCode>
 				</program>
@@ -3254,6 +3389,7 @@ END_STRUCT;
 						<var name="Ventilator" type="ST_ParVentilator"/>
 						<var name="Strombegrenzung" type="ST_ParZeitfenster"/>
 						<var name="Tarifabschaltung" type="ST_ParTarifabschaltung"/>
+						<var name="Boxen" type="ST_ParBoxen" idxMin0="1" idx0="2"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -3283,6 +3419,7 @@ END_STRUCT;
 						<var name="AbluftBox2Feuchte" type="REAL"/>
 						<var name="LuftaufberTyp" type="UINT"/>
 						<var name="WetterIstSchlecht" type="BOOL"/>
+						<var name="Box" type="ST_StatBoxen" idxMin0="1" idx0="2"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -3419,10 +3556,10 @@ END_STRUCT;
 				</struct>
 				<struct name="ST_ParZeitfenster" version="1.0.0">
 					<vars>
-						<var name="StartStd" type="USINT"/>
-						<var name="StartMin" type="USINT"/>
-						<var name="StoppStd" type="USINT"/>
-						<var name="StoppMin" type="USINT"/>
+						<var name="StartStd" type="UINT"/>
+						<var name="StartMin" type="UINT"/>
+						<var name="StoppStd" type="UINT"/>
+						<var name="StoppMin" type="UINT"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -3432,6 +3569,58 @@ END_STRUCT;
 						<var name="VorlaufzeitAbschaltungLuftaufb" type="USINT"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
+				</struct>
+				<struct name="ST_ParBoxen" version="1.0.0">
+					<vars>
+						<var name="StellungKlappe1" type="eStellungKlappeBoxen"/>
+						<var name="StellungKlappe2" type="eStellungKlappeBoxen"/>
+						<var name="NameBox" type="STRING" length="32"/>
+						<var name="Trockengut" type="eTrockengut"/>
+						<var name="Aus" type="BOOL"/>
+						<var name="DauerbetriebEin" type="BOOL"/>
+						<var name="IntervallbetriebEin" type="BOOL"/>
+						<var name="NachtrocknungEin" type="BOOL"/>
+						<var name="IntervallbetriebZeiten" type="BOOL" dim0="24"/>
+						<var name="NachtrocknungZeiten" type="BOOL" dim0="24"/>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_ParBoxen: STRUCT
+	StellungKlappe1: eStellungKlappeBoxen;
+	StellungKlappe2: eStellungKlappeBoxen;
+	NameBox : STRING[ 32 ];
+	Trockengut : eTrockengut;
+	Aus : BOOL;
+	DauerbetriebEin : BOOL;
+	IntervallbetriebEin : BOOL;
+	NachtrocknungEin : BOOL;
+	IntervallbetriebZeiten : ARRAY[0..23] OF BOOL;
+	NachtrocknungZeiten : ARRAY[0..23] OF BOOL;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
+				</struct>
+				<struct name="ST_StatBoxen" version="1.0.0">
+					<vars>
+						<var name="LaufRestzeitStunden" type="INT"/>
+						<var name="LaufRestzeitMinuten" type="INT"/>
+						<var name="TextIndexLaufzeit" type="USINT"/>
+						<var name="TrockengutIcon" type="eIcon"/>
+						<var name="IconWitterung" type="USINT"/>
+						<var name="Status" type="eStatus"/>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_StatBoxen: STRUCT
+	LaufRestzeitStunden : INT;
+	LaufRestzeitMinuten : INT;
+	TextIndexLaufzeit : USINT;
+	TrockengutIcon : eIcon;
+	IconWitterung : USINT;
+	Status : eStatus;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
 				</struct>
 			</structs>
 			<typedefs>
@@ -3596,6 +3785,163 @@ END_STRUCT;
 							<value>1</value>
 						</element>
 						<element name="OFEN">
+							<value>2</value>
+						</element>
+					</elements>
+					<iecDeclaration active="FALSE"/>
+				</enum>
+				<enum name="eIcon" baseType="USINT" version="1.0.0">
+					<elements>
+						<element name="ICON_VISIBLE">
+							<value>0</value>
+						</element>
+						<element name="ICON_HIDDEN">
+							<value>1</value>
+						</element>
+						<element name="ICON_GRAU">
+							<value>2</value>
+						</element>
+						<element name="ICON_GELB">
+							<value>3</value>
+						</element>
+						<element name="ICON_ROT">
+							<value>4</value>
+						</element>
+						<element name="TEXT_HELLGRAU">
+							<value>5</value>
+						</element>
+						<element name="TEXT_DUNKELGRAU">
+							<value>6</value>
+						</element>
+						<element name="TEXT_GELB">
+							<value>7</value>
+						</element>
+						<element name="TROCKENGUT_HEU_GRAU">
+							<value>8</value>
+						</element>
+						<element name="TROCKENGUT_HEU_GELB">
+							<value>9</value>
+						</element>
+						<element name="TROCKENGUT_RUNDB_GRAU">
+							<value>10</value>
+						</element>
+						<element name="TROCKENGUT_RUNDB_GELB">
+							<value>11</value>
+						</element>
+						<element name="TROCKENGUT_MAIS_GRAU">
+							<value>12</value>
+						</element>
+						<element name="TROCKENGUT_MAIS_GELB">
+							<value>13</value>
+						</element>
+						<element name="TROCKENGUT_GETREIDE_GRAU">
+							<value>14</value>
+						</element>
+						<element name="TROCKENGUT_GETREIDE_GELB">
+							<value>15</value>
+						</element>
+						<element name="TROCKENGUT_HOPFEN_GRAU">
+							<value>16</value>
+						</element>
+						<element name="TROCKENGUT_HOPFEN_GELB">
+							<value>17</value>
+						</element>
+						<element name="TROCKENGUT_KRAEUTER_GRAU">
+							<value>18</value>
+						</element>
+						<element name="TROCKENGUT_KRAEUTER_GELB">
+							<value>19</value>
+						</element>
+						<element name="TROCKENGUT_HOLZ_GRAU">
+							<value>20</value>
+						</element>
+						<element name="TROCKENGUT_HOLZ_GELB">
+							<value>21</value>
+						</element>
+						<element name="TASTE_ENTF_INSELBETR_GESPERRT">
+							<value>22</value>
+						</element>
+						<element name="TASTE_ENTF_INSELBETR_AUS">
+							<value>23</value>
+						</element>
+						<element name="TASTE_ENTF_INSELBETR_EIN">
+							<value>24</value>
+						</element>
+					</elements>
+					<iecDeclaration active="FALSE"/>
+				</enum>
+				<enum name="eBoxIndex" baseType="USINT" version="1.0.0">
+					<elements>
+						<element name="BOX_NONE">
+							<descr>Keine Box aktiv</descr>
+							<value>0</value>
+						</element>
+						<element name="BOX_1">
+							<descr>Box 1 Ansicht aktiv</descr>
+							<value>1</value>
+						</element>
+						<element name="BOX_2">
+							<descr>Box 2 Ansicht aktiv</descr>
+							<value>2</value>
+						</element>
+					</elements>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[eBoxIndex: USINT (
+	BOX_NONE:= 0,	(* Keine Box aktiv *)
+	BOX_1 := 1,	(* Box 1 Ansicht aktiv *)
+	BOX_2 := 2	(* Box 2 Ansicht aktiv *)
+);
+
+]]>
+					</iecDeclaration>
+				</enum>
+				<enum name="eTrockengut" baseType="UINT" version="1.0.0">
+					<elements>
+						<element name="HEU">
+							<value>0</value>
+						</element>
+						<element name="RUNDBALLEN">
+							<value>1</value>
+						</element>
+						<element name="MAIS">
+							<value>2</value>
+						</element>
+						<element name="GETREIDE">
+							<value>3</value>
+						</element>
+						<element name="HOPFEN">
+							<value>4</value>
+						</element>
+						<element name="KRAEUTER">
+							<value>5</value>
+						</element>
+						<element name="HOLZ">
+							<value>6</value>
+						</element>
+					</elements>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[eTrockengut: UINT (
+	HEU := 0,
+	RUNDBALLEN := 1,
+	MAIS := 2,
+	GETREIDE := 3,
+	HOPFEN := 4,
+	KRAEUTER := 5,
+	HOLZ := 6
+);
+
+]]>
+					</iecDeclaration>
+				</enum>
+				<enum name="eStellungKlappeBoxen" baseType="USINT" version="1.0.0">
+					<elements>
+						<element name="NICHT_VERWENDET">
+							<value>0</value>
+						</element>
+						<element name="GESCHLOSSEN">
+							<value>1</value>
+						</element>
+						<element name="GEOEFFNET">
 							<value>2</value>
 						</element>
 					</elements>
@@ -72270,6 +72616,18 @@ nSamples := cnt;
 	Par_Luftaufbereitung_FarbeIcon AT %MW200.164 : BYTE;
 		{G:"Parameters"}
 	Par_Luftaufbereitung_BetriebsmeldungVorh AT %MW200.165 : BOOL;
+		{G:"Parameters"}
+	Par_Box1_Name AT %MW200.166 : STRING[ 31 ];
+		{G:"Parameters"}
+	Par_Box2_Name AT %MW200.182 : STRING[ 31 ];
+		{G:"Parameters"}
+	Par_Box1_StellungKlappe1 AT %MW200.198 : USINT;
+		{G:"Parameters"}
+	Par_Box1_StellungKlappe2 AT %MW200.199 : USINT;
+		{G:"Parameters"}
+	Par_Box2_StellungKlappe1 AT %MW200.200 : USINT;
+		{G:"Parameters"}
+	Par_Box2_StellungKlappe2 AT %MW200.201 : USINT;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -72434,6 +72792,94 @@ nSamples := cnt;
 	HMI_Ventilator1_FarbeIcon AT %MW201.109 : UINT := 0;
 		{G:"Variables"}
 	HMI_Ventilator1_IstDrehzahl AT %MW201.110 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_DauerbetriebEin AT %MW201.111 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_IntervallbetriebEIn AT %MW201.112 : BOOL;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_NachtrocknungEin AT %MW201.113 : BOOL;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_Aus AT %MW201.114 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell AT %MW201.115 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_LaufRestzeitMinuten AT %MW201.116 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_LaufRestzeitStunden AT %MW201.117 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit AT %MW201.118 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_IconWitterung AT %MW201.119 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_Status AT %MW201.120 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_Temp AT %MW201.122 : REAL := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_Feucht AT %MW201.124 : REAL := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_TrockengutIcon AT %MW201.126 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_SperreDauerbetrieb AT %MW201.127 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_SperreIntervallbetrieb AT %MW201.128 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart AT %MW201.129 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_TextIndexLaufzeit AT %MW201.130 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_Status AT %MW201.131 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_Status AT %MW201.132 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Allg_UmschaltverzBetriebsartAktiv AT %MW201.133 : USINT := 0;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_BoxIndex AT %MW201.134 : USINT := 0;
+		{G:"Variables"}
+	HMI_OUT_Box1_DauerbetriebEin AT %MW201.135 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box1_IntervallbetriebEin AT %MW201.136 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box1_NachtrocknungEin AT %MW201.137 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box1_Aus AT %MW201.138 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_TextIndexLaufzeit AT %MW201.139 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_LaufRestzeitMinuten AT %MW201.140 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_LaufRestzeitStunden AT %MW201.141 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_AnzeigeLaufRestzeit AT %MW201.142 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_IconWitterung AT %MW201.143 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_TrockengutIcon AT %MW201.144 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_SperreDauerbetrieb AT %MW201.145 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_SperreIntervallbetrieb AT %MW201.146 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box1_RestzeitUmschVerzBetriebsart AT %MW201.147 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_TextIndexLaufzeit AT %MW201.148 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_LaufRestzeitMinuten AT %MW201.149 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_LaufRestzeitStunden AT %MW201.150 : INT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_AnzeigeLaufRestzeit AT %MW201.151 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_TrockengutIcon AT %MW201.152 : USINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_SperreDauerbetrieb AT %MW201.153 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_SperreIntervallbetrieb AT %MW201.154 : BOOL := 0;
+		{G:"Variables"}
+	HMI_IN_Box2_RestzeitUmschVerzBetriebsart AT %MW201.155 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_Box1_TrockengutfeuchteAktuell AT %MW201.156 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_Box_Aktuell_Name AT %MW201.157 : STRING[ 31 ] := '0';
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -75077,8 +75523,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..6599 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 165; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..8599 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 215; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -75091,9 +75537,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 1888766046;
+	dummyCrc32 := 1920668133;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 166, 2, 201, TO_DWORD( ADR(%MW201.0) ), 111, 2, 1888766046 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 202, 2, 201, TO_DWORD( ADR(%MW201.0) ), 173, 2, 1920668133 );
 
 END_PROGRAM
 
@@ -75162,7 +75608,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="9435">
+			<root name="CControl_Lite" nextID="11518">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -75181,6 +75627,10 @@ END_PROGRAM
 					<Definition name="eWarnungen" id="49"/>
 					<Definition name="eZusatzmeldungen" id="50"/>
 					<Definition name="eLuftaufbereiterTyp" id="5706"/>
+					<Definition name="eIcon" id="10823"/>
+					<Definition name="eBoxIndex" id="11162"/>
+					<Definition name="eTrockengut" id="11221"/>
+					<Definition name="eStellungKlappeBoxen" id="11273"/>
 				</folder>
 				<folder name="utils" id="51">
 					<Pou name="fbBoxenklappe" id="3023"/>
@@ -75208,6 +75658,8 @@ END_PROGRAM
 					<Definition name="ST_ParVentilator" id="7845"/>
 					<Definition name="ST_ParZeitfenster" id="8013"/>
 					<Definition name="ST_ParTarifabschaltung" id="9255"/>
+					<Definition name="ST_ParBoxen" id="11220"/>
+					<Definition name="ST_StatBoxen" id="11222"/>
 				</folder>
 				<folder name="types" id="910">
 					<Definition name="T_Betriebsparameter" id="912"/>
@@ -79330,6 +79782,300 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>16543</ipa>
+								<address>16543</address>
+								<name>Par_Box1_Name</name>
+								<typepar>8</typepar>
+								<typetarg>STRING</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>31</size>
+								<dataBlock>%MW200.166</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16559</ipa>
+								<address>16559</address>
+								<name>Par_Box2_Name</name>
+								<typepar>8</typepar>
+								<typetarg>STRING</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>31</size>
+								<dataBlock>%MW200.182</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16591</ipa>
+								<address>16591</address>
+								<name>Par_Box1_StellungKlappe1</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.198</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16592</ipa>
+								<address>16592</address>
+								<name>Par_Box1_StellungKlappe2</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.199</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16593</ipa>
+								<address>16593</address>
+								<name>Par_Box2_StellungKlappe1</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.200</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16594</ipa>
+								<address>16594</address>
+								<name>Par_Box2_StellungKlappe2</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.201</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</params>
 						<paramsRO>
 							<param>
@@ -83350,6 +84096,2162 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>9070</ipa>
+								<address>9070</address>
+								<name>HMI_OUT_Box_Aktuell_DauerbetriebEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.111</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9071</ipa>
+								<address>9071</address>
+								<name>HMI_OUT_Box_Aktuell_IntervallbetriebEIn</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.112</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9072</ipa>
+								<address>9072</address>
+								<name>HMI_OUT_Box_Aktuell_NachtrocknungEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.113</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9073</ipa>
+								<address>9073</address>
+								<name>HMI_OUT_Box_Aktuell_Aus</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.114</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9074</ipa>
+								<address>9074</address>
+								<name>HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.115</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9075</ipa>
+								<address>9075</address>
+								<name>HMI_IN_Box_Aktuell_LaufRestzeitMinuten</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.116</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9076</ipa>
+								<address>9076</address>
+								<name>HMI_IN_Box_Aktuell_LaufRestzeitStunden</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.117</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9077</ipa>
+								<address>9077</address>
+								<name>HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.118</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9078</ipa>
+								<address>9078</address>
+								<name>HMI_IN_Box_Aktuell_IconWitterung</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.119</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9095</ipa>
+								<address>9095</address>
+								<name>HMI_IN_Box_Aktuell_Status</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.120</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9096</ipa>
+								<address>9096</address>
+								<name>HMI_IN_Box_Aktuell_Temp</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.122</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9098</ipa>
+								<address>9098</address>
+								<name>HMI_IN_Box_Aktuell_Feucht</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.124</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9100</ipa>
+								<address>9100</address>
+								<name>HMI_IN_Box_Aktuell_TrockengutIcon</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.126</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9101</ipa>
+								<address>9101</address>
+								<name>HMI_IN_Box_Aktuell_SperreDauerbetrieb</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.127</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9102</ipa>
+								<address>9102</address>
+								<name>HMI_IN_Box_Aktuell_SperreIntervallbetrieb</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.128</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9103</ipa>
+								<address>9103</address>
+								<name>HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.129</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9104</ipa>
+								<address>9104</address>
+								<name>HMI_IN_Box_Aktuell_TextIndexLaufzeit</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.130</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9105</ipa>
+								<address>9105</address>
+								<name>HMI_IN_Box1_Status</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.131</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9106</ipa>
+								<address>9106</address>
+								<name>HMI_IN_Box2_Status</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.132</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9107</ipa>
+								<address>9107</address>
+								<name>HMI_IN_Allg_UmschaltverzBetriebsartAktiv</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.133</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9108</ipa>
+								<address>9108</address>
+								<name>HMI_OUT_Box_Aktuell_BoxIndex</name>
+								<typepar>2</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.134</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9109</ipa>
+								<address>9109</address>
+								<name>HMI_OUT_Box1_DauerbetriebEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.135</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9110</ipa>
+								<address>9110</address>
+								<name>HMI_OUT_Box1_IntervallbetriebEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.136</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9111</ipa>
+								<address>9111</address>
+								<name>HMI_OUT_Box1_NachtrocknungEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.137</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9112</ipa>
+								<address>9112</address>
+								<name>HMI_OUT_Box1_Aus</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.138</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9113</ipa>
+								<address>9113</address>
+								<name>HMI_IN_Box1_TextIndexLaufzeit</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.139</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9114</ipa>
+								<address>9114</address>
+								<name>HMI_IN_Box1_LaufRestzeitMinuten</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.140</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9115</ipa>
+								<address>9115</address>
+								<name>HMI_IN_Box1_LaufRestzeitStunden</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.141</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9116</ipa>
+								<address>9116</address>
+								<name>HMI_IN_Box1_AnzeigeLaufRestzeit</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.142</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9117</ipa>
+								<address>9117</address>
+								<name>HMI_IN_Box1_IconWitterung</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.143</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9134</ipa>
+								<address>9134</address>
+								<name>HMI_IN_Box1_TrockengutIcon</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.144</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9135</ipa>
+								<address>9135</address>
+								<name>HMI_IN_Box1_SperreDauerbetrieb</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.145</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9136</ipa>
+								<address>9136</address>
+								<name>HMI_IN_Box1_SperreIntervallbetrieb</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.146</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9137</ipa>
+								<address>9137</address>
+								<name>HMI_IN_Box1_RestzeitUmschVerzBetriebsart</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.147</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9138</ipa>
+								<address>9138</address>
+								<name>HMI_IN_Box2_TextIndexLaufzeit</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.148</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9139</ipa>
+								<address>9139</address>
+								<name>HMI_IN_Box2_LaufRestzeitMinuten</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.149</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9140</ipa>
+								<address>9140</address>
+								<name>HMI_IN_Box2_LaufRestzeitStunden</name>
+								<typepar>0</typepar>
+								<typetarg>INT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.150</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9141</ipa>
+								<address>9141</address>
+								<name>HMI_IN_Box2_AnzeigeLaufRestzeit</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.151</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9158</ipa>
+								<address>9158</address>
+								<name>HMI_IN_Box2_TrockengutIcon</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.152</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9159</ipa>
+								<address>9159</address>
+								<name>HMI_IN_Box2_SperreDauerbetrieb</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.153</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9160</ipa>
+								<address>9160</address>
+								<name>HMI_IN_Box2_SperreIntervallbetrieb</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.154</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9161</ipa>
+								<address>9161</address>
+								<name>HMI_IN_Box2_RestzeitUmschVerzBetriebsart</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.155</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9162</ipa>
+								<address>9162</address>
+								<name>HMI_OUT_Box1_TrockengutfeuchteAktuell</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.156</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9079</ipa>
+								<address>9079</address>
+								<name>HMI_IN_Box_Aktuell_Name</name>
+								<typepar>8</typepar>
+								<typetarg>STRING</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>31</size>
+								<dataBlock>%MW201.157</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</paramsRO>
 						<enums/>
 						<sysenums>
@@ -85296,6 +88198,12 @@ END_PROGRAM
 								<value ipa="16540" subidx="0">0</value>
 								<value ipa="16541" subidx="0">0</value>
 								<value ipa="16542" subidx="0">0</value>
+								<value ipa="16543" subidx="0">0</value>
+								<value ipa="16559" subidx="0">0</value>
+								<value ipa="16591" subidx="0">0</value>
+								<value ipa="16592" subidx="0">0</value>
+								<value ipa="16593" subidx="0">0</value>
+								<value ipa="16594" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
@@ -85378,6 +88286,50 @@ END_PROGRAM
 								<value ipa="9067" subidx="0">0</value>
 								<value ipa="9068" subidx="0">0</value>
 								<value ipa="9069" subidx="0">0</value>
+								<value ipa="9070" subidx="0">0</value>
+								<value ipa="9071" subidx="0">0</value>
+								<value ipa="9072" subidx="0">0</value>
+								<value ipa="9073" subidx="0">0</value>
+								<value ipa="9074" subidx="0">0</value>
+								<value ipa="9075" subidx="0">0</value>
+								<value ipa="9076" subidx="0">0</value>
+								<value ipa="9077" subidx="0">0</value>
+								<value ipa="9078" subidx="0">0</value>
+								<value ipa="9095" subidx="0">0</value>
+								<value ipa="9096" subidx="0">0</value>
+								<value ipa="9098" subidx="0">0</value>
+								<value ipa="9100" subidx="0">0</value>
+								<value ipa="9101" subidx="0">0</value>
+								<value ipa="9102" subidx="0">0</value>
+								<value ipa="9103" subidx="0">0</value>
+								<value ipa="9104" subidx="0">0</value>
+								<value ipa="9105" subidx="0">0</value>
+								<value ipa="9106" subidx="0">0</value>
+								<value ipa="9107" subidx="0">0</value>
+								<value ipa="9108" subidx="0">0</value>
+								<value ipa="9109" subidx="0">0</value>
+								<value ipa="9110" subidx="0">0</value>
+								<value ipa="9111" subidx="0">0</value>
+								<value ipa="9112" subidx="0">0</value>
+								<value ipa="9113" subidx="0">0</value>
+								<value ipa="9114" subidx="0">0</value>
+								<value ipa="9115" subidx="0">0</value>
+								<value ipa="9116" subidx="0">0</value>
+								<value ipa="9117" subidx="0">0</value>
+								<value ipa="9134" subidx="0">0</value>
+								<value ipa="9135" subidx="0">0</value>
+								<value ipa="9136" subidx="0">0</value>
+								<value ipa="9137" subidx="0">0</value>
+								<value ipa="9138" subidx="0">0</value>
+								<value ipa="9139" subidx="0">0</value>
+								<value ipa="9140" subidx="0">0</value>
+								<value ipa="9141" subidx="0">0</value>
+								<value ipa="9158" subidx="0">0</value>
+								<value ipa="9159" subidx="0">0</value>
+								<value ipa="9160" subidx="0">0</value>
+								<value ipa="9161" subidx="0">0</value>
+								<value ipa="9162" subidx="0">0</value>
+								<value ipa="9079" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>
