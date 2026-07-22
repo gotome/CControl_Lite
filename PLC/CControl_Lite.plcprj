@@ -31,6 +31,9 @@
 					<program>BerechnungCyclic</program>
 					<program>AlarmCyclic</program>
 				</task>
+				<task name="Background">
+					<program>BackgroundTask</program>
+				</task>
 			</tasks>
 			<globalVars>
 				<group name="var_glob" version="1.0.0">
@@ -44,6 +47,9 @@
 					<var name="gCmdAnlage" type="T_CmdAnlage"/>
 					<var name="Strombegrenzung" type="fbTrockStrombegr">
 						<descr>Strombegrenzung Logik</descr>
+					</var>
+					<var name="gPlcSwVersion" type="STRING" length="32">
+						<initValue>'v1.0.0'</initValue>
 					</var>
 					<var name="gQuitErr" type="BOOL">
 						<descr>Fehler quittieren</descr>
@@ -136,44 +142,7 @@
 			<constantVars/>
 			<iecVarsDeclaration>
 				<group name="var_glob">
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[VAR_GLOBAL
-	gAktModus : eBetriebsmodus := BETRIEB;
-	gStatusAnlage : T_StatAnlage;
-	gBetriebsparameter : T_Betriebsparameter;
-	gAktoren : T_Aktor;
-	gIoTest : T_IoTest;
-	gCmdAnlage : T_CmdAnlage;
-	Strombegrenzung : fbTrockStrombegr;	(* Strombegrenzung Logik *)
-	gQuitErr : BOOL := false;	(* Fehler quittieren *)
-	IBN_FALSE : BOOL := false;	(* Inbetriebnahmemerker false *)
-	IBN_TRUE : BOOL := true;	(* Inbetriebnahmemerker true *)
-	diBox1Offen : BOOL;	(* Rückmeldung Box 1 offen *)
-	diBox1Geschl : BOOL;	(* Rückmeldung Box 1 geschlossen *)
-	diBox2Offen : BOOL;	(* Rückmeldung Box 2 offen *)
-	diBox2Geschl : BOOL;	(* Rückmeldung Box 2 geschlossen *)
-	diBetriebLuftaufber : BOOL;	(* Betriebsmeldung Luftaufbereitung *)
-	diBetriebVentilator : BOOL;	(* Betriebsmeldung Ventilator *)
-	aiFrischluftTemp : REAL;	(* Frischlufttemperatur *)
-	aiFrischluftFeucht : REAL;	(* Frischluftfeuchte *)
-	aiAbluftBox1Temp : REAL;	(* Ablufttemperatur Box 1 *)
-	aiAbluftBox1Feucht : REAL;	(* Abluftfeuchte Box 1 *)
-	aiTrockenluftTemp : REAL;	(* Trockenlufttemperatur *)
-	aiTrockenluftFeucht : REAL;	(* Trockenluftfeuchte *)
-	aiAbluftBox2Temp : REAL;	(* Ablufttemperatur Box 2 *)
-	aiAbluftBox2Feucht : REAL;	(* Abluftfeuchte Box 2 *)
-	aiStocktemp : REAL;	(* Stock- bzw. Produkttemperatur *)
-	doFrgLuftaufber : BOOL;	(* Freigabe Luftaufbereiter (Digitaler Ausgang) *)
-	doFrgBox1 : BOOL;	(* Freigabe Box 1 (z.B. Klappe / Aktor Box 1) *)
-	doFrgBox2 : BOOL;	(* Freigabe Box 2 (z.B. Klappe / Aktor Box 2) *)
-	doFrgAbluftventilator : BOOL;	(* Freigabe Abluftventilator *)
-	doFrgVentilator : BOOL;	(* Freigabe Ventilator *)
-	aoFuVentilator : REAL;	(* Sollwert Frequenzumrichter Ventilator [%] *)
-	aoLeistVorgLuftaufber : REAL;	(* Leistungsvorgabe Luftaufbereiter [%] *)
-END_VAR
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 				</group>
 				<group name="varAlarm">
 					<iecDeclaration active="FALSE"/>
@@ -1013,6 +982,613 @@ END_IF;
 ]]>
 					</sourceCode>
 				</functionBlock>
+				<functionBlock name="fbMathLuft" version="1.0.0" creationDate="1784722262" lastModifiedDate="1784722325">
+					<vars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL"/>
+							<var name="LuftTemperatur" type="REAL">
+								<descr>[°C]</descr>
+							</var>
+							<var name="LuftRelFeuchte" type="REAL">
+								<descr>[%]</descr>
+							</var>
+							<var name="MeterUeberAdria" type="REAL">
+								<descr>[m]</descr>
+							</var>
+						</inputVars>
+						<outputVars>
+							<var name="LuftAbsoluteFeuchteSatt" type="REAL">
+								<descr>[g/m³]</descr>
+							</var>
+							<var name="LuftAbsoluteFeuchte_g_m3" type="REAL">
+								<descr>[g/m³]</descr>
+							</var>
+							<var name="LuftAbsoluteFeuchte_g_kg" type="REAL">
+								<descr>[g/kg]</descr>
+							</var>
+							<var name="LuftSaettigungsdefizit" type="REAL">
+								<descr>[g/m³]</descr>
+							</var>
+							<var name="LuftdruckUmgebung" type="REAL">
+								<descr>[hPa]</descr>
+							</var>
+							<var name="LuftDichte" type="REAL">
+								<descr>[kg/m³]</descr>
+							</var>
+							<var name="LuftDampfdruckSatt" type="REAL">
+								<descr>[mbar]</descr>
+							</var>
+							<var name="LuftDampfdruckH2O" type="REAL">
+								<descr>[mbar]</descr>
+							</var>
+							<var name="TaupunktTemp" type="REAL">
+								<descr>[°C]</descr>
+							</var>
+							<var name="Gueltig" type="BOOL">
+								<descr>NEU: TRUE = alle Werte plausibel</descr>
+							</var>
+						</outputVars>
+						<localVars>
+							<var name="loc_Taupunkttemp" type="REAL"/>
+							<var name="loc_TempK" type="REAL">
+								<descr>absolute Temperatur [K]</descr>
+							</var>
+							<var name="loc_Nenner" type="REAL">
+								<descr>Magnus-Nenner (237.3 + T)</descr>
+							</var>
+							<var name="loc_Basis" type="REAL">
+								<descr>Basis der Barometerformel</descr>
+							</var>
+							<var name="loc_rF" type="REAL">
+								<descr>begrenzte rel. Feuchte [%]</descr>
+							</var>
+						</localVars>
+						<localConsts>
+							<const name="CONST_MATH_MAX_VALUE" type="REAL">
+								<initValue>3.4E38</initValue>
+							</const>
+							<const name="CONST_MATH_DRUCK_MEERESHOEHE" type="REAL">
+								<initValue>1013.25</initValue>
+							</const>
+							<const name="C_LN10" type="REAL">
+								<initValue>2.302585</initValue>
+							</const>
+						</localConsts>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[FUNCTION_BLOCK fbMathLuft
+
+VAR_INPUT
+	Freigabe                 : BOOL;
+	LuftTemperatur           : REAL;   (* [°C]  *)
+	LuftRelFeuchte           : REAL;   (* [%]   *)
+	MeterUeberAdria          : REAL;   (* [m]   *)
+END_VAR
+
+VAR_OUTPUT
+	LuftAbsoluteFeuchteSatt  : REAL;   (* [g/m³]  *)
+	LuftAbsoluteFeuchte_g_m3 : REAL;   (* [g/m³]  *)
+	LuftAbsoluteFeuchte_g_kg : REAL;   (* [g/kg]  *)
+	LuftSaettigungsdefizit   : REAL;   (* [g/m³]  *)
+	LuftdruckUmgebung        : REAL;   (* [hPa]   *)
+	LuftDichte               : REAL;   (* [kg/m³] *)
+	LuftDampfdruckSatt       : REAL;   (* [mbar]  *)
+	LuftDampfdruckH2O        : REAL;   (* [mbar]  *)
+	TaupunktTemp             : REAL;   (* [°C]    *)
+	Gueltig                  : BOOL;   (* NEU: TRUE = alle Werte plausibel *)
+END_VAR
+
+VAR
+	loc_Taupunkttemp : REAL;
+	loc_TempK        : REAL;    (* absolute Temperatur [K]      *)
+	loc_Nenner       : REAL;    (* Magnus-Nenner (237.3 + T)    *)
+	loc_Basis        : REAL;    (* Basis der Barometerformel    *)
+	loc_rF           : REAL;    (* begrenzte rel. Feuchte [%]   *)
+END_VAR
+
+VAR CONSTANT
+	CONST_MATH_MAX_VALUE       : REAL := 3.4E38;
+	CONST_MATH_DRUCK_MEERESHOEHE : REAL := 1013.25;
+	C_LN10                     : REAL := 2.302585;
+END_VAR
+]]>
+					</iecDeclaration>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[IF Freigabe THEN
+
+	Gueltig    := TRUE;
+	loc_TempK  := 273.15 + LuftTemperatur;
+	loc_Nenner := 237.3  + LuftTemperatur;
+
+	(* rel. Feuchte hart begrenzen - Sensorausreisser sonst durchgereicht *)
+	loc_rF := LuftRelFeuchte;
+	IF loc_rF < 0.0   THEN loc_rF := 0.0;   END_IF;
+	IF loc_rF > 100.0 THEN loc_rF := 100.0; END_IF;
+
+
+	(* --- Luftdruck [hPa] ------------------------------------------- *)
+	(* p = p0 * (1 - 0.0065*h/288.15)^5.255                            *)
+	loc_Basis := 1.0 - 0.0065 * MeterUeberAdria / 288.15;
+	IF loc_Basis > 0.001 THEN
+		LuftdruckUmgebung := CONST_MATH_DRUCK_MEERESHOEHE
+		                     * EXP(5.255 * LN(loc_Basis));
+	ELSE
+		LuftdruckUmgebung := CONST_MATH_MAX_VALUE;
+		Gueltig           := FALSE;
+	END_IF;
+
+
+	(* --- Luftdichte [kg/m³] ---------------------------------------- *)
+	IF (loc_TempK > 0.001) AND (LuftdruckUmgebung < CONST_MATH_MAX_VALUE) THEN
+		LuftDichte := (LuftdruckUmgebung * 100.0) / (287.058 * loc_TempK);
+	ELSE
+		LuftDichte := CONST_MATH_MAX_VALUE;
+		Gueltig    := FALSE;
+	END_IF;
+
+
+	(* --- Saettigungsdampfdruck [mbar] ------------------------------ *)
+	(* Magnus: es = 6.1078 * 10^(7.5*T/(237.3+T))                      *)
+	IF loc_Nenner > 0.001 THEN
+		LuftDampfdruckSatt := 6.1078
+		                      * EXP(C_LN10 * 7.5 * LuftTemperatur / loc_Nenner);
+	ELSE
+		LuftDampfdruckSatt := CONST_MATH_MAX_VALUE;
+		Gueltig            := FALSE;
+	END_IF;
+
+
+	(* --- Wasserdampfdruck [mbar] ----------------------------------- *)
+	IF LuftDampfdruckSatt < CONST_MATH_MAX_VALUE THEN
+		LuftDampfdruckH2O := LuftDampfdruckSatt * (loc_rF / 100.0);
+	ELSE
+		LuftDampfdruckH2O := CONST_MATH_MAX_VALUE;
+		Gueltig           := FALSE;
+	END_IF;
+
+
+	(* --- absolute Feuchte gesaettigt [g/m³] ------------------------ *)
+	IF (LuftDampfdruckSatt < CONST_MATH_MAX_VALUE) AND (loc_TempK > 0.001) THEN
+		LuftAbsoluteFeuchteSatt := 216.67 * LuftDampfdruckSatt / loc_TempK;
+	ELSE
+		LuftAbsoluteFeuchteSatt := CONST_MATH_MAX_VALUE;
+		Gueltig                 := FALSE;
+	END_IF;
+
+
+	(* --- absolute Feuchte [g/m³] ----------------------------------- *)
+	IF LuftAbsoluteFeuchteSatt < CONST_MATH_MAX_VALUE THEN
+		LuftAbsoluteFeuchte_g_m3 := (loc_rF / 100.0) * LuftAbsoluteFeuchteSatt;
+	ELSE
+		LuftAbsoluteFeuchte_g_m3 := CONST_MATH_MAX_VALUE;
+		Gueltig                  := FALSE;
+	END_IF;
+
+
+	(* --- Saettigungsdefizit [g/m³] --------------------------------- *)
+	IF LuftAbsoluteFeuchte_g_m3 < CONST_MATH_MAX_VALUE THEN
+		LuftSaettigungsdefizit := LuftAbsoluteFeuchteSatt - LuftAbsoluteFeuchte_g_m3;
+	ELSE
+		LuftSaettigungsdefizit := CONST_MATH_MAX_VALUE;
+		Gueltig                := FALSE;
+	END_IF;
+
+
+	(* --- absolute Feuchte [g/kg] ----------------------------------- *)
+	IF (LuftAbsoluteFeuchte_g_m3 < CONST_MATH_MAX_VALUE)
+	   AND (LuftDichte < CONST_MATH_MAX_VALUE) AND (LuftDichte > 0.001) THEN
+		LuftAbsoluteFeuchte_g_kg := LuftAbsoluteFeuchte_g_m3 / LuftDichte;
+	ELSE
+		LuftAbsoluteFeuchte_g_kg := CONST_MATH_MAX_VALUE;
+		Gueltig                  := FALSE;
+	END_IF;
+
+
+	(* --- Taupunkttemperatur [°C] ----------------------------------- *)
+	IF (LuftDampfdruckH2O < CONST_MATH_MAX_VALUE) AND (LuftDampfdruckH2O > 0.001) THEN
+		loc_Taupunkttemp := LN(LuftDampfdruckH2O) / C_LN10;   (* log10 *)
+		IF (8.233 - loc_Taupunkttemp) > 0.001 THEN
+			TaupunktTemp := (234.67 * loc_Taupunkttemp - 184.2)
+			                / (8.233 - loc_Taupunkttemp);
+		ELSE
+			TaupunktTemp := CONST_MATH_MAX_VALUE;
+			Gueltig      := FALSE;
+		END_IF;
+	ELSE
+		TaupunktTemp := CONST_MATH_MAX_VALUE;
+		Gueltig      := FALSE;
+	END_IF;
+
+ELSE
+
+	LuftdruckUmgebung        := CONST_MATH_MAX_VALUE;
+	LuftAbsoluteFeuchteSatt  := CONST_MATH_MAX_VALUE;
+	LuftAbsoluteFeuchte_g_kg := CONST_MATH_MAX_VALUE;
+	LuftAbsoluteFeuchte_g_m3 := CONST_MATH_MAX_VALUE;
+	LuftDichte               := CONST_MATH_MAX_VALUE;
+	TaupunktTemp             := CONST_MATH_MAX_VALUE;
+	LuftDampfdruckH2O        := CONST_MATH_MAX_VALUE;
+	LuftDampfdruckSatt       := CONST_MATH_MAX_VALUE;
+	LuftSaettigungsdefizit   := CONST_MATH_MAX_VALUE;
+	Gueltig                  := FALSE;
+
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
+				<functionBlock name="fbCControlWitterung" version="1.0.0" creationDate="1784725630" lastModifiedDate="1784729288">
+					<vars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL"/>
+							<var name="MaterialfeuchteIst" type="UDINT"/>
+							<var name="MaterialfeuchteStufe" type="UDINT" idxMin0="1" idx0="6">
+								<descr>absteigend!</descr>
+							</var>
+							<var name="FrischluftSaettigungsdefizit" type="REAL"/>
+							<var name="TrockenluftSaettigungsdefizit" type="REAL"/>
+							<var name="AuswahlSensor" type="USINT">
+								<descr>0=None 1=Frisch 2=Trocken</descr>
+							</var>
+							<var name="SensorFrischluftVhd" type="BOOL"/>
+							<var name="SensorTrockenluftVhd" type="BOOL"/>
+							<var name="GrenzwertStufeAktuell" type="REAL"/>
+							<var name="HystereseGrenzwert" type="REAL"/>
+							<var name="VerzWetterwechsel" type="UDINT">
+								<descr>[ms]</descr>
+							</var>
+							<var name="SchlechtwetterPulszeitAktuell" type="UDINT"/>
+							<var name="SchlechtwetterPausezeitAktuell" type="UDINT"/>
+						</inputVars>
+						<outputVars>
+							<var name="StufeAktuell" type="USINT"/>
+							<var name="WetterIstGut" type="BOOL"/>
+							<var name="WetterIstSchlecht" type="BOOL"/>
+							<var name="SchlechtwetterPulszeit" type="UDINT"/>
+							<var name="SchlechtwetterPausezeit" type="UDINT"/>
+							<var name="SensorGueltig" type="BOOL">
+								<descr>NEU - siehe Anmerkung 1</descr>
+							</var>
+						</outputVars>
+						<localVars>
+							<var name="i" type="USINT"/>
+							<var name="SaettigungsdefizitIst" type="REAL"/>
+							<var name="loc_WetterIstGut" type="BOOL"/>
+							<var name="loc_WetterIstSchlecht" type="BOOL"/>
+							<var name="TON_SchrittWitterung" type="TON"/>
+							<var name="curStep" type="USINT"/>
+							<var name="stateEntry" type="BOOL"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[(********************************************************************
+ * fbCControlWitterung - Portierung für EcoStruxure Machine Expert - HVAC
+ ********************************************************************
+ * Generierung der Witterungsverhaeltnisse aus Saettigungsdefizit
+ * und Trocknungslaufzeit (Materialfeuchte-Stufe)
+ ********************************************************************)
+ 
+ IF Freigabe THEN
+
+	(* --- Aktuell gueltige Stufe aus der Trockengutfeuchte ---------- *)
+	(* Setzt eine ABSTEIGEND sortierte Schwellwerttabelle voraus!      *)
+	StufeAktuell := 1;
+	IF MaterialfeuchteIst <> 0 THEN
+		FOR i := 1 TO 5 DO
+			IF MaterialfeuchteIst <= MaterialfeuchteStufe[i] THEN
+				StufeAktuell := i + 1;
+			END_IF;
+		END_FOR;
+	END_IF;
+
+
+	(* --- Puls-/Pausezeiten durchreichen ---------------------------- *)
+	SchlechtwetterPulszeit  := SchlechtwetterPulszeitAktuell;
+	SchlechtwetterPausezeit := SchlechtwetterPausezeitAktuell;
+
+
+	(* --- Gueltigen Sensor bestimmen -------------------------------- *)
+	SensorGueltig := TRUE;
+
+	IF (AuswahlSensor = 1) AND SensorFrischluftVhd THEN
+		SaettigungsdefizitIst := FrischluftSaettigungsdefizit;
+	ELSIF (AuswahlSensor = 2) AND SensorTrockenluftVhd THEN
+		SaettigungsdefizitIst := TrockenluftSaettigungsdefizit;
+	(* Ausgewaehlter Sensor nicht vhd. -> Ersatzsensor in fester Reihenfolge *)
+	ELSIF SensorFrischluftVhd THEN
+		SaettigungsdefizitIst := FrischluftSaettigungsdefizit;
+	ELSIF SensorTrockenluftVhd THEN
+		SaettigungsdefizitIst := TrockenluftSaettigungsdefizit;
+	ELSE
+		SaettigungsdefizitIst := 0.0;
+		SensorGueltig         := FALSE;   (* kein Sensor verfuegbar *)
+	END_IF;
+
+
+	(* --- Witterungsverhaeltnisse bestimmen ------------------------- *)
+	IF SensorGueltig THEN
+
+		loc_WetterIstGut      := FALSE;
+		loc_WetterIstSchlecht := FALSE;
+
+		IF SaettigungsdefizitIst >= (GrenzwertStufeAktuell + HystereseGrenzwert) THEN
+			loc_WetterIstGut := TRUE;
+		ELSIF SaettigungsdefizitIst <= (GrenzwertStufeAktuell - HystereseGrenzwert) THEN
+			loc_WetterIstSchlecht := TRUE;
+		END_IF;
+
+		CASE curStep OF
+
+		(* --- INIT --- *)
+		0:
+			TON_SchrittWitterung(IN := FALSE);
+			stateEntry := TRUE;
+			IF loc_WetterIstGut THEN
+				curStep := 1;
+			ELSE
+				curStep := 2;
+			END_IF;
+
+		(* --- Wetter ist gut --- *)
+		1:
+			IF stateEntry THEN
+				stateEntry := FALSE;
+				TON_SchrittWitterung(IN := FALSE);
+			END_IF;
+
+			WetterIstGut      := TRUE;
+			WetterIstSchlecht := FALSE;
+
+			TON_SchrittWitterung(IN := loc_WetterIstSchlecht,
+			                     PT := VerzWetterwechsel);
+
+			IF TON_SchrittWitterung.Q THEN
+				stateEntry := TRUE;
+				curStep    := 2;
+			END_IF;
+
+		(* --- Wetter ist schlecht --- *)
+		2:
+			IF stateEntry THEN
+				stateEntry := FALSE;
+				TON_SchrittWitterung(IN := FALSE);
+			END_IF;
+
+			WetterIstGut      := FALSE;
+			WetterIstSchlecht := TRUE;
+
+			TON_SchrittWitterung(IN := loc_WetterIstGut,
+			                     PT := VerzWetterwechsel);
+
+			IF TON_SchrittWitterung.Q THEN
+				stateEntry := TRUE;
+				curStep    := 1;
+			END_IF;
+
+		ELSE
+			curStep    := 0;      (* Schrittkette defensiv zuruecksetzen *)
+			stateEntry := TRUE;
+
+		END_CASE;
+
+	ELSE
+		(* Kein gueltiger Sensor -> Normalbetrieb, kein Schlechtwetter *)
+		loc_WetterIstGut      := FALSE;
+		loc_WetterIstSchlecht := FALSE;
+		WetterIstGut          := TRUE;
+		WetterIstSchlecht     := FALSE;
+		TON_SchrittWitterung(IN := FALSE);
+		stateEntry := TRUE;
+		curStep    := 0;
+	END_IF;
+
+
+(* --- keine Freigabe des Bausteins --------------------------------- *)
+ELSE
+	loc_WetterIstGut        := FALSE;
+	loc_WetterIstSchlecht   := FALSE;
+	WetterIstGut            := FALSE;
+	WetterIstSchlecht       := FALSE;
+	SensorGueltig           := FALSE;
+	TON_SchrittWitterung(IN := FALSE);
+	stateEntry              := TRUE;
+	curStep                 := 0;
+	SaettigungsdefizitIst   := 0.0;
+	SchlechtwetterPulszeit  := 0;
+	SchlechtwetterPausezeit := 0;
+	StufeAktuell            := 1;
+END_IF;
+ 
+]]>
+					</sourceCode>
+				</functionBlock>
+				<functionBlock name="fbPulsPause" version="1.0.0" creationDate="1784739313" lastModifiedDate="1784741563">
+					<vars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL">
+								<descr>TRUE = Puls-/Pausebetrieb laeuft</descr>
+							</var>
+							<var name="StartMitPause" type="BOOL">
+								<descr>Einstieg in die Pause statt Puls</descr>
+							</var>
+							<var name="ZeitPuls" type="UDINT">
+								<descr>[ms] Trocknungszeit</descr>
+							</var>
+							<var name="ZeitPause" type="UDINT">
+								<descr>[ms] Pausezeit, 0 = Dauerbetrieb</descr>
+							</var>
+						</inputVars>
+						<outputVars>
+							<var name="PulsOut" type="BOOL">
+								<descr>TRUE = jetzt trocknen</descr>
+							</var>
+							<var name="PauseOut" type="BOOL">
+								<descr>TRUE = jetzt pausieren</descr>
+							</var>
+							<var name="RestzeitPuls" type="UDINT">
+								<descr>[ms]</descr>
+							</var>
+							<var name="RestzeitPause" type="UDINT">
+								<descr>[ms]</descr>
+							</var>
+						</outputVars>
+						<localVars>
+							<var name="curStep" type="USINT"/>
+							<var name="stateEntry" type="BOOL"/>
+							<var name="TON_PulsPause" type="TON"/>
+							<var name="loc_ET_ms" type="UDINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[FUNCTION_BLOCK fbPulsPause
+
+VAR_INPUT
+	Freigabe      : BOOL;    (* TRUE = Puls-/Pausebetrieb laeuft *)
+	StartMitPause : BOOL;    (* Einstieg in die Pause statt Puls *)
+	ZeitPuls      : UDINT;   (* [ms] Trocknungszeit              *)
+	ZeitPause     : UDINT;   (* [ms] Pausezeit, 0 = Dauerbetrieb *)
+END_VAR
+
+VAR_OUTPUT
+	PulsOut       : BOOL;    (* TRUE = jetzt trocknen  *)
+	PauseOut      : BOOL;    (* TRUE = jetzt pausieren *)
+	RestzeitPuls  : UDINT;   (* [ms] *)
+	RestzeitPause : UDINT;   (* [ms] *)
+END_VAR
+
+VAR
+	curStep       : USINT;
+	stateEntry    : BOOL;
+	TON_PulsPause : TON;
+	loc_ET_ms     : UDINT;
+END_VAR
+]]>
+					</iecDeclaration>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[IF Freigabe THEN
+
+	(* --- Sonderfaelle ohne Schrittkette ---------------------------- *)
+	IF ZeitPause = 0 THEN
+		(* keine Pause parametriert -> durchgehend trocknen *)
+		PulsOut       := TRUE;
+		PauseOut      := FALSE;
+		RestzeitPuls  := ZeitPuls;
+		RestzeitPause := 0;
+		TON_PulsPause(IN := FALSE, PT := 0);
+		curStep       := 0;
+		stateEntry    := TRUE;
+
+	ELSIF ZeitPuls = 0 THEN
+		(* keine Laufzeit parametriert -> Box bleibt aus *)
+		PulsOut       := FALSE;
+		PauseOut      := TRUE;
+		RestzeitPuls  := 0;
+		RestzeitPause := ZeitPause;
+		TON_PulsPause(IN := FALSE, PT := 0);
+		curStep       := 0;
+		stateEntry    := TRUE;
+
+	ELSE
+
+		CASE curStep OF
+
+		(* --- INIT --- *)
+		0:
+			TON_PulsPause(IN := FALSE, PT := 0);
+			stateEntry := TRUE;
+			IF StartMitPause THEN
+				curStep := 2;
+			ELSE
+				curStep := 1;
+			END_IF;
+
+		(* --- PULS: Box trocknet --- *)
+		1:
+			IF stateEntry THEN
+				stateEntry := FALSE;
+				TON_PulsPause(IN := FALSE, PT := 0);
+			END_IF;
+
+			PulsOut  := TRUE;
+			PauseOut := FALSE;
+
+			TON_PulsPause(IN := TRUE, PT := ZeitPuls);
+
+			IF TON_PulsPause.Q THEN
+				stateEntry := TRUE;
+				curStep    := 2;
+			END_IF;
+
+		(* --- PAUSE: Box steht --- *)
+		2:
+			IF stateEntry THEN
+				stateEntry := FALSE;
+				TON_PulsPause(IN := FALSE, PT := 0);
+			END_IF;
+
+			PulsOut  := FALSE;
+			PauseOut := TRUE;
+
+			TON_PulsPause(IN := TRUE, PT := ZeitPause);
+
+			IF TON_PulsPause.Q THEN
+				stateEntry := TRUE;
+				curStep    := 1;
+			END_IF;
+
+		ELSE
+			curStep    := 0;
+			stateEntry := TRUE;
+
+		END_CASE;
+
+
+		(* --- Restzeiten fuer die HMI-Anzeige --- *)
+		IF stateEntry THEN
+			(* Schrittwechsel: Timer wird erst im naechsten Zyklus gestartet *)
+			RestzeitPuls  := ZeitPuls;
+			RestzeitPause := ZeitPause;
+		ELSE
+			loc_ET_ms := TON_PulsPause.ET;
+
+			IF curStep = 1 THEN
+				IF ZeitPuls > loc_ET_ms THEN
+					RestzeitPuls := ZeitPuls - loc_ET_ms;
+				ELSE
+					RestzeitPuls := 0;
+				END_IF;
+				RestzeitPause := ZeitPause;
+			ELSE
+				RestzeitPuls := ZeitPuls;
+				IF ZeitPause > loc_ET_ms THEN
+					RestzeitPause := ZeitPause - loc_ET_ms;
+				ELSE
+					RestzeitPause := 0;
+				END_IF;
+			END_IF;
+		END_IF;
+
+	END_IF;
+
+ELSE
+	(* keine Freigabe -> Schrittkette ruecksetzen *)
+	PulsOut       := FALSE;
+	PauseOut      := FALSE;
+	RestzeitPuls  := 0;
+	RestzeitPause := 0;
+	TON_PulsPause(IN := FALSE, PT := 0);
+	curStep       := 0;
+	stateEntry    := TRUE;
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
 			</functionBlocks>
 			<programs>
 				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1784621393">
@@ -1626,45 +2202,17 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1778965491">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1784740483">
 					<vars>
 						<localVars>
-							<var name="xFrischluftTempOk" type="BOOL"/>
-							<var name="xFrischluftFeuchtOk" type="BOOL"/>
-							<var name="xAbluft1TempOk" type="BOOL"/>
-							<var name="xAbluft1FeuchtOk" type="BOOL"/>
-							<var name="xTrockenTempOk" type="BOOL"/>
-							<var name="xTrockenFeuchtOk" type="BOOL"/>
-							<var name="xAbluft2TempOk" type="BOOL"/>
-							<var name="xAbluft2FeuchtOk" type="BOOL"/>
-							<var name="xStockTempOk" type="BOOL"/>
-							<var name="rDeltaTempBox1" type="REAL"/>
-							<var name="rDeltaTempBox2" type="REAL"/>
-							<var name="rDeltaFeuchteBox1" type="REAL"/>
-							<var name="rDeltaFeuchteBox2" type="REAL"/>
+							<var name="Frischluftsensor" type="fbMathLuft"/>
+							<var name="Trockenluftsensor" type="fbMathLuft"/>
+							<var name="fbSchlechtwetterBox1" type="fbCControlWitterung"/>
+							<var name="idx" type="USINT"/>
+							<var name="idxStufe" type="USINT"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[PROGRAM BerechnungCyclic
-
-VAR
-    xFrischluftTempOk : BOOL;
-    xFrischluftFeuchtOk : BOOL;
-    xAbluft1TempOk : BOOL;
-    xAbluft1FeuchtOk : BOOL;
-    xTrockenTempOk : BOOL;
-    xTrockenFeuchtOk : BOOL;
-    xAbluft2TempOk : BOOL;
-    xAbluft2FeuchtOk : BOOL;
-    xStockTempOk : BOOL;
-
-    rDeltaTempBox1 : REAL;
-    rDeltaTempBox2 : REAL;
-    rDeltaFeuchteBox1 : REAL;
-    rDeltaFeuchteBox2 : REAL;
-END_VAR
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -1675,7 +2223,76 @@ Description :
 ================================================================================
 *)
 
+//====================================================================================================================================================
+//Berechnungen aus Fühlerwerten
+//====================================================================================================================================================
+
+//Berechnungen Frischluftsensor
+//*****************************
+Frischluftsensor.Freigabe							:= gBetriebsparameter.Ausstattung.SensorFrischluft; // AND (NOT alarmFehler[FEHLER_SENSOR_FRISCHLUFT] OR IBN_TRUE));
+Frischluftsensor.LuftTemperatur						:= gStatusAnlage.FrischluftTemperatur;
+Frischluftsensor.LuftRelFeuchte						:= gStatusAnlage.FrischluftFeuchte;
+Frischluftsensor.MeterUeberAdria					:= TO_REAL(gBetriebsparameter.Allgemein.StandortHoehe);
+Frischluftsensor();
+
+gStatusAnlage.FrischluftSaettDefizit := Frischluftsensor.LuftSaettigungsdefizit;
+
+//Berechnungen Trockenluft
+//*****************************
+Trockenluftsensor.Freigabe							:= gBetriebsparameter.Ausstattung.SensorTrockenluft; // AND (NOT alarmFehler[FEHLER_SENSOR_TROCKENLUFT] OR IBN_TRUE));
+Trockenluftsensor.LuftTemperatur					:= gStatusAnlage.TrockenluftTemperatur;
+Trockenluftsensor.LuftRelFeuchte					:= gStatusAnlage.TrockenluftFeuchte;
+Trockenluftsensor.MeterUeberAdria					:= TO_REAL(gBetriebsparameter.Allgemein.StandortHoehe);
+Trockenluftsensor();
+
+gStatusAnlage.TrockenluftSaettDefizit := Trockenluftsensor.LuftSaettigungsdefizit;
+
+
+//Schlechtwetter Box 1
+//*****************************
+fbSchlechtwetterBox1.Freigabe                      := TRUE;
+fbSchlechtwetterBox1.AuswahlSensor                 := gBetriebsparameter.SchlechtwetterBoxen[1].AuswahlSensorGrenzwert;
+fbSchlechtwetterBox1.FrischluftSaettigungsdefizit  := gStatusAnlage.FrischluftSaettDefizit;
+fbSchlechtwetterBox1.TrockenluftSaettigungsdefizit := gStatusAnlage.TrockenluftSaettDefizit;
+
+//Sensor gilt nur als verfuegbar, wenn auch die Berechnung plausibel ist
+fbSchlechtwetterBox1.SensorFrischluftVhd  := gBetriebsparameter.Ausstattung.SensorFrischluft AND
+                                             //AND NOT alarmFehler[FEHLER_SENSOR_FRISCHLUFT] IBN_TRUE
+                                             Frischluftsensor.Gueltig;
+                                             
+fbSchlechtwetterBox1.SensorTrockenluftVhd := gBetriebsparameter.Ausstattung.SensorTrockenluft AND
+                                             //AND NOT alarmFehler[FEHLER_SENSOR_TROCKENLUFT] IBN_TRUE
+                                             Trockenluftsensor.Gueltig;
+
+
+FOR idx := 1 TO 6 DO
+	fbSchlechtwetterBox1.MaterialfeuchteStufe[idx] := gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[idx].MaterialfeuchteStufe;
+END_FOR;
+
+//Stufenabhaengige Werte - StufeAktuell stammt aus dem Vorzyklus
+idxStufe := fbSchlechtwetterBox1.StufeAktuell;
+IF (idxStufe < 1) OR (idxStufe > 6) THEN 
+	idxStufe := 1; 
+END_IF;
+
+fbSchlechtwetterBox1.GrenzwertStufeAktuell          := gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[idxStufe].Saettigungsdefizit;
+fbSchlechtwetterBox1.SchlechtwetterPulszeitAktuell  := gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[idxStufe].SchlechtwetterZeitLauf;
+fbSchlechtwetterBox1.SchlechtwetterPausezeitAktuell := gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[idxStufe].SchlechtwetterZeitPause;
+fbSchlechtwetterBox1.VerzWetterwechsel := gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel;
+fbSchlechtwetterBox1.HystereseGrenzwert := gBetriebsparameter.SchlechtwetterBoxen[1].HystereseGrenzwert;
+fbSchlechtwetterBox1.MaterialfeuchteIst := gBetriebsparameter.SchlechtwetterBoxen[1].MaterialfeuchteIst;
+
+fbSchlechtwetterBox1();
+
+//Aktualwerte auf globale Werte schreiben
+gStatusAnlage.Box[1].WetterIstSchlecht := fbSchlechtwetterBox1.WetterIstSchlecht;
+gStatusAnlage.Box[1].AktSchlechtwetterPuls := fbSchlechtwetterBox1.SchlechtwetterPulszeitAktuell;
+gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.SchlechtwetterPausezeitAktuell;
+
+
+(*
 (* Plausibilisierung *)
+(*
 xFrischluftTempOk   := (aiFrischluftTemp >= -40.0) AND (aiFrischluftTemp <= 80.0);
 xFrischluftFeuchtOk := (aiFrischluftFeucht >= 0.0) AND (aiFrischluftFeucht <= 100.0);
 
@@ -1694,8 +2311,9 @@ ELSE
 END_IF;
 
 xStockTempOk := (aiStocktemp >= -40.0) AND (aiStocktemp <= 140.0);
-
+*)
 (* Kennwerte *)
+(*
 IF xAbluft1TempOk AND xFrischluftTempOk THEN
     rDeltaTempBox1 := aiAbluftBox1Temp - aiFrischluftTemp;
 ELSE
@@ -1719,6 +2337,10 @@ IF gBetriebsparameter.Ausstattung.Box2 AND xAbluft2FeuchtOk AND xFrischluftFeuch
 ELSE
     rDeltaFeuchteBox2 := 0.0;
 END_IF;
+
+*)
+
+
 
 // Stoerungen werden in AlarmCyclic behandelt
 ]]>
@@ -2826,13 +3448,15 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1784640651">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1784742111">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
 							<var name="rt_Box_Dauer" type="R_TRIG"/>
 							<var name="rt_Box_Intervall" type="R_TRIG"/>
 							<var name="rt_Box_Nachtr" type="R_TRIG"/>
+							<var name="lastBoxIndex" type="USINT"/>
+							<var name="firstStep" type="BOOL"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="FALSE"/>
@@ -2874,6 +3498,14 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
  sprechende HMI-Variablen kopiert.
 ===============================================================================
 *)
+(*
+---------------------------------------------------------------------------
+Allgemein
+---------------------------------------------------------------------------
+*)
+Konfig_SoftwareVersionPLC := gPlcSwVersion;
+gBetriebsparameter.Allgemein.StandortHoehe := Par_Anlage_Standorthoehe;
+
 
 (*
 ---------------------------------------------------------------------------
@@ -2998,7 +3630,83 @@ gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll := Par_Luftaufbereitung_Temp
 gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung := Par_Luftaufbereitung_VerzBetriebsmeldung;
 gBetriebsparameter.Luftaufbereitung.Auskuehlzeit := Par_Luftaufbereitung_Auskuehlzeit;
 
+(*
+---------------------------------------------------------------------------
+Schlechtwetter
+---------------------------------------------------------------------------
+*)
 
+//======== Box 1 =========
+
+//Sensortype 
+gBetriebsparameter.SchlechtwetterBoxen[1].AuswahlSensorGrenzwert := Par_Schlechtwetter_Box1_Sensortype;
+//Feuchte
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[1].MaterialfeuchteStufe := Par_Schlechtwetter_Box1_MaterialfeuchteStufe1;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[2].MaterialfeuchteStufe := Par_Schlechtwetter_Box1_MaterialfeuchteStufe2;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[3].MaterialfeuchteStufe := Par_Schlechtwetter_Box1_MaterialfeuchteStufe3;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[4].MaterialfeuchteStufe := Par_Schlechtwetter_Box1_MaterialfeuchteStufe4;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[5].MaterialfeuchteStufe := Par_Schlechtwetter_Box1_MaterialfeuchteStufe5;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[6].MaterialfeuchteStufe := Par_Schlechtwetter_Box1_MaterialfeuchteStufe6;
+//Saettigung
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[1].Saettigungsdefizit := Par_Schlechtwetter_Box1_Saettigungsdefizit1;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[2].Saettigungsdefizit := Par_Schlechtwetter_Box1_Saettigungsdefizit2;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[3].Saettigungsdefizit := Par_Schlechtwetter_Box1_Saettigungsdefizit3;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[4].Saettigungsdefizit := Par_Schlechtwetter_Box1_Saettigungsdefizit4;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[5].Saettigungsdefizit := Par_Schlechtwetter_Box1_Saettigungsdefizit5;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[6].Saettigungsdefizit := Par_Schlechtwetter_Box1_Saettigungsdefizit6;
+// Zeit Lauf
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[1].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box1_ZeitLauf1;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[2].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box1_ZeitLauf2;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[3].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box1_ZeitLauf3;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[4].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box1_ZeitLauf4;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[5].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box1_ZeitLauf5;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[6].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box1_ZeitLauf6;
+// Zeit Pause
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[1].SchlechtwetterZeitPause := Par_Schlechtwetter_Box1_ZeitPause1;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[2].SchlechtwetterZeitPause := Par_Schlechtwetter_Box1_ZeitPause2;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[3].SchlechtwetterZeitPause := Par_Schlechtwetter_Box1_ZeitPause3;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[4].SchlechtwetterZeitPause := Par_Schlechtwetter_Box1_ZeitPause4;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[5].SchlechtwetterZeitPause := Par_Schlechtwetter_Box1_ZeitPause5;
+gBetriebsparameter.SchlechtwetterBoxen[1].Stufe[6].SchlechtwetterZeitPause := Par_Schlechtwetter_Box1_ZeitPause6;
+
+gBetriebsparameter.SchlechtwetterBoxen[1].MaterialfeuchteIst := gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
+gBetriebsparameter.SchlechtwetterBoxen[1].HystereseGrenzwert := gBetriebsparameter.Luftaufbereitung.Hysterese;
+
+//======== Box 2 =========
+
+//Sensortype 
+gBetriebsparameter.SchlechtwetterBoxen[2].AuswahlSensorGrenzwert := Par_Schlechtwetter_Box2_Sensortype;
+//Feuchte
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[1].MaterialfeuchteStufe := Par_Schlechtwetter_Box2_MaterialfeuchteStufe1;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[2].MaterialfeuchteStufe := Par_Schlechtwetter_Box2_MaterialfeuchteStufe2;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[3].MaterialfeuchteStufe := Par_Schlechtwetter_Box2_MaterialfeuchteStufe3;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[4].MaterialfeuchteStufe := Par_Schlechtwetter_Box2_MaterialfeuchteStufe4;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[5].MaterialfeuchteStufe := Par_Schlechtwetter_Box2_MaterialfeuchteStufe5;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[6].MaterialfeuchteStufe := Par_Schlechtwetter_Box2_MaterialfeuchteStufe6;
+//Saettigung
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[1].Saettigungsdefizit := Par_Schlechtwetter_Box2_Saettigungsdefizit1;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[2].Saettigungsdefizit := Par_Schlechtwetter_Box2_Saettigungsdefizit2;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[3].Saettigungsdefizit := Par_Schlechtwetter_Box2_Saettigungsdefizit3;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[4].Saettigungsdefizit := Par_Schlechtwetter_Box2_Saettigungsdefizit4;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[5].Saettigungsdefizit := Par_Schlechtwetter_Box2_Saettigungsdefizit5;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[6].Saettigungsdefizit := Par_Schlechtwetter_Box2_Saettigungsdefizit6;
+// Zeit Lauf
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[1].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box2_ZeitLauf1;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[2].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box2_ZeitLauf2;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[3].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box2_ZeitLauf3;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[4].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box2_ZeitLauf4;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[5].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box2_ZeitLauf5;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[6].SchlechtwetterZeitLauf := Par_Schlechtwetter_Box2_ZeitLauf6;
+// Zeit Pause
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[1].SchlechtwetterZeitPause := Par_Schlechtwetter_Box2_ZeitPause1;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[2].SchlechtwetterZeitPause := Par_Schlechtwetter_Box2_ZeitPause2;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[3].SchlechtwetterZeitPause := Par_Schlechtwetter_Box2_ZeitPause3;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[4].SchlechtwetterZeitPause := Par_Schlechtwetter_Box2_ZeitPause4;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[5].SchlechtwetterZeitPause := Par_Schlechtwetter_Box2_ZeitPause5;
+gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[6].SchlechtwetterZeitPause := Par_Schlechtwetter_Box2_ZeitPause6;
+
+gBetriebsparameter.SchlechtwetterBoxen[2].MaterialfeuchteIst := gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
+gBetriebsparameter.SchlechtwetterBoxen[2].HystereseGrenzwert := gBetriebsparameter.Luftaufbereitung.Hysterese;
 
 (*
 ---------------------------------------------------------------------------
@@ -3190,9 +3898,23 @@ HMI_IN_Box2_TrockengutIcon := gStatusAnlage.Box[2].TrockengutIcon;
 //HMI_IN_Box2_SperreDauerbetrieb
 //HMI_IN_Box2_SperreIntervallbetrieb
 
+IF lastBoxIndex <> HMI_OUT_Box_Aktuell_BoxIndex THEN
+	firstStep := TRUE;
+	lastBoxIndex := HMI_OUT_Box_Aktuell_BoxIndex;
+END_IF;
+
 
 //Box 1 auf Aktualfenster PopUp schreiben
 IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
+	
+	IF firstStep THEN
+		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[1].DauerbetriebEin;
+		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[1].IntervallbetriebEin;
+		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[1].NachtrocknungEin;
+		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[1].Aus;	
+	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
+		firstStep := FALSE;	
+	END_IF;
 	
 	//HMI -> PLC
 	//--- Detailansicht Box 1 : Betriebsartenwahl (flankengesteuert) ---
@@ -3223,6 +3945,8 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	gBetriebsparameter.Boxen[1].IntervallbetriebEin:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
 	gBetriebsparameter.Boxen[1].NachtrocknungEin   := HMI_OUT_Box_Aktuell_NachtrocknungEin;
 	gBetriebsparameter.Boxen[1].Aus                := HMI_OUT_Box_Aktuell_Aus;
+	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
+	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	
 	
 	//PLC -> HMI
@@ -3235,6 +3959,7 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[1].IconWitterung;
 	HMI_IN_Box_Aktuell_Status := TO_INT(gStatusAnlage.Box[1].Status);
 	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[1].TextIndexLaufzeit;
+	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[1].WetterIstSchlecht;
 	
 	
 	//TODO RIG: Parameter die noch zu verschalten sind!
@@ -3246,8 +3971,18 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		
 	
 	
-//Box 2 auf Aktualfenster PopUp schreiben
+//Box 2 auf Aktualfenster-PopUp schreiben
 ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
+
+	
+	IF firstStep THEN
+		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[2].DauerbetriebEin;
+		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[2].IntervallbetriebEin;
+		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[2].NachtrocknungEin;
+		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[2].Aus;	
+	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
+		firstStep := FALSE;	
+	END_IF;
 
 	//HMI -> PLC
 	//--- Detailansicht Box 2 : Betriebsartenwahl (flankengesteuert) ---
@@ -3278,6 +4013,8 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	gBetriebsparameter.Boxen[2].IntervallbetriebEin:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
 	gBetriebsparameter.Boxen[2].NachtrocknungEin   := HMI_OUT_Box_Aktuell_NachtrocknungEin;
 	gBetriebsparameter.Boxen[2].Aus                := HMI_OUT_Box_Aktuell_Aus;
+	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
+	gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 		
 	//PLC -> HMI
 	HMI_IN_Box_Aktuell_Name := gBetriebsparameter.Boxen[2].NameBox;
@@ -3289,6 +4026,7 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[2].IconWitterung;
 	HMI_IN_Box_Aktuell_Status := TO_INT(gStatusAnlage.Box[2].Status);
 	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[2].TextIndexLaufzeit;
+	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[2].WetterIstSchlecht;
 	
 	
 	//TODO RIG: Parameter die noch zu verschalten sind!
@@ -3300,6 +4038,7 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 
 ELSE 
 //--- Nur eine Box verfuegbar - Box 1 ist einzige Box : Betriebsartenwahl (flankengesteuert) ---
+	firstStep := FALSE;
 	rt_Box_Aus(CLK := HMI_OUT_Box1_Aus);
 	rt_Box_Dauer(CLK := HMI_OUT_Box1_DauerbetriebEin);
 	rt_Box_Intervall(CLK := HMI_OUT_Box1_IntervallbetriebEIn);
@@ -3327,7 +4066,11 @@ ELSE
 	gBetriebsparameter.Boxen[1].IntervallbetriebEin:= HMI_OUT_Box1_IntervallbetriebEIn;
 	gBetriebsparameter.Boxen[1].NachtrocknungEin   := HMI_OUT_Box1_NachtrocknungEin;
 	gBetriebsparameter.Boxen[1].Aus                := HMI_OUT_Box1_Aus;
+	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
+	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
+	HMI_IN_Box1_IconWitterung := gStatusAnlage.Box[1].WetterIstSchlecht;
 	//Detailansicht Box 2
+	
 	//BOX 2 HIER EINFACH NUR GEH LOSSN!!! Wird in der VISU verwaltet!
 	
 END_IF;
@@ -3350,91 +4093,224 @@ ELSIF gAktoren.xFrgVentilator THEN
 ELSE 
 	HMI_Ventilator1_FarbeIcon := ICON_GRAU;
 END_IF;
+
+
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1784642530">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1784741282">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
 							<var name="xExternStart" type="BOOL"/>
 							<var name="xExternStop" type="BOOL"/>
+							<var name="xDauerbetriebBox1Aktiv" type="BOOL"/>
+							<var name="xDauerbetriebBox2Aktiv" type="BOOL"/>
 							<var name="xIntervallBox1Aktiv" type="BOOL"/>
 							<var name="xIntervallBox2Aktiv" type="BOOL"/>
+							<var name="xNachtrocknungBox1Aktiv" type="BOOL"/>
+							<var name="xNachtrocknungBox2Aktiv" type="BOOL"/>
+							<var name="xBox1Freigegeben" type="BOOL"/>
+							<var name="xBox2Freigegeben" type="BOOL"/>
 							<var name="usAktStunde" type="USINT"/>
 							<var name="udIntervallMaskeBox1" type="UDINT"/>
 							<var name="udIntervallMaskeBox2" type="UDINT"/>
+							<var name="udNachtrocknungMaskeBox1" type="UDINT"/>
+							<var name="udNachtrocknungMaskeBox2" type="UDINT"/>
+							<var name="fbPulsPauseBox1" type="fbPulsPause"/>
+							<var name="xDauerbetriebBox1Trocknet" type="BOOL"/>
+							<var name="xSchlechtwetterBox1Aktiv" type="BOOL"/>
+							<var name="fbPulsPauseBox2" type="fbPulsPause"/>
+							<var name="xDauerbetriebBox2Trocknet" type="BOOL"/>
+							<var name="xSchlechtwetterBox2Aktiv" type="BOOL"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[PROGRAM StartStoppCyclic
 
 VAR
-    xMindEineBoxAktiv : BOOL;
-    xExternStart : BOOL;
-    xExternStop : BOOL;
-    xIntervallBox1Aktiv : BOOL;
-    xIntervallBox2Aktiv : BOOL;
-    usAktStunde : USINT;
-    udIntervallMaskeBox1 : UDINT;
-    udIntervallMaskeBox2 : UDINT;
+	xMindEineBoxAktiv : BOOL;
+	xExternStart : BOOL;
+	xExternStop : BOOL;
+	xDauerbetriebBox1Aktiv : BOOL;
+	xDauerbetriebBox2Aktiv : BOOL;
+	xIntervallBox1Aktiv : BOOL;
+	xIntervallBox2Aktiv : BOOL;
+	xNachtrocknungBox1Aktiv : BOOL;
+	xNachtrocknungBox2Aktiv : BOOL;
+	xBox1Freigegeben : BOOL;
+	xBox2Freigegeben : BOOL;
+	usAktStunde : USINT;
+	udIntervallMaskeBox1 : UDINT;
+	udIntervallMaskeBox2 : UDINT;
+	udNachtrocknungMaskeBox1 : UDINT;
+	udNachtrocknungMaskeBox2 : UDINT;
+	fbPulsPauseBox1 : fbPulsPause;
+	xDauerbetriebBox1Trocknet : BOOL;
+	xSchlechtwetterBox1Aktiv : BOOL;
+	fbPulsPauseBox2 : fbPulsPause;
+	xDauerbetriebBox2Trocknet : BOOL;
+	xSchlechtwetterBox2Aktiv : BOOL;
 END_VAR
 ]]>
 					</iecDeclaration>
 					<sourceCode type="ST">
-						<![CDATA[(*
+						<![CDATA[
+(*
 ================================================================================
 File        : StartStoppCyclic.st
 Project     : CControl_Lite
 Description :
-    Start-/Stopp-Auswertung für 2-Box-Lite-Anlage.
+    Start-/Stopp-Auswertung fuer 2-Box-Anlage.
+    Ablauf: 1) Betriebsarten  2) Verriegelung  3) Puls-/Pausebetrieb
+            4) Boxaktivitaet  5) Start/Stopp
+    Hinweis: BerechnungCyclic muss vor diesem Programm aufgerufen werden.
 ================================================================================
 *)
 
-(* ALLGEIMEIN *)
+(* ALLGEMEIN *)
 usAktStunde := sysClock.hours;
 udIntervallMaskeBox1 := Par_Box1_Intervallzeit;
 udIntervallMaskeBox2 := Par_Box2_Intervallzeit;
-xIntervallBox1Aktiv := FALSE;
-xIntervallBox2Aktiv := FALSE;
+udNachtrocknungMaskeBox1 := Par_Box1_Nachtrocknungszeit;
+udNachtrocknungMaskeBox2 := Par_Box2_Nachtrocknungszeit;
+
+xIntervallBox1Aktiv     := FALSE;
+xIntervallBox2Aktiv     := FALSE;
+xNachtrocknungBox1Aktiv := FALSE;
+xNachtrocknungBox2Aktiv := FALSE;
+xDauerbetriebBox1Aktiv  := FALSE;
+xDauerbetriebBox2Aktiv  := FALSE;
 
 (* Betriebsart *)
 gCmdAnlage.Auto := NOT HMI_TEST_doIoTestAktivieren;
 gCmdAnlage.Test := HMI_TEST_doIoTestAktivieren;
 
 
-(* LOGIK INTERVALLBETRIEB *)
+(*
+================================================================================
+ PHASE 1 - Betriebsarten ermitteln
+ Prioritaet: Nachtrocknung > Intervallbetrieb > Dauerbetrieb
+================================================================================
+*)
 
 //===== BOX 1 =====
-IF gBetriebsparameter.Boxen[1].IntervallbetriebEin AND (usAktStunde <= 23) THEN 
+IF gBetriebsparameter.Boxen[1].NachtrocknungEin AND (usAktStunde <= 23) THEN
 	//Bitmaske um die aktuelle Stundenanzahl nach rechts schieben und pruefen ob Stunde in Maske aktiv
+	xNachtrocknungBox1Aktiv := (SHR(IN := udNachtrocknungMaskeBox1, N := usAktStunde) AND 1) <> 0;
+
+ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin AND (usAktStunde <= 23) THEN
 	xIntervallBox1Aktiv := (SHR(IN := udIntervallMaskeBox1, N := usAktStunde) AND 1) <> 0;
-ELSE 
-	xIntervallBox1Aktiv := FALSE; // Intervall kann nicht aktiv sein
+
+ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
+	xDauerbetriebBox1Aktiv := TRUE;
 END_IF;
 
 //===== BOX 2 =====
-IF gBetriebsparameter.Boxen[2].IntervallbetriebEin AND (usAktStunde <= 23) THEN 
-	//Bitmaske um die aktuelle Stundenanzahl nach rechts schieben und pruefen ob Stunde in Maske aktiv
+IF gBetriebsparameter.Boxen[2].NachtrocknungEin AND (usAktStunde <= 23) THEN
+	xNachtrocknungBox2Aktiv := (SHR(IN := udNachtrocknungMaskeBox2, N := usAktStunde) AND 1) <> 0;
+
+ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin AND (usAktStunde <= 23) THEN
 	xIntervallBox2Aktiv := (SHR(IN := udIntervallMaskeBox2, N := usAktStunde) AND 1) <> 0;
-ELSE
-	xIntervallBox2Aktiv := FALSE; // Intervall kann nicht aktiv sein
+
+ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
+	xDauerbetriebBox2Aktiv := TRUE;
 END_IF;
 
 
-(* Boxaktivität *)
-gBetriebsparameter.Boxen[1].xBoxAktiv := gBetriebsparameter.Boxen[1].DauerbetriebEin OR xIntervallBox1Aktiv OR  
-        	  						     gBetriebsparameter.Boxen[1].NachtrocknungEin;
-        							  
+(*
+================================================================================
+ PHASE 2 - Verriegelung und Grundfreigabe
+ Muss vor der Puls-/Pausezeit stehen, damit die Trocknungszeit nicht
+ waehrend einer Sperre oder Stoerung abgezaehlt wird.
+================================================================================
+*)
 
-IF gBetriebsparameter.Ausstattung.Box2 THEN
-    gBetriebsparameter.Boxen[2].xBoxAktiv  := gBetriebsparameter.Boxen[2].DauerbetriebEin OR xIntervallBox2Aktiv OR  
-        	   	  							  gBetriebsparameter.Boxen[2].NachtrocknungEin;
+//OFFEN: Die Nachtrocknungssperre wirkt gegenseitig. Haben beide Boxen
+//       Nachtrocknung aktiv und ueberlappende Stundenmasken, laeuft keine
+//       der beiden. Bei Bedarf feste Prioritaet vergeben.
+xBox1Freigegeben := gCmdAnlage.Auto
+                    AND NOT gCmdAnlage.FehlerStopp
+                    AND NOT (xNachtrocknungBox2Aktiv AND gBetriebsparameter.Ausstattung.Box2);
+
+xBox2Freigegeben := gCmdAnlage.Auto
+                    AND NOT gCmdAnlage.FehlerStopp
+                    AND gBetriebsparameter.Ausstattung.Box2
+                    AND NOT xNachtrocknungBox1Aktiv;
+
+
+(*
+================================================================================
+ PHASE 3 - Schlechtwetter Puls-/Pausebetrieb
+ Wirkt ausschliesslich auf den Dauerbetrieb. Intervall- und Nachtrocknungs-
+ betrieb laufen unveraendert nach Stundenmaske.
+================================================================================
+*)
+
+//===== BOX 1 =====
+xSchlechtwetterBox1Aktiv := xDauerbetriebBox1Aktiv
+                            AND xBox1Freigegeben
+                            AND gStatusAnlage.Box[1].WetterIstSchlecht
+                            AND (gStatusAnlage.Box[1].AktSchlechtwetterPause <> 0);
+
+fbPulsPauseBox1.Freigabe      := xSchlechtwetterBox1Aktiv;
+fbPulsPauseBox1.StartMitPause := FALSE;   //bei Wetterumschlag zuerst trocknen
+fbPulsPauseBox1.ZeitPuls      := gStatusAnlage.Box[1].AktSchlechtwetterPuls;
+fbPulsPauseBox1.ZeitPause     := gStatusAnlage.Box[1].AktSchlechtwetterPause;
+fbPulsPauseBox1();
+
+IF xSchlechtwetterBox1Aktiv THEN
+	//Schlechtwetter: nur waehrend der Pulszeit trocknen
+	xDauerbetriebBox1Trocknet := fbPulsPauseBox1.PulsOut;
 ELSE
-    gBetriebsparameter.Boxen[2].xBoxAktiv  := FALSE;
+	//Schoenwetter oder keine Pausezeit parametriert: Dauerbetrieb
+	xDauerbetriebBox1Trocknet := xDauerbetriebBox1Aktiv;
 END_IF;
 
-xMindEineBoxAktiv := gBetriebsparameter.Boxen[1].xBoxAktiv  OR gBetriebsparameter.Boxen[2].xBoxAktiv ; //TODO RIG: Boxenkonfig muss noch implementiert werden!
+//===== BOX 2 =====
+xSchlechtwetterBox2Aktiv := xDauerbetriebBox2Aktiv
+                            AND xBox2Freigegeben
+                            AND gStatusAnlage.Box[2].WetterIstSchlecht
+                            AND (gStatusAnlage.Box[2].AktSchlechtwetterPause <> 0);
+
+fbPulsPauseBox2.Freigabe      := xSchlechtwetterBox2Aktiv;
+fbPulsPauseBox2.StartMitPause := FALSE;
+fbPulsPauseBox2.ZeitPuls      := gStatusAnlage.Box[2].AktSchlechtwetterPuls;
+fbPulsPauseBox2.ZeitPause     := gStatusAnlage.Box[2].AktSchlechtwetterPause;
+fbPulsPauseBox2();
+
+IF xSchlechtwetterBox2Aktiv THEN
+	xDauerbetriebBox2Trocknet := fbPulsPauseBox2.PulsOut;
+ELSE
+	xDauerbetriebBox2Trocknet := xDauerbetriebBox2Aktiv;
+END_IF;
+
+
+(*
+================================================================================
+ PHASE 4 - Boxaktivitaet
+================================================================================
+*)
+
+gBetriebsparameter.Boxen[1].xBoxAktiv := (xDauerbetriebBox1Trocknet
+                                          OR xIntervallBox1Aktiv
+                                          OR xNachtrocknungBox1Aktiv)
+                                         AND xBox1Freigegeben;
+
+gBetriebsparameter.Boxen[2].xBoxAktiv := (xDauerbetriebBox2Trocknet
+                                          OR xIntervallBox2Aktiv
+                                          OR xNachtrocknungBox2Aktiv)
+                                         AND xBox2Freigegeben;
+
+xMindEineBoxAktiv := gBetriebsparameter.Boxen[1].xBoxAktiv
+                     OR gBetriebsparameter.Boxen[2].xBoxAktiv;
+
+
+(*
+================================================================================
+ PHASE 5 - Start/Stopp
+================================================================================
+*)
 
 (* externe Signale optional, muessen beschrieben werden wenn gewuenscht *)
 xExternStart := gCmdAnlage.StartExtern;
@@ -3443,13 +4319,43 @@ xExternStop  := gCmdAnlage.StoppExtern;
 (* Fehlerstopp vorerst ohne Alarmmatrix, Variable wird in AlarmCyclic beschrieben *)
 //gCmdAnlage.FehlerStopp := FALSE;
 
-(* Start/Stop *)
 gCmdAnlage.Start := gCmdAnlage.Auto
                     AND (xMindEineBoxAktiv OR xExternStart)
                     AND NOT gCmdAnlage.FehlerStopp;
 
 gCmdAnlage.Stopp := gCmdAnlage.Auto
                     AND ((NOT xMindEineBoxAktiv) OR xExternStop OR gCmdAnlage.FehlerStopp);
+]]>
+					</sourceCode>
+				</program>
+				<program name="BackgroundTask" version="1.0.0" creationDate="1784704678" lastModifiedDate="1784719051">
+					<vars>
+						<localVars>
+							<var name="retVal" type="USINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<sourceCode type="ST">
+						<![CDATA[//SetSysClock (Anforderung kommt von HMI)
+IF HMI_OUT_SysClock_ReqSet THEN 
+  //Uhrzeit setzen
+  retVal :=	sysClockWrite(
+  						  seconds 	:= TO_USINT(HMI_OUT_SysClock_seconds), 
+						  minutes 	:= TO_USINT(HMI_OUT_SysClock_minutes),
+						  hours 	:= TO_USINT(HMI_OUT_SysClock_hours),
+						  dayweek 	:= TO_USINT(HMI_OUT_SysClock_dayweek),
+						  daymonth 	:= TO_USINT(HMI_OUT_SysClock_daymonth), 
+						  month 	:= TO_USINT(HMI_OUT_SysClock_month), 
+						  year 		:= TO_USINT(HMI_OUT_SysClock_year)
+						  );
+	
+END_IF;
+
+IF retVal <> 0 THEN
+	HMI_OUT_SysClock_ReqSet := FALSE;
+	retVal := 0;
+END_IF;
+
 ]]>
 					</sourceCode>
 				</program>
@@ -3600,6 +4506,8 @@ END_STRUCT;
 						<var name="Strombegrenzung" type="ST_ParZeitfenster"/>
 						<var name="Tarifabschaltung" type="ST_ParTarifabschaltung"/>
 						<var name="Boxen" type="ST_ParBoxen" idxMin0="1" idx0="2"/>
+						<var name="Allgemein" type="ST_Anlage_Allgemein"/>
+						<var name="SchlechtwetterBoxen" type="ST_ParSchlechtwetterBoxen" idxMin0="1" idx0="2"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -3627,8 +4535,9 @@ END_STRUCT;
 						<var name="AbluftBox1Feuchte" type="REAL"/>
 						<var name="AbluftBox2Temp" type="REAL"/>
 						<var name="AbluftBox2Feuchte" type="REAL"/>
+						<var name="FrischluftSaettDefizit" type="REAL"/>
+						<var name="TrockenluftSaettDefizit" type="REAL"/>
 						<var name="LuftaufberTyp" type="UINT"/>
-						<var name="WetterIstSchlecht" type="BOOL"/>
 						<var name="Box" type="ST_StatBoxen" idxMin0="1" idx0="2"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
@@ -3793,6 +4702,7 @@ END_STRUCT;
 						<var name="NachtrocknungEin" type="BOOL"/>
 						<var name="IntervallbetriebZeiten" type="BOOL" dim0="24"/>
 						<var name="NachtrocknungZeiten" type="BOOL" dim0="24"/>
+						<var name="AktuelleTrockengutFeuchte" type="UINT"/>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[ST_ParBoxen: STRUCT
@@ -3807,6 +4717,7 @@ END_STRUCT;
 	NachtrocknungEin : BOOL;
 	IntervallbetriebZeiten : ARRAY[0..23] OF BOOL;
 	NachtrocknungZeiten : ARRAY[0..23] OF BOOL;
+	AktuelleTrockengutFeuchte : UINT;
 END_STRUCT;
 
 ]]>
@@ -3814,6 +4725,9 @@ END_STRUCT;
 				</struct>
 				<struct name="ST_StatBoxen" version="1.0.0">
 					<vars>
+						<var name="AktSchlechtwetterPuls" type="UDINT"/>
+						<var name="AktSchlechtwetterPause" type="UDINT"/>
+						<var name="WetterIstSchlecht" type="BOOL"/>
 						<var name="LaufRestzeitStunden" type="INT"/>
 						<var name="LaufRestzeitMinuten" type="INT"/>
 						<var name="TextIndexLaufzeit" type="USINT"/>
@@ -3823,6 +4737,9 @@ END_STRUCT;
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[ST_StatBoxen: STRUCT
+	AktSchlechtwetterPuls : UDINT;
+	AktSchlechtwetterPause : UDINT;
+	WetterIstSchlecht : BOOL;
 	LaufRestzeitStunden : INT;
 	LaufRestzeitMinuten : INT;
 	TextIndexLaufzeit : USINT;
@@ -3833,6 +4750,30 @@ END_STRUCT;
 
 ]]>
 					</iecDeclaration>
+				</struct>
+				<struct name="ST_Anlage_Allgemein" version="1.0.0">
+					<vars>
+						<var name="StandortHoehe" type="UINT"/>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+				</struct>
+				<struct name="ST_ParSchlechtwetterBoxen" version="1.0.0">
+					<vars>
+						<var name="Stufe" type="ST_ParSchlechtwetterBoxenStufe" idxMin0="1" idx0="6"/>
+						<var name="HystereseGrenzwert" type="REAL"/>
+						<var name="AuswahlSensorGrenzwert" type="USINT"/>
+						<var name="MaterialfeuchteIst" type="UINT"/>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+				</struct>
+				<struct name="ST_ParSchlechtwetterBoxenStufe" version="1.0.0">
+					<vars>
+						<var name="Saettigungsdefizit" type="REAL"/>
+						<var name="SchlechtwetterZeitLauf" type="UDINT"/>
+						<var name="SchlechtwetterZeitPause" type="UDINT"/>
+						<var name="MaterialfeuchteStufe" type="UINT"/>
+					</vars>
+					<iecDeclaration active="FALSE"/>
 				</struct>
 			</structs>
 			<typedefs>
@@ -4154,6 +5095,20 @@ END_STRUCT;
 							<value>1</value>
 						</element>
 						<element name="FBBOX_GEOEFFNET">
+							<value>2</value>
+						</element>
+					</elements>
+					<iecDeclaration active="FALSE"/>
+				</enum>
+				<enum name="eWitterungSensor" baseType="DINT" version="1.0.0">
+					<elements>
+						<element name="NONE">
+							<value>0</value>
+						</element>
+						<element name="SENSOR_FRISCHLUFT">
+							<value>1</value>
+						</element>
+						<element name="SENSOR_TROCKENLUFT">
 							<value>2</value>
 						</element>
 					</elements>
@@ -72848,6 +73803,108 @@ nSamples := cnt;
 	Par_Box2_Intervallzeit AT %MW200.206 : UDINT;
 		{G:"Parameters"}
 	Par_Box2_Nachtrocknungszeit AT %MW200.208 : UDINT;
+		{G:"Parameters"}
+	Par_Anlage_Standorthoehe AT %MW200.210 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Sensortype AT %MW200.211 : USINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_MaterialfeuchteStufe1 AT %MW200.212 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_MaterialfeuchteStufe2 AT %MW200.213 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_MaterialfeuchteStufe3 AT %MW200.214 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_MaterialfeuchteStufe4 AT %MW200.215 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_MaterialfeuchteStufe5 AT %MW200.216 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_MaterialfeuchteStufe6 AT %MW200.217 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Saettigungsdefizit1 AT %MW200.218 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Saettigungsdefizit2 AT %MW200.220 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Saettigungsdefizit3 AT %MW200.222 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Saettigungsdefizit4 AT %MW200.224 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Saettigungsdefizit5 AT %MW200.226 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_Saettigungsdefizit6 AT %MW200.228 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitLauf1 AT %MW200.230 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitLauf2 AT %MW200.232 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitLauf3 AT %MW200.234 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitLauf4 AT %MW200.236 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitLauf5 AT %MW200.238 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitLauf6 AT %MW200.240 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitPause1 AT %MW200.242 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitPause2 AT %MW200.244 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitPause3 AT %MW200.246 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitPause4 AT %MW200.248 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitPause5 AT %MW200.250 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box1_ZeitPause6 AT %MW200.252 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_MaterialfeuchteStufe1 AT %MW200.254 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_MaterialfeuchteStufe2 AT %MW200.255 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_MaterialfeuchteStufe3 AT %MW200.256 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_MaterialfeuchteStufe4 AT %MW200.257 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_MaterialfeuchteStufe5 AT %MW200.258 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_MaterialfeuchteStufe6 AT %MW200.259 : UINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Saettigungsdefizit1 AT %MW200.260 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Saettigungsdefizit2 AT %MW200.262 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Saettigungsdefizit3 AT %MW200.264 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Saettigungsdefizit4 AT %MW200.266 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Saettigungsdefizit5 AT %MW200.268 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Saettigungsdefizit6 AT %MW200.270 : REAL;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitLauf1 AT %MW200.272 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitLauf2 AT %MW200.274 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitLauf3 AT %MW200.276 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitLauf4 AT %MW200.278 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitLauf5 AT %MW200.280 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitLauf6 AT %MW200.282 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitPause1 AT %MW200.284 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitPause2 AT %MW200.286 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitPause3 AT %MW200.288 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitPause4 AT %MW200.290 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitPause5 AT %MW200.292 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_ZeitPause6 AT %MW200.294 : UDINT;
+		{G:"Parameters"}
+	Par_Schlechtwetter_Box2_Sensortype AT %MW200.296 : USINT;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -73011,7 +74068,7 @@ nSamples := cnt;
 		{G:"Variables"}
 	HMI_Ventilator1_FarbeIcon AT %MW201.109 : UINT := 0;
 		{G:"Variables"}
-	HMI_Ventilator1_IstDrehzahl AT %MW201.110 : UINT := 0;
+	HMI_IN_Res AT %MW201.110 : UINT := 0;
 		{G:"Variables"}
 	HMI_OUT_Box_Aktuell_DauerbetriebEin AT %MW201.111 : BOOL := 0;
 		{G:"Variables"}
@@ -73097,9 +74154,23 @@ nSamples := cnt;
 		{G:"Variables"}
 	HMI_IN_Box2_RestzeitUmschVerzBetriebsart AT %MW201.155 : UINT := 0;
 		{G:"Variables"}
-	HMI_OUT_Box1_TrockengutfeuchteAktuell AT %MW201.156 : UINT := 0;
+	HMI_IN_Box_Aktuell_Name AT %MW201.156 : STRING[ 31 ] := '0';
 		{G:"Variables"}
-	HMI_IN_Box_Aktuell_Name AT %MW201.157 : STRING[ 31 ] := '0';
+	HMI_OUT_SysClock_seconds AT %MW201.172 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_minutes AT %MW201.173 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_hours AT %MW201.174 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_dayweek AT %MW201.175 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_daymonth AT %MW201.176 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_month AT %MW201.177 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_year AT %MW201.178 : UINT := 0;
+		{G:"Variables"}
+	HMI_OUT_SysClock_ReqSet AT %MW201.179 : BOOL := 0;
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -75743,8 +76814,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..8759 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 219; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11079 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 277; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -75757,9 +76828,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 693373548;
+	dummyCrc32 := 3536839;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 210, 2, 201, TO_DWORD( ADR(%MW201.0) ), 173, 2, 693373548 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 297, 2, 201, TO_DWORD( ADR(%MW201.0) ), 180, 2, 3536839 );
 
 END_PROGRAM
 
@@ -75828,7 +76899,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="12372">
+			<root name="CControl_Lite" nextID="13723">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -75851,12 +76922,16 @@ END_PROGRAM
 					<Definition name="eBoxIndex" id="11162"/>
 					<Definition name="eTrockengut" id="11221"/>
 					<Definition name="eStellungKlappeBoxen" id="11273"/>
+					<Definition name="eWitterungSensor" id="13401"/>
 				</folder>
 				<folder name="utils" id="51">
 					<Pou name="fbBoxenklappe" id="3023"/>
 					<Pou name="fbTrockStrombegr" id="8051"/>
 					<Pou name="fbBoxenWLO" id="8562"/>
 					<Pou name="fbHeizregister" id="9269"/>
+					<Pou name="fbMathLuft" id="13274"/>
+					<Pou name="fbCControlWitterung" id="13370"/>
+					<Pou name="fbPulsPause" id="13655"/>
 				</folder>
 				<folder name="struct" id="52">
 					<Definition name="ST_Ausstattung" id="56"/>
@@ -75880,6 +76955,9 @@ END_PROGRAM
 					<Definition name="ST_ParTarifabschaltung" id="9255"/>
 					<Definition name="ST_ParBoxen" id="11220"/>
 					<Definition name="ST_StatBoxen" id="11222"/>
+					<Definition name="ST_Anlage_Allgemein" id="13299"/>
+					<Definition name="ST_ParSchlechtwetterBoxen" id="13497"/>
+					<Definition name="ST_ParSchlechtwetterBoxenStufe" id="13498"/>
 				</folder>
 				<folder name="types" id="910">
 					<Definition name="T_Betriebsparameter" id="912"/>
@@ -75901,6 +76979,7 @@ END_PROGRAM
 					<folder name="Steuerung" id="4546">
 						<Pou name="StartStoppCyclic" id="4548"/>
 					</folder>
+					<Pou name="BackgroundTask" id="12591"/>
 				</folder>
 				<GlobalVars name="var_VisuIo" id="4241"/>
 			</root>
@@ -77705,7 +78784,7 @@ END_PROGRAM
 								<name>Konfig_SoftwareVersionPLC</name>
 								<typepar>8</typepar>
 								<typetarg>STRING</typetarg>
-								<value>v1.0.0</value>
+								<value/>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -80101,8 +81180,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16591</ipa>
-								<address>16591</address>
+								<ipa>16575</ipa>
+								<address>16575</address>
 								<name>Par_Box1_StellungKlappe1</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -80150,8 +81229,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16592</ipa>
-								<address>16592</address>
+								<ipa>16576</ipa>
+								<address>16576</address>
 								<name>Par_Box1_StellungKlappe2</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -80199,8 +81278,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16593</ipa>
-								<address>16593</address>
+								<ipa>16577</ipa>
+								<address>16577</address>
 								<name>Par_Box2_StellungKlappe1</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -80248,8 +81327,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16594</ipa>
-								<address>16594</address>
+								<ipa>16578</ipa>
+								<address>16578</address>
 								<name>Par_Box2_StellungKlappe2</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -80297,8 +81376,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16575</ipa>
-								<address>16575</address>
+								<ipa>16579</ipa>
+								<address>16579</address>
 								<name>Par_Box1_Intervallzeit</name>
 								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
@@ -80346,8 +81425,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16577</ipa>
-								<address>16577</address>
+								<ipa>16581</ipa>
+								<address>16581</address>
 								<name>Par_Box1_Nachtrocknungszeit</name>
 								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
@@ -80395,8 +81474,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16579</ipa>
-								<address>16579</address>
+								<ipa>16583</ipa>
+								<address>16583</address>
 								<name>Par_Box2_Intervallzeit</name>
 								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
@@ -80444,8 +81523,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>16581</ipa>
-								<address>16581</address>
+								<ipa>16585</ipa>
+								<address>16585</address>
 								<name>Par_Box2_Nachtrocknungszeit</name>
 								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
@@ -80465,6 +81544,2505 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.208</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16587</ipa>
+								<address>16587</address>
+								<name>Par_Anlage_Standorthoehe</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.210</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16588</ipa>
+								<address>16588</address>
+								<name>Par_Schlechtwetter_Box1_Sensortype</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.211</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16589</ipa>
+								<address>16589</address>
+								<name>Par_Schlechtwetter_Box1_MaterialfeuchteStufe1</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.212</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16590</ipa>
+								<address>16590</address>
+								<name>Par_Schlechtwetter_Box1_MaterialfeuchteStufe2</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.213</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16591</ipa>
+								<address>16591</address>
+								<name>Par_Schlechtwetter_Box1_MaterialfeuchteStufe3</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.214</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16592</ipa>
+								<address>16592</address>
+								<name>Par_Schlechtwetter_Box1_MaterialfeuchteStufe4</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.215</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16593</ipa>
+								<address>16593</address>
+								<name>Par_Schlechtwetter_Box1_MaterialfeuchteStufe5</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.216</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16594</ipa>
+								<address>16594</address>
+								<name>Par_Schlechtwetter_Box1_MaterialfeuchteStufe6</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.217</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16595</ipa>
+								<address>16595</address>
+								<name>Par_Schlechtwetter_Box1_Saettigungsdefizit1</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.218</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16597</ipa>
+								<address>16597</address>
+								<name>Par_Schlechtwetter_Box1_Saettigungsdefizit2</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.220</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16599</ipa>
+								<address>16599</address>
+								<name>Par_Schlechtwetter_Box1_Saettigungsdefizit3</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.222</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16601</ipa>
+								<address>16601</address>
+								<name>Par_Schlechtwetter_Box1_Saettigungsdefizit4</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.224</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16603</ipa>
+								<address>16603</address>
+								<name>Par_Schlechtwetter_Box1_Saettigungsdefizit5</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.226</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16605</ipa>
+								<address>16605</address>
+								<name>Par_Schlechtwetter_Box1_Saettigungsdefizit6</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.228</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16607</ipa>
+								<address>16607</address>
+								<name>Par_Schlechtwetter_Box1_ZeitLauf1</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.230</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16609</ipa>
+								<address>16609</address>
+								<name>Par_Schlechtwetter_Box1_ZeitLauf2</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.232</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16611</ipa>
+								<address>16611</address>
+								<name>Par_Schlechtwetter_Box1_ZeitLauf3</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.234</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16613</ipa>
+								<address>16613</address>
+								<name>Par_Schlechtwetter_Box1_ZeitLauf4</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.236</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16615</ipa>
+								<address>16615</address>
+								<name>Par_Schlechtwetter_Box1_ZeitLauf5</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.238</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16617</ipa>
+								<address>16617</address>
+								<name>Par_Schlechtwetter_Box1_ZeitLauf6</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.240</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16619</ipa>
+								<address>16619</address>
+								<name>Par_Schlechtwetter_Box1_ZeitPause1</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.242</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16621</ipa>
+								<address>16621</address>
+								<name>Par_Schlechtwetter_Box1_ZeitPause2</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.244</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16623</ipa>
+								<address>16623</address>
+								<name>Par_Schlechtwetter_Box1_ZeitPause3</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.246</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16625</ipa>
+								<address>16625</address>
+								<name>Par_Schlechtwetter_Box1_ZeitPause4</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.248</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16627</ipa>
+								<address>16627</address>
+								<name>Par_Schlechtwetter_Box1_ZeitPause5</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.250</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16629</ipa>
+								<address>16629</address>
+								<name>Par_Schlechtwetter_Box1_ZeitPause6</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.252</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16631</ipa>
+								<address>16631</address>
+								<name>Par_Schlechtwetter_Box2_MaterialfeuchteStufe1</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.254</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16632</ipa>
+								<address>16632</address>
+								<name>Par_Schlechtwetter_Box2_MaterialfeuchteStufe2</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.255</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16633</ipa>
+								<address>16633</address>
+								<name>Par_Schlechtwetter_Box2_MaterialfeuchteStufe3</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.256</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16634</ipa>
+								<address>16634</address>
+								<name>Par_Schlechtwetter_Box2_MaterialfeuchteStufe4</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.257</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16635</ipa>
+								<address>16635</address>
+								<name>Par_Schlechtwetter_Box2_MaterialfeuchteStufe5</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.258</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16636</ipa>
+								<address>16636</address>
+								<name>Par_Schlechtwetter_Box2_MaterialfeuchteStufe6</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.259</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16637</ipa>
+								<address>16637</address>
+								<name>Par_Schlechtwetter_Box2_Saettigungsdefizit1</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.260</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16639</ipa>
+								<address>16639</address>
+								<name>Par_Schlechtwetter_Box2_Saettigungsdefizit2</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.262</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16641</ipa>
+								<address>16641</address>
+								<name>Par_Schlechtwetter_Box2_Saettigungsdefizit3</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.264</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16643</ipa>
+								<address>16643</address>
+								<name>Par_Schlechtwetter_Box2_Saettigungsdefizit4</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.266</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16645</ipa>
+								<address>16645</address>
+								<name>Par_Schlechtwetter_Box2_Saettigungsdefizit5</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.268</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16647</ipa>
+								<address>16647</address>
+								<name>Par_Schlechtwetter_Box2_Saettigungsdefizit6</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.270</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16649</ipa>
+								<address>16649</address>
+								<name>Par_Schlechtwetter_Box2_ZeitLauf1</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.272</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16651</ipa>
+								<address>16651</address>
+								<name>Par_Schlechtwetter_Box2_ZeitLauf2</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.274</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16653</ipa>
+								<address>16653</address>
+								<name>Par_Schlechtwetter_Box2_ZeitLauf3</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.276</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16655</ipa>
+								<address>16655</address>
+								<name>Par_Schlechtwetter_Box2_ZeitLauf4</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.278</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16657</ipa>
+								<address>16657</address>
+								<name>Par_Schlechtwetter_Box2_ZeitLauf5</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.280</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16659</ipa>
+								<address>16659</address>
+								<name>Par_Schlechtwetter_Box2_ZeitLauf6</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.282</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16661</ipa>
+								<address>16661</address>
+								<name>Par_Schlechtwetter_Box2_ZeitPause1</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.284</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16663</ipa>
+								<address>16663</address>
+								<name>Par_Schlechtwetter_Box2_ZeitPause2</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.286</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16665</ipa>
+								<address>16665</address>
+								<name>Par_Schlechtwetter_Box2_ZeitPause3</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.288</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16667</ipa>
+								<address>16667</address>
+								<name>Par_Schlechtwetter_Box2_ZeitPause4</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.290</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16669</ipa>
+								<address>16669</address>
+								<name>Par_Schlechtwetter_Box2_ZeitPause5</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.292</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16671</ipa>
+								<address>16671</address>
+								<name>Par_Schlechtwetter_Box2_ZeitPause6</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.294</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16673</ipa>
+								<address>16673</address>
+								<name>Par_Schlechtwetter_Box2_Sensortype</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.296</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -84466,7 +88044,7 @@ END_PROGRAM
 							<param>
 								<ipa>9069</ipa>
 								<address>9069</address>
-								<name>HMI_Ventilator1_IstDrehzahl</name>
+								<name>HMI_IN_Res</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
 								<value>0</value>
@@ -84954,8 +88532,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9095</ipa>
-								<address>9095</address>
+								<ipa>9079</ipa>
+								<address>9079</address>
 								<name>HMI_IN_Box_Aktuell_Status</name>
 								<typepar>0</typepar>
 								<typetarg>INT</typetarg>
@@ -85003,8 +88581,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9096</ipa>
-								<address>9096</address>
+								<ipa>9080</ipa>
+								<address>9080</address>
 								<name>HMI_IN_Box_Aktuell_Temp</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
@@ -85052,8 +88630,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9098</ipa>
-								<address>9098</address>
+								<ipa>9082</ipa>
+								<address>9082</address>
 								<name>HMI_IN_Box_Aktuell_Feucht</name>
 								<typepar>4</typepar>
 								<typetarg>REAL</typetarg>
@@ -85101,8 +88679,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9100</ipa>
-								<address>9100</address>
+								<ipa>9084</ipa>
+								<address>9084</address>
 								<name>HMI_IN_Box_Aktuell_TrockengutIcon</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -85150,8 +88728,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9101</ipa>
-								<address>9101</address>
+								<ipa>9085</ipa>
+								<address>9085</address>
 								<name>HMI_IN_Box_Aktuell_SperreDauerbetrieb</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -85199,8 +88777,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9102</ipa>
-								<address>9102</address>
+								<ipa>9086</ipa>
+								<address>9086</address>
 								<name>HMI_IN_Box_Aktuell_SperreIntervallbetrieb</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -85248,8 +88826,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9103</ipa>
-								<address>9103</address>
+								<ipa>9087</ipa>
+								<address>9087</address>
 								<name>HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -85297,8 +88875,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9104</ipa>
-								<address>9104</address>
+								<ipa>9088</ipa>
+								<address>9088</address>
 								<name>HMI_IN_Box_Aktuell_TextIndexLaufzeit</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -85346,8 +88924,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9105</ipa>
-								<address>9105</address>
+								<ipa>9089</ipa>
+								<address>9089</address>
 								<name>HMI_IN_Box1_Status</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -85395,8 +88973,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9106</ipa>
-								<address>9106</address>
+								<ipa>9090</ipa>
+								<address>9090</address>
 								<name>HMI_IN_Box2_Status</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -85444,8 +89022,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9107</ipa>
-								<address>9107</address>
+								<ipa>9091</ipa>
+								<address>9091</address>
 								<name>HMI_IN_Allg_UmschaltverzBetriebsartAktiv</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -85493,8 +89071,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9108</ipa>
-								<address>9108</address>
+								<ipa>9092</ipa>
+								<address>9092</address>
 								<name>HMI_OUT_Box_Aktuell_BoxIndex</name>
 								<typepar>2</typepar>
 								<typetarg>USINT</typetarg>
@@ -85542,8 +89120,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9109</ipa>
-								<address>9109</address>
+								<ipa>9093</ipa>
+								<address>9093</address>
 								<name>HMI_OUT_Box1_DauerbetriebEin</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -85591,8 +89169,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9110</ipa>
-								<address>9110</address>
+								<ipa>9094</ipa>
+								<address>9094</address>
 								<name>HMI_OUT_Box1_IntervallbetriebEin</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -85640,8 +89218,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9111</ipa>
-								<address>9111</address>
+								<ipa>9095</ipa>
+								<address>9095</address>
 								<name>HMI_OUT_Box1_NachtrocknungEin</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -85689,8 +89267,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9112</ipa>
-								<address>9112</address>
+								<ipa>9096</ipa>
+								<address>9096</address>
 								<name>HMI_OUT_Box1_Aus</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -85738,8 +89316,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9113</ipa>
-								<address>9113</address>
+								<ipa>9097</ipa>
+								<address>9097</address>
 								<name>HMI_IN_Box1_TextIndexLaufzeit</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -85787,8 +89365,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9114</ipa>
-								<address>9114</address>
+								<ipa>9098</ipa>
+								<address>9098</address>
 								<name>HMI_IN_Box1_LaufRestzeitMinuten</name>
 								<typepar>0</typepar>
 								<typetarg>INT</typetarg>
@@ -85836,8 +89414,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9115</ipa>
-								<address>9115</address>
+								<ipa>9099</ipa>
+								<address>9099</address>
 								<name>HMI_IN_Box1_LaufRestzeitStunden</name>
 								<typepar>0</typepar>
 								<typetarg>INT</typetarg>
@@ -85885,8 +89463,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9116</ipa>
-								<address>9116</address>
+								<ipa>9100</ipa>
+								<address>9100</address>
 								<name>HMI_IN_Box1_AnzeigeLaufRestzeit</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -85934,8 +89512,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9117</ipa>
-								<address>9117</address>
+								<ipa>9101</ipa>
+								<address>9101</address>
 								<name>HMI_IN_Box1_IconWitterung</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -85983,8 +89561,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9134</ipa>
-								<address>9134</address>
+								<ipa>9102</ipa>
+								<address>9102</address>
 								<name>HMI_IN_Box1_TrockengutIcon</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -86032,8 +89610,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9135</ipa>
-								<address>9135</address>
+								<ipa>9103</ipa>
+								<address>9103</address>
 								<name>HMI_IN_Box1_SperreDauerbetrieb</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -86081,8 +89659,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9136</ipa>
-								<address>9136</address>
+								<ipa>9104</ipa>
+								<address>9104</address>
 								<name>HMI_IN_Box1_SperreIntervallbetrieb</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -86130,8 +89708,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9137</ipa>
-								<address>9137</address>
+								<ipa>9105</ipa>
+								<address>9105</address>
 								<name>HMI_IN_Box1_RestzeitUmschVerzBetriebsart</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -86179,8 +89757,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9138</ipa>
-								<address>9138</address>
+								<ipa>9106</ipa>
+								<address>9106</address>
 								<name>HMI_IN_Box2_TextIndexLaufzeit</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -86228,8 +89806,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9139</ipa>
-								<address>9139</address>
+								<ipa>9107</ipa>
+								<address>9107</address>
 								<name>HMI_IN_Box2_LaufRestzeitMinuten</name>
 								<typepar>0</typepar>
 								<typetarg>INT</typetarg>
@@ -86277,8 +89855,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9140</ipa>
-								<address>9140</address>
+								<ipa>9108</ipa>
+								<address>9108</address>
 								<name>HMI_IN_Box2_LaufRestzeitStunden</name>
 								<typepar>0</typepar>
 								<typetarg>INT</typetarg>
@@ -86326,8 +89904,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9141</ipa>
-								<address>9141</address>
+								<ipa>9109</ipa>
+								<address>9109</address>
 								<name>HMI_IN_Box2_AnzeigeLaufRestzeit</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -86375,8 +89953,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9158</ipa>
-								<address>9158</address>
+								<ipa>9110</ipa>
+								<address>9110</address>
 								<name>HMI_IN_Box2_TrockengutIcon</name>
 								<typepar>7</typepar>
 								<typetarg>USINT</typetarg>
@@ -86424,8 +90002,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9159</ipa>
-								<address>9159</address>
+								<ipa>9111</ipa>
+								<address>9111</address>
 								<name>HMI_IN_Box2_SperreDauerbetrieb</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -86473,8 +90051,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9160</ipa>
-								<address>9160</address>
+								<ipa>9112</ipa>
+								<address>9112</address>
 								<name>HMI_IN_Box2_SperreIntervallbetrieb</name>
 								<typepar>5</typepar>
 								<typetarg>BOOL</typetarg>
@@ -86522,8 +90100,8 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9161</ipa>
-								<address>9161</address>
+								<ipa>9113</ipa>
+								<address>9113</address>
 								<name>HMI_IN_Box2_RestzeitUmschVerzBetriebsart</name>
 								<typepar>2</typepar>
 								<typetarg>UINT</typetarg>
@@ -86571,11 +90149,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9162</ipa>
-								<address>9162</address>
-								<name>HMI_OUT_Box1_TrockengutfeuchteAktuell</name>
-								<typepar>2</typepar>
-								<typetarg>UINT</typetarg>
+								<ipa>9114</ipa>
+								<address>9114</address>
+								<name>HMI_IN_Box_Aktuell_Name</name>
+								<typepar>8</typepar>
+								<typetarg>STRING</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -86590,7 +90168,7 @@ END_PROGRAM
 								<accesslevel>3</accesslevel>
 								<readonly>0</readonly>
 								<shortname/>
-								<size>0</size>
+								<size>31</size>
 								<dataBlock>%MW201.156</dataBlock>
 								<label/>
 								<translation/>
@@ -86620,11 +90198,11 @@ END_PROGRAM
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
 							<param>
-								<ipa>9079</ipa>
-								<address>9079</address>
-								<name>HMI_IN_Box_Aktuell_Name</name>
-								<typepar>8</typepar>
-								<typetarg>STRING</typetarg>
+								<ipa>9130</ipa>
+								<address>9130</address>
+								<name>HMI_OUT_SysClock_seconds</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
 								<value>0</value>
 								<min/>
 								<max/>
@@ -86639,8 +90217,351 @@ END_PROGRAM
 								<accesslevel>3</accesslevel>
 								<readonly>0</readonly>
 								<shortname/>
-								<size>31</size>
-								<dataBlock>%MW201.157</dataBlock>
+								<size>0</size>
+								<dataBlock>%MW201.172</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9131</ipa>
+								<address>9131</address>
+								<name>HMI_OUT_SysClock_minutes</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.173</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9132</ipa>
+								<address>9132</address>
+								<name>HMI_OUT_SysClock_hours</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.174</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9133</ipa>
+								<address>9133</address>
+								<name>HMI_OUT_SysClock_dayweek</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.175</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9134</ipa>
+								<address>9134</address>
+								<name>HMI_OUT_SysClock_daymonth</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.176</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9135</ipa>
+								<address>9135</address>
+								<name>HMI_OUT_SysClock_month</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.177</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9136</ipa>
+								<address>9136</address>
+								<name>HMI_OUT_SysClock_year</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.178</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9137</ipa>
+								<address>9137</address>
+								<name>HMI_OUT_SysClock_ReqSet</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.179</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -88512,20 +92433,20 @@ END_PROGRAM
 								<value ipa="8900" subidx="0">0</value>
 								<value ipa="8902" subidx="0">0</value>
 								<value ipa="8903" subidx="0">0</value>
-								<value ipa="8736" subidx="0">0</value>
-								<value ipa="8737" subidx="0">4</value>
-								<value ipa="8738" subidx="0">0</value>
-								<value ipa="8739" subidx="0">6</value>
-								<value ipa="8740" subidx="0">1</value>
-								<value ipa="8741" subidx="0">1</value>
+								<value ipa="8736" subidx="0">4</value>
+								<value ipa="8737" subidx="0">0</value>
+								<value ipa="8738" subidx="0">19</value>
+								<value ipa="8739" subidx="0">5</value>
+								<value ipa="8740" subidx="0">25</value>
+								<value ipa="8741" subidx="0">2</value>
 								<value ipa="8742" subidx="0">0</value>
 								<value ipa="8743" subidx="0">1</value>
-								<value ipa="8744" subidx="0">44</value>
+								<value ipa="8744" subidx="0">8</value>
 								<value ipa="8745" subidx="0">0</value>
 								<value ipa="8746" subidx="0">0</value>
 								<value ipa="8747" subidx="0">0</value>
-								<value ipa="8748" subidx="0">1</value>
-								<value ipa="8749" subidx="0">1</value>
+								<value ipa="8748" subidx="0">24</value>
+								<value ipa="8749" subidx="0">2</value>
 								<value ipa="8750" subidx="0">0</value>
 								<value ipa="8751" subidx="0">0</value>
 								<value ipa="24320" subidx="0">4294967295</value>
@@ -88567,7 +92488,7 @@ END_PROGRAM
 								<value ipa="16439" subidx="0">0</value>
 								<value ipa="16441" subidx="0">0</value>
 								<value ipa="16442" subidx="0">0</value>
-								<value ipa="16458" subidx="0">v1.0.0</value>
+								<value ipa="16458" subidx="0"/>
 								<value ipa="16474" subidx="0">0</value>
 								<value ipa="16475" subidx="0">0</value>
 								<value ipa="16476" subidx="0">0</value>
@@ -88616,14 +92537,65 @@ END_PROGRAM
 								<value ipa="16542" subidx="0">0</value>
 								<value ipa="16543" subidx="0">0</value>
 								<value ipa="16559" subidx="0">0</value>
+								<value ipa="16575" subidx="0">0</value>
+								<value ipa="16576" subidx="0">0</value>
+								<value ipa="16577" subidx="0">0</value>
+								<value ipa="16578" subidx="0">0</value>
+								<value ipa="16579" subidx="0">0</value>
+								<value ipa="16581" subidx="0">0</value>
+								<value ipa="16583" subidx="0">0</value>
+								<value ipa="16585" subidx="0">0</value>
+								<value ipa="16587" subidx="0">0</value>
+								<value ipa="16588" subidx="0">0</value>
+								<value ipa="16589" subidx="0">0</value>
+								<value ipa="16590" subidx="0">0</value>
 								<value ipa="16591" subidx="0">0</value>
 								<value ipa="16592" subidx="0">0</value>
 								<value ipa="16593" subidx="0">0</value>
 								<value ipa="16594" subidx="0">0</value>
-								<value ipa="16575" subidx="0">0</value>
-								<value ipa="16577" subidx="0">0</value>
-								<value ipa="16579" subidx="0">0</value>
-								<value ipa="16581" subidx="0">0</value>
+								<value ipa="16595" subidx="0">0</value>
+								<value ipa="16597" subidx="0">0</value>
+								<value ipa="16599" subidx="0">0</value>
+								<value ipa="16601" subidx="0">0</value>
+								<value ipa="16603" subidx="0">0</value>
+								<value ipa="16605" subidx="0">0</value>
+								<value ipa="16607" subidx="0">0</value>
+								<value ipa="16609" subidx="0">0</value>
+								<value ipa="16611" subidx="0">0</value>
+								<value ipa="16613" subidx="0">0</value>
+								<value ipa="16615" subidx="0">0</value>
+								<value ipa="16617" subidx="0">0</value>
+								<value ipa="16619" subidx="0">0</value>
+								<value ipa="16621" subidx="0">0</value>
+								<value ipa="16623" subidx="0">0</value>
+								<value ipa="16625" subidx="0">0</value>
+								<value ipa="16627" subidx="0">0</value>
+								<value ipa="16629" subidx="0">0</value>
+								<value ipa="16631" subidx="0">0</value>
+								<value ipa="16632" subidx="0">0</value>
+								<value ipa="16633" subidx="0">0</value>
+								<value ipa="16634" subidx="0">0</value>
+								<value ipa="16635" subidx="0">0</value>
+								<value ipa="16636" subidx="0">0</value>
+								<value ipa="16637" subidx="0">0</value>
+								<value ipa="16639" subidx="0">0</value>
+								<value ipa="16641" subidx="0">0</value>
+								<value ipa="16643" subidx="0">0</value>
+								<value ipa="16645" subidx="0">0</value>
+								<value ipa="16647" subidx="0">0</value>
+								<value ipa="16649" subidx="0">0</value>
+								<value ipa="16651" subidx="0">0</value>
+								<value ipa="16653" subidx="0">0</value>
+								<value ipa="16655" subidx="0">0</value>
+								<value ipa="16657" subidx="0">0</value>
+								<value ipa="16659" subidx="0">0</value>
+								<value ipa="16661" subidx="0">0</value>
+								<value ipa="16663" subidx="0">0</value>
+								<value ipa="16665" subidx="0">0</value>
+								<value ipa="16667" subidx="0">0</value>
+								<value ipa="16669" subidx="0">0</value>
+								<value ipa="16671" subidx="0">0</value>
+								<value ipa="16673" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
@@ -88715,9 +92687,25 @@ END_PROGRAM
 								<value ipa="9076" subidx="0">0</value>
 								<value ipa="9077" subidx="0">0</value>
 								<value ipa="9078" subidx="0">0</value>
+								<value ipa="9079" subidx="0">0</value>
+								<value ipa="9080" subidx="0">0</value>
+								<value ipa="9082" subidx="0">0</value>
+								<value ipa="9084" subidx="0">0</value>
+								<value ipa="9085" subidx="0">0</value>
+								<value ipa="9086" subidx="0">0</value>
+								<value ipa="9087" subidx="0">0</value>
+								<value ipa="9088" subidx="0">0</value>
+								<value ipa="9089" subidx="0">0</value>
+								<value ipa="9090" subidx="0">0</value>
+								<value ipa="9091" subidx="0">0</value>
+								<value ipa="9092" subidx="0">0</value>
+								<value ipa="9093" subidx="0">0</value>
+								<value ipa="9094" subidx="0">0</value>
 								<value ipa="9095" subidx="0">0</value>
 								<value ipa="9096" subidx="0">0</value>
+								<value ipa="9097" subidx="0">0</value>
 								<value ipa="9098" subidx="0">0</value>
+								<value ipa="9099" subidx="0">0</value>
 								<value ipa="9100" subidx="0">0</value>
 								<value ipa="9101" subidx="0">0</value>
 								<value ipa="9102" subidx="0">0</value>
@@ -88733,23 +92721,14 @@ END_PROGRAM
 								<value ipa="9112" subidx="0">0</value>
 								<value ipa="9113" subidx="0">0</value>
 								<value ipa="9114" subidx="0">0</value>
-								<value ipa="9115" subidx="0">0</value>
-								<value ipa="9116" subidx="0">0</value>
-								<value ipa="9117" subidx="0">0</value>
+								<value ipa="9130" subidx="0">0</value>
+								<value ipa="9131" subidx="0">0</value>
+								<value ipa="9132" subidx="0">0</value>
+								<value ipa="9133" subidx="0">0</value>
 								<value ipa="9134" subidx="0">0</value>
 								<value ipa="9135" subidx="0">0</value>
 								<value ipa="9136" subidx="0">0</value>
 								<value ipa="9137" subidx="0">0</value>
-								<value ipa="9138" subidx="0">0</value>
-								<value ipa="9139" subidx="0">0</value>
-								<value ipa="9140" subidx="0">0</value>
-								<value ipa="9141" subidx="0">0</value>
-								<value ipa="9158" subidx="0">0</value>
-								<value ipa="9159" subidx="0">0</value>
-								<value ipa="9160" subidx="0">0</value>
-								<value ipa="9161" subidx="0">0</value>
-								<value ipa="9162" subidx="0">0</value>
-								<value ipa="9079" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>
