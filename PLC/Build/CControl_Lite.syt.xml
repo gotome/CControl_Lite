@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type ="text/xsl" href="file://C:/Users/gries/AppData/Local/Temp/LLSymTab.xsl" version="1.0"?>
-<LLSymbolTable Version="1.4" Name="CControl_Lite" TargetID="TM173O_825p3" CodeId="0x658D7CB1" DebugMemoId="0x0000DB6B" MemoId="0x0000B3C5" DataRelocation="none" DbRelocation="none" FunctRelocation="none" dataAddrMode="byte" codeAddrMode="byte" NoIncrAlloc="false" is64bit="false" isBigEndian="false" dataSignature="0xF5B8F71D">
+<LLSymbolTable Version="1.4" Name="CControl_Lite" TargetID="TM173O_825p3" CodeId="0xC34AD229" DebugMemoId="0x0000DB6B" MemoId="0x0000B3C5" DataRelocation="none" DbRelocation="none" FunctRelocation="none" dataAddrMode="byte" codeAddrMode="byte" NoIncrAlloc="false" is64bit="false" isBigEndian="false" dataSignature="0xB5E0EAC1">
 	<Resource Name="TM173O" Proc="ARMThumb2_VFP2_SP"/>
 	<CaseSensitive>false</CaseSensitive>
 	<CompilerOptions FBExtCheck="true"/>
@@ -98,20 +98,22 @@
 		<Var Name="GBETRIEBSPARAMETER" OrigName="gBetriebsparameter" Type="ST_BETRIEBSPARAMETER" OrigType="ST_Betriebsparameter" Addr="0x20063C78" Group="var_glob"/>
 		<Var Name="GQUITERR" OrigName="gQuitErr" Type="BOOL" OrigType="BOOL" Addr="0x20063E1A" Descr="Fehler quittieren" Group="var_glob"/>
 		<Const Name="1" OrigName="1" Type="USINT" OrigType="USINT">1</Const>
-		<Var Name="DIBOX1OFFEN" OrigName="diBox1Offen" Type="BOOL" OrigType="BOOL" Addr="0x20063E1B" Descr="Rückmeldung Box 1 offen" Group="var_glob"/>
-		<Var Name="DIBOX1GESCHL" OrigName="diBox1Geschl" Type="BOOL" OrigType="BOOL" Addr="0x20063E60" Descr="Rückmeldung Box 1 geschlossen" Group="var_glob"/>
-		<Var Name="DOFRGBOX1" OrigName="doFrgBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063E61" Descr="Freigabe Box 1 (z.B. Klappe / Aktor Box 1)" Group="var_glob"/>
 		<Const Name="2" OrigName="2" Type="USINT" OrigType="USINT">2</Const>
-		<Var Name="DIBOX2OFFEN" OrigName="diBox2Offen" Type="BOOL" OrigType="BOOL" Addr="0x20063E63" Descr="Rückmeldung Box 2 offen" Group="var_glob"/>
-		<Var Name="DIBOX2GESCHL" OrigName="diBox2Geschl" Type="BOOL" OrigType="BOOL" Addr="0x20063E62" Descr="Rückmeldung Box 2 geschlossen" Group="var_glob"/>
-		<Var Name="DOFRGBOX2" OrigName="doFrgBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EA8" Descr="Freigabe Box 2 (z.B. Klappe / Aktor Box 2)" Group="var_glob"/>
-		<Var Name="AOFUVENTILATOR" OrigName="aoFuVentilator" Type="REAL" OrigType="REAL" Addr="0x20063EAC" Descr="Sollwert Frequenzumrichter Ventilator [%]" Group="var_glob"/>
-		<Var Name="AOLEISTVORGLUFTAUFBER" OrigName="aoLeistVorgLuftaufber" Type="REAL" OrigType="REAL" Addr="0x20063EB0" Descr="Leistungsvorgabe Luftaufbereiter [%]" Group="var_glob"/>
-		<Var Name="DOFRGVENTILATOR" OrigName="doFrgVentilator" Type="BOOL" OrigType="BOOL" Addr="0x20063EA9" Descr="Freigabe Ventilator" Group="var_glob"/>
-		<Var Name="GALARMBETRIEBLUFTAUFBER" OrigName="gAlarmBetriebLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x20063EAB" Group="varAlarm"/>
-		<Var Name="DIBETRIEBLUFTAUFBER" OrigName="diBetriebLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x20063EAA" Descr="Betriebsmeldung Luftaufbereitung" Group="var_glob"/>
-		<Var Name="DOFRGLUFTAUFBER" OrigName="doFrgLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x20063EB4" Descr="Freigabe Luftaufbereiter (Digitaler Ausgang)" Group="var_glob"/>
-		<Var Name="DOFRGABLUFTVENTILATOR" OrigName="doFrgAbluftventilator" Type="BOOL" OrigType="BOOL" Addr="0x20063EB5" Descr="Freigabe Abluftventilator" Group="var_glob"/>
+		<Var Name="DIBOX1OFFEN" OrigName="diBox1Offen" Type="BOOL" OrigType="BOOL" Addr="0x20063E1F" Descr="Rückmeldung Box 1 offen" Group="var_glob"/>
+		<Var Name="DIBOX1GESCHL" OrigName="diBox1Geschl" Type="BOOL" OrigType="BOOL" Addr="0x20063E64" Descr="Rückmeldung Box 1 geschlossen" Group="var_glob"/>
+		<Var Name="DOFRGBOX1" OrigName="doFrgBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063E65" Descr="Freigabe Box 1 (z.B. Klappe / Aktor Box 1)" Group="var_glob"/>
+		<Var Name="DIBOX2OFFEN" OrigName="diBox2Offen" Type="BOOL" OrigType="BOOL" Addr="0x20063E67" Descr="Rückmeldung Box 2 offen" Group="var_glob"/>
+		<Var Name="DIBOX2GESCHL" OrigName="diBox2Geschl" Type="BOOL" OrigType="BOOL" Addr="0x20063EAC" Descr="Rückmeldung Box 2 geschlossen" Group="var_glob"/>
+		<Var Name="DOFRGBOX2" OrigName="doFrgBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EAD" Descr="Freigabe Box 2 (z.B. Klappe / Aktor Box 2)" Group="var_glob"/>
+		<Var Name="DOFRGVENTILATOR" OrigName="doFrgVentilator" Type="BOOL" OrigType="BOOL" Addr="0x20063EAF" Descr="Freigabe Ventilator" Group="var_glob"/>
+		<Var Name="AOFUVENTILATOR" OrigName="aoFuVentilator" Type="REAL" OrigType="REAL" Addr="0x20063EB0" Descr="Sollwert Frequenzumrichter Ventilator [%]" Group="var_glob"/>
+		<Var Name="AOLEISTVORGLUFTAUFBER" OrigName="aoLeistVorgLuftaufber" Type="REAL" OrigType="REAL" Addr="0x20063EB4" Descr="Leistungsvorgabe Luftaufbereiter [%]" Group="var_glob"/>
+		<Var Name="GALARMBETRIEBLUFTAUFBER" OrigName="gAlarmBetriebLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x20063EB8" Group="varAlarm"/>
+		<Var Name="DIBETRIEBLUFTAUFBER" OrigName="diBetriebLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x20063EB9" Descr="Betriebsmeldung Luftaufbereitung" Group="var_glob"/>
+		<Var Name="DOFRGLUFTAUFBER" OrigName="doFrgLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x20063EBA" Descr="Freigabe Luftaufbereiter (Digitaler Ausgang)" Group="var_glob"/>
+		<Var Name="DOFRGABLUFTVENTILATOR" OrigName="doFrgAbluftventilator" Type="BOOL" OrigType="BOOL" Addr="0x20063EBB" Descr="Freigabe Abluftventilator" Group="var_glob"/>
+		<Var Name="DIBETRIEBVENTILATOR" OrigName="diBetriebVentilator" Type="BOOL" OrigType="BOOL" Addr="0x20063ED8" Descr="Betriebsmeldung Ventilator" Group="var_glob"/>
+		<Var Name="GALARMBETRIEBVENTILATOR" OrigName="gAlarmBetriebVentilator" Type="BOOL" OrigType="BOOL" Addr="0x20063ED9" Group="varAlarm"/>
 		<Var Name="SENSOREN_FILTERZEITFRISCHLUFT" OrigName="Sensoren_FilterzeitFrischluft" Type="UINT" OrigType="UINT" Addr="0x2004FDD0" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="6" Access="3"/>
 		<Var Name="SENSOREN_FILTERZEITABLUFT" OrigName="Sensoren_FilterzeitAbluft" Type="UINT" OrigType="UINT" Addr="0x2004FDD2" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="7" Access="3"/>
 		<Var Name="SENSOREN_FILTERZEITTROCKENLUFT" OrigName="Sensoren_FilterzeitTrockenluft" Type="UINT" OrigType="UINT" Addr="0x2004FECE" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="133" Access="3"/>
@@ -191,7 +193,6 @@
 		<Var Name="HMI_IN_DIBOX2OFFEN" OrigName="HMI_IN_diBox2Offen" Type="BOOL" OrigType="BOOL" Addr="0x2004D6DC" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="20" Access="3"/>
 		<Var Name="HMI_IN_DIBOX2GESCHL" OrigName="HMI_IN_diBox2Geschl" Type="BOOL" OrigType="BOOL" Addr="0x2004D6DE" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="21" Access="3"/>
 		<Var Name="HMI_IN_DIBETRIEBLUFTAUFBER" OrigName="HMI_IN_diBetriebLuftaufber" Type="BOOL" OrigType="BOOL" Addr="0x2004D6E0" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="22" Access="3"/>
-		<Var Name="DIBETRIEBVENTILATOR" OrigName="diBetriebVentilator" Type="BOOL" OrigType="BOOL" Addr="0x20063EE5" Descr="Betriebsmeldung Ventilator" Group="var_glob"/>
 		<Var Name="HMI_IN_DIBETRIEBVENTILATOR" OrigName="HMI_IN_diBetriebVentilator" Type="BOOL" OrigType="BOOL" Addr="0x2004D6E2" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="23" Access="3"/>
 		<Var Name="HMI_IN_AIFRISCHLUFTTEMP" OrigName="HMI_IN_aiFrischluftTemp" Type="REAL" OrigType="REAL" Addr="0x2004D714" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="48" Access="3"/>
 		<Var Name="HMI_IN_AIFRISCHLUFTFEUCHTE" OrigName="HMI_IN_aiFrischluftFeuchte" Type="REAL" OrigType="REAL" Addr="0x2004D718" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="50" Access="3"/>
@@ -209,7 +210,7 @@
 		<Var Name="HMI_IN_DOFRGVENTILATOR" OrigName="HMI_IN_doFrgVentilator" Type="BOOL" OrigType="BOOL" Addr="0x2004D6EC" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="28" Access="3"/>
 		<Var Name="HMI_IN_AOFUVENTILATOR" OrigName="HMI_IN_aoFuVentilator" Type="REAL" OrigType="REAL" Addr="0x2004D738" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="66" Access="3"/>
 		<Var Name="HMI_IN_AOLEISTVORGLUFTAUFBER" OrigName="HMI_IN_aoLeistVorgLuftaufber" Type="REAL" OrigType="REAL" Addr="0x2004D73C" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="68" Access="3"/>
-		<Var Name="GIOTEST" OrigName="gIoTest" Type="ST_IOTEST" OrigType="ST_IoTest" Addr="0x20063EFC" Group="var_glob"/>
+		<Var Name="GIOTEST" OrigName="gIoTest" Type="ST_IOTEST" OrigType="ST_IoTest" Addr="0x20063F18" Group="var_glob"/>
 		<Var Name="HMI_TEST_DIBOX1OFFEN" OrigName="HMI_TEST_diBox1Offen" Type="BOOL" OrigType="BOOL" Addr="0x2004D6BC" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="4" Access="3"/>
 		<Var Name="HMI_TEST_DIBOX1GESCHL" OrigName="HMI_TEST_diBox1Geschl" Type="BOOL" OrigType="BOOL" Addr="0x2004D6BE" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="5" Access="3"/>
 		<Var Name="HMI_TEST_DIBOX2OFFEN" OrigName="HMI_TEST_diBox2Offen" Type="BOOL" OrigType="BOOL" Addr="0x2004D6C0" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="6" Access="3"/>
@@ -252,10 +253,10 @@
 		<Var Name="HMI_IN_BOX2_TEXTINDEXLAUFZEIT" OrigName="HMI_IN_Box2_TextIndexLaufzeit" Type="USINT" OrigType="USINT" Addr="0x2004D7DC" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="148" Access="3"/>
 		<Var Name="HMI_IN_BOX2_TROCKENGUTICON" OrigName="HMI_IN_Box2_TrockengutIcon" Type="USINT" OrigType="USINT" Addr="0x2004D7E4" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="152" Access="3"/>
 		<Var Name="HMI_OUT_BOX_AKTUELL_BOXINDEX" OrigName="HMI_OUT_Box_Aktuell_BoxIndex" Type="USINT" OrigType="USINT" Addr="0x2004D7C0" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="134" Access="3"/>
+		<Var Name="HMI_OUT_BOX_AKTUELL_AUS" OrigName="HMI_OUT_Box_Aktuell_Aus" Type="BOOL" OrigType="BOOL" Addr="0x2004D798" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="114" Access="3"/>
 		<Var Name="HMI_OUT_BOX_AKTUELL_DAUERBETRIEBEIN" OrigName="HMI_OUT_Box_Aktuell_DauerbetriebEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D792" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="111" Access="3"/>
 		<Var Name="HMI_OUT_BOX_AKTUELL_INTERVALLBETRIEBEIN" OrigName="HMI_OUT_Box_Aktuell_IntervallbetriebEIn" Type="BOOL" OrigType="BOOL" Addr="0x2004D794" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="112" Access="3"/>
 		<Var Name="HMI_OUT_BOX_AKTUELL_NACHTROCKNUNGEIN" OrigName="HMI_OUT_Box_Aktuell_NachtrocknungEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D796" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="113" Access="3"/>
-		<Var Name="HMI_OUT_BOX_AKTUELL_AUS" OrigName="HMI_OUT_Box_Aktuell_Aus" Type="BOOL" OrigType="BOOL" Addr="0x2004D798" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="114" Access="3"/>
 		<Var Name="HMI_IN_BOX_AKTUELL_NAME" OrigName="HMI_IN_Box_Aktuell_Name" Type="STRING" OrigType="STRING" Addr="0x2004D7EE" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="157" Access="3" length="31"/>
 		<Var Name="HMI_IN_BOX_AKTUELL_TEMP" OrigName="HMI_IN_Box_Aktuell_Temp" Type="REAL" OrigType="REAL" Addr="0x2004D7A8" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="122" Access="3"/>
 		<Var Name="HMI_IN_BOX_AKTUELL_FEUCHT" OrigName="HMI_IN_Box_Aktuell_Feucht" Type="REAL" OrigType="REAL" Addr="0x2004D7AC" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="124" Access="3"/>
@@ -265,17 +266,18 @@
 		<Var Name="HMI_IN_BOX_AKTUELL_ICONWITTERUNG" OrigName="HMI_IN_Box_Aktuell_IconWitterung" Type="USINT" OrigType="USINT" Addr="0x2004D7A2" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="119" Access="3"/>
 		<Var Name="HMI_IN_BOX_AKTUELL_STATUS" OrigName="HMI_IN_Box_Aktuell_Status" Type="INT" OrigType="INT" Addr="0x2004D7A4" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="120" Access="3"/>
 		<Var Name="HMI_IN_BOX_AKTUELL_TEXTINDEXLAUFZEIT" OrigName="HMI_IN_Box_Aktuell_TextIndexLaufzeit" Type="USINT" OrigType="USINT" Addr="0x2004D7B8" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="130" Access="3"/>
+		<Var Name="HMI_OUT_BOX1_AUS" OrigName="HMI_OUT_Box1_Aus" Type="BOOL" OrigType="BOOL" Addr="0x2004D7C8" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="138" Access="3"/>
 		<Var Name="HMI_OUT_BOX1_DAUERBETRIEBEIN" OrigName="HMI_OUT_Box1_DauerbetriebEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D7C2" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="135" Access="3"/>
 		<Var Name="HMI_OUT_BOX1_INTERVALLBETRIEBEIN" OrigName="HMI_OUT_Box1_IntervallbetriebEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D7C4" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="136" Access="3"/>
 		<Var Name="HMI_OUT_BOX1_NACHTROCKNUNGEIN" OrigName="HMI_OUT_Box1_NachtrocknungEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D7C6" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="137" Access="3"/>
-		<Var Name="HMI_OUT_BOX1_AUS" OrigName="HMI_OUT_Box1_Aus" Type="BOOL" OrigType="BOOL" Addr="0x2004D7C8" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="138" Access="3"/>
 		<Var Name="HMI_IN_BOX1_ANZEIGELAUFRESTZEIT" OrigName="HMI_IN_Box1_AnzeigeLaufRestzeit" Type="UINT" OrigType="UINT" Addr="0x2004D7D0" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="142" Access="3"/>
 		<Var Name="HMI_IN_BOX2_ANZEIGELAUFRESTZEIT" OrigName="HMI_IN_Box2_AnzeigeLaufRestzeit" Type="UINT" OrigType="UINT" Addr="0x2004D7E2" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="151" Access="3"/>
+		<Var Name="HMI_VENTILATOR1_FARBEICON" OrigName="HMI_Ventilator1_FarbeIcon" Type="UINT" OrigType="UINT" Addr="0x2004D78E" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="109" Access="3"/>
 		<Var Name="%MW200.0" OrigName="%MW200.0" Type="WORD" OrigType="WORD" Addr="0x2004FDC4" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="0" Access="3"/>
 		<Var Name="%MW201.0" OrigName="%MW201.0" Type="WORD" OrigType="WORD" Addr="0x2004D6B4" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="0" Access="3"/>
-		<Const Name="$$PARDBLENGTH" OrigName="$$ParDBLength" Type="DWORD" OrigType="DWORD" hidden="true">215</Const>
-		<Var Name="IBN_TRUE" OrigName="IBN_TRUE" Type="BOOL" OrigType="BOOL" Addr="0x20063EE6" Descr="Inbetriebnahmemerker true" Group="var_glob"/>
-		<Var Name="IBN_FALSE" OrigName="IBN_FALSE" Type="BOOL" OrigType="BOOL" Addr="0x20063F44" Descr="Inbetriebnahmemerker false" Group="var_glob"/>
+		<Const Name="$$PARDBLENGTH" OrigName="$$ParDBLength" Type="DWORD" OrigType="DWORD" hidden="true">219</Const>
+		<Var Name="IBN_TRUE" OrigName="IBN_TRUE" Type="BOOL" OrigType="BOOL" Addr="0x20063F02" Descr="Inbetriebnahmemerker true" Group="var_glob"/>
+		<Var Name="IBN_FALSE" OrigName="IBN_FALSE" Type="BOOL" OrigType="BOOL" Addr="0x20063F70" Descr="Inbetriebnahmemerker false" Group="var_glob"/>
 		<Var Name="HMI_IN_DIQUITERR" OrigName="HMI_IN_diQuitErr" Type="BOOL" OrigType="BOOL" Addr="0x2004D6EE" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="29" Access="3"/>
 		<Var Name="HW_DI1" OrigName="hw_di1" Type="BOOL" OrigType="BOOL" Addr="0x2004D4AC" Descr="DIL1 digital input" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="I" DBDataType="X" DataBlockNumber="0" DataBlockIndex="0" Access="1"/>
 		<Var Name="HW_DI2" OrigName="hw_di2" Type="BOOL" OrigType="BOOL" Addr="0x2004D4AD" Descr="DIL2 digital input" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="I" DBDataType="X" DataBlockNumber="0" DataBlockIndex="1" Access="1"/>
@@ -297,6 +299,8 @@
 		<Var Name="HW_DO5" OrigName="hw_do5" Type="BOOL" OrigType="BOOL" Addr="0x2004D470" Descr="DOL5 digital output" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="Q" DBDataType="X" DataBlockNumber="1" DataBlockIndex="4" Access="3"/>
 		<Var Name="HW_AO1" OrigName="hw_ao1" Type="INT" OrigType="INT" Addr="0x2004D4A4" Descr="AOL1 analog output" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="Q" DBDataType="W" DataBlockNumber="0" DataBlockIndex="0" Access="3"/>
 		<Var Name="HW_AO4" OrigName="hw_ao4" Type="INT" OrigType="INT" Addr="0x2004D4AA" Descr="AOL4 analog output" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="Q" DBDataType="W" DataBlockNumber="0" DataBlockIndex="3" Access="3"/>
+		<Var Name="PAR_BOX1_INTERVALLZEIT" OrigName="Par_Box1_Intervallzeit" Type="UDINT" OrigType="UDINT" Addr="0x2004FF58" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="202" Access="3"/>
+		<Var Name="PAR_BOX2_INTERVALLZEIT" OrigName="Par_Box2_Intervallzeit" Type="UDINT" OrigType="UDINT" Addr="0x2004FF60" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="206" Access="3"/>
 		<Var Name="HMI_TEST_DOIOTESTAKTIVIEREN" OrigName="HMI_TEST_doIoTestAktivieren" Type="BOOL" OrigType="BOOL" Addr="0x2004D6CE" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="13" Access="3"/>
 		<Const Name="1" OrigName="1" Type="USINT" OrigType="USINT">1</Const>
 		<Const Name="2" OrigName="2" Type="USINT" OrigType="USINT">2</Const>
@@ -310,6 +314,8 @@
 		<Var Name="PAR_LUFTAUFBEREITUNG_XRES1" OrigName="Par_Luftaufbereitung_xRes1" Type="BOOL" OrigType="BOOL" Addr="0x2004FEC0" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="126" Access="3"/>
 		<Var Name="PAR_LUFTAUFBEREITUNG_FARBEICON" OrigName="Par_Luftaufbereitung_FarbeIcon" Type="BYTE" OrigType="BYTE" Addr="0x2004FF0C" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="164" Access="3"/>
 		<Var Name="PAR_LUFTAUFBEREITUNG_BETRIEBSMELDUNGVORH" OrigName="Par_Luftaufbereitung_BetriebsmeldungVorh" Type="BOOL" OrigType="BOOL" Addr="0x2004FF0E" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="165" Access="3"/>
+		<Var Name="PAR_BOX1_NACHTROCKNUNGSZEIT" OrigName="Par_Box1_Nachtrocknungszeit" Type="UDINT" OrigType="UDINT" Addr="0x2004FF5C" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="204" Access="3"/>
+		<Var Name="PAR_BOX2_NACHTROCKNUNGSZEIT" OrigName="Par_Box2_Nachtrocknungszeit" Type="UDINT" OrigType="UDINT" Addr="0x2004FF64" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="208" Access="3"/>
 		<Var Name="HMI_TEST_DI3" OrigName="HMI_TEST_di3" Type="BOOL" OrigType="BOOL" Addr="0x2004D6C8" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="10" Access="3"/>
 		<Var Name="HMI_TEST_DI4" OrigName="HMI_TEST_di4" Type="BOOL" OrigType="BOOL" Addr="0x2004D6CA" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="11" Access="3"/>
 		<Var Name="HMI_TEST_DO3" OrigName="HMI_TEST_do3" Type="BOOL" OrigType="BOOL" Addr="0x2004D6D2" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="15" Access="3"/>
@@ -343,7 +349,6 @@
 		<Var Name="HMI_ZUSATZMELDUNG_STATUSTEXT" OrigName="HMI_Zusatzmeldung_Statustext" Type="UINT" OrigType="UINT" Addr="0x2004D788" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="106" Access="3"/>
 		<Var Name="HMI_ZUSATZMELDUNG_SANDUHR" OrigName="HMI_Zusatzmeldung_Sanduhr" Type="UINT" OrigType="UINT" Addr="0x2004D78A" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="107" Access="3"/>
 		<Var Name="HMI_ZUSATZMELDUNG_RESTZEIT" OrigName="HMI_Zusatzmeldung_Restzeit" Type="UINT" OrigType="UINT" Addr="0x2004D78C" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="108" Access="3"/>
-		<Var Name="HMI_VENTILATOR1_FARBEICON" OrigName="HMI_Ventilator1_FarbeIcon" Type="UINT" OrigType="UINT" Addr="0x2004D78E" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="109" Access="3"/>
 		<Var Name="HMI_VENTILATOR1_ISTDREHZAHL" OrigName="HMI_Ventilator1_IstDrehzahl" Type="UINT" OrigType="UINT" Addr="0x2004D790" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="110" Access="3"/>
 		<Var Name="HMI_OUT_BOX_AKTUELL_TROCKENGUTFEUCHTEAKTUELL" OrigName="HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell" Type="UINT" OrigType="UINT" Addr="0x2004D79A" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="115" Access="3"/>
 		<Var Name="HMI_IN_BOX_AKTUELL_ANZEIGELAUFRESTZEIT" OrigName="HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit" Type="UINT" OrigType="UINT" Addr="0x2004D7A0" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="118" Access="3"/>
@@ -432,30 +437,30 @@
 		<Var Name="SYSCOPMEVENT" OrigName="sysCopmEvent" Type="COPM_EVENT_STRUCT" OrigType="COPM_EVENT_STRUCT" Addr="0x2005A8A8" Descr="Event from CANopen Master" Group="CANopen_Master" OnDataBlock="true" DataBlockType="I" DBDataType="B" DataBlockNumber="60004" DataBlockIndex="0" Access="1"/>
 		<Var Name="SYSCOPMMONITOR" OrigName="sysCopmMonitor" Type="COPM_MONITOR_STRUCT" OrigType="COPM_MONITOR_STRUCT" Addr="0x2005A8BC" Descr="Diagnostic for CANopen Master" Group="CANopen_Master" OnDataBlock="true" DataBlockType="I" DBDataType="B" DataBlockNumber="60005" DataBlockIndex="0" Access="1"/>
 		<Var Name="SYSCOPSSTATUS" OrigName="sysCopsStatus" Type="COPS_STATUS_STRUCT" OrigType="COPS_STATUS_STRUCT" Addr="0x2005A8D4" Descr="System CANopen Slave Diagno. It is a structure of type COPS_STATUS_STRUCT" Group="CANOpen_Slave" OnDataBlock="true" DataBlockType="I" DBDataType="B" DataBlockNumber="60072" DataBlockIndex="0" Access="1"/>
-		<Var Name="$MENU_30000" OrigName="$MENU_30000" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007C91C" Group="Menu_vars" idxMin0="1" idx0="47" hidden="true"/>
-		<Var Name="$MENU_30001" OrigName="$MENU_30001" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CA94" Group="Menu_vars" idxMin0="1" idx0="21" hidden="true"/>
-		<Var Name="$MENU_30003" OrigName="$MENU_30003" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CB3C" Group="Menu_vars" idxMin0="1" idx0="7" hidden="true"/>
-		<Var Name="$MENU_30004" OrigName="$MENU_30004" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CB74" Group="Menu_vars" idxMin0="1" idx0="7" hidden="true"/>
-		<Var Name="$MENU_30005" OrigName="$MENU_30005" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CBAC" Group="Menu_vars" idxMin0="1" idx0="15" hidden="true"/>
-		<Var Name="$MENU_30006" OrigName="$MENU_30006" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CC24" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
-		<Var Name="$MENU_30007" OrigName="$MENU_30007" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CC44" Group="Menu_vars" idxMin0="1" idx0="5" hidden="true"/>
-		<Var Name="$MENU_30008" OrigName="$MENU_30008" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CC6C" Group="Menu_vars" idxMin0="1" idx0="3" hidden="true"/>
-		<Var Name="$MENU_30009" OrigName="$MENU_30009" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CC84" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
-		<Var Name="$MENU_30010" OrigName="$MENU_30010" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CCA4" Group="Menu_vars" idxMin0="1" idx0="2" hidden="true"/>
+		<Var Name="$MENU_30000" OrigName="$MENU_30000" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007C950" Group="Menu_vars" idxMin0="1" idx0="47" hidden="true"/>
+		<Var Name="$MENU_30001" OrigName="$MENU_30001" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CAC8" Group="Menu_vars" idxMin0="1" idx0="21" hidden="true"/>
+		<Var Name="$MENU_30003" OrigName="$MENU_30003" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CB70" Group="Menu_vars" idxMin0="1" idx0="7" hidden="true"/>
+		<Var Name="$MENU_30004" OrigName="$MENU_30004" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CBA8" Group="Menu_vars" idxMin0="1" idx0="7" hidden="true"/>
+		<Var Name="$MENU_30005" OrigName="$MENU_30005" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CBE0" Group="Menu_vars" idxMin0="1" idx0="15" hidden="true"/>
+		<Var Name="$MENU_30006" OrigName="$MENU_30006" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CC58" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
+		<Var Name="$MENU_30007" OrigName="$MENU_30007" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CC78" Group="Menu_vars" idxMin0="1" idx0="5" hidden="true"/>
+		<Var Name="$MENU_30008" OrigName="$MENU_30008" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CCA0" Group="Menu_vars" idxMin0="1" idx0="3" hidden="true"/>
+		<Var Name="$MENU_30009" OrigName="$MENU_30009" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CCB8" Group="Menu_vars" idxMin0="1" idx0="4" hidden="true"/>
+		<Var Name="$MENU_30010" OrigName="$MENU_30010" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007CCD8" Group="Menu_vars" idxMin0="1" idx0="2" hidden="true"/>
 		<Var Name="$$CODEBASE$$" OrigName="$$CODEBASE$$" Type="UDINT" OrigType="UDINT" Addr="0x8100000"/>
-		<Var Name="$$CODESTART$$" OrigName="$$CODESTART$$" Type="UDINT" OrigType="UDINT" Addr="0x810D158"/>
-		<Var Name="$$CODESIZE$$" OrigName="$$CODESIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x811F490"/>
+		<Var Name="$$CODESTART$$" OrigName="$$CODESTART$$" Type="UDINT" OrigType="UDINT" Addr="0x810D1F8"/>
+		<Var Name="$$CODESIZE$$" OrigName="$$CODESIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x811FDE0"/>
 		<Var Name="$$CODEEND$$" OrigName="$$CODEEND$$" Type="UDINT" OrigType="UDINT" Addr="0x8200000"/>
-		<Var Name="$$DATASIZE$$" OrigName="$$DATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x2007CCB4"/>
+		<Var Name="$$DATASIZE$$" OrigName="$$DATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x2007CCE8"/>
 		<Var Name="$$AUXDATASIZE$$" OrigName="$$AUXDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x0"/>
 		<Var Name="$$BITDATASIZE$$" OrigName="$$BITDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x0"/>
 		<Var Name="$$RITDATASIZE$$" OrigName="$$RITDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x2005E688"/>
 	</GlobalVars>
 	<Programs>
-		<Prog Name="$$MBSBOOT_1" OrigName="$$MbSBoot_1" SrcType="3" CodeAddr="0x8119160" HashCode="B0EE8022">
+		<Prog Name="$$MBSBOOT_1" OrigName="$$MbSBoot_1" SrcType="3" CodeAddr="0x8119200" HashCode="B0EE8022">
 			<Var Name="CHN_RETURN" OrigName="chn_return" Type="USINT" OrigType="USINT" Addr="0x2005E80F"/>
 		</Prog>
-		<Prog Name="$APPLICATIONMENU" OrigName="$ApplicationMenu" SrcType="3" CodeAddr="0x81191E0" HashCode="A5A4D5DA">
+		<Prog Name="$APPLICATIONMENU" OrigName="$ApplicationMenu" SrcType="3" CodeAddr="0x8119280" HashCode="A5A4D5DA">
 			<Var Name="$MAIN" OrigName="$main" Type="$FUNDAMENTALSTATE" OrigType="$FundamentalState" Addr="0x2005E81C"/>
 			<Var Name="$FSTYPE" OrigName="$fsType" Type="DINT" OrigType="DINT" Addr="0x2005E818" Range="$FUNDAMENTAL_STATE_TYPE"/>
 			<Var Name="$ISPLC" OrigName="$isPLC" Type="BOOL" OrigType="BOOL" Addr="0x2005E80E"/>
@@ -463,7 +468,7 @@
 			<Var Name="$RES" OrigName="$res" Type="INT" OrigType="INT" Addr="0x2005E816"/>
 			<Var Name="$RESUINT" OrigName="$resUint" Type="UINT" OrigType="UINT" Addr="0x200639F8"/>
 		</Prog>
-		<Prog Name="ABLAUFSTRGCYCLIC" OrigName="AblaufstrgCyclic" SrcType="3" CodeAddr="0x811B864" HashCode="D18BFAA2">
+		<Prog Name="ABLAUFSTRGCYCLIC" OrigName="AblaufstrgCyclic" SrcType="3" CodeAddr="0x811BA88" HashCode="C5730014">
 			<Var Name="STATEENTRY" OrigName="stateEntry" Type="BOOL" OrigType="BOOL" Addr="0x20063B15"/>
 			<Var Name="XSTARTFREIGABE" OrigName="xStartFreigabe" Type="BOOL" OrigType="BOOL" Addr="0x200639FB"/>
 			<Var Name="XSTOPANFORDERUNG" OrigName="xStopAnforderung" Type="BOOL" OrigType="BOOL" Addr="0x200639FA"/>
@@ -472,113 +477,129 @@
 			<Var Name="USTROMBEGRSTART1" OrigName="uStromBegrStart1" Type="UINT" OrigType="UINT" Addr="0x20063B16"/>
 			<Var Name="USTROMBEGRSTOPP1" OrigName="uStromBegrStopp1" Type="UINT" OrigType="UINT" Addr="0x20063E18"/>
 		</Prog>
-		<Prog Name="AKTORENMAPPINGCYCLIC" OrigName="AktorenMappingCyclic" SrcType="3" CodeAddr="0x811BCB4" HashCode="AADFE871">
-			<Var Name="FBBOXENKLAPPE1" OrigName="fbBoxenklappe1" Type="FBBOXENKLAPPE" OrigType="fbBoxenklappe" Addr="0x20063E1C"/>
-			<Var Name="FBBOXENKLAPPE2" OrigName="fbBoxenklappe2" Type="FBBOXENKLAPPE" OrigType="fbBoxenklappe" Addr="0x20063E64"/>
+		<Prog Name="AKTORENMAPPINGCYCLIC" OrigName="AktorenMappingCyclic" SrcType="3" CodeAddr="0x811BEA8" HashCode="7947A6F0">
+			<Var Name="FBBOXENKLAPPE1" OrigName="fbBoxenklappe1" Type="FBBOXENKLAPPE" OrigType="fbBoxenklappe" Addr="0x20063E20"/>
+			<Var Name="FBBOXENKLAPPE2" OrigName="fbBoxenklappe2" Type="FBBOXENKLAPPE" OrigType="fbBoxenklappe" Addr="0x20063E68"/>
+			<Var Name="XFREIGABEKLAPPE1OUT" OrigName="xFreigabeKlappe1Out" Type="BOOL" OrigType="BOOL" Addr="0x20063E1C"/>
+			<Var Name="XFREIGABEKLAPPE2OUT" OrigName="xFreigabeKlappe2Out" Type="BOOL" OrigType="BOOL" Addr="0x20063E1D"/>
+			<Var Name="XNOTBETRIEBBOX1" OrigName="xNotbetriebBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063E1B"/>
+			<Var Name="XNOTBETRIEBBOX2" OrigName="xNotbetriebBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063E1E"/>
+			<Var Name="XBOX1ENDLERREICHT" OrigName="xBox1EndlErreicht" Type="BOOL" OrigType="BOOL" Addr="0x20063E66"/>
+			<Var Name="XBOX2ENDLERREICHT" OrigName="xBox2EndlErreicht" Type="BOOL" OrigType="BOOL" Addr="0x20063EAE"/>
 		</Prog>
-		<Prog Name="ALARMCYCLIC" OrigName="AlarmCyclic" SrcType="3" CodeAddr="0x811A114" HashCode="755936FF">
-			<Var Name="XF_SENSORFRISCHLUFT" OrigName="xF_SensorFrischluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EB6"/>
-			<Var Name="XF_SENSORABLUFTBOX1" OrigName="xF_SensorAbluftBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EB7"/>
-			<Var Name="XF_SENSORABLUFTBOX2" OrigName="xF_SensorAbluftBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EB8"/>
-			<Var Name="XF_SENSORTROCKENLUFT" OrigName="xF_SensorTrockenluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EB9"/>
-			<Var Name="XF_SENSORSTOCKTEMP" OrigName="xF_SensorStocktemp" Type="BOOL" OrigType="BOOL" Addr="0x20063EBA"/>
-			<Var Name="XF_KLAPPEBOX1" OrigName="xF_KlappeBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EBB"/>
-			<Var Name="XF_KLAPPEBOX2" OrigName="xF_KlappeBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EBC"/>
-			<Var Name="XF_LUFTAUFBEREITER" OrigName="xF_Luftaufbereiter" Type="BOOL" OrigType="BOOL" Addr="0x20063EBD"/>
-			<Var Name="XFL_SENSORFRISCHLUFT" OrigName="xFL_SensorFrischluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EBF"/>
-			<Var Name="XFL_SENSORABLUFTBOX1" OrigName="xFL_SensorAbluftBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EBE"/>
-			<Var Name="XFL_SENSORABLUFTBOX2" OrigName="xFL_SensorAbluftBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063ED4"/>
-			<Var Name="XFL_SENSORTROCKENLUFT" OrigName="xFL_SensorTrockenluft" Type="BOOL" OrigType="BOOL" Addr="0x20063ED5"/>
-			<Var Name="XFL_SENSORSTOCKTEMP" OrigName="xFL_SensorStocktemp" Type="BOOL" OrigType="BOOL" Addr="0x20063ED6"/>
-			<Var Name="XFL_KLAPPEBOX1" OrigName="xFL_KlappeBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063ED7"/>
-			<Var Name="XFL_KLAPPEBOX2" OrigName="xFL_KlappeBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063ED8"/>
-			<Var Name="XFL_LUFTAUFBEREITER" OrigName="xFL_Luftaufbereiter" Type="BOOL" OrigType="BOOL" Addr="0x20063ED9"/>
-			<Var Name="XSUMMEFEHLER" OrigName="xSummeFehler" Type="BOOL" OrigType="BOOL" Addr="0x20063EDA"/>
-			<Var Name="XSUMMEWARNUNG" OrigName="xSummeWarnung" Type="BOOL" OrigType="BOOL" Addr="0x20063EDB"/>
-			<Var Name="TON_FAULTBETRIEBLUFTAFBER" OrigName="Ton_FaultBetriebLuftafber" Type="TON" OrigType="TON" Addr="0x20063EC0"/>
+		<Prog Name="ALARMCYCLIC" OrigName="AlarmCyclic" SrcType="3" CodeAddr="0x811A1B4" HashCode="D55CD2FB">
+			<Var Name="XF_SENSORFRISCHLUFT" OrigName="xF_SensorFrischluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EBC"/>
+			<Var Name="XF_SENSORABLUFTBOX1" OrigName="xF_SensorAbluftBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EBD"/>
+			<Var Name="XF_SENSORABLUFTBOX2" OrigName="xF_SensorAbluftBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EBE"/>
+			<Var Name="XF_SENSORTROCKENLUFT" OrigName="xF_SensorTrockenluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EBF"/>
+			<Var Name="XF_SENSORSTOCKTEMP" OrigName="xF_SensorStocktemp" Type="BOOL" OrigType="BOOL" Addr="0x20063EC0"/>
+			<Var Name="XF_KLAPPEBOX1" OrigName="xF_KlappeBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EC1"/>
+			<Var Name="XF_KLAPPEBOX2" OrigName="xF_KlappeBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EC2"/>
+			<Var Name="XF_LUFTAUFBEREITER" OrigName="xF_Luftaufbereiter" Type="BOOL" OrigType="BOOL" Addr="0x20063EC3"/>
+			<Var Name="XF_VENTILATOR" OrigName="xF_Ventilator" Type="BOOL" OrigType="BOOL" Addr="0x20063EDB"/>
+			<Var Name="XFL_SENSORFRISCHLUFT" OrigName="xFL_SensorFrischluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EDA"/>
+			<Var Name="XFL_SENSORABLUFTBOX1" OrigName="xFL_SensorAbluftBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EF0"/>
+			<Var Name="XFL_SENSORABLUFTBOX2" OrigName="xFL_SensorAbluftBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EF1"/>
+			<Var Name="XFL_SENSORTROCKENLUFT" OrigName="xFL_SensorTrockenluft" Type="BOOL" OrigType="BOOL" Addr="0x20063EF2"/>
+			<Var Name="XFL_SENSORSTOCKTEMP" OrigName="xFL_SensorStocktemp" Type="BOOL" OrigType="BOOL" Addr="0x20063EF3"/>
+			<Var Name="XFL_KLAPPEBOX1" OrigName="xFL_KlappeBox1" Type="BOOL" OrigType="BOOL" Addr="0x20063EF4"/>
+			<Var Name="XFL_KLAPPEBOX2" OrigName="xFL_KlappeBox2" Type="BOOL" OrigType="BOOL" Addr="0x20063EF5"/>
+			<Var Name="XFL_LUFTAUFBEREITER" OrigName="xFL_Luftaufbereiter" Type="BOOL" OrigType="BOOL" Addr="0x20063EF6"/>
+			<Var Name="XSUMMEFEHLER" OrigName="xSummeFehler" Type="BOOL" OrigType="BOOL" Addr="0x20063EF7"/>
+			<Var Name="XSUMMEWARNUNG" OrigName="xSummeWarnung" Type="BOOL" OrigType="BOOL" Addr="0x20063EF8"/>
+			<Var Name="TON_FAULTBETRIEBLUFTAFBER" OrigName="Ton_FaultBetriebLuftafber" Type="TON" OrigType="TON" Addr="0x20063EC4"/>
+			<Var Name="TON_FAULTBETRIEBVENTILATOR" OrigName="Ton_FaultBetriebVentilator" Type="TON" OrigType="TON" Addr="0x20063EDC"/>
 		</Prog>
-		<Prog Name="BERECHNUNGCYCLIC" OrigName="BerechnungCyclic" SrcType="3" CodeAddr="0x8119B20" HashCode="45F6FB81">
-			<Var Name="XFRISCHLUFTTEMPOK" OrigName="xFrischluftTempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EDC"/>
-			<Var Name="XFRISCHLUFTFEUCHTOK" OrigName="xFrischluftFeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EDD"/>
-			<Var Name="XABLUFT1TEMPOK" OrigName="xAbluft1TempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EDE"/>
-			<Var Name="XABLUFT1FEUCHTOK" OrigName="xAbluft1FeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EDF"/>
-			<Var Name="XTROCKENTEMPOK" OrigName="xTrockenTempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EE0"/>
-			<Var Name="XTROCKENFEUCHTOK" OrigName="xTrockenFeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EE1"/>
-			<Var Name="XABLUFT2TEMPOK" OrigName="xAbluft2TempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EE2"/>
-			<Var Name="XABLUFT2FEUCHTOK" OrigName="xAbluft2FeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EE3"/>
-			<Var Name="XSTOCKTEMPOK" OrigName="xStockTempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EE4"/>
-			<Var Name="RDELTATEMPBOX1" OrigName="rDeltaTempBox1" Type="REAL" OrigType="REAL" Addr="0x20063EE8"/>
-			<Var Name="RDELTATEMPBOX2" OrigName="rDeltaTempBox2" Type="REAL" OrigType="REAL" Addr="0x20063EEC"/>
-			<Var Name="RDELTAFEUCHTEBOX1" OrigName="rDeltaFeuchteBox1" Type="REAL" OrigType="REAL" Addr="0x20063EF0"/>
-			<Var Name="RDELTAFEUCHTEBOX2" OrigName="rDeltaFeuchteBox2" Type="REAL" OrigType="REAL" Addr="0x20063EF4"/>
+		<Prog Name="BERECHNUNGCYCLIC" OrigName="BerechnungCyclic" SrcType="3" CodeAddr="0x8119BC0" HashCode="45F6FB81">
+			<Var Name="XFRISCHLUFTTEMPOK" OrigName="xFrischluftTempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EF9"/>
+			<Var Name="XFRISCHLUFTFEUCHTOK" OrigName="xFrischluftFeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EFA"/>
+			<Var Name="XABLUFT1TEMPOK" OrigName="xAbluft1TempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EFB"/>
+			<Var Name="XABLUFT1FEUCHTOK" OrigName="xAbluft1FeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EFC"/>
+			<Var Name="XTROCKENTEMPOK" OrigName="xTrockenTempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EFD"/>
+			<Var Name="XTROCKENFEUCHTOK" OrigName="xTrockenFeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EFE"/>
+			<Var Name="XABLUFT2TEMPOK" OrigName="xAbluft2TempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063EFF"/>
+			<Var Name="XABLUFT2FEUCHTOK" OrigName="xAbluft2FeuchtOk" Type="BOOL" OrigType="BOOL" Addr="0x20063F00"/>
+			<Var Name="XSTOCKTEMPOK" OrigName="xStockTempOk" Type="BOOL" OrigType="BOOL" Addr="0x20063F01"/>
+			<Var Name="RDELTATEMPBOX1" OrigName="rDeltaTempBox1" Type="REAL" OrigType="REAL" Addr="0x20063F04"/>
+			<Var Name="RDELTATEMPBOX2" OrigName="rDeltaTempBox2" Type="REAL" OrigType="REAL" Addr="0x20063F08"/>
+			<Var Name="RDELTAFEUCHTEBOX1" OrigName="rDeltaFeuchteBox1" Type="REAL" OrigType="REAL" Addr="0x20063F0C"/>
+			<Var Name="RDELTAFEUCHTEBOX2" OrigName="rDeltaFeuchteBox2" Type="REAL" OrigType="REAL" Addr="0x20063F10"/>
 		</Prog>
-		<Prog Name="COPMBOOT" OrigName="CopMBoot" SrcType="3" CodeAddr="0x8119010" HashCode="8D8E80FA">
-			<Var Name="MASTER_RETURN" OrigName="master_return" Type="DINT" OrigType="DINT" Addr="0x20063EF8"/>
+		<Prog Name="COPMBOOT" OrigName="CopMBoot" SrcType="3" CodeAddr="0x81190B0" HashCode="8D8E80FA">
+			<Var Name="MASTER_RETURN" OrigName="master_return" Type="DINT" OrigType="DINT" Addr="0x20063F14"/>
 		</Prog>
-		<Prog Name="HMIMAPPINGCYCLIC" OrigName="HmiMappingCyclic" SrcType="3" CodeAddr="0x811D610" HashCode="E699F1F8"/>
-		<Prog Name="INITPARDB" OrigName="InitParDB" SrcType="3" CodeAddr="0x8119080" HashCode="99518893">
-			<Var Name="WARNINGSKILLER" OrigName="warningsKiller" Type="USINT" OrigType="USINT" Addr="0x20063EE7"/>
-			<Var Name="DUMMYCRC32" OrigName="dummyCrc32" Type="UDINT" OrigType="UDINT" Addr="0x20063F38"/>
+		<Prog Name="HMIMAPPINGCYCLIC" OrigName="HmiMappingCyclic" SrcType="3" CodeAddr="0x811DB78" HashCode="0ECFF154">
+			<Var Name="RT_BOX_AUS" OrigName="rt_Box_Aus" Type="R_TRIG" OrigType="R_TRIG" Addr="0x20063F54"/>
+			<Var Name="RT_BOX_DAUER" OrigName="rt_Box_Dauer" Type="R_TRIG" OrigType="R_TRIG" Addr="0x20063F58"/>
+			<Var Name="RT_BOX_INTERVALL" OrigName="rt_Box_Intervall" Type="R_TRIG" OrigType="R_TRIG" Addr="0x20063F5C"/>
+			<Var Name="RT_BOX_NACHTR" OrigName="rt_Box_Nachtr" Type="R_TRIG" OrigType="R_TRIG" Addr="0x20063F60"/>
+		</Prog>
+		<Prog Name="INITPARDB" OrigName="InitParDB" SrcType="3" CodeAddr="0x8119120" HashCode="48513BE4">
+			<Var Name="WARNINGSKILLER" OrigName="warningsKiller" Type="USINT" OrigType="USINT" Addr="0x20063F03"/>
+			<Var Name="DUMMYCRC32" OrigName="dummyCrc32" Type="UDINT" OrigType="UDINT" Addr="0x20063F64"/>
 			<GenVar Name="%MW200.0" OrigName="%MW200.0" Type="WORD" OrigType="WORD" Addr="0x2004FDC4" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="0" Access="3"/>
 			<GenVar Name="%MW201.0" OrigName="%MW201.0" Type="WORD" OrigType="WORD" Addr="0x2004D6B4" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="0" Access="3"/>
-			<TmpVar Name="$$TMP3" OrigName="$$TMP3" Type="DWORD" OrigType="DWORD" Addr="0x20063F3C"/>
-			<TmpVar Name="$$TMP5" OrigName="$$TMP5" Type="DWORD" OrigType="DWORD" Addr="0x20063F40"/>
+			<TmpVar Name="$$TMP3" OrigName="$$TMP3" Type="DWORD" OrigType="DWORD" Addr="0x20063F68"/>
+			<TmpVar Name="$$TMP5" OrigName="$$TMP5" Type="DWORD" OrigType="DWORD" Addr="0x20063F6C"/>
 		</Prog>
-		<Prog Name="IOMAPPINGCYCLIC" OrigName="IOMappingCyclic" SrcType="3" CodeAddr="0x811C190" HashCode="FB4362D6">
-			<Var Name="FBFRISCHLUFTTEMPAVG" OrigName="fbFrischluftTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20063F6C"/>
-			<Var Name="FBABLUFTBOX1TEMPAVG" OrigName="fbAbluftBox1TempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x2006DC7C"/>
-			<Var Name="FBABLUFTBOX2TEMPAVG" OrigName="fbAbluftBox2TempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20072B04"/>
-			<Var Name="FBTROCKENLUFTTEMPAVG" OrigName="fbTrockenluftTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20068DF4"/>
-			<Var Name="FBSTOCKTEMPAVG" OrigName="fbStockTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x2007798C"/>
-			<Var Name="FBFRISCHLUFTTEMPSCAL" OrigName="fbFrischluftTempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20068DBC"/>
-			<Var Name="FBFRISCHLUFTFEUCHTSCAL" OrigName="fbFrischluftFeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20068DD8"/>
-			<Var Name="FBABLUFTBOX1TEMPSCAL" OrigName="fbAbluftBox1TempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20072ACC"/>
-			<Var Name="FBABLUFTBOX1FEUCHTSCAL" OrigName="fbAbluftBox1FeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20072AE8"/>
-			<Var Name="FBTROCKENLUFTTEMPSCAL" OrigName="fbTrockenluftTempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2006DC44"/>
-			<Var Name="FBTROCKENLUFTFEUCHTSCAL" OrigName="fbTrockenluftFeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2006DC60"/>
-			<Var Name="FBABLUFTBOX2TEMPSCAL" OrigName="fbAbluftBox2TempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20077954"/>
-			<Var Name="FBABLUFTBOX2FEUCHTSCAL" OrigName="fbAbluftBox2FeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20077970"/>
-			<Var Name="FBSTOCKTEMPSCAL" OrigName="fbStocktempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007C7DC"/>
-			<Var Name="FBAOFUVENTILATORSCAL" OrigName="fbAoFuVentilatorScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007C7F8"/>
-			<Var Name="FBAOLUFTAUFBERLEISTUNGSCAL" OrigName="fbAoLuftaufberLeistungScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007C814"/>
-			<Var Name="RFRISCHLUFTTEMPRAW" OrigName="rFrischluftTempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F48"/>
-			<Var Name="RFRISCHLUFTFEUCHTRAW" OrigName="rFrischluftFeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F4C"/>
-			<Var Name="RABLUFTBOX1TEMPRAW" OrigName="rAbluftBox1TempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F50"/>
-			<Var Name="RABLUFTBOX1FEUCHTRAW" OrigName="rAbluftBox1FeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F54"/>
-			<Var Name="RABLUFTBOX2TEMPRAW" OrigName="rAbluftBox2TempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F60"/>
-			<Var Name="RABLUFTBOX2FEUCHTRAW" OrigName="rAbluftBox2FeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F64"/>
-			<Var Name="RTROCKENLUFTTEMPRAW" OrigName="rTrockenluftTempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F58"/>
-			<Var Name="RTROCKENLUFTFEUCHTRAW" OrigName="rTrockenluftFeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F5C"/>
-			<Var Name="RSTOCKTEMPRAW" OrigName="rStocktempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F68"/>
-			<Var Name="GINITDONE" OrigName="gInitDone" Type="BOOL" OrigType="BOOL" Addr="0x20063F45"/>
+		<Prog Name="IOMAPPINGCYCLIC" OrigName="IOMappingCyclic" SrcType="3" CodeAddr="0x811C6F8" HashCode="FB4362D6">
+			<Var Name="FBFRISCHLUFTTEMPAVG" OrigName="fbFrischluftTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20063F98"/>
+			<Var Name="FBABLUFTBOX1TEMPAVG" OrigName="fbAbluftBox1TempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x2006DCA8"/>
+			<Var Name="FBABLUFTBOX2TEMPAVG" OrigName="fbAbluftBox2TempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20072B30"/>
+			<Var Name="FBTROCKENLUFTTEMPAVG" OrigName="fbTrockenluftTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20068E20"/>
+			<Var Name="FBSTOCKTEMPAVG" OrigName="fbStockTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x200779B8"/>
+			<Var Name="FBFRISCHLUFTTEMPSCAL" OrigName="fbFrischluftTempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20068DE8"/>
+			<Var Name="FBFRISCHLUFTFEUCHTSCAL" OrigName="fbFrischluftFeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20068E04"/>
+			<Var Name="FBABLUFTBOX1TEMPSCAL" OrigName="fbAbluftBox1TempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20072AF8"/>
+			<Var Name="FBABLUFTBOX1FEUCHTSCAL" OrigName="fbAbluftBox1FeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20072B14"/>
+			<Var Name="FBTROCKENLUFTTEMPSCAL" OrigName="fbTrockenluftTempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2006DC70"/>
+			<Var Name="FBTROCKENLUFTFEUCHTSCAL" OrigName="fbTrockenluftFeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2006DC8C"/>
+			<Var Name="FBABLUFTBOX2TEMPSCAL" OrigName="fbAbluftBox2TempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x20077980"/>
+			<Var Name="FBABLUFTBOX2FEUCHTSCAL" OrigName="fbAbluftBox2FeuchtScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007799C"/>
+			<Var Name="FBSTOCKTEMPSCAL" OrigName="fbStocktempScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007C808"/>
+			<Var Name="FBAOFUVENTILATORSCAL" OrigName="fbAoFuVentilatorScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007C824"/>
+			<Var Name="FBAOLUFTAUFBERLEISTUNGSCAL" OrigName="fbAoLuftaufberLeistungScal" Type="FB_LIMSCAL" OrigType="FB_LimScal" Addr="0x2007C840"/>
+			<Var Name="RFRISCHLUFTTEMPRAW" OrigName="rFrischluftTempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F74"/>
+			<Var Name="RFRISCHLUFTFEUCHTRAW" OrigName="rFrischluftFeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F78"/>
+			<Var Name="RABLUFTBOX1TEMPRAW" OrigName="rAbluftBox1TempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F7C"/>
+			<Var Name="RABLUFTBOX1FEUCHTRAW" OrigName="rAbluftBox1FeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F80"/>
+			<Var Name="RABLUFTBOX2TEMPRAW" OrigName="rAbluftBox2TempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F8C"/>
+			<Var Name="RABLUFTBOX2FEUCHTRAW" OrigName="rAbluftBox2FeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F90"/>
+			<Var Name="RTROCKENLUFTTEMPRAW" OrigName="rTrockenluftTempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F84"/>
+			<Var Name="RTROCKENLUFTFEUCHTRAW" OrigName="rTrockenluftFeuchtRaw" Type="REAL" OrigType="REAL" Addr="0x20063F88"/>
+			<Var Name="RSTOCKTEMPRAW" OrigName="rStocktempRaw" Type="REAL" OrigType="REAL" Addr="0x20063F94"/>
+			<Var Name="GINITDONE" OrigName="gInitDone" Type="BOOL" OrigType="BOOL" Addr="0x20063F71"/>
 		</Prog>
-		<Prog Name="LEISTUNGCYCLIC" OrigName="LeistungCyclic" SrcType="3" CodeAddr="0x811AAEC" HashCode="55EABAFF">
-			<Var Name="XLUFTAUFBHYSTEIN" OrigName="xLuftaufbHystEin" Type="BOOL" OrigType="BOOL" Addr="0x20063F47" Descr="Hysterese-Merker Automatikbetrieb"/>
-			<Var Name="RLUFTAUFBLEISTUNG" OrigName="rLuftaufbLeistung" Type="REAL" OrigType="REAL" Addr="0x2007C830" Descr="berechnete Leistungsvorgabe"/>
-			<Var Name="FBPIDLUFTAUFB" OrigName="fbPidLuftaufb" Type="PIDADVANCED" OrigType="PIDAdvanced" Addr="0x2007C860"/>
-			<Var Name="XLUFTAUFBPIDEN" OrigName="xLuftaufbPidEn" Type="BOOL" OrigType="BOOL" Addr="0x20063F46"/>
-			<Var Name="XLUFTAUFBANF" OrigName="xLuftaufbAnf" Type="BOOL" OrigType="BOOL" Addr="0x2007C837"/>
-			<Var Name="XLUFTAUFBHYSTMERKER" OrigName="xLuftaufbHystMerker" Type="BOOL" OrigType="BOOL" Addr="0x2007C836" Descr="Feuchte-Hysterese Merker"/>
-			<Var Name="ILUFTAUFBSCHRITT" OrigName="iLuftaufbSchritt" Type="INT" OrigType="INT" Addr="0x2007C834" Descr="Schrittkennung 0..2"/>
-			<Var Name="TONLUFTAUFBEIN" OrigName="tonLuftaufbEin" Type="TON" OrigType="TON" Addr="0x2007C838" Descr="Einschaltverzögerung"/>
-			<Var Name="TONLUFTAUFBMIN" OrigName="tonLuftaufbMin" Type="TON" OrigType="TON" Addr="0x2007C84C" Descr="Mindestlaufzeit"/>
+		<Prog Name="LEISTUNGCYCLIC" OrigName="LeistungCyclic" SrcType="3" CodeAddr="0x811AD10" HashCode="55EABAFF">
+			<Var Name="XLUFTAUFBHYSTEIN" OrigName="xLuftaufbHystEin" Type="BOOL" OrigType="BOOL" Addr="0x20063F73" Descr="Hysterese-Merker Automatikbetrieb"/>
+			<Var Name="RLUFTAUFBLEISTUNG" OrigName="rLuftaufbLeistung" Type="REAL" OrigType="REAL" Addr="0x2007C85C" Descr="berechnete Leistungsvorgabe"/>
+			<Var Name="FBPIDLUFTAUFB" OrigName="fbPidLuftaufb" Type="PIDADVANCED" OrigType="PIDAdvanced" Addr="0x2007C88C"/>
+			<Var Name="XLUFTAUFBPIDEN" OrigName="xLuftaufbPidEn" Type="BOOL" OrigType="BOOL" Addr="0x20063F72"/>
+			<Var Name="XLUFTAUFBANF" OrigName="xLuftaufbAnf" Type="BOOL" OrigType="BOOL" Addr="0x2007C863"/>
+			<Var Name="XLUFTAUFBHYSTMERKER" OrigName="xLuftaufbHystMerker" Type="BOOL" OrigType="BOOL" Addr="0x2007C862" Descr="Feuchte-Hysterese Merker"/>
+			<Var Name="ILUFTAUFBSCHRITT" OrigName="iLuftaufbSchritt" Type="INT" OrigType="INT" Addr="0x2007C860" Descr="Schrittkennung 0..2"/>
+			<Var Name="TONLUFTAUFBEIN" OrigName="tonLuftaufbEin" Type="TON" OrigType="TON" Addr="0x2007C864" Descr="Einschaltverzögerung"/>
+			<Var Name="TONLUFTAUFBMIN" OrigName="tonLuftaufbMin" Type="TON" OrigType="TON" Addr="0x2007C878" Descr="Mindestlaufzeit"/>
 		</Prog>
-		<Prog Name="STARTSTOPPCYCLIC" OrigName="StartStoppCyclic" SrcType="3" CodeAddr="0x811A9A0" HashCode="6867D2A5">
-			<Var Name="XBOX1AKTIV" OrigName="xBox1Aktiv" Type="BOOL" OrigType="BOOL" Addr="0x2007C914"/>
-			<Var Name="XBOX2AKTIV" OrigName="xBox2Aktiv" Type="BOOL" OrigType="BOOL" Addr="0x2007C915"/>
-			<Var Name="XMINDEINEBOXAKTIV" OrigName="xMindEineBoxAktiv" Type="BOOL" OrigType="BOOL" Addr="0x2007C916"/>
-			<Var Name="XEXTERNSTART" OrigName="xExternStart" Type="BOOL" OrigType="BOOL" Addr="0x2007C917"/>
-			<Var Name="XEXTERNSTOP" OrigName="xExternStop" Type="BOOL" OrigType="BOOL" Addr="0x2007C918"/>
+		<Prog Name="STARTSTOPPCYCLIC" OrigName="StartStoppCyclic" SrcType="3" CodeAddr="0x811AAB0" HashCode="F94B88AC">
+			<Var Name="XMINDEINEBOXAKTIV" OrigName="xMindEineBoxAktiv" Type="BOOL" OrigType="BOOL" Addr="0x2007C942"/>
+			<Var Name="XEXTERNSTART" OrigName="xExternStart" Type="BOOL" OrigType="BOOL" Addr="0x2007C94C"/>
+			<Var Name="XEXTERNSTOP" OrigName="xExternStop" Type="BOOL" OrigType="BOOL" Addr="0x2007C94D"/>
+			<Var Name="XINTERVALLBOX1AKTIV" OrigName="xIntervallBox1Aktiv" Type="BOOL" OrigType="BOOL" Addr="0x2007C941"/>
+			<Var Name="XINTERVALLBOX2AKTIV" OrigName="xIntervallBox2Aktiv" Type="BOOL" OrigType="BOOL" Addr="0x2007C943"/>
+			<Var Name="USAKTSTUNDE" OrigName="usAktStunde" Type="USINT" OrigType="USINT" Addr="0x2007C940"/>
+			<Var Name="UDINTERVALLMASKEBOX1" OrigName="udIntervallMaskeBox1" Type="UDINT" OrigType="UDINT" Addr="0x2007C944"/>
+			<Var Name="UDINTERVALLMASKEBOX2" OrigName="udIntervallMaskeBox2" Type="UDINT" OrigType="UDINT" Addr="0x2007C948"/>
 		</Prog>
 	</Programs>
 	<FunctionBlocks>
-		<FBlock Name="$CALLBACKPROCEDURE" OrigName="$CallbackProcedure" SrcType="3" FrameSize="16" CodeAddr="0x8113324" HashCode="98563DC8">
+		<FBlock Name="$CALLBACKPROCEDURE" OrigName="$CallbackProcedure" SrcType="3" FrameSize="16" CodeAddr="0x81133C4" HashCode="98563DC8">
 			<VarI Name="MENUID" OrigName="menuId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative" Descr="Current menu identifier"/>
 			<VarI Name="CALLBACKTYPE" OrigName="callbackType" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative" Descr="Callback type passed to the callback function" Range="CallbackType"/>
 			<VarI Name="INFO" OrigName="info" Type="UDINT" OrigType="UDINT" Addr="0x6[8]" Attribs="relative" Descr="Info passed to the callback function"/>
 			<VarO Name="RES" OrigName="res" Type="BOOL" OrigType="BOOL" Addr="0x6[12]" Attribs="relative" Descr="Result of the callback function"/>
 		</FBlock>
-		<FBlock Name="$READPARAMETERVALUE" OrigName="$ReadParameterValue" SrcType="3" FrameSize="108" CodeAddr="0x8114C38" HashCode="5F57937D">
+		<FBlock Name="$READPARAMETERVALUE" OrigName="$ReadParameterValue" SrcType="3" FrameSize="108" CodeAddr="0x8114CD8" HashCode="5F57937D">
 			<VarI Name="IPA" OrigName="ipa" Type="UINT" OrigType="UINT" Addr="0x6[20]" Attribs="relative" Descr="Parameter IPA"/>
 			<VarI Name="TYPE" OrigName="type" Type="DINT" OrigType="DINT" Addr="0x6[24]" Attribs="relative" Descr="Parameter type" Range="$VarType"/>
 			<VarO Name="$RES_REAL" OrigName="$res_REAL" Type="REAL" OrigType="REAL" Addr="0x6[28]" Attribs="relative"/>
@@ -602,7 +623,7 @@
 			<TmpVar Name="$$TMP7" OrigName="$$TMP7" Type="@REAL" OrigType="@REAL" Addr="0x6[100]" Attribs="relative"/>
 			<TmpVar Name="$$TMP8" OrigName="$$TMP8" Type="@STRING" OrigType="@STRING" Addr="0x6[104]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="$SETPASSWORD" OrigName="$SetPassword" SrcType="3" FrameSize="48" CodeAddr="0x8114774" HashCode="ED117CFF">
+		<FBlock Name="$SETPASSWORD" OrigName="$SetPassword" SrcType="3" FrameSize="48" CodeAddr="0x8114814" HashCode="ED117CFF">
 			<VarI Name="$FSTYPE" OrigName="$fsType" Type="DINT" OrigType="DINT" Addr="0x6[40]" Attribs="relative" Descr="Current fundamental state type" Range="$FUNDAMENTAL_STATE_TYPE"/>
 			<Var Name="$RES" OrigName="$res" Type="INT" OrigType="INT" Addr="0x6[0]" Attribs="relative"/>
 			<Var Name="$RESUINT" OrigName="$resUint" Type="UINT" OrigType="UINT" Addr="0x6[2]" Attribs="relative"/>
@@ -626,12 +647,12 @@
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 			<VarExt Name="SYSGOTOMENUID" OrigName="sysGoToMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D650" Descr="Next Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="28" DataBlockIndex="0" Access="3" Range="$enumGoToMenuID"/>
 		</FBlock>
-		<FBlock Name="$VISIBILITYMANAGER" OrigName="$VisibilityManager" SrcType="3" FrameSize="12" CodeAddr="0x810EFDC" HashCode="4B11D6AC">
+		<FBlock Name="$VISIBILITYMANAGER" OrigName="$VisibilityManager" SrcType="3" FrameSize="12" CodeAddr="0x810F07C" HashCode="4B11D6AC">
 			<VarI Name="VIS" OrigName="vis" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative" Descr="Current visibility value" Range="Visibility"/>
 			<VarO Name="ROW1" OrigName="row1" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative" Descr="Blinking value for row 1" Range="$ROW_VISIBILITY"/>
 			<VarO Name="ROW2" OrigName="row2" Type="DINT" OrigType="DINT" Addr="0x6[8]" Attribs="relative" Descr="Blinking value for row 2" Range="$ROW_VISIBILITY"/>
 		</FBlock>
-		<FBlock Name="FBTROCKSTROMBEGR" OrigName="fbTrockStrombegr" SrcType="3" FrameSize="52" CodeAddr="0x810F0C4" HashCode="B84F1093">
+		<FBlock Name="FBTROCKSTROMBEGR" OrigName="fbTrockStrombegr" SrcType="3" FrameSize="52" CodeAddr="0x810F164" HashCode="B84F1093">
 			<VarI Name="FREIGABE" OrigName="Freigabe" Type="BOOL" OrigType="BOOL" Addr="0x6[3]" Attribs="relative" Descr="Freigabe Strombegrenzung"/>
 			<VarI Name="STARTZEIT1" OrigName="StartZeit1" Type="REAL" OrigType="REAL" Addr="0x6[4]" Attribs="relative" Descr="Startzeit Zeitfenster 1"/>
 			<VarI Name="STOPPZEIT1" OrigName="StoppZeit1" Type="REAL" OrigType="REAL" Addr="0x6[8]" Attribs="relative" Descr="Stoppzeit Zeitfenster 1"/>
@@ -649,7 +670,7 @@
 			<Var Name="FREIGZEITFENSTER2" OrigName="FreigZeitfenster2" Type="BOOL" OrigType="BOOL" Addr="0x6[1]" Attribs="relative"/>
 			<Var Name="FREIGZEITFENSTER3" OrigName="FreigZeitfenster3" Type="BOOL" OrigType="BOOL" Addr="0x6[2]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="FB_LIMSCAL" OrigName="FB_LimScal" SrcType="3" FrameSize="28" CodeAddr="0x810F5D8" HashCode="7FF0ED44">
+		<FBlock Name="FB_LIMSCAL" OrigName="FB_LimScal" SrcType="3" FrameSize="28" CodeAddr="0x810F678" HashCode="7FF0ED44">
 			<VarI Name="X" OrigName="x" Type="REAL" OrigType="REAL" Addr="0x6[4]" Attribs="relative"/>
 			<VarI Name="X1" OrigName="x1" Type="REAL" OrigType="REAL" Addr="0x6[8]" Attribs="relative"/>
 			<VarI Name="Y1" OrigName="y1" Type="REAL" OrigType="REAL" Addr="0x6[12]" Attribs="relative"/>
@@ -658,7 +679,7 @@
 			<VarO Name="Y" OrigName="y" Type="REAL" OrigType="REAL" Addr="0x6[24]" Attribs="relative"/>
 			<Var Name="RTEMP" OrigName="rTemp" Type="REAL" OrigType="REAL" Addr="0x6[0]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="FB_MOVAVGFLT" OrigName="FB_MovAvgFlt" SrcType="3" FrameSize="20048" CodeAddr="0x810F858" HashCode="C6B207E6">
+		<FBlock Name="FB_MOVAVGFLT" OrigName="FB_MovAvgFlt" SrcType="3" FrameSize="20048" CodeAddr="0x810F8F8" HashCode="C6B207E6">
 			<VarI Name="ENABLE" OrigName="enable" Type="BOOL" OrigType="BOOL" Addr="0x6[20024]" Attribs="relative"/>
 			<VarI Name="X" OrigName="x" Type="REAL" OrigType="REAL" Addr="0x6[20028]" Attribs="relative"/>
 			<VarI Name="NWINDOW_MS" OrigName="nWindow_ms" Type="UDINT" OrigType="UDINT" Addr="0x6[20032]" Attribs="relative" Descr="Mittelungsfenster in Millisekunden, z.B. 5000"/>
@@ -673,7 +694,7 @@
 			<Var Name="WIN" OrigName="win" Type="UDINT" OrigType="UDINT" Addr="0x6[20016]" Attribs="relative"/>
 			<Var Name="LASTWIN" OrigName="lastWin" Type="UDINT" OrigType="UDINT" Addr="0x6[20020]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="PIDADVANCED" OrigName="PIDAdvanced" SrcType="3" FrameSize="180" CodeAddr="0x810FB94" HashCode="0F3D634C">
+		<FBlock Name="PIDADVANCED" OrigName="PIDAdvanced" SrcType="3" FrameSize="180" CodeAddr="0x810FC34" HashCode="0F3D634C">
 			<VarI Name="XEN" OrigName="xEn" Type="BOOL" OrigType="BOOL" Addr="0x6[111]" Attribs="relative" Descr="Enable input for the algorithm"/>
 			<VarI Name="RPV" OrigName="rPv" Type="REAL" OrigType="REAL" Addr="0x6[112]" Attribs="relative" Descr="Process value (User Unit)"/>
 			<VarI Name="RSETP" OrigName="rSetp" Type="REAL" OrigType="REAL" Addr="0x6[116]" Attribs="relative" Descr="Setpoint (User Unit)"/>
@@ -738,12 +759,12 @@
 			<Var Name="L_XENOLD" OrigName="l_xEnOld" Type="BOOL" OrigType="BOOL" Addr="0x6[110]" Attribs="relative" Descr="xlManOld"/>
 			<VarExt Name="SYSTIMER" OrigName="sysTimer" Type="UDINT" OrigType="UDINT" Addr="0x2004D6B0" Descr="System timer [ms]" Group="System_Timers" OnDataBlock="true" DataBlockType="M" DBDataType="D" DataBlockNumber="60000" DataBlockIndex="0" Access="1"/>
 		</FBlock>
-		<FBlock Name="R_TRIG" OrigName="R_TRIG" SrcType="0" FrameSize="4" CodeAddr="0x8111F1C" HashCode="45CFD1FC">
+		<FBlock Name="R_TRIG" OrigName="R_TRIG" SrcType="0" FrameSize="4" CodeAddr="0x8111FBC" HashCode="45CFD1FC">
 			<VarI Name="CLK" OrigName="clk" Type="BOOL" OrigType="BOOL" Addr="0x6[1]" Attribs="relative" Descr="Input for edge detection"/>
 			<VarO Name="Q" OrigName="q" Type="BOOL" OrigType="BOOL" Addr="0x6[2]" Attribs="relative" Descr="Raising edge output"/>
 			<Var Name="M" OrigName="m" Type="BOOL" OrigType="BOOL" Addr="0x6[0]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="TOF" OrigName="TOF" SrcType="0" FrameSize="20" CodeAddr="0x8111F54" HashCode="98FE3D87">
+		<FBlock Name="TOF" OrigName="TOF" SrcType="0" FrameSize="20" CodeAddr="0x8111FF4" HashCode="98FE3D87">
 			<VarI Name="IN" OrigName="IN" Type="BOOL" OrigType="BOOL" Addr="0x6[4]" Attribs="relative" Descr="Timer input source"/>
 			<VarI Name="PT" OrigName="PT" Type="UDINT" OrigType="UDINT" Addr="0x6[8]" Attribs="relative" Descr="Preset time value (ms)"/>
 			<VarO Name="Q" OrigName="Q" Type="BOOL" OrigType="BOOL" Addr="0x6[12]" Attribs="relative" Descr="Timer output"/>
@@ -751,7 +772,7 @@
 			<Var Name="TIMSTART" OrigName="timStart" Type="UDINT" OrigType="UDINT" Addr="0x6[0]" Attribs="relative" Descr="Time value at start of counting"/>
 			<VarExt Name="SYSTIMER" OrigName="sysTimer" Type="UDINT" OrigType="UDINT" Addr="0x2004D6B0" Descr="System timer [ms]" Group="System_Timers" OnDataBlock="true" DataBlockType="M" DBDataType="D" DataBlockNumber="60000" DataBlockIndex="0" Access="1"/>
 		</FBlock>
-		<FBlock Name="TON" OrigName="TON" SrcType="0" FrameSize="20" CodeAddr="0x811200C" HashCode="09CEF9A4">
+		<FBlock Name="TON" OrigName="TON" SrcType="0" FrameSize="20" CodeAddr="0x81120AC" HashCode="09CEF9A4">
 			<VarI Name="IN" OrigName="IN" Type="BOOL" OrigType="BOOL" Addr="0x6[4]" Attribs="relative" Descr="Timer input source"/>
 			<VarI Name="PT" OrigName="PT" Type="UDINT" OrigType="UDINT" Addr="0x6[8]" Attribs="relative" Descr="Preset time value (ms)"/>
 			<VarO Name="Q" OrigName="Q" Type="BOOL" OrigType="BOOL" Addr="0x6[12]" Attribs="relative" Descr="Timer output"/>
@@ -759,13 +780,13 @@
 			<Var Name="TIMSTART" OrigName="timStart" Type="UDINT" OrigType="UDINT" Addr="0x6[0]" Attribs="relative" Descr="Time value at start of counting"/>
 			<VarExt Name="SYSTIMER" OrigName="sysTimer" Type="UDINT" OrigType="UDINT" Addr="0x2004D6B0" Descr="System timer [ms]" Group="System_Timers" OnDataBlock="true" DataBlockType="M" DBDataType="D" DataBlockNumber="60000" DataBlockIndex="0" Access="1"/>
 		</FBlock>
-		<FBlock Name="$GETENUMDATA" OrigName="$GetEnumData" SrcType="3" FrameSize="52" CodeAddr="0x810EA0C" HashCode="AB5A030D">
+		<FBlock Name="$GETENUMDATA" OrigName="$GetEnumData" SrcType="3" FrameSize="52" CodeAddr="0x810EAAC" HashCode="AB5A030D">
 			<VarI Name="ENUMID" OrigName="enumId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative" Descr="Enumerative type identifier"/>
 			<VarI Name="POS" OrigName="pos" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative" Descr="Position of the value inside the enumerative type"/>
 			<VarO Name="$VALUE" OrigName="$value" Type="$ENUMVALUE" OrigType="$EnumValue" Addr="0x6[8]" Attribs="relative" Descr="Extracted value"/>
 			<VarO Name="MAXPOS" OrigName="maxPos" Type="DINT" OrigType="DINT" Addr="0x6[48]" Attribs="relative" Descr="Max position inside the enumerative type"/>
 		</FBlock>
-		<FBlock Name="$GETMENUITEMINFO" OrigName="$GetMenuItemInfo" SrcType="3" FrameSize="32" CodeAddr="0x810EEE8" HashCode="44D4DD80">
+		<FBlock Name="$GETMENUITEMINFO" OrigName="$GetMenuItemInfo" SrcType="3" FrameSize="32" CodeAddr="0x810EF88" HashCode="44D4DD80">
 			<VarI Name="$MENUID" OrigName="$menuId" Type="UINT" OrigType="UINT" Addr="0x6[20]" Attribs="relative" Descr="Current menu identifier"/>
 			<VarI Name="POS" OrigName="pos" Type="UINT" OrigType="UINT" Addr="0x6[22]" Attribs="relative" Descr="Position of the menu item inside the menu"/>
 			<VarO Name="IPA" OrigName="ipa" Type="UINT" OrigType="UINT" Addr="0x6[24]" Attribs="relative" Descr="Parameter IPA"/>
@@ -776,7 +797,7 @@
 			<Var Name="PTRVISIBILITY" OrigName="ptrVisibility" Type="@VISIBILITY" OrigType="@Visibility" Addr="0x6[16]" Attribs="relative"/>
 			<VarExt Name="$MENUS" OrigName="$MENUS" Type="@$MENUITEM" OrigType="@$MenuItem" Addr="0x200639CC" Group="Menu_vars" idxMin0="30000" idx0="30010" hidden="true"/>
 		</FBlock>
-		<FBlock Name="FBBOXENKLAPPE" OrigName="fbBoxenklappe" SrcType="3" FrameSize="68" CodeAddr="0x8112288" HashCode="9D05F041">
+		<FBlock Name="FBBOXENKLAPPE" OrigName="fbBoxenklappe" SrcType="3" FrameSize="68" CodeAddr="0x8112328" HashCode="9D05F041">
 			<VarI Name="OEFFNEN" OrigName="Oeffnen" Type="BOOL" OrigType="BOOL" Addr="0x6[44]" Attribs="relative"/>
 			<VarI Name="SCHLIESSEN" OrigName="Schliessen" Type="BOOL" OrigType="BOOL" Addr="0x6[45]" Attribs="relative"/>
 			<VarI Name="ENDLAGEOFFEN" OrigName="EndlageOffen" Type="BOOL" OrigType="BOOL" Addr="0x6[46]" Attribs="relative"/>
@@ -797,7 +818,7 @@
 			<Var Name="TON_LAUFZEIT" OrigName="TON_Laufzeit" Type="TON" OrigType="TON" Addr="0x6[4]" Attribs="relative"/>
 			<Var Name="TON_ANZVERZ" OrigName="TON_AnzVerz" Type="TON" OrigType="TON" Addr="0x6[24]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="FBHEIZREGISTER" OrigName="fbHeizregister" SrcType="3" FrameSize="96" CodeAddr="0x81133DC" HashCode="E59D5ACB">
+		<FBlock Name="FBHEIZREGISTER" OrigName="fbHeizregister" SrcType="3" FrameSize="96" CodeAddr="0x811347C" HashCode="E59D5ACB">
 			<VarI Name="FREIGABE" OrigName="Freigabe" Type="BOOL" OrigType="BOOL" Addr="0x6[52]" Attribs="relative" Descr="Grundfreigabe Baustein"/>
 			<VarI Name="QUITFEHLER" OrigName="QuitFehler" Type="BOOL" OrigType="BOOL" Addr="0x6[53]" Attribs="relative" Descr="Fehlerquittierung"/>
 			<VarI Name="AUTOMATIKBETRIEB" OrigName="Automatikbetrieb" Type="BOOL" OrigType="BOOL" Addr="0x6[54]" Attribs="relative" Descr="Betriebsart Automatik (witterungsgeführt)"/>
@@ -821,7 +842,7 @@
 			<Var Name="R_TRIG_WETTERISTGUT" OrigName="R_TRIG_WetterIstGut" Type="R_TRIG" OrigType="R_TRIG" Addr="0x6[44]" Attribs="relative" Descr="ersetzt EDGEPOS"/>
 			<Var Name="R_TRIG_WETTERISTSCHLECHT" OrigName="R_TRIG_WetterIstSchlecht" Type="R_TRIG" OrigType="R_TRIG" Addr="0x6[48]" Attribs="relative" Descr="ersetzt EDGEPOS"/>
 		</FBlock>
-		<FBlock Name="FBBOXENWLO" OrigName="fbBoxenWLO" SrcType="3" FrameSize="148" CodeAddr="0x8113A8C" HashCode="259754A9">
+		<FBlock Name="FBBOXENWLO" OrigName="fbBoxenWLO" SrcType="3" FrameSize="148" CodeAddr="0x8113B2C" HashCode="259754A9">
 			<VarI Name="FREIGABE" OrigName="Freigabe" Type="BOOL" OrigType="BOOL" Addr="0x6[96]" Attribs="relative" Descr="Grundfreigabe Baustein"/>
 			<VarI Name="AUTOMATIKBETRIEB" OrigName="Automatikbetrieb" Type="BOOL" OrigType="BOOL" Addr="0x6[97]" Attribs="relative" Descr="Betriebsart Automatik (witterungsgeführt)"/>
 			<VarI Name="DAUERBETRIEB" OrigName="Dauerbetrieb" Type="BOOL" OrigType="BOOL" Addr="0x6[98]" Attribs="relative" Descr="Betriebsart Dauerbetrieb"/>
@@ -854,7 +875,7 @@
 			<Var Name="R_TRIG_WETTERISTGUT" OrigName="R_TRIG_WetterIstGut" Type="R_TRIG" OrigType="R_TRIG" Addr="0x6[88]" Attribs="relative" Descr="ersetzt EDGEPOS"/>
 			<Var Name="R_TRIG_WETTERISTSCHLECHT" OrigName="R_TRIG_WetterIstSchlecht" Type="R_TRIG" OrigType="R_TRIG" Addr="0x6[92]" Attribs="relative" Descr="ersetzt EDGEPOS"/>
 		</FBlock>
-		<FBlock Name="$GETPARAMETERINFO" OrigName="$GetParameterInfo" SrcType="3" FrameSize="376" CodeAddr="0x811503C" HashCode="938B4931">
+		<FBlock Name="$GETPARAMETERINFO" OrigName="$GetParameterInfo" SrcType="3" FrameSize="376" CodeAddr="0x81150DC" HashCode="938B4931">
 			<VarI Name="IPA" OrigName="ipa" Type="UINT" OrigType="UINT" Addr="0x6[244]" Attribs="relative" Descr="Parameter IPA"/>
 			<VarO Name="NAME" OrigName="name" Type="STRING" OrigType="STRING" Addr="0x6[246]" Attribs="relative" Descr="Parameter name" length="32"/>
 			<VarO Name="TYPE" OrigName="type" Type="DINT" OrigType="DINT" Addr="0x6[280]" Attribs="relative" Descr="Parameter type" Range="$VarType"/>
@@ -880,7 +901,7 @@
 			<Var Name="$PARAMETER" OrigName="$parameter" Type="$PARINFO" OrigType="$ParInfo" Addr="0x6[36]" Attribs="relative"/>
 			<Var Name="$READER" OrigName="$reader" Type="$READPARAMETERVALUE" OrigType="$ReadParameterValue" Addr="0x6[136]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="$SETPARAMETERVALUE" OrigName="$SetParameterValue" SrcType="3" FrameSize="448" CodeAddr="0x81153A4" HashCode="62978B5F">
+		<FBlock Name="$SETPARAMETERVALUE" OrigName="$SetParameterValue" SrcType="3" FrameSize="448" CodeAddr="0x8115444" HashCode="62978B5F">
 			<VarI Name="IPA" OrigName="ipa" Type="UINT" OrigType="UINT" Addr="0x6[380]" Attribs="relative" Descr="IPA of the parameter to be edited"/>
 			<VarI Name="$VALUE" OrigName="$value" Type="$VALUE" OrigType="$Value" Addr="0x6[384]" Attribs="relative" Descr="Value to be set"/>
 			<Var Name="$RC" OrigName="$rc" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative" Range="sysDBaseErrCode"/>
@@ -893,7 +914,7 @@
 			<TmpVar Name="$$TMP5" OrigName="$$TMP5" Type="BOOL" OrigType="BOOL" Addr="0x6[440]" Attribs="relative"/>
 			<TmpVar Name="$$TMP8" OrigName="$$TMP8" Type="@STRING" OrigType="@STRING" Addr="0x6[444]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="$SHOWITEM" OrigName="$ShowItem" SrcType="3" FrameSize="652" CodeAddr="0x8115834" HashCode="FE34EFFF">
+		<FBlock Name="$SHOWITEM" OrigName="$ShowItem" SrcType="3" FrameSize="652" CodeAddr="0x81158D4" HashCode="FE34EFFF">
 			<VarI Name="$MENUID" OrigName="$menuId" Type="UINT" OrigType="UINT" Addr="0x6[596]" Attribs="relative" Descr="Current menu identifier"/>
 			<VarI Name="ITEMID" OrigName="itemId" Type="UINT" OrigType="UINT" Addr="0x6[598]" Attribs="relative" Descr="Index of the item to be shown"/>
 			<VarI Name="LISTTYPE" OrigName="listType" Type="DINT" OrigType="DINT" Addr="0x6[600]" Attribs="relative" Descr="List name containing the item index" Range="$LIST_TYPE"/>
@@ -922,7 +943,7 @@
 			<TmpVar Name="$$TMP0" OrigName="$$TMP0" Type="@USINT" OrigType="@USINT" Addr="0x6[644]" Attribs="relative"/>
 			<TmpVar Name="$$TMP2" OrigName="$$TMP2" Type="$GETPARAMETERINFO^" OrigType="$GetParameterInfo^" Addr="0x6[648]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="$GOUPDOWN" OrigName="$GoUpDown" SrcType="3" FrameSize="696" CodeAddr="0x81163FC" HashCode="BABA16B8">
+		<FBlock Name="$GOUPDOWN" OrigName="$GoUpDown" SrcType="3" FrameSize="696" CodeAddr="0x811649C" HashCode="BABA16B8">
 			<VarI Name="STARTPOS" OrigName="startPos" Type="UINT" OrigType="UINT" Addr="0x6[662]" Attribs="relative" Descr="Starting position inside the parent list"/>
 			<VarI Name="NITEMS" OrigName="nItems" Type="UINT" OrigType="UINT" Addr="0x6[664]" Attribs="relative" Descr="Number of items contained inside the list"/>
 			<VarI Name="DIRECTION" OrigName="direction" Type="DINT" OrigType="DINT" Addr="0x6[668]" Attribs="relative" Descr="UP/DOWN direction" Range="$LOGICAL_KEY"/>
@@ -940,7 +961,7 @@
 			<Var Name="$SHOWITEM" OrigName="$showItem" Type="$SHOWITEM" OrigType="$ShowItem" Addr="0x6[8]" Attribs="relative"/>
 			<Var Name="ITERATE" OrigName="iterate" Type="BOOL" OrigType="BOOL" Addr="0x6[660]" Attribs="relative"/>
 		</FBlock>
-		<FBlock Name="$EDITMODE" OrigName="$EditMode" SrcType="3" FrameSize="1740" CodeAddr="0x811669C" HashCode="A1772741">
+		<FBlock Name="$EDITMODE" OrigName="$EditMode" SrcType="3" FrameSize="1740" CodeAddr="0x811673C" HashCode="A1772741">
 			<VarI Name="$MENUID" OrigName="$menuId" Type="UINT" OrigType="UINT" Addr="0x6[1724]" Attribs="relative" Descr="Menu identifier"/>
 			<VarI Name="MENUITEMPOS" OrigName="menuItemPos" Type="UINT" OrigType="UINT" Addr="0x6[1726]" Attribs="relative" Descr="Position of the menu item inside its menu"/>
 			<VarI Name="$FSTYPE" OrigName="$fsType" Type="DINT" OrigType="DINT" Addr="0x6[1728]" Attribs="relative" Descr="Current fundamental state type" Range="$FUNDAMENTAL_STATE_TYPE"/>
@@ -984,7 +1005,7 @@
 			<VarExt Name="SYSGOTOMENUID" OrigName="sysGoToMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D650" Descr="Next Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="28" DataBlockIndex="0" Access="3" Range="$enumGoToMenuID"/>
 			<VarExt Name="ISEDITWITHICON" OrigName="isEditWithIcon" Type="BOOL" OrigType="BOOL" Addr="0x2005E815" Descr="Edit mode with icon (TRUE) or with blinking value (FALSE)" Group="Display"/>
 		</FBlock>
-		<FBlock Name="$MENUITEMSLIST" OrigName="$MenuItemsList" SrcType="3" FrameSize="3184" CodeAddr="0x81173EC" HashCode="931A3B5D">
+		<FBlock Name="$MENUITEMSLIST" OrigName="$MenuItemsList" SrcType="3" FrameSize="3184" CodeAddr="0x811748C" HashCode="931A3B5D">
 			<VarI Name="$MENUID" OrigName="$menuId" Type="UINT" OrigType="UINT" Addr="0x6[3168]" Attribs="relative" Descr="Current menu identifier"/>
 			<VarI Name="PARENTLISTTYPE" OrigName="parentListType" Type="DINT" OrigType="DINT" Addr="0x6[3172]" Attribs="relative" Descr="Menu parent" Range="$LIST_TYPE"/>
 			<VarI Name="$FSTYPE" OrigName="$fsType" Type="DINT" OrigType="DINT" Addr="0x6[3176]" Attribs="relative" Descr="Current fundamental state type" Range="$FUNDAMENTAL_STATE_TYPE"/>
@@ -1012,7 +1033,7 @@
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 			<VarExt Name="SYSGOTOMENUID" OrigName="sysGoToMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D650" Descr="Next Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="28" DataBlockIndex="0" Access="3" Range="$enumGoToMenuID"/>
 		</FBlock>
-		<FBlock Name="$MENUSLIST" OrigName="$MenusList" SrcType="3" FrameSize="4588" CodeAddr="0x8117BBC" HashCode="D6627DE5">
+		<FBlock Name="$MENUSLIST" OrigName="$MenusList" SrcType="3" FrameSize="4588" CodeAddr="0x8117C5C" HashCode="D6627DE5">
 			<VarI Name="LISTSTARTPOSITION" OrigName="listStartPosition" Type="UINT" OrigType="UINT" Addr="0x6[4572]" Attribs="relative" Descr="Starting position of the list from which the scroll shall begin"/>
 			<VarI Name="LISTLASTPOSITION" OrigName="listLastPosition" Type="UINT" OrigType="UINT" Addr="0x6[4574]" Attribs="relative" Descr="Last position of the list"/>
 			<VarI Name="LISTTYPE" OrigName="listType" Type="DINT" OrigType="DINT" Addr="0x6[4576]" Attribs="relative" Descr="List type" Range="$LIST_TYPE"/>
@@ -1043,7 +1064,7 @@
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 			<VarExt Name="SYSGOTOMENUID" OrigName="sysGoToMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D650" Descr="Next Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="28" DataBlockIndex="0" Access="3" Range="$enumGoToMenuID"/>
 		</FBlock>
-		<FBlock Name="$ENTERPARPASS" OrigName="$EnterParPass" SrcType="3" FrameSize="6020" CodeAddr="0x81182C4" HashCode="4AC1531E">
+		<FBlock Name="$ENTERPARPASS" OrigName="$EnterParPass" SrcType="3" FrameSize="6020" CodeAddr="0x8118364" HashCode="4AC1531E">
 			<VarI Name="$FSTYPE" OrigName="$fsType" Type="DINT" OrigType="DINT" Addr="0x6[6012]" Attribs="relative" Descr="Current fundamental state type" Range="$FUNDAMENTAL_STATE_TYPE"/>
 			<Var Name="$RES" OrigName="$res" Type="INT" OrigType="INT" Addr="0x6[0]" Attribs="relative"/>
 			<Var Name="$CURRPOS" OrigName="$currPos" Type="UINT" OrigType="UINT" Addr="0x6[2]" Attribs="relative"/>
@@ -1102,7 +1123,7 @@
 			<VarExt Name="SYSLOGICALKEYS" OrigName="sysLogicalKeys" Type="BYTE" OrigType="BYTE" Addr="0x2004D61C" Descr="Shows the status of LOGICAL Buttons based on following values: ..." Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="B" DataBlockNumber="21" DataBlockIndex="0" Access="1" Dims="15"/>
 			<VarExt Name="SYSTIMER" OrigName="sysTimer" Type="UDINT" OrigType="UDINT" Addr="0x2004D6B0" Descr="System timer [ms]" Group="System_Timers" OnDataBlock="true" DataBlockType="M" DBDataType="D" DataBlockNumber="60000" DataBlockIndex="0" Access="1"/>
 		</FBlock>
-		<FBlock Name="$FUNDAMENTALSTATE" OrigName="$FundamentalState" SrcType="3" FrameSize="20912" CodeAddr="0x8118850" HashCode="9E32078E">
+		<FBlock Name="$FUNDAMENTALSTATE" OrigName="$FundamentalState" SrcType="3" FrameSize="20912" CodeAddr="0x81188F0" HashCode="9E32078E">
 			<VarI Name="$FSTYPE" OrigName="$fsType" Type="DINT" OrigType="DINT" Addr="0x6[20900]" Attribs="relative" Descr="Current fundamental state type" Range="$FUNDAMENTAL_STATE_TYPE"/>
 			<VarI Name="$TOGGLEPLCBIOS" OrigName="$togglePlcBios" Type="BOOL" OrigType="BOOL" Addr="0x6[20904]" Attribs="relative" Descr="Toggle between PLC and BIOS fundamental state"/>
 			<Var Name="$RES" OrigName="$res" Type="INT" OrigType="INT" Addr="0x6[0]" Attribs="relative"/>
@@ -1149,14 +1170,14 @@
 		</FBlock>
 	</FunctionBlocks>
 	<Functions>
-		<Fun Name="$FINDPARAMETER" OrigName="$FindParameter" SrcType="3" CodeAddr="0x810D424" HashCode="907CBFAB">
+		<Fun Name="$FINDPARAMETER" OrigName="$FindParameter" SrcType="3" CodeAddr="0x810D4C4" HashCode="907CBFAB">
 			<Res Name="$FINDPARAMETER" OrigName="$FindParameter" Type="$PARINFO" OrigType="$ParInfo" Addr="0x6[8]" Attribs="relative,stack"/>
 			<VarI Name="IPA" OrigName="ipa" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Parameter IPA"/>
 			<Var Name="I" OrigName="i" Type="INT" OrigType="INT" Addr="0x9" Attribs="register"/>
 			<Var Name="FOUND" OrigName="found" Type="BOOL" OrigType="BOOL" Addr="0xA" Attribs="register"/>
 			<TmpVar Name="$$INPTIPA" OrigName="$$inptipa" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Parameter IPA"/>
 		</Fun>
-		<Fun Name="$GETENUMVALUEPOSITION" OrigName="$GetEnumValuePosition" SrcType="3" CodeAddr="0x8112164" HashCode="6478127B">
+		<Fun Name="$GETENUMVALUEPOSITION" OrigName="$GetEnumValuePosition" SrcType="3" CodeAddr="0x8112204" HashCode="6478127B">
 			<Res Name="$GETENUMVALUEPOSITION" OrigName="$GetEnumValuePosition" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="ENUMID" OrigName="enumId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Enumerative type identifier"/>
 			<VarI Name="$VALUE" OrigName="$value" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Enumerative parameter value"/>
@@ -1168,7 +1189,7 @@
 			<TmpVar Name="$$INPTENUMID" OrigName="$$inptenumId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Enumerative type identifier"/>
 			<TmpVar Name="$$INPT$VALUE" OrigName="$$inpt$value" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Enumerative parameter value"/>
 		</Fun>
-		<Fun Name="$PRINTCLOCK" OrigName="$PrintClock" SrcType="3" CodeAddr="0x8112980" HashCode="0F410329">
+		<Fun Name="$PRINTCLOCK" OrigName="$PrintClock" SrcType="3" CodeAddr="0x8112A20" HashCode="0F410329">
 			<Res Name="$PRINTCLOCK" OrigName="$PrintClock" Type="UINT" OrigType="UINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="ROWID" OrigName="rowId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current row identifier"/>
 			<VarI Name="BLINK" OrigName="blink" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Blinking value"/>
@@ -1181,7 +1202,7 @@
 			<VarExt Name="SYSCLOCK" OrigName="sysClock" Type="TYPEDATATIME" OrigType="TypeDataTime" Addr="0x2004D668" Descr="System Date and Time Read. It is a structure of type TypeDataTime composed by the following fields: ..." Group="System_clock" OnDataBlock="true" DataBlockType="M" DBDataType="B" DataBlockNumber="1" DataBlockIndex="0" Access="1"/>
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 		</Fun>
-		<Fun Name="$SETCLOCKICONS" OrigName="$SetClockIcons" SrcType="3" CodeAddr="0x810DA28" HashCode="6F7872C5">
+		<Fun Name="$SETCLOCKICONS" OrigName="$SetClockIcons" SrcType="3" CodeAddr="0x810DAC8" HashCode="6F7872C5">
 			<Res Name="$SETCLOCKICONS" OrigName="$SetClockIcons" Type="UINT" OrigType="UINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="$ROWID" OrigName="$rowId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current row identifier"/>
 			<VarI Name="$ON_OFF" OrigName="$on_off" Type="BYTE" OrigType="BYTE" Addr="0x6[4]" Attribs="relative,stack" Descr="ON/OFF state"/>
@@ -1192,7 +1213,7 @@
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$PRINTDATE" OrigName="$PrintDate" SrcType="3" CodeAddr="0x8112CBC" HashCode="669B3943">
+		<Fun Name="$PRINTDATE" OrigName="$PrintDate" SrcType="3" CodeAddr="0x8112D5C" HashCode="669B3943">
 			<Res Name="$PRINTDATE" OrigName="$PrintDate" Type="UINT" OrigType="UINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="ROWID" OrigName="rowId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current row identifier"/>
 			<VarI Name="BLINK" OrigName="blink" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Blinking value"/>
@@ -1204,7 +1225,7 @@
 			<TmpVar Name="$$INPTBLINK" OrigName="$$inptblink" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Blinking value"/>
 			<VarExt Name="SYSCLOCK" OrigName="sysClock" Type="TYPEDATATIME" OrigType="TypeDataTime" Addr="0x2004D668" Descr="System Date and Time Read. It is a structure of type TypeDataTime composed by the following fields: ..." Group="System_clock" OnDataBlock="true" DataBlockType="M" DBDataType="B" DataBlockNumber="1" DataBlockIndex="0" Access="1"/>
 		</Fun>
-		<Fun Name="$SETDATEICONS" OrigName="$SetDateIcons" SrcType="3" CodeAddr="0x810DAE0" HashCode="57D2D992">
+		<Fun Name="$SETDATEICONS" OrigName="$SetDateIcons" SrcType="3" CodeAddr="0x810DB80" HashCode="57D2D992">
 			<Res Name="$SETDATEICONS" OrigName="$SetDateIcons" Type="UINT" OrigType="UINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="ROWID" OrigName="rowId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current row identifier"/>
 			<VarI Name="ON_OFF" OrigName="on_off" Type="BYTE" OrigType="BYTE" Addr="0x6[4]" Attribs="relative,stack" Descr="ON/OFF state"/>
@@ -1213,12 +1234,12 @@
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$GETICONBLINKVALUE" OrigName="$GetIconBlinkValue" SrcType="3" CodeAddr="0x810D4EC" HashCode="AC451DA4">
+		<Fun Name="$GETICONBLINKVALUE" OrigName="$GetIconBlinkValue" SrcType="3" CodeAddr="0x810D58C" HashCode="AC451DA4">
 			<Res Name="$GETICONBLINKVALUE" OrigName="$GetIconBlinkValue" Type="BYTE" OrigType="BYTE" Addr="0x4" Attribs="register"/>
 			<VarI Name="$ROW_BLINK" OrigName="$row_blink" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Row visibility value" Range="$ROW_VISIBILITY"/>
 			<TmpVar Name="$$INPT$ROW_BLINK" OrigName="$$inpt$row_blink" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Row visibility value" Range="$ROW_VISIBILITY"/>
 		</Fun>
-		<Fun Name="$SETUNITYLED" OrigName="$SetUnityLed" SrcType="3" CodeAddr="0x810DB78" HashCode="7094C7C6">
+		<Fun Name="$SETUNITYLED" OrigName="$SetUnityLed" SrcType="3" CodeAddr="0x810DC18" HashCode="7094C7C6">
 			<Res Name="$SETUNITYLED" OrigName="$SetUnityLed" Type="INT" OrigType="INT" Addr="0x4" Attribs="register"/>
 			<VarI Name="UM" OrigName="um" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Unity measure of the parameter" Range="$Unity"/>
 			<VarI Name="ROWID" OrigName="rowId" Type="USINT" OrigType="USINT" Addr="0x6[4]" Attribs="relative,stack" Descr="LED display row ID"/>
@@ -1229,26 +1250,26 @@
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$RESETUNITYLEDS" OrigName="$ResetUnityLeds" SrcType="3" CodeAddr="0x810D98C" HashCode="1D325D7E">
+		<Fun Name="$RESETUNITYLEDS" OrigName="$ResetUnityLeds" SrcType="3" CodeAddr="0x810DA2C" HashCode="1D325D7E">
 			<Res Name="$RESETUNITYLEDS" OrigName="$ResetUnityLeds" Type="INT" OrigType="INT" Addr="0x4" Attribs="register"/>
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$CLEARDOTSANDICONS" OrigName="$ClearDotsAndIcons" SrcType="3" CodeAddr="0x81120AC" HashCode="B123377D">
+		<Fun Name="$CLEARDOTSANDICONS" OrigName="$ClearDotsAndIcons" SrcType="3" CodeAddr="0x811214C" HashCode="B123377D">
 			<Res Name="$CLEARDOTSANDICONS" OrigName="$ClearDotsAndIcons" Type="INT" OrigType="INT" Addr="0x4" Attribs="register"/>
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$GETMENUSIZE" OrigName="$GetMenuSize" SrcType="3" CodeAddr="0x810D584" HashCode="9F20C585">
+		<Fun Name="$GETMENUSIZE" OrigName="$GetMenuSize" SrcType="3" CodeAddr="0x810D624" HashCode="9F20C585">
 			<Res Name="$GETMENUSIZE" OrigName="$GetMenuSize" Type="UINT" OrigType="UINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="$MENUID" OrigName="$menuId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current menu identifier"/>
 			<TmpVar Name="$$INPT$MENUID" OrigName="$$inpt$menuId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current menu identifier"/>
 		</Fun>
-		<Fun Name="$CHECKRETURNTOFUNDAMENTALSTATE" OrigName="$CheckReturnToFundamentalState" SrcType="3" CodeAddr="0x810D3CC" HashCode="1612A8F3">
+		<Fun Name="$CHECKRETURNTOFUNDAMENTALSTATE" OrigName="$CheckReturnToFundamentalState" SrcType="3" CodeAddr="0x810D46C" HashCode="1612A8F3">
 			<Res Name="$CHECKRETURNTOFUNDAMENTALSTATE" OrigName="$CheckReturnToFundamentalState" Type="BOOL" OrigType="BOOL" Addr="0x4" Attribs="register"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 		</Fun>
-		<Fun Name="$CHECKNAVIGATIONENABLED" OrigName="$CheckNavigationEnabled" SrcType="3" CodeAddr="0x8113928" HashCode="108F44B4">
+		<Fun Name="$CHECKNAVIGATIONENABLED" OrigName="$CheckNavigationEnabled" SrcType="3" CodeAddr="0x81139C8" HashCode="108F44B4">
 			<Res Name="$CHECKNAVIGATIONENABLED" OrigName="$CheckNavigationEnabled" Type="BOOL" OrigType="BOOL" Addr="0x4" Attribs="register"/>
 			<VarI Name="$KEY" OrigName="$key" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Pressed key"/>
 			<Var Name="$RES" OrigName="$res" Type="INT" OrigType="INT" Addr="0x9" Attribs="register"/>
@@ -1259,19 +1280,19 @@
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 			<VarExt Name="SYSGOTOMENUID" OrigName="sysGoToMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D650" Descr="Next Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="28" DataBlockIndex="0" Access="3" Range="$enumGoToMenuID"/>
 		</Fun>
-		<Fun Name="$CHECKNAVIGATIONCOMMAND" OrigName="$CheckNavigationCommand" SrcType="3" CodeAddr="0x810D228" HashCode="57D6A2BE">
+		<Fun Name="$CHECKNAVIGATIONCOMMAND" OrigName="$CheckNavigationCommand" SrcType="3" CodeAddr="0x810D2C8" HashCode="57D6A2BE">
 			<Res Name="$CHECKNAVIGATIONCOMMAND" OrigName="$CheckNavigationCommand" Type="INT" OrigType="INT" Addr="0x4" Attribs="register"/>
 			<VarExt Name="SYSCURRENTMENUID" OrigName="sysCurrentMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D614" Descr="Current Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="27" DataBlockIndex="0" Access="3" Range="$enumCurrentMenuID"/>
 			<VarExt Name="SYSGOTOMENUID" OrigName="sysGoToMenuID" Type="DINT" OrigType="DINT" Addr="0x2004D650" Descr="Next Menu ID" Group="Display" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="28" DataBlockIndex="0" Access="3" Range="$enumGoToMenuID"/>
 			<VarExt Name="$FUNDAMENTALSTATEOVERRIDDEN" OrigName="$fundamentalStateOverridden" Type="BOOL" OrigType="BOOL" Addr="0x2005E80C" Group="Menu_vars" hidden="true"/>
 		</Fun>
-		<Fun Name="$GETTIMER" OrigName="$GetTimer" SrcType="3" CodeAddr="0x810D70C" HashCode="051D1030">
+		<Fun Name="$GETTIMER" OrigName="$GetTimer" SrcType="3" CodeAddr="0x810D7AC" HashCode="051D1030">
 			<Res Name="$GETTIMER" OrigName="$GetTimer" Type="UDINT" OrigType="UDINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="HASTIMEOUT" OrigName="hasTimeout" Type="BOOL" OrigType="BOOL" Addr="0x6[0]" Attribs="relative,stack" Descr="Flag request for a new timer"/>
 			<TmpVar Name="$$INPTHASTIMEOUT" OrigName="$$inpthasTimeout" Type="BOOL" OrigType="BOOL" Addr="0x6[0]" Attribs="relative,stack" Descr="Flag request for a new timer"/>
 			<VarExt Name="SYSTIMER" OrigName="sysTimer" Type="UDINT" OrigType="UDINT" Addr="0x2004D6B0" Descr="System timer [ms]" Group="System_Timers" OnDataBlock="true" DataBlockType="M" DBDataType="D" DataBlockNumber="60000" DataBlockIndex="0" Access="1"/>
 		</Fun>
-		<Fun Name="$PRINTVALUE" OrigName="$PrintValue" SrcType="3" CodeAddr="0x8114274" HashCode="79FE3CF5">
+		<Fun Name="$PRINTVALUE" OrigName="$PrintValue" SrcType="3" CodeAddr="0x8114314" HashCode="79FE3CF5">
 			<Res Name="$PRINTVALUE" OrigName="$PrintValue" Type="INT" OrigType="INT" Addr="0x4" Attribs="register"/>
 			<VarI Name="ROWID" OrigName="rowId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current row identifier"/>
 			<VarI Name="PARAMETERINFO" OrigName="parameterInfo" Type="$GETPARAMETERINFO^" OrigType="$GetParameterInfo^" Addr="0x6[4]" Attribs="relative,stack" Descr="Current parameter information"/>
@@ -1292,7 +1313,7 @@
 			<TmpVar Name="$$INPTALIGN" OrigName="$$inptalign" Type="DINT" OrigType="DINT" Addr="0x6[56]" Attribs="relative,stack" Descr="Alignment value"/>
 			<VarExt Name="SYSICONS" OrigName="sysIcons" Type="BYTE" OrigType="BYTE" Addr="0x2004D5F4" Descr="System Icons: ..." Group="Display" OnDataBlock="true" DataBlockType="Q" DBDataType="B" DataBlockNumber="2" DataBlockIndex="0" Access="3" Dims="29"/>
 		</Fun>
-		<Fun Name="$PRINTFORMAT_HH_MM" OrigName="$PrintFormat_HH_MM" SrcType="3" CodeAddr="0x8112FF4" HashCode="69564006">
+		<Fun Name="$PRINTFORMAT_HH_MM" OrigName="$PrintFormat_HH_MM" SrcType="3" CodeAddr="0x8113094" HashCode="69564006">
 			<Res Name="$PRINTFORMAT_HH_MM" OrigName="$PrintFormat_HH_MM" Type="INT" OrigType="INT" Addr="0x4" Attribs="register"/>
 			<VarI Name="$ROWID" OrigName="$rowId" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Current row identifier"/>
 			<VarI Name="$SRCMINUTES" OrigName="$srcMinutes" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Source minutes value"/>
@@ -1311,13 +1332,13 @@
 			<TmpVar Name="$$INPT$BLINK" OrigName="$$inpt$blink" Type="DINT" OrigType="DINT" Addr="0x6[8]" Attribs="relative,stack" Descr="Blinking value"/>
 			<TmpVar Name="$$INPT$ALIGN" OrigName="$$inpt$align" Type="DINT" OrigType="DINT" Addr="0x6[12]" Attribs="relative,stack" Descr="Alignment value"/>
 		</Fun>
-		<Fun Name="$ISVALIDACCESSLEVEL" OrigName="$IsValidAccessLevel" SrcType="3" CodeAddr="0x810D90C" HashCode="27BD17F5">
+		<Fun Name="$ISVALIDACCESSLEVEL" OrigName="$IsValidAccessLevel" SrcType="3" CodeAddr="0x810D9AC" HashCode="27BD17F5">
 			<Res Name="$ISVALIDACCESSLEVEL" OrigName="$IsValidAccessLevel" Type="BOOL" OrigType="BOOL" Addr="0x4" Attribs="register"/>
 			<VarI Name="PARAMACCESSLEVEL" OrigName="paramAccessLevel" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Parameter access level" Range="$AccessLevel"/>
 			<TmpVar Name="$$INPTPARAMACCESSLEVEL" OrigName="$$inptparamAccessLevel" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Parameter access level" Range="$AccessLevel"/>
 			<VarExt Name="SYSPWLEVEL" OrigName="sysPWLevel" Type="DINT" OrigType="DINT" Addr="0x2005E810" Descr="Password Level. 0=User 1=Installer 3=Manufacturer" Group="Passwords" Range="$PassLevel"/>
 		</Fun>
-		<Fun Name="$ISINTEGERTYPE" OrigName="$IsIntegerType" SrcType="3" CodeAddr="0x810D748" HashCode="22CFC6F8">
+		<Fun Name="$ISINTEGERTYPE" OrigName="$IsIntegerType" SrcType="3" CodeAddr="0x810D7E8" HashCode="22CFC6F8">
 			<Res Name="$ISINTEGERTYPE" OrigName="$IsIntegerType" Type="BOOL" OrigType="BOOL" Addr="0x4" Attribs="register"/>
 			<VarI Name="TP" OrigName="tp" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Variable type" Range="$VarType"/>
 			<TmpVar Name="$$INPTTP" OrigName="$$inpttp" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Variable type" Range="$VarType"/>
@@ -1481,7 +1502,7 @@
 			<Res Name="SYS_USBD_STATUS" OrigName="sys_USBD_Status" Type="USINT" OrigType="USINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="DUMMY" OrigName="dummy" Type="USINT" OrigType="USINT" Addr="0x0" Attribs="register" Descr="Dummy input"/>
 		</Fun>
-		<Fun Name="CALLBACKMENU_CLDATE" OrigName="CallbackMenu_CLDate" SrcType="3" CodeAddr="0x810DD38" HashCode="ABF5E9CE">
+		<Fun Name="CALLBACKMENU_CLDATE" OrigName="CallbackMenu_CLDate" SrcType="3" CodeAddr="0x810DDD8" HashCode="ABF5E9CE">
 			<Res Name="CALLBACKMENU_CLDATE" OrigName="CallbackMenu_CLDate" Type="BOOL" OrigType="BOOL" Addr="0x4" Attribs="register"/>
 			<VarI Name="TYPE" OrigName="Type" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Range="CallbackType"/>
 			<VarI Name="INFO" OrigName="Info" Type="UDINT" OrigType="UDINT" Addr="0x6[4]" Attribs="relative,stack"/>
@@ -1490,7 +1511,7 @@
 			<VarExt Name="SYSCLOCK" OrigName="sysClock" Type="TYPEDATATIME" OrigType="TypeDataTime" Addr="0x2004D668" Descr="System Date and Time Read. It is a structure of type TypeDataTime composed by the following fields: ..." Group="System_clock" OnDataBlock="true" DataBlockType="M" DBDataType="B" DataBlockNumber="1" DataBlockIndex="0" Access="1"/>
 			<VarExt Name="SYSCLOCKSET" OrigName="sysClockSet" Type="TYPEDATATIMEUPDATE" OrigType="TypeDataTimeUpdate" Addr="0x2004D670" Descr="System Date and Time Write. It is a structure of type TypeDataTime composed by the following fields: ..." Group="System_clock" OnDataBlock="true" DataBlockType="M" DBDataType="B" DataBlockNumber="6" DataBlockIndex="0" Access="3"/>
 		</Fun>
-		<Fun Name="CALLBACKMENU_CLHOUR" OrigName="CallbackMenu_CLHour" SrcType="3" CodeAddr="0x810DEE8" HashCode="3DB4C170">
+		<Fun Name="CALLBACKMENU_CLHOUR" OrigName="CallbackMenu_CLHour" SrcType="3" CodeAddr="0x810DF88" HashCode="3DB4C170">
 			<Res Name="CALLBACKMENU_CLHOUR" OrigName="CallbackMenu_CLHour" Type="BOOL" OrigType="BOOL" Addr="0x4" Attribs="register"/>
 			<VarI Name="TYPE" OrigName="Type" Type="DINT" OrigType="DINT" Addr="0x6[0]" Attribs="relative,stack" Range="CallbackType"/>
 			<VarI Name="INFO" OrigName="Info" Type="UDINT" OrigType="UDINT" Addr="0x6[4]" Attribs="relative,stack"/>
@@ -1583,7 +1604,7 @@
 			<VarI Name="MSG" OrigName="msg" Type="STRING" OrigType="STRING" Addr="0x1" Attribs="register" Descr="String" length="32"/>
 			<VarI Name="LEN" OrigName="len" Type="USINT" OrigType="USINT" Addr="0x2" Attribs="register" Descr="SIZEOF(String to write)"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_BOOL" OrigName="sysDBaseSetValue_Bool" SrcType="3" CodeAddr="0x810E618" HashCode="249F1DB8">
+		<Fun Name="SYSDBASESETVALUE_BOOL" OrigName="sysDBaseSetValue_Bool" SrcType="3" CodeAddr="0x810E6B8" HashCode="249F1DB8">
 			<Res Name="SYSDBASESETVALUE_BOOL" OrigName="sysDBaseSetValue_Bool" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="BOOL" OrigType="BOOL" Addr="0x6[4]" Attribs="relative,stack" Descr="BOOL value to write"/>
@@ -1592,7 +1613,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="BOOL" OrigType="BOOL" Addr="0x6[4]" Attribs="relative,stack" Descr="BOOL value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_S32" OrigName="sysDBaseSetValue_S32" SrcType="3" CodeAddr="0x810E768" HashCode="F315F533">
+		<Fun Name="SYSDBASESETVALUE_S32" OrigName="sysDBaseSetValue_S32" SrcType="3" CodeAddr="0x810E808" HashCode="F315F533">
 			<Res Name="SYSDBASESETVALUE_S32" OrigName="sysDBaseSetValue_S32" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="DINT value to write"/>
@@ -1601,7 +1622,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="DINT" OrigType="DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="DINT value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_S16" OrigName="sysDBaseSetValue_S16" SrcType="3" CodeAddr="0x810E6F8" HashCode="FF481635">
+		<Fun Name="SYSDBASESETVALUE_S16" OrigName="sysDBaseSetValue_S16" SrcType="3" CodeAddr="0x810E798" HashCode="FF481635">
 			<Res Name="SYSDBASESETVALUE_S16" OrigName="sysDBaseSetValue_S16" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="INT" OrigType="INT" Addr="0x6[4]" Attribs="relative,stack" Descr="INT value to write"/>
@@ -1610,7 +1631,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="INT" OrigType="INT" Addr="0x6[4]" Attribs="relative,stack" Descr="INT value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_FLOAT32" OrigName="sysDBaseSetValue_Float32" SrcType="3" CodeAddr="0x810E688" HashCode="518F88E9">
+		<Fun Name="SYSDBASESETVALUE_FLOAT32" OrigName="sysDBaseSetValue_Float32" SrcType="3" CodeAddr="0x810E728" HashCode="518F88E9">
 			<Res Name="SYSDBASESETVALUE_FLOAT32" OrigName="sysDBaseSetValue_Float32" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="REAL" OrigType="REAL" Addr="0x6[4]" Attribs="relative,stack" Descr="REAL value to write"/>
@@ -1619,7 +1640,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="REAL" OrigType="REAL" Addr="0x6[4]" Attribs="relative,stack" Descr="REAL value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_S8" OrigName="sysDBaseSetValue_S8" SrcType="3" CodeAddr="0x810E7D8" HashCode="39634956">
+		<Fun Name="SYSDBASESETVALUE_S8" OrigName="sysDBaseSetValue_S8" SrcType="3" CodeAddr="0x810E878" HashCode="39634956">
 			<Res Name="SYSDBASESETVALUE_S8" OrigName="sysDBaseSetValue_S8" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="SINT" OrigType="SINT" Addr="0x6[4]" Attribs="relative,stack" Descr="SINT value to write"/>
@@ -1628,7 +1649,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="SINT" OrigType="SINT" Addr="0x6[4]" Attribs="relative,stack" Descr="SINT value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_U32" OrigName="sysDBaseSetValue_U32" SrcType="3" CodeAddr="0x810E92C" HashCode="4264E1B7">
+		<Fun Name="SYSDBASESETVALUE_U32" OrigName="sysDBaseSetValue_U32" SrcType="3" CodeAddr="0x810E9CC" HashCode="4264E1B7">
 			<Res Name="SYSDBASESETVALUE_U32" OrigName="sysDBaseSetValue_U32" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="UDINT" OrigType="UDINT" Addr="0x6[4]" Attribs="relative,stack" Descr="UDINT value to write"/>
@@ -1637,7 +1658,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="UDINT" OrigType="UDINT" Addr="0x6[4]" Attribs="relative,stack" Descr="UDINT value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_U16" OrigName="sysDBaseSetValue_U16" SrcType="3" CodeAddr="0x810E8BC" HashCode="4E9702B9">
+		<Fun Name="SYSDBASESETVALUE_U16" OrigName="sysDBaseSetValue_U16" SrcType="3" CodeAddr="0x810E95C" HashCode="4E9702B9">
 			<Res Name="SYSDBASESETVALUE_U16" OrigName="sysDBaseSetValue_U16" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="UINT" OrigType="UINT" Addr="0x6[4]" Attribs="relative,stack" Descr="UINT value to write"/>
@@ -1646,7 +1667,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="UINT" OrigType="UINT" Addr="0x6[4]" Attribs="relative,stack" Descr="UINT value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_U8" OrigName="sysDBaseSetValue_U8" SrcType="3" CodeAddr="0x810E99C" HashCode="558EBD1A">
+		<Fun Name="SYSDBASESETVALUE_U8" OrigName="sysDBaseSetValue_U8" SrcType="3" CodeAddr="0x810EA3C" HashCode="558EBD1A">
 			<Res Name="SYSDBASESETVALUE_U8" OrigName="sysDBaseSetValue_U8" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="USINT" OrigType="USINT" Addr="0x6[4]" Attribs="relative,stack" Descr="USINT value to write"/>
@@ -1655,7 +1676,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="USINT" OrigType="USINT" Addr="0x6[4]" Attribs="relative,stack" Descr="USINT value to write"/>
 		</Fun>
-		<Fun Name="SYSDBASESETVALUE_STRING" OrigName="sysDBaseSetValue_String" SrcType="3" CodeAddr="0x810E848" HashCode="94D74CE3">
+		<Fun Name="SYSDBASESETVALUE_STRING" OrigName="sysDBaseSetValue_String" SrcType="3" CodeAddr="0x810E8E8" HashCode="94D74CE3">
 			<Res Name="SYSDBASESETVALUE_STRING" OrigName="sysDBaseSetValue_String" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="PTRSTRING" OrigName="ptrString" Type="@STRING" OrigType="@STRING" Addr="0x6[4]" Attribs="relative,stack" Descr="String value to write"/>
@@ -1665,7 +1686,7 @@
 			<TmpVar Name="$$INPTPTRSTRING" OrigName="$$inptptrString" Type="@STRING" OrigType="@STRING" Addr="0x6[4]" Attribs="relative,stack" Descr="String value to write"/>
 			<TmpVar Name="$$INPTNUMCHAR" OrigName="$$inptnumChar" Type="UDINT" OrigType="UDINT" Addr="0x6[8]" Attribs="relative,stack" Descr="Number of characters to write"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_BOOL" OrigName="sysDBaseGetValue_Bool" SrcType="3" CodeAddr="0x810E014" HashCode="6D79DAFC">
+		<Fun Name="SYSDBASEGETVALUE_BOOL" OrigName="sysDBaseGetValue_Bool" SrcType="3" CodeAddr="0x810E0B4" HashCode="6D79DAFC">
 			<Res Name="SYSDBASEGETVALUE_BOOL" OrigName="sysDBaseGetValue_Bool" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@BOOL" OrigType="@BOOL" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (BOOL value)"/>
@@ -1680,7 +1701,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@BOOL" OrigType="@BOOL" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (BOOL value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_S32" OrigName="sysDBaseGetValue_S32" SrcType="3" CodeAddr="0x810E218" HashCode="97829D37">
+		<Fun Name="SYSDBASEGETVALUE_S32" OrigName="sysDBaseGetValue_S32" SrcType="3" CodeAddr="0x810E2B8" HashCode="97829D37">
 			<Res Name="SYSDBASEGETVALUE_S32" OrigName="sysDBaseGetValue_S32" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@DINT" OrigType="@DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (DINT value)"/>
@@ -1695,7 +1716,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@DINT" OrigType="@DINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (DINT value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_S16" OrigName="sysDBaseGetValue_S16" SrcType="3" CodeAddr="0x810E16C" HashCode="A221EC39">
+		<Fun Name="SYSDBASEGETVALUE_S16" OrigName="sysDBaseGetValue_S16" SrcType="3" CodeAddr="0x810E20C" HashCode="A221EC39">
 			<Res Name="SYSDBASEGETVALUE_S16" OrigName="sysDBaseGetValue_S16" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@INT" OrigType="@INT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (INT value)"/>
@@ -1710,7 +1731,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@INT" OrigType="@INT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (INT value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_FLOAT32" OrigName="sysDBaseGetValue_Float32" SrcType="3" CodeAddr="0x810E0C0" HashCode="85149A2D">
+		<Fun Name="SYSDBASEGETVALUE_FLOAT32" OrigName="sysDBaseGetValue_Float32" SrcType="3" CodeAddr="0x810E160" HashCode="85149A2D">
 			<Res Name="SYSDBASEGETVALUE_FLOAT32" OrigName="sysDBaseGetValue_Float32" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@REAL" OrigType="@REAL" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (REAL value)"/>
@@ -1725,7 +1746,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@REAL" OrigType="@REAL" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (REAL value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_S8" OrigName="sysDBaseGetValue_S8" SrcType="3" CodeAddr="0x810E2C4" HashCode="DA2E91DA">
+		<Fun Name="SYSDBASEGETVALUE_S8" OrigName="sysDBaseGetValue_S8" SrcType="3" CodeAddr="0x810E364" HashCode="DA2E91DA">
 			<Res Name="SYSDBASEGETVALUE_S8" OrigName="sysDBaseGetValue_S8" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@SINT" OrigType="@SINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (SINT value)"/>
@@ -1740,7 +1761,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@SINT" OrigType="@SINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (SINT value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_U32" OrigName="sysDBaseGetValue_U32" SrcType="3" CodeAddr="0x810E4C0" HashCode="10C3A13B">
+		<Fun Name="SYSDBASEGETVALUE_U32" OrigName="sysDBaseGetValue_U32" SrcType="3" CodeAddr="0x810E560" HashCode="10C3A13B">
 			<Res Name="SYSDBASEGETVALUE_U32" OrigName="sysDBaseGetValue_U32" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@UDINT" OrigType="@UDINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (UDINT value)"/>
@@ -1755,7 +1776,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@UDINT" OrigType="@UDINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (UDINT value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_U16" OrigName="sysDBaseGetValue_U16" SrcType="3" CodeAddr="0x810E414" HashCode="1B62F03D">
+		<Fun Name="SYSDBASEGETVALUE_U16" OrigName="sysDBaseGetValue_U16" SrcType="3" CodeAddr="0x810E4B4" HashCode="1B62F03D">
 			<Res Name="SYSDBASEGETVALUE_U16" OrigName="sysDBaseGetValue_U16" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@UINT" OrigType="@UINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (UINT value)"/>
@@ -1770,7 +1791,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@UINT" OrigType="@UINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (UINT value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_U8" OrigName="sysDBaseGetValue_U8" SrcType="3" CodeAddr="0x810E56C" HashCode="25E03D1E">
+		<Fun Name="SYSDBASEGETVALUE_U8" OrigName="sysDBaseGetValue_U8" SrcType="3" CodeAddr="0x810E60C" HashCode="25E03D1E">
 			<Res Name="SYSDBASEGETVALUE_U8" OrigName="sysDBaseGetValue_U8" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<VarI Name="VALUE" OrigName="value" Type="@USINT" OrigType="@USINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (USINT value)"/>
@@ -1785,7 +1806,7 @@
 			<TmpVar Name="$$INPTINDEX" OrigName="$$inptindex" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack" Descr="Index of the parameter"/>
 			<TmpVar Name="$$INPTVALUE" OrigName="$$inptvalue" Type="@USINT" OrigType="@USINT" Addr="0x6[4]" Attribs="relative,stack" Descr="Value of the parameter (USINT value)"/>
 		</Fun>
-		<Fun Name="SYSDBASEGETVALUE_STRING" OrigName="sysDBaseGetValue_String" SrcType="3" CodeAddr="0x810E370" HashCode="797857B5">
+		<Fun Name="SYSDBASEGETVALUE_STRING" OrigName="sysDBaseGetValue_String" SrcType="3" CodeAddr="0x810E410" HashCode="797857B5">
 			<Res Name="SYSDBASEGETVALUE_STRING" OrigName="sysDBaseGetValue_String" Type="DINT" OrigType="DINT" Addr="0x4" Attribs="register" Range="sysDBaseErrCode"/>
 			<VarI Name="INDEX" OrigName="index" Type="UINT" OrigType="UINT" Addr="0x6[0]" Attribs="relative,stack"/>
 			<VarI Name="PTRSTRING" OrigName="ptrString" Type="@STRING" OrigType="@STRING" Addr="0x6[4]" Attribs="relative,stack" Descr="Index of the parameter"/>
@@ -2473,7 +2494,8 @@
 		<Stru Name="ST_PARBOXEN" OrigName="ST_ParBoxen" Size="92">
 			<Var Name="STELLUNGKLAPPE1" OrigName="StellungKlappe1" Type="USINT" OrigType="USINT" Addr="0x0[0]" Attribs="relative" Range="eStellungKlappeBoxen"/>
 			<Var Name="STELLUNGKLAPPE2" OrigName="StellungKlappe2" Type="USINT" OrigType="USINT" Addr="0x0[1]" Attribs="relative" Range="eStellungKlappeBoxen"/>
-			<Var Name="NAMEBOX" OrigName="NameBox" Type="STRING" OrigType="STRING" Addr="0x0[2]" Attribs="relative" length="32"/>
+			<Var Name="XBOXAKTIV" OrigName="xBoxAktiv" Type="BOOL" OrigType="BOOL" Addr="0x0[2]" Attribs="relative"/>
+			<Var Name="NAMEBOX" OrigName="NameBox" Type="STRING" OrigType="STRING" Addr="0x0[3]" Attribs="relative" length="32"/>
 			<Var Name="TROCKENGUT" OrigName="Trockengut" Type="UINT" OrigType="UINT" Addr="0x0[36]" Attribs="relative" Range="eTrockengut"/>
 			<Var Name="AUS" OrigName="Aus" Type="BOOL" OrigType="BOOL" Addr="0x0[38]" Attribs="relative"/>
 			<Var Name="DAUERBETRIEBEIN" OrigName="DauerbetriebEin" Type="BOOL" OrigType="BOOL" Addr="0x0[39]" Attribs="relative"/>
@@ -2836,9 +2858,9 @@
 			<Var Name="HOLZ" OrigName="HOLZ" Value="6"/>
 		</Enum>
 		<Enum Name="ESTELLUNGKLAPPEBOXEN" OrigName="eStellungKlappeBoxen" baseType="USINT">
-			<Var Name="NICHT_VERWENDET" OrigName="NICHT_VERWENDET" Value="0"/>
-			<Var Name="GESCHLOSSEN" OrigName="GESCHLOSSEN" Value="1"/>
-			<Var Name="GEOEFFNET" OrigName="GEOEFFNET" Value="2"/>
+			<Var Name="FBBOX_NICHT_VERWENDET" OrigName="FBBOX_NICHT_VERWENDET" Value="0"/>
+			<Var Name="FBBOX_GESCHLOSSEN" OrigName="FBBOX_GESCHLOSSEN" Value="1"/>
+			<Var Name="FBBOX_GEOEFFNET" OrigName="FBBOX_GEOEFFNET" Value="2"/>
 		</Enum>
 		<Enum Name="$LOGICAL_KEY" OrigName="$LOGICAL_KEY" baseType="DINT">
 			<Var Name="$SET" OrigName="$SET" Value="16#03"/>
