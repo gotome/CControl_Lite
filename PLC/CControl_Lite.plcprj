@@ -53,15 +53,12 @@
 					</var>
 					<var name="gQuitErr" type="BOOL">
 						<descr>Fehler quittieren</descr>
-						<initValue>false</initValue>
 					</var>
 					<var name="IBN_FALSE" type="BOOL">
 						<descr>Inbetriebnahmemerker false</descr>
-						<initValue>false</initValue>
 					</var>
 					<var name="IBN_TRUE" type="BOOL">
 						<descr>Inbetriebnahmemerker true</descr>
-						<initValue>true</initValue>
 					</var>
 					<var name="diBox1Offen" type="BOOL">
 						<descr>Rückmeldung Box 1 offen</descr>
@@ -2202,7 +2199,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1784740483">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1784921125">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
@@ -2290,59 +2287,6 @@ gStatusAnlage.Box[1].AktSchlechtwetterPuls := fbSchlechtwetterBox1.Schlechtwette
 gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.SchlechtwetterPausezeitAktuell;
 
 
-(*
-(* Plausibilisierung *)
-(*
-xFrischluftTempOk   := (aiFrischluftTemp >= -40.0) AND (aiFrischluftTemp <= 80.0);
-xFrischluftFeuchtOk := (aiFrischluftFeucht >= 0.0) AND (aiFrischluftFeucht <= 100.0);
-
-xAbluft1TempOk      := (aiAbluftBox1Temp >= -40.0) AND (aiAbluftBox1Temp <= 100.0);
-xAbluft1FeuchtOk    := (aiAbluftBox1Feucht >= 0.0) AND (aiAbluftBox1Feucht <= 100.0);
-
-xTrockenTempOk      := (aiTrockenluftTemp >= -40.0) AND (aiTrockenluftTemp <= 100.0);
-xTrockenFeuchtOk    := (aiTrockenluftFeucht >= 0.0) AND (aiTrockenluftFeucht <= 100.0);
-
-IF gBetriebsparameter.Ausstattung.Box2 THEN
-    xAbluft2TempOk   := (aiAbluftBox2Temp >= -40.0) AND (aiAbluftBox2Temp <= 100.0);
-    xAbluft2FeuchtOk := (aiAbluftBox2Feucht >= 0.0) AND (aiAbluftBox2Feucht <= 100.0);
-ELSE
-    xAbluft2TempOk   := TRUE;
-    xAbluft2FeuchtOk := TRUE;
-END_IF;
-
-xStockTempOk := (aiStocktemp >= -40.0) AND (aiStocktemp <= 140.0);
-*)
-(* Kennwerte *)
-(*
-IF xAbluft1TempOk AND xFrischluftTempOk THEN
-    rDeltaTempBox1 := aiAbluftBox1Temp - aiFrischluftTemp;
-ELSE
-    rDeltaTempBox1 := 0.0;
-END_IF;
-
-IF gBetriebsparameter.Ausstattung.Box2 AND xAbluft2TempOk AND xFrischluftTempOk THEN
-    rDeltaTempBox2 := aiAbluftBox2Temp - aiFrischluftTemp;
-ELSE
-    rDeltaTempBox2 := 0.0;
-END_IF;
-
-IF xAbluft1FeuchtOk AND xFrischluftFeuchtOk THEN
-    rDeltaFeuchteBox1 := aiAbluftBox1Feucht - aiFrischluftFeucht;
-ELSE
-    rDeltaFeuchteBox1 := 0.0;
-END_IF;
-
-IF gBetriebsparameter.Ausstattung.Box2 AND xAbluft2FeuchtOk AND xFrischluftFeuchtOk THEN
-    rDeltaFeuchteBox2 := aiAbluftBox2Feucht - aiFrischluftFeucht;
-ELSE
-    rDeltaFeuchteBox2 := 0.0;
-END_IF;
-
-*)
-
-
-
-// Stoerungen werden in AlarmCyclic behandelt
 ]]>
 					</sourceCode>
 				</program>
@@ -3448,18 +3392,33 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1784742111">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1784926145">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
 							<var name="rt_Box_Dauer" type="R_TRIG"/>
 							<var name="rt_Box_Intervall" type="R_TRIG"/>
 							<var name="rt_Box_Nachtr" type="R_TRIG"/>
+							<var name="rt_Box_Stocktemp" type="R_TRIG"/>
 							<var name="lastBoxIndex" type="USINT"/>
 							<var name="firstStep" type="BOOL"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM HmiMappingCyclic
+
+VAR
+	rt_Box_Aus : R_TRIG;
+	rt_Box_Dauer : R_TRIG;
+	rt_Box_Intervall : R_TRIG;
+	rt_Box_Nachtr : R_TRIG;
+	rt_Box_Stocktemp : R_TRIG;
+	lastBoxIndex : USINT;
+	firstStep : BOOL;
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -3873,6 +3832,10 @@ gBetriebsparameter.Boxen[1].StellungKlappe2 := Par_Box1_StellungKlappe2;
 gBetriebsparameter.Boxen[2].StellungKlappe1 := Par_Box2_StellungKlappe1;
 gBetriebsparameter.Boxen[2].StellungKlappe2 := Par_Box2_StellungKlappe2;
 
+//Stocktemperatur
+gBetriebsparameter.Boxen[1].StocktemperaturHysterese := Par_Stocktemperatur_Box1_Hysterese;
+gBetriebsparameter.Boxen[2].StocktemperaturHysterese := Par_Stocktemperatur_Box2_Hysterese;
+
 //======== Box 1 =========
 HMI_IN_Box1_IconWitterung := gStatusAnlage.Box[1].IconWitterung;
 HMI_IN_Box1_LaufRestzeitMinuten := gStatusAnlage.Box[1].LaufRestzeitMinuten;
@@ -3911,8 +3874,10 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[1].DauerbetriebEin;
 		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[1].IntervallbetriebEin;
 		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[1].NachtrocknungEin;
+	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[2].StocktemperaturEin;
 		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[1].Aus;	
 	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
+	 	HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
 		firstStep := FALSE;	
 	END_IF;
 	
@@ -3922,31 +3887,43 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	rt_Box_Dauer(CLK := HMI_OUT_Box_Aktuell_DauerbetriebEin);
 	rt_Box_Intervall(CLK := HMI_OUT_Box_Aktuell_IntervallbetriebEIn);
 	rt_Box_Nachtr(CLK := HMI_OUT_Box_Aktuell_NachtrocknungEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
 	
 	IF rt_Box_Aus.Q THEN
 	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
 	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Dauer.Q THEN
 	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
 	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Intervall.Q THEN
 	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
 	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Nachtr.Q THEN
 	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
 	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Stocktemp.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;		
 	END_IF;
 	
-	gBetriebsparameter.Boxen[1].DauerbetriebEin    := HMI_OUT_Box_Aktuell_DauerbetriebEin;
-	gBetriebsparameter.Boxen[1].IntervallbetriebEin:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-	gBetriebsparameter.Boxen[1].NachtrocknungEin   := HMI_OUT_Box_Aktuell_NachtrocknungEin;
-	gBetriebsparameter.Boxen[1].Aus                := HMI_OUT_Box_Aktuell_Aus;
+	gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
+	gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+	gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
+	gBetriebsparameter.Boxen[1].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
+	gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
+	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
 	
 	
 	//PLC -> HMI
@@ -3979,8 +3956,10 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[2].DauerbetriebEin;
 		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[2].IntervallbetriebEin;
 		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[2].NachtrocknungEin;
+	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[2].StocktemperaturEin ;
 		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[2].Aus;	
 	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
+	 	HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[2].StocktemperaturSoll;
 		firstStep := FALSE;	
 	END_IF;
 
@@ -3990,31 +3969,43 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	rt_Box_Dauer(CLK := HMI_OUT_Box_Aktuell_DauerbetriebEin);
 	rt_Box_Intervall(CLK := HMI_OUT_Box_Aktuell_IntervallbetriebEIn);
 	rt_Box_Nachtr(CLK := HMI_OUT_Box_Aktuell_NachtrocknungEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
 	
 	IF rt_Box_Aus.Q THEN
 	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
 	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Dauer.Q THEN
 	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
 	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Intervall.Q THEN
 	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
 	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Nachtr.Q THEN
 	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
 	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Stocktemp.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;		
 	END_IF;
 	
-	gBetriebsparameter.Boxen[2].DauerbetriebEin    := HMI_OUT_Box_Aktuell_DauerbetriebEin;
-	gBetriebsparameter.Boxen[2].IntervallbetriebEin:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-	gBetriebsparameter.Boxen[2].NachtrocknungEin   := HMI_OUT_Box_Aktuell_NachtrocknungEin;
-	gBetriebsparameter.Boxen[2].Aus                := HMI_OUT_Box_Aktuell_Aus;
+	gBetriebsparameter.Boxen[2].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
+	gBetriebsparameter.Boxen[2].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+	gBetriebsparameter.Boxen[2].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
+	gBetriebsparameter.Boxen[2].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
+	gBetriebsparameter.Boxen[2].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
+	gBetriebsparameter.Boxen[2].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
 		
 	//PLC -> HMI
 	HMI_IN_Box_Aktuell_Name := gBetriebsparameter.Boxen[2].NameBox;
@@ -4043,31 +4034,43 @@ ELSE
 	rt_Box_Dauer(CLK := HMI_OUT_Box1_DauerbetriebEin);
 	rt_Box_Intervall(CLK := HMI_OUT_Box1_IntervallbetriebEIn);
 	rt_Box_Nachtr(CLK := HMI_OUT_Box1_NachtrocknungEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
 	
 	IF rt_Box_Aus.Q THEN
 	    HMI_OUT_Box1_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box1_IntervallbetriebEIn := FALSE;
 	    HMI_OUT_Box1_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box1_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Dauer.Q THEN
 	    HMI_OUT_Box1_Aus                 := FALSE;
 	    HMI_OUT_Box1_IntervallbetriebEIn := FALSE;
 	    HMI_OUT_Box1_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box1_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Intervall.Q THEN
 	    HMI_OUT_Box1_Aus                 := FALSE;
 	    HMI_OUT_Box1_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box1_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box1_StocktemperaturEin  := FALSE;
 	ELSIF rt_Box_Nachtr.Q THEN
 	    HMI_OUT_Box1_Aus                 := FALSE;
 	    HMI_OUT_Box1_DauerbetriebEin     := FALSE;
 	    HMI_OUT_Box1_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box1_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Stocktemp.Q THEN
+	    HMI_OUT_Box1_Aus                 := FALSE;
+	    HMI_OUT_Box1_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box1_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box1_NachtrocknungEin 	 := FALSE;		
 	END_IF;
 	
-	gBetriebsparameter.Boxen[1].DauerbetriebEin    := HMI_OUT_Box1_DauerbetriebEin;
-	gBetriebsparameter.Boxen[1].IntervallbetriebEin:= HMI_OUT_Box1_IntervallbetriebEIn;
-	gBetriebsparameter.Boxen[1].NachtrocknungEin   := HMI_OUT_Box1_NachtrocknungEin;
-	gBetriebsparameter.Boxen[1].Aus                := HMI_OUT_Box1_Aus;
+	gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box1_DauerbetriebEin;
+	gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box1_IntervallbetriebEIn;
+	gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box1_NachtrocknungEin;
+	gBetriebsparameter.Boxen[1].StocktemperaturEin  := HMI_OUT_Box1_StocktemperaturEin;
+	gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box1_Aus;
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
+	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
 	HMI_IN_Box1_IconWitterung := gStatusAnlage.Box[1].WetterIstSchlecht;
 	//Detailansicht Box 2
 	
@@ -4098,18 +4101,22 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1784741282">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1784925925">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
 							<var name="xExternStart" type="BOOL"/>
 							<var name="xExternStop" type="BOOL"/>
-							<var name="xDauerbetriebBox1Aktiv" type="BOOL"/>
-							<var name="xDauerbetriebBox2Aktiv" type="BOOL"/>
-							<var name="xIntervallBox1Aktiv" type="BOOL"/>
-							<var name="xIntervallBox2Aktiv" type="BOOL"/>
-							<var name="xNachtrocknungBox1Aktiv" type="BOOL"/>
-							<var name="xNachtrocknungBox2Aktiv" type="BOOL"/>
+							<var name="xDauerbetriebBox1Anwahl" type="BOOL"/>
+							<var name="xDauerbetriebBox2Anwahl" type="BOOL"/>
+							<var name="xIntervallBox1Anwahl" type="BOOL"/>
+							<var name="xIntervallBox2Anwahl" type="BOOL"/>
+							<var name="xNachtrocknungBox1Anwahl" type="BOOL"/>
+							<var name="xNachtrocknungBox2Anwahl" type="BOOL"/>
+							<var name="xStocktemperaturBox1Anwahl" type="BOOL"/>
+							<var name="xStocktemperaturBox2Anwahl" type="BOOL"/>
+							<var name="xStocktemperaturBox1Aktiv" type="BOOL"/>
+							<var name="xStocktemperaturBox2Aktiv" type="BOOL"/>
 							<var name="xBox1Freigegeben" type="BOOL"/>
 							<var name="xBox2Freigegeben" type="BOOL"/>
 							<var name="usAktStunde" type="USINT"/>
@@ -4123,6 +4130,14 @@ END_IF;
 							<var name="fbPulsPauseBox2" type="fbPulsPause"/>
 							<var name="xDauerbetriebBox2Trocknet" type="BOOL"/>
 							<var name="xSchlechtwetterBox2Aktiv" type="BOOL"/>
+							<var name="xStockHaltBox1" type="BOOL">
+								<descr>Haltebit Zweipunkt Box 1</descr>
+								<initValue>FALSE</initValue>
+							</var>
+							<var name="xStockHaltBox2" type="BOOL">
+								<descr>Haltebit Zweipunkt Box 2</descr>
+								<initValue>FALSE</initValue>
+							</var>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -4132,12 +4147,16 @@ VAR
 	xMindEineBoxAktiv : BOOL;
 	xExternStart : BOOL;
 	xExternStop : BOOL;
-	xDauerbetriebBox1Aktiv : BOOL;
-	xDauerbetriebBox2Aktiv : BOOL;
-	xIntervallBox1Aktiv : BOOL;
-	xIntervallBox2Aktiv : BOOL;
-	xNachtrocknungBox1Aktiv : BOOL;
-	xNachtrocknungBox2Aktiv : BOOL;
+	xDauerbetriebBox1Anwahl : BOOL;
+	xDauerbetriebBox2Anwahl : BOOL;
+	xIntervallBox1Anwahl : BOOL;
+	xIntervallBox2Anwahl : BOOL;
+	xNachtrocknungBox1Anwahl : BOOL;
+	xNachtrocknungBox2Anwahl : BOOL;
+	xStocktemperaturBox1Anwahl : BOOL;
+	xStocktemperaturBox2Anwahl : BOOL;
+	xStocktemperaturBox1Aktiv : BOOL;
+	xStocktemperaturBox2Aktiv : BOOL;
 	xBox1Freigegeben : BOOL;
 	xBox2Freigegeben : BOOL;
 	usAktStunde : USINT;
@@ -4151,7 +4170,10 @@ VAR
 	fbPulsPauseBox2 : fbPulsPause;
 	xDauerbetriebBox2Trocknet : BOOL;
 	xSchlechtwetterBox2Aktiv : BOOL;
+	xStockHaltBox1 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 1 *)
+	xStockHaltBox2 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 2 *)
 END_VAR
+
 ]]>
 					</iecDeclaration>
 					<sourceCode type="ST">
@@ -4162,8 +4184,12 @@ File        : StartStoppCyclic.st
 Project     : CControl_Lite
 Description :
     Start-/Stopp-Auswertung fuer 2-Box-Anlage.
-    Ablauf: 1) Betriebsarten  2) Verriegelung  3) Puls-/Pausebetrieb
-            4) Boxaktivitaet  5) Start/Stopp
+    Ablauf: 
+    	1) Betriebsarten  
+    	2) Verriegelung  
+    	3) Puls-/Pausebetrieb
+        4) Boxaktivitaet  
+        5) Start/Stopp
     Hinweis: BerechnungCyclic muss vor diesem Programm aufgerufen werden.
 ================================================================================
 *)
@@ -4175,12 +4201,14 @@ udIntervallMaskeBox2 := Par_Box2_Intervallzeit;
 udNachtrocknungMaskeBox1 := Par_Box1_Nachtrocknungszeit;
 udNachtrocknungMaskeBox2 := Par_Box2_Nachtrocknungszeit;
 
-xIntervallBox1Aktiv     := FALSE;
-xIntervallBox2Aktiv     := FALSE;
-xNachtrocknungBox1Aktiv := FALSE;
-xNachtrocknungBox2Aktiv := FALSE;
-xDauerbetriebBox1Aktiv  := FALSE;
-xDauerbetriebBox2Aktiv  := FALSE;
+xIntervallBox1Anwahl     := FALSE;
+xIntervallBox2Anwahl     := FALSE;
+xNachtrocknungBox1Anwahl := FALSE;
+xNachtrocknungBox2Anwahl := FALSE;
+xDauerbetriebBox1Anwahl  := FALSE;
+xDauerbetriebBox2Anwahl  := FALSE;
+xStocktemperaturBox1Anwahl  := FALSE;
+xStocktemperaturBox2Anwahl  := FALSE;
 
 (* Betriebsart *)
 gCmdAnlage.Auto := NOT HMI_TEST_doIoTestAktivieren;
@@ -4197,24 +4225,32 @@ gCmdAnlage.Test := HMI_TEST_doIoTestAktivieren;
 //===== BOX 1 =====
 IF gBetriebsparameter.Boxen[1].NachtrocknungEin AND (usAktStunde <= 23) THEN
 	//Bitmaske um die aktuelle Stundenanzahl nach rechts schieben und pruefen ob Stunde in Maske aktiv
-	xNachtrocknungBox1Aktiv := (SHR(IN := udNachtrocknungMaskeBox1, N := usAktStunde) AND 1) <> 0;
-
+	xNachtrocknungBox1Anwahl := (SHR(IN := udNachtrocknungMaskeBox1, N := usAktStunde) AND 1) <> 0;
+	
 ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin AND (usAktStunde <= 23) THEN
-	xIntervallBox1Aktiv := (SHR(IN := udIntervallMaskeBox1, N := usAktStunde) AND 1) <> 0;
-
+	xIntervallBox1Anwahl := (SHR(IN := udIntervallMaskeBox1, N := usAktStunde) AND 1) <> 0;
+	
+ELSIF gBetriebsparameter.Boxen[1].StocktemperaturEin THEN
+	xStocktemperaturBox1Anwahl := TRUE;
+	
 ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
-	xDauerbetriebBox1Aktiv := TRUE;
+	xDauerbetriebBox1Anwahl := TRUE;
+	
 END_IF;
 
 //===== BOX 2 =====
 IF gBetriebsparameter.Boxen[2].NachtrocknungEin AND (usAktStunde <= 23) THEN
-	xNachtrocknungBox2Aktiv := (SHR(IN := udNachtrocknungMaskeBox2, N := usAktStunde) AND 1) <> 0;
+	xNachtrocknungBox2Anwahl := (SHR(IN := udNachtrocknungMaskeBox2, N := usAktStunde) AND 1) <> 0;
 
 ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin AND (usAktStunde <= 23) THEN
-	xIntervallBox2Aktiv := (SHR(IN := udIntervallMaskeBox2, N := usAktStunde) AND 1) <> 0;
+	xIntervallBox2Anwahl := (SHR(IN := udIntervallMaskeBox2, N := usAktStunde) AND 1) <> 0;
 
+ELSIF gBetriebsparameter.Boxen[2].StocktemperaturEin THEN
+	xStocktemperaturBox2Anwahl := TRUE;
+	
 ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
-	xDauerbetriebBox2Aktiv := TRUE;
+	xDauerbetriebBox2Anwahl := TRUE;
+	
 END_IF;
 
 
@@ -4226,29 +4262,59 @@ END_IF;
 ================================================================================
 *)
 
-//OFFEN: Die Nachtrocknungssperre wirkt gegenseitig. Haben beide Boxen
-//       Nachtrocknung aktiv und ueberlappende Stundenmasken, laeuft keine
-//       der beiden. Bei Bedarf feste Prioritaet vergeben.
+// Die Nachtrocknungssperre wirkt nur für Box 2. Haben beide Boxen
+// Nachtrocknung aktiv und ueberlappende Stundenmasken, laeuft nur
+// Box 1.
 xBox1Freigegeben := gCmdAnlage.Auto
-                    AND NOT gCmdAnlage.FehlerStopp
-                    AND NOT (xNachtrocknungBox2Aktiv AND gBetriebsparameter.Ausstattung.Box2);
+                    AND NOT gCmdAnlage.FehlerStopp;
 
 xBox2Freigegeben := gCmdAnlage.Auto
                     AND NOT gCmdAnlage.FehlerStopp
                     AND gBetriebsparameter.Ausstattung.Box2
-                    AND NOT xNachtrocknungBox1Aktiv;
+                    AND NOT xNachtrocknungBox1Anwahl;
+
+(*
+================================================================================
+ PHASE 3 - Stocktemperatur
+ 
+================================================================================
+*)
+//===== BOX 1 - Stocktemperatur =====
+IF xStocktemperaturBox1Anwahl THEN
+    IF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[1].StocktemperaturSoll - gBetriebsparameter.Boxen[1].StocktemperaturHysterese) THEN
+        xStockHaltBox1 := TRUE;
+    ELSIF gStatusAnlage.StockTemperatur >= gBetriebsparameter.Boxen[1].StocktemperaturSoll THEN
+        xStockHaltBox1 := FALSE;
+    END_IF;
+    xStocktemperaturBox1Aktiv := xStockHaltBox1;
+ELSE
+    xStockHaltBox1      := FALSE;
+    xStocktemperaturBox1Aktiv := FALSE;
+END_IF;
+//===== BOX 2 - Stocktemperatur =====
+IF xStocktemperaturBox2Anwahl THEN
+    IF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[2].StocktemperaturSoll - gBetriebsparameter.Boxen[2].StocktemperaturHysterese) THEN
+        xStockHaltBox2 := TRUE;
+    ELSIF gStatusAnlage.StockTemperatur >= gBetriebsparameter.Boxen[2].StocktemperaturSoll THEN
+        xStockHaltBox2 := FALSE;
+    END_IF;
+    xStocktemperaturBox2Aktiv := xStockHaltBox2;
+ELSE
+    xStockHaltBox2      := FALSE;
+    xStocktemperaturBox2Aktiv := FALSE;
+END_IF;
 
 
 (*
 ================================================================================
- PHASE 3 - Schlechtwetter Puls-/Pausebetrieb
+ PHASE 4 - Schlechtwetter Puls-/Pausebetrieb
  Wirkt ausschliesslich auf den Dauerbetrieb. Intervall- und Nachtrocknungs-
  betrieb laufen unveraendert nach Stundenmaske.
 ================================================================================
 *)
 
 //===== BOX 1 =====
-xSchlechtwetterBox1Aktiv := xDauerbetriebBox1Aktiv
+xSchlechtwetterBox1Aktiv := xDauerbetriebBox1Anwahl
                             AND xBox1Freigegeben
                             AND gStatusAnlage.Box[1].WetterIstSchlecht
                             AND (gStatusAnlage.Box[1].AktSchlechtwetterPause <> 0);
@@ -4264,11 +4330,11 @@ IF xSchlechtwetterBox1Aktiv THEN
 	xDauerbetriebBox1Trocknet := fbPulsPauseBox1.PulsOut;
 ELSE
 	//Schoenwetter oder keine Pausezeit parametriert: Dauerbetrieb
-	xDauerbetriebBox1Trocknet := xDauerbetriebBox1Aktiv;
+	xDauerbetriebBox1Trocknet := xDauerbetriebBox1Anwahl;
 END_IF;
 
 //===== BOX 2 =====
-xSchlechtwetterBox2Aktiv := xDauerbetriebBox2Aktiv
+xSchlechtwetterBox2Aktiv := xDauerbetriebBox2Anwahl
                             AND xBox2Freigegeben
                             AND gStatusAnlage.Box[2].WetterIstSchlecht
                             AND (gStatusAnlage.Box[2].AktSchlechtwetterPause <> 0);
@@ -4282,24 +4348,26 @@ fbPulsPauseBox2();
 IF xSchlechtwetterBox2Aktiv THEN
 	xDauerbetriebBox2Trocknet := fbPulsPauseBox2.PulsOut;
 ELSE
-	xDauerbetriebBox2Trocknet := xDauerbetriebBox2Aktiv;
+	xDauerbetriebBox2Trocknet := xDauerbetriebBox2Anwahl;
 END_IF;
 
 
 (*
 ================================================================================
- PHASE 4 - Boxaktivitaet
+ PHASE 5 - Boxaktivitaet
 ================================================================================
 *)
 
 gBetriebsparameter.Boxen[1].xBoxAktiv := (xDauerbetriebBox1Trocknet
-                                          OR xIntervallBox1Aktiv
-                                          OR xNachtrocknungBox1Aktiv)
+                                          OR xIntervallBox1Anwahl
+                                          OR xNachtrocknungBox1Anwahl
+                                          OR xStocktemperaturBox1Aktiv)
                                          AND xBox1Freigegeben;
 
 gBetriebsparameter.Boxen[2].xBoxAktiv := (xDauerbetriebBox2Trocknet
-                                          OR xIntervallBox2Aktiv
-                                          OR xNachtrocknungBox2Aktiv)
+                                          OR xIntervallBox2Anwahl
+                                          OR xNachtrocknungBox2Anwahl
+                                          OR xStocktemperaturBox2Aktiv)
                                          AND xBox2Freigegeben;
 
 xMindEineBoxAktiv := gBetriebsparameter.Boxen[1].xBoxAktiv
@@ -4308,7 +4376,7 @@ xMindEineBoxAktiv := gBetriebsparameter.Boxen[1].xBoxAktiv
 
 (*
 ================================================================================
- PHASE 5 - Start/Stopp
+ PHASE 6 - Start/Stopp
 ================================================================================
 *)
 
@@ -4509,7 +4577,22 @@ END_STRUCT;
 						<var name="Allgemein" type="ST_Anlage_Allgemein"/>
 						<var name="SchlechtwetterBoxen" type="ST_ParSchlechtwetterBoxen" idxMin0="1" idx0="2"/>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_Betriebsparameter: STRUCT
+	Sensoren : ST_SensorParameter;
+	Ausstattung : ST_Ausstattung;
+	KlappenBoxen : ARRAY[1..2] OF ST_KlappenBoxen;
+	Luftaufbereitung : ST_ParLuftaufber;
+	Ventilator : ST_ParVentilator;
+	Strombegrenzung : ST_ParZeitfenster;
+	Tarifabschaltung : ST_ParTarifabschaltung;
+	Boxen : ARRAY[1..2] OF ST_ParBoxen;
+	Allgemein : ST_Anlage_Allgemein;
+	SchlechtwetterBoxen : ARRAY[1..2] OF ST_ParSchlechtwetterBoxen;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
 				</struct>
 				<struct name="ST_KlappenBoxen" version="1.0.0">
 					<vars>
@@ -4700,24 +4783,32 @@ END_STRUCT;
 						<var name="DauerbetriebEin" type="BOOL"/>
 						<var name="IntervallbetriebEin" type="BOOL"/>
 						<var name="NachtrocknungEin" type="BOOL"/>
+						<var name="StocktemperaturEin" type="BOOL"/>
 						<var name="IntervallbetriebZeiten" type="BOOL" dim0="24"/>
 						<var name="NachtrocknungZeiten" type="BOOL" dim0="24"/>
 						<var name="AktuelleTrockengutFeuchte" type="UINT"/>
+						<var name="StocktemperaturSoll" type="REAL">
+							<descr>Bediener-Sollwert Stocktemperatur [°C]</descr>
+						</var>
+						<var name="StocktemperaturHysterese" type="REAL"/>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[ST_ParBoxen: STRUCT
-	StellungKlappe1: eStellungKlappeBoxen;
-	StellungKlappe2: eStellungKlappeBoxen;
-	xBoxAktiv: BOOL;
+	StellungKlappe1 : eStellungKlappeBoxen;
+	StellungKlappe2 : eStellungKlappeBoxen;
+	xBoxAktiv : BOOL;
 	NameBox : STRING[ 32 ];
 	Trockengut : eTrockengut;
 	Aus : BOOL;
 	DauerbetriebEin : BOOL;
 	IntervallbetriebEin : BOOL;
 	NachtrocknungEin : BOOL;
+	StocktemperaturEin : BOOL;
 	IntervallbetriebZeiten : ARRAY[0..23] OF BOOL;
 	NachtrocknungZeiten : ARRAY[0..23] OF BOOL;
 	AktuelleTrockengutFeuchte : UINT;
+	StocktemperaturSoll : REAL;	(* Bediener-Sollwert Stocktemperatur [°C] *)
+	StocktemperaturHysterese : REAL;
 END_STRUCT;
 
 ]]>
@@ -73905,6 +73996,10 @@ nSamples := cnt;
 	Par_Schlechtwetter_Box2_ZeitPause6 AT %MW200.294 : UDINT;
 		{G:"Parameters"}
 	Par_Schlechtwetter_Box2_Sensortype AT %MW200.296 : USINT;
+		{G:"Parameters"}
+	Par_Stocktemperatur_Box1_Hysterese AT %MW200.298 : REAL;
+		{G:"Parameters"}
+	Par_Stocktemperatur_Box2_Hysterese AT %MW200.300 : REAL;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -74171,6 +74266,12 @@ nSamples := cnt;
 	HMI_OUT_SysClock_year AT %MW201.178 : UINT := 0;
 		{G:"Variables"}
 	HMI_OUT_SysClock_ReqSet AT %MW201.179 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_StocktemperaturEin AT %MW201.180 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box1_StocktemperaturEin AT %MW201.181 : BOOL := 0;
+		{G:"Variables"}
+	HMI_OUT_Box_Aktuell_StocktemperaturSoll AT %MW201.182 : REAL := 0;
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -76814,8 +76915,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11079 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 277; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11279 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 282; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -76828,9 +76929,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 3536839;
+	dummyCrc32 := 1914203239;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 297, 2, 201, TO_DWORD( ADR(%MW201.0) ), 180, 2, 3536839 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 302, 2, 201, TO_DWORD( ADR(%MW201.0) ), 184, 2, 1914203239 );
 
 END_PROGRAM
 
@@ -76899,7 +77000,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="13723">
+			<root name="CControl_Lite" nextID="14325">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -84070,6 +84171,104 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>16674</ipa>
+								<address>16674</address>
+								<name>Par_Stocktemperatur_Box1_Hysterese</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.298</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16676</ipa>
+								<address>16676</address>
+								<name>Par_Stocktemperatur_Box2_Hysterese</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.300</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</params>
 						<paramsRO>
 							<param>
@@ -90589,6 +90788,153 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>9138</ipa>
+								<address>9138</address>
+								<name>HMI_OUT_Box_Aktuell_StocktemperaturEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.180</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9139</ipa>
+								<address>9139</address>
+								<name>HMI_OUT_Box1_StocktemperaturEin</name>
+								<typepar>5</typepar>
+								<typetarg>BOOL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.181</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9140</ipa>
+								<address>9140</address>
+								<name>HMI_OUT_Box_Aktuell_StocktemperaturSoll</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.182</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</paramsRO>
 						<enums/>
 						<sysenums>
@@ -92596,6 +92942,8 @@ END_PROGRAM
 								<value ipa="16669" subidx="0">0</value>
 								<value ipa="16671" subidx="0">0</value>
 								<value ipa="16673" subidx="0">0</value>
+								<value ipa="16674" subidx="0">0</value>
+								<value ipa="16676" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
@@ -92729,6 +93077,9 @@ END_PROGRAM
 								<value ipa="9135" subidx="0">0</value>
 								<value ipa="9136" subidx="0">0</value>
 								<value ipa="9137" subidx="0">0</value>
+								<value ipa="9138" subidx="0">0</value>
+								<value ipa="9139" subidx="0">0</value>
+								<value ipa="9140" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>
