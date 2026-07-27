@@ -49,7 +49,12 @@
 						<descr>Strombegrenzung Logik</descr>
 					</var>
 					<var name="gPlcSwVersion" type="STRING" length="32">
+						<descr>PLC Software Version</descr>
 						<initValue>'v1.0.0'</initValue>
+					</var>
+					<var name="gPlcKonfigId" type="UINT">
+						<descr>PLC Konfiguration [17...2.04]</descr>
+						<initValue>17</initValue>
 					</var>
 					<var name="gQuitErr" type="BOOL">
 						<descr>Fehler quittieren</descr>
@@ -126,6 +131,7 @@
 					<var name="aoLeistVorgLuftaufber" type="REAL">
 						<descr>Leistungsvorgabe Luftaufbereiter [%]</descr>
 					</var>
+					<var name="gudTemp" type="UDINT"/>
 				</group>
 				<group name="varAlarm" version="1.0.0">
 					<var name="gAlarmBetriebLuftaufber" type="BOOL"/>
@@ -139,7 +145,47 @@
 			<constantVars/>
 			<iecVarsDeclaration>
 				<group name="var_glob">
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[VAR_GLOBAL
+	gAktModus : eBetriebsmodus := BETRIEB;
+	gStatusAnlage : T_StatAnlage;
+	gBetriebsparameter : T_Betriebsparameter;
+	gAktoren : T_Aktor;
+	gIoTest : T_IoTest;
+	gCmdAnlage : T_CmdAnlage;
+	Strombegrenzung : fbTrockStrombegr;	(* Strombegrenzung Logik *)
+	gPlcSwVersion : STRING[ 32 ] := 'v1.0.0';	(* PLC Software Version *)
+	gPlcKonfigId : UINT := 17;	(* PLC Konfiguration [17...2.04] *)
+	gQuitErr : BOOL;	(* Fehler quittieren *)
+	IBN_FALSE : BOOL;	(* Inbetriebnahmemerker false *)
+	IBN_TRUE : BOOL;	(* Inbetriebnahmemerker true *)
+	diBox1Offen : BOOL;	(* Rückmeldung Box 1 offen *)
+	diBox1Geschl : BOOL;	(* Rückmeldung Box 1 geschlossen *)
+	diBox2Offen : BOOL;	(* Rückmeldung Box 2 offen *)
+	diBox2Geschl : BOOL;	(* Rückmeldung Box 2 geschlossen *)
+	diBetriebLuftaufber : BOOL;	(* Betriebsmeldung Luftaufbereitung *)
+	diBetriebVentilator : BOOL;	(* Betriebsmeldung Ventilator *)
+	aiFrischluftTemp : REAL;	(* Frischlufttemperatur *)
+	aiFrischluftFeucht : REAL;	(* Frischluftfeuchte *)
+	aiAbluftBox1Temp : REAL;	(* Ablufttemperatur Box 1 *)
+	aiAbluftBox1Feucht : REAL;	(* Abluftfeuchte Box 1 *)
+	aiTrockenluftTemp : REAL;	(* Trockenlufttemperatur *)
+	aiTrockenluftFeucht : REAL;	(* Trockenluftfeuchte *)
+	aiAbluftBox2Temp : REAL;	(* Ablufttemperatur Box 2 *)
+	aiAbluftBox2Feucht : REAL;	(* Abluftfeuchte Box 2 *)
+	aiStocktemp : REAL;	(* Stock- bzw. Produkttemperatur *)
+	doFrgLuftaufber : BOOL;	(* Freigabe Luftaufbereiter (Digitaler Ausgang) *)
+	doFrgBox1 : BOOL;	(* Freigabe Box 1 (z.B. Klappe / Aktor Box 1) *)
+	doFrgBox2 : BOOL;	(* Freigabe Box 2 (z.B. Klappe / Aktor Box 2) *)
+	doFrgAbluftventilator : BOOL;	(* Freigabe Abluftventilator *)
+	doFrgVentilator : BOOL;	(* Freigabe Ventilator *)
+	aoFuVentilator : REAL;	(* Sollwert Frequenzumrichter Ventilator [%] *)
+	aoLeistVorgLuftaufber : REAL;	(* Leistungsvorgabe Luftaufbereiter [%] *)
+	gudTemp : UDINT;
+END_VAR
+
+]]>
+					</iecDeclaration>
 				</group>
 				<group name="varAlarm">
 					<iecDeclaration active="FALSE"/>
@@ -148,7 +194,74 @@
 					<iecDeclaration active="FALSE"/>
 				</group>
 			</iecVarsDeclaration>
-			<functions/>
+			<functions>
+				<function name="fcSetBitInBitmask" version="1.0.0" creationDate="1785154221" lastModifiedDate="1785155993">
+					<returnValue>UDINT</returnValue>
+					<vars>
+						<inputVars>
+							<var name="Bitmask" type="UDINT"/>
+							<var name="BitNr" type="USINT"/>
+						</inputVars>
+						<localVars>
+							<var name="ValBit" type="UDINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[FUNCTION fcSetBitInBitmask: UDINT
+
+VAR
+	ValBit : UDINT;
+END_VAR
+
+VAR_INPUT
+	Bitmask : UDINT;
+	BitNr : USINT;
+END_VAR
+
+]]>
+					</iecDeclaration>
+					<sourceCode type="ST">
+						<![CDATA[//Bitstelle in Wert umwandeln
+ValBit := SHL(1, BitNr);
+//Bit in Bitmaske setzen
+fcSetBitInBitmask := Bitmask OR ValBit;
+]]>
+					</sourceCode>
+				</function>
+				<function name="fcClearBitInBitmask" version="1.0.0" creationDate="1785156421" lastModifiedDate="1785156496">
+					<returnValue>BOOL</returnValue>
+					<vars>
+						<inputVars>
+							<var name="Bitmask" type="UDINT"/>
+							<var name="BitNr" type="USINT"/>
+						</inputVars>
+						<localVars>
+							<var name="ValBit" type="UDINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<sourceCode type="ST">
+						<![CDATA[// Bitstelle in Wert umwandeln
+
+ValBit := SHL(UDINT#1, BitNr);
+
+
+// Bit in Bitmaske löschen
+
+fcClearBitInBitmask := Bitmask AND NOT ValBit;
+]]>
+					</sourceCode>
+				</function>
+				<function name="fcResetBitmask" version="1.0.0" creationDate="1785156531" lastModifiedDate="1785156594">
+					<returnValue>UDINT</returnValue>
+					<vars/>
+					<iecDeclaration active="FALSE"/>
+					<sourceCode type="ST">
+						<![CDATA[fcResetBitmask := TO_UDINT(0);
+]]>
+					</sourceCode>
+				</function>
+			</functions>
 			<functionBlocks>
 				<functionBlock name="fbBoxenklappe" version="1.0.0" creationDate="1775249282" lastModifiedDate="1775942768">
 					<vars>
@@ -1588,7 +1701,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1784621393">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1785152975">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -1706,7 +1819,7 @@ IF NOT gInitDone THEN
     gInitDone := TRUE;
 END_IF;
 
-
+//Fehler Quittieren
 gQuitErr := HMI_IN_diQuitErr;
 
 (*
@@ -2290,7 +2403,7 @@ gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.Schlechtwett
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1784626200">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1785159741">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2390,38 +2503,38 @@ END_VAR
 // =============================================================================
 
 // F01 Sensor Frischluft
-xF_SensorFrischluft :=
+ xF_SensorFrischluft :=
     gBetriebsparameter.Ausstattung.SensorFrischluft AND (
-        (aiFrischluftTemp   < -40.0) OR (aiFrischluftTemp   > 80.0)  OR
-        (aiFrischluftFeucht <   0.0) OR (aiFrischluftFeucht > 100.0)
+        (aiFrischluftTemp  < gBetriebsparameter.Sensoren.FrischlTempMessberMin) OR (aiFrischluftTemp   > gBetriebsparameter.Sensoren.FrischlTempMessberMax)  OR
+        (aiFrischluftFeucht < gBetriebsparameter.Sensoren.FrischlFeuchtMessberMin) OR (aiFrischluftFeucht > gBetriebsparameter.Sensoren.FrischlFeuchtMessberMax)
     );
 
 // F02 Sensor Abluft Box 1
 xF_SensorAbluftBox1 :=
     gBetriebsparameter.Ausstattung.SensorAbluftBox1 AND (
-        (aiAbluftBox1Temp   < -40.0) OR (aiAbluftBox1Temp   > 100.0) OR
-        (aiAbluftBox1Feucht <   0.0) OR (aiAbluftBox1Feucht > 100.0)
+        (aiAbluftBox1Temp < gBetriebsparameter.Sensoren.AbluftTempMessberMin) OR (aiAbluftBox1Temp > gBetriebsparameter.Sensoren.AbluftTempMessberMin) OR
+        (aiAbluftBox1Feucht < gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin) OR (aiAbluftBox1Feucht > gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax)
     );
 
 // F03 Sensor Abluft Box 2 (nur wenn Box 2 vorhanden)
 xF_SensorAbluftBox2 :=
     gBetriebsparameter.Ausstattung.Box2 AND
     gBetriebsparameter.Ausstattung.SensorAbluftBox2 AND (
-        (aiAbluftBox2Temp   < -40.0) OR (aiAbluftBox2Temp   > 100.0) OR
-        (aiAbluftBox2Feucht <   0.0) OR (aiAbluftBox2Feucht > 100.0)
+        (aiAbluftBox2Temp   < gBetriebsparameter.Sensoren.AbluftTempMessberMin) OR (aiAbluftBox2Temp > gBetriebsparameter.Sensoren.AbluftTempMessberMax) OR
+        (aiAbluftBox2Feucht < gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin) OR (aiAbluftBox2Feucht > gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax)
     );
 
 // F04 Sensor Trockenluft
 xF_SensorTrockenluft :=
     gBetriebsparameter.Ausstattung.SensorTrockenluft AND (
-        (aiTrockenluftTemp   < -40.0) OR (aiTrockenluftTemp   > 100.0) OR
-        (aiTrockenluftFeucht <   0.0) OR (aiTrockenluftFeucht > 100.0)
+        (aiTrockenluftTemp   < gBetriebsparameter.Sensoren.TrockenlTempMessberMin) OR (aiTrockenluftTemp > gBetriebsparameter.Sensoren.TrockenlTempMessberMax) OR
+        (aiTrockenluftFeucht < gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMin) OR (aiTrockenluftFeucht > gBetriebsparameter.Sensoren.TrockenlFeuchtMessberMax)
     );
 
 // F05 Sensor Stocktemperatur
 xF_SensorStocktemp :=
     gBetriebsparameter.Ausstattung.SensorStocktemp AND (
-        (aiStocktemp < -40.0) OR (aiStocktemp > 140.0)
+        (aiStocktemp < gBetriebsparameter.Sensoren.StocktempMessberMin) OR (aiStocktemp > gBetriebsparameter.Sensoren.StocktempMessberMax)
     );
 
 // F06 Laufzeit Boxenklappe 1 (Status wird von aktorenMapping gesetzt)
@@ -2502,14 +2615,14 @@ END_IF;
 // =============================================================================
 
 xSummeFehler :=
-    xFL_SensorFrischluft  OR
-    xFL_SensorAbluftBox1  OR
-    xFL_SensorAbluftBox2  OR
+    xFL_SensorFrischluft OR
+    xFL_SensorAbluftBox1 OR
+    xFL_SensorAbluftBox2 OR
     xFL_SensorTrockenluft OR
-    xFL_SensorStocktemp   OR
-    xFL_KlappeBox1        OR
-    xFL_KlappeBox2        OR
-    xFL_Luftaufbereiter;
+    xFL_SensorStocktemp OR
+    xFL_Luftaufbereiter OR
+    xFL_KlappeBox1 OR
+    xFL_KlappeBox2;
 
 // Warnungen (nicht latchend) Erweiterungspunkt für zukünftige Warnungen
 xSummeWarnung := FALSE;
@@ -2526,6 +2639,25 @@ gCmdAnlage.FehlerStopp := xSummeFehler;
 IF xSummeFehler THEN
     gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_STOERUNG;
 END_IF;
+
+gudTemp := fcSetBitInBitmask(gudTemp, 0);
+
+
+// =============================================================================
+// 5) Auf globales Meldearray kopieren
+// =============================================================================
+
+gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_FRISCHLUFT] := xFL_SensorFrischluft;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_ABLUFT_BOX1] := xFL_SensorAbluftBox1;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_ABLUFT_BOX2] := xFL_SensorAbluftBox2;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_TROCKENLUFT] := xFL_SensorTrockenluft;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_FRISCHLUFT] := xFL_SensorStocktemp;
+
+gStatusAnlage.Alarm.ArrFehler[FEHLER_ENDLAGEN_BOXENKLAPPE_1] := xFL_KlappeBox1;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_ENDLAGEN_BOXENKLAPPE_2] := xFL_KlappeBox2;
+
+gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER] := xFL_Luftaufbereiter;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_VENTILATOR] := xFL_Ventilator;
 ]]>
 					</sourceCode>
 				</program>
@@ -3392,7 +3524,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1784926145">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1785159416">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -3401,6 +3533,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 							<var name="rt_Box_Nachtr" type="R_TRIG"/>
 							<var name="rt_Box_Stocktemp" type="R_TRIG"/>
 							<var name="lastBoxIndex" type="USINT"/>
+							<var name="uIdx" type="USINT"/>
 							<var name="firstStep" type="BOOL"/>
 						</localVars>
 					</vars>
@@ -3414,6 +3547,7 @@ VAR
 	rt_Box_Nachtr : R_TRIG;
 	rt_Box_Stocktemp : R_TRIG;
 	lastBoxIndex : USINT;
+	uIdx : USINT;
 	firstStep : BOOL;
 END_VAR
 
@@ -3463,6 +3597,7 @@ Allgemein
 ---------------------------------------------------------------------------
 *)
 Konfig_SoftwareVersionPLC := gPlcSwVersion;
+Konfig_idNameSteuerung := gPlcKonfigId;
 gBetriebsparameter.Allgemein.StandortHoehe := Par_Anlage_Standorthoehe;
 
 
@@ -4097,7 +4232,38 @@ ELSE
 	HMI_Ventilator1_FarbeIcon := ICON_GRAU;
 END_IF;
 
+(*
+-------------------------------------------------------------------------------
+ ALARME fuer Visu aufbereiten ARRAY -> UDINT Maske da Arrays nicht direkt
+ an HMI gesendet werden koennen! 
+-------------------------------------------------------------------------------
+*)
 
+//Reset Bitmasken vor Auswertung
+HMI_IN_ALARM_WARNMASKE_1 := fcResetBitmask();
+HMI_IN_ALARM_WARNMASKE_2 := fcResetBitmask();
+HMI_IN_ALARM_STOERMASKE_1 := fcResetBitmask();
+HMI_IN_ALARM_STOERMASKE_2 := fcResetBitmask();
+
+//Array auf Bitmaske fuer HMI schreiben
+FOR uIdx := 0 TO 31 DO
+	//Erste Warnungsbitmaske [0.31]
+	IF (gStatusAnlage.Alarm.ArrWarnung[uIdx]) THEN
+		HMI_IN_ALARM_WARNMASKE_1:= fcSetBitInBitmask(Bitmask := HMI_IN_ALARM_WARNMASKE_1, BitNr:= uIdx);
+	END_IF;
+	//Zweite Warnungsbitmaske [32.63]
+	IF (gStatusAnlage.Alarm.ArrWarnung[uIdx + 32]) THEN
+		HMI_IN_ALARM_WARNMASKE_2:= fcSetBitInBitmask(Bitmask := HMI_IN_ALARM_WARNMASKE_2, BitNr:= uIdx);
+	END_IF;	
+	//Erste Stoerungsbitmaske [0.31]
+	IF (gStatusAnlage.Alarm.ArrFehler[uIdx]) THEN
+		HMI_IN_ALARM_STOERMASKE_1:= fcSetBitInBitmask(Bitmask := HMI_IN_ALARM_STOERMASKE_1, BitNr:= uIdx);
+	END_IF;
+	//Zweite Stoerungsbitmaske [32.63]
+	IF (gStatusAnlage.Alarm.ArrFehler[uIdx + 32]) THEN
+		HMI_IN_ALARM_STOERMASKE_2 := fcSetBitInBitmask(Bitmask := HMI_IN_ALARM_STOERMASKE_2, BitNr:= uIdx);
+	END_IF;
+END_FOR;
 ]]>
 					</sourceCode>
 				</program>
@@ -4622,6 +4788,7 @@ END_STRUCT;
 						<var name="TrockenluftSaettDefizit" type="REAL"/>
 						<var name="LuftaufberTyp" type="UINT"/>
 						<var name="Box" type="ST_StatBoxen" idxMin0="1" idx0="2"/>
+						<var name="Alarm" type="ST_Alarm"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -4866,6 +5033,22 @@ END_STRUCT;
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
+				<struct name="ST_Alarm" version="1.0.0">
+					<vars>
+						<var name="ArrWarnung" type="BOOL" dim0="64"/>
+						<var name="ArrFehler" type="BOOL" dim0="64"/>
+						<var name="ArrSystem" type="BOOL" dim0="33"/>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_Alarm: STRUCT
+	ArrWarnung : ARRAY[0..63] OF BOOL;
+	ArrFehler : ARRAY[0..63] OF BOOL;
+	ArrSystem : ARRAY[0..32] OF BOOL;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
+				</struct>
 			</structs>
 			<typedefs>
 				<typedef name="T_Betriebsparameter" type="ST_Betriebsparameter">
@@ -4923,8 +5106,94 @@ END_STRUCT;
 					<iecDeclaration active="FALSE"/>
 				</enum>
 				<enum name="eFehler" baseType="DINT" version="1.0.0">
-					<elements/>
-					<iecDeclaration active="FALSE"/>
+					<elements>
+						<element name="FEHLER_24VDC">
+							<value>0</value>
+						</element>
+						<element name="FEHLER_BETRIEBSMLDG_VENTILATOR">
+							<value>5</value>
+						</element>
+						<element name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER">
+							<value>6</value>
+						</element>
+						<element name="FEHLER_BETRIEBSMLDG_NOTSTROM">
+							<value>7</value>
+						</element>
+						<element name="FEHLER_SENSOR_FRISCHLUFT">
+							<value>10</value>
+						</element>
+						<element name="FEHLER_SENSOR_TROCKENLUFT">
+							<value>11</value>
+						</element>
+						<element name="FEHLER_SENSOR_ABLUFT_BOX1">
+							<value>12</value>
+						</element>
+						<element name="FEHLER_SENSOR_ABLUFT_BOX2">
+							<value>13</value>
+						</element>
+						<element name="FEHLER_SENSOR_STOCKTEMP">
+							<value>14</value>
+						</element>
+						<element name="FEHLER_ENDLAGEN_BYPASSKLAPPE">
+							<value>20</value>
+						</element>
+						<element name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1">
+							<value>21</value>
+						</element>
+						<element name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2">
+							<value>22</value>
+						</element>
+						<element name="FEHLER_ENDLAGEN_BOXENKLAPPE_1">
+							<value>23</value>
+						</element>
+						<element name="FEHLER_ENDLAGEN_BOXENKLAPPE_2">
+							<value>24</value>
+						</element>
+						<element name="FEHLER_EINTRITT_TEMP_ZU_HOCH">
+							<value>30</value>
+						</element>
+						<element name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG">
+							<value>31</value>
+						</element>
+						<element name="FEHLER_LZ_PUMPDOWN_MOD1">
+							<value>32</value>
+						</element>
+						<element name="FEHLER_LZ_PUMPDOWN_MOD2">
+							<value>33</value>
+						</element>
+						<element name="FEHLER_ENTF_FREMD_STOERMELDUNG">
+							<value>35</value>
+						</element>
+						<element name="FEHLER_ENTF_FREMD_BETRMLDG">
+							<value>36</value>
+						</element>
+					</elements>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[eFehler: DINT (
+	FEHLER_24VDC := 0,
+	FEHLER_BETRIEBSMLDG_VENTILATOR := 5,
+	FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER := 6,
+	FEHLER_BETRIEBSMLDG_NOTSTROM := 7,
+	FEHLER_SENSOR_FRISCHLUFT := 10,
+	FEHLER_SENSOR_TROCKENLUFT := 11,
+	FEHLER_SENSOR_ABLUFT_BOX1 := 12,
+	FEHLER_SENSOR_ABLUFT_BOX2 := 13,
+	FEHLER_SENSOR_STOCKTEMP := 14,
+	FEHLER_ENDLAGEN_BYPASSKLAPPE := 20,
+	FEHLER_ENDLAGEN_UMSCHALTKLAPPE1 := 21,
+	FEHLER_ENDLAGEN_UMSCHALTKLAPPE2 := 22,
+	FEHLER_ENDLAGEN_BOXENKLAPPE_1 := 23,
+	FEHLER_ENDLAGEN_BOXENKLAPPE_2 := 24,
+	FEHLER_EINTRITT_TEMP_ZU_HOCH := 30,
+	FEHLER_EINTRITT_TEMP_ZU_NIEDRIG := 31,
+	FEHLER_LZ_PUMPDOWN_MOD1 := 32,
+	FEHLER_LZ_PUMPDOWN_MOD2 := 33,
+	FEHLER_ENTF_FREMD_STOERMELDUNG := 35,
+	FEHLER_ENTF_FREMD_BETRMLDG := 36
+);
+
+]]>
+					</iecDeclaration>
 				</enum>
 				<enum name="eStatus" baseType="DINT" version="1.0.0">
 					<elements>
@@ -5012,8 +5281,21 @@ END_STRUCT;
 					</elements>
 					<iecDeclaration active="FALSE"/>
 				</enum>
-				<enum name="eWarnungen" baseType="DINT" version="1.0.0">
-					<elements/>
+				<enum name="eWarnung" baseType="DINT" version="1.0.0">
+					<elements>
+						<element name="WARNUNG_Res1">
+							<value>0</value>
+						</element>
+						<element name="WARNUNG_Res2">
+							<value>1</value>
+						</element>
+						<element name="WARNUNG_Res3">
+							<value>2</value>
+						</element>
+						<element name="WARNUNG_Res4">
+							<value>3</value>
+						</element>
+					</elements>
 					<iecDeclaration active="FALSE"/>
 				</enum>
 				<enum name="eZusatzmeldungen" baseType="DINT" version="1.0.0">
@@ -74151,7 +74433,7 @@ nSamples := cnt;
 		{G:"Variables"}
 	HMI_TEST_aiStocktemp AT %MW201.102 : REAL := 0;
 		{G:"Variables"}
-	HMI_ALARM_ AT %MW201.104 : INT := 0;
+	HMI_TEST_Res1 AT %MW201.104 : INT := 0;
 		{G:"Variables"}
 	HMI_Allgemein_Entfeuchter AT %MW201.105 : UINT := 0;
 		{G:"Variables"}
@@ -74272,6 +74554,14 @@ nSamples := cnt;
 	HMI_OUT_Box1_StocktemperaturEin AT %MW201.181 : BOOL := 0;
 		{G:"Variables"}
 	HMI_OUT_Box_Aktuell_StocktemperaturSoll AT %MW201.182 : REAL := 0;
+		{G:"Variables"}
+	HMI_IN_ALARM_STOERMASKE_1 AT %MW201.184 : UDINT := 0;
+		{G:"Variables"}
+	HMI_IN_ALARM_STOERMASKE_2 AT %MW201.186 : UDINT;
+		{G:"Variables"}
+	HMI_IN_ALARM_WARNMASKE_1 AT %MW201.188 : UDINT;
+		{G:"Variables"}
+	HMI_IN_ALARM_WARNMASKE_2 AT %MW201.190 : UDINT;
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -76915,8 +77205,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11279 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 282; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11439 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 286; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -76929,9 +77219,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 1914203239;
+	dummyCrc32 := 1103114461;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 302, 2, 201, TO_DWORD( ADR(%MW201.0) ), 184, 2, 1914203239 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 302, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 1103114461 );
 
 END_PROGRAM
 
@@ -77000,7 +77290,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="14325">
+			<root name="CControl_Lite" nextID="14739">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77016,7 +77306,7 @@ END_PROGRAM
 					<Definition name="eBetriebsmodus" id="46"/>
 					<Definition name="eFehler" id="47"/>
 					<Definition name="eStatus" id="48"/>
-					<Definition name="eWarnungen" id="49"/>
+					<Definition name="eWarnung" id="49" genHidden="false"/>
 					<Definition name="eZusatzmeldungen" id="50"/>
 					<Definition name="eLuftaufbereiterTyp" id="5706"/>
 					<Definition name="eIcon" id="10823"/>
@@ -77033,6 +77323,9 @@ END_PROGRAM
 					<Pou name="fbMathLuft" id="13274"/>
 					<Pou name="fbCControlWitterung" id="13370"/>
 					<Pou name="fbPulsPause" id="13655"/>
+					<Pou name="fcSetBitInBitmask" id="14563"/>
+					<Pou name="fcClearBitInBitmask" id="14666"/>
+					<Pou name="fcResetBitmask" id="14670"/>
 				</folder>
 				<folder name="struct" id="52">
 					<Definition name="ST_Ausstattung" id="56"/>
@@ -77059,6 +77352,7 @@ END_PROGRAM
 					<Definition name="ST_Anlage_Allgemein" id="13299"/>
 					<Definition name="ST_ParSchlechtwetterBoxen" id="13497"/>
 					<Definition name="ST_ParSchlechtwetterBoxenStufe" id="13498"/>
+					<Definition name="ST_Alarm" id="14671" genHidden="false"/>
 				</folder>
 				<folder name="types" id="910">
 					<Definition name="T_Betriebsparameter" id="912"/>
@@ -87949,7 +88243,7 @@ END_PROGRAM
 							<param>
 								<ipa>9063</ipa>
 								<address>9063</address>
-								<name>HMI_ALARM_</name>
+								<name>HMI_TEST_Res1</name>
 								<typepar>5</typepar>
 								<typetarg>INT</typetarg>
 								<value>0</value>
@@ -90935,6 +91229,202 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>9142</ipa>
+								<address>9142</address>
+								<name>HMI_IN_ALARM_STOERMASKE_1</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.184</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9144</ipa>
+								<address>9144</address>
+								<name>HMI_IN_ALARM_STOERMASKE_2</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.186</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9146</ipa>
+								<address>9146</address>
+								<name>HMI_IN_ALARM_WARNMASKE_1</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.188</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9148</ipa>
+								<address>9148</address>
+								<name>HMI_IN_ALARM_WARNMASKE_2</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value/>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.190</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</paramsRO>
 						<enums/>
 						<sysenums>
@@ -93080,6 +93570,10 @@ END_PROGRAM
 								<value ipa="9138" subidx="0">0</value>
 								<value ipa="9139" subidx="0">0</value>
 								<value ipa="9140" subidx="0">0</value>
+								<value ipa="9142" subidx="0">0</value>
+								<value ipa="9144" subidx="0">0</value>
+								<value ipa="9146" subidx="0">0</value>
+								<value ipa="9148" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>
