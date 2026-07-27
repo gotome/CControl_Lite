@@ -1701,7 +1701,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1785152975">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1785180641">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -1858,12 +1858,24 @@ IF gAktModus <> IOTEST THEN
     Analoge Rohwerte einlesen und in REAL umwandeln
     ---------------------------------------------------------------------------
     *)
+    
     rFrischluftTempRaw    := TO_REAL(hw_ai1);
     rFrischluftFeuchtRaw  := TO_REAL(hw_ai2);
-    rAbluftBox1TempRaw    := TO_REAL(hw_ai3);
-    rAbluftBox1FeuchtRaw  := TO_REAL(hw_ai4);
-    rTrockenluftTempRaw   := TO_REAL(hw_ai3);
-    rTrockenluftFeuchtRaw := TO_REAL(hw_ai4);
+    
+    //Variable Fuehler, ueber HMI einstellbar
+    IF (Par_Sensoren_Config_Analog = FRISCHLUFT) THEN
+	    rTrockenluftTempRaw   := TO_REAL(hw_ai3);
+	    rTrockenluftFeuchtRaw := TO_REAL(hw_ai4);
+	ELSIF (Par_Sensoren_Config_Analog = ABLUFT_BOX1) THEN
+	    rAbluftBox1TempRaw    := TO_REAL(hw_ai3);
+	    rAbluftBox1FeuchtRaw  := TO_REAL(hw_ai4);	
+	ELSE 
+		rTrockenluftTempRaw := 0.0;
+		rTrockenluftFeuchtRaw := 0.0;
+		rAbluftBox1TempRaw := 0.0;
+		rAbluftBox1FeuchtRaw := 0.0;	
+    END_IF;
+    
     rAbluftBox2TempRaw    := TO_REAL(hw_ai5);
     rAbluftBox2FeuchtRaw  := TO_REAL(hw_ai6);
     rStocktempRaw         := TO_REAL(hw_ai7);
@@ -2403,7 +2415,7 @@ gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.Schlechtwett
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1785159741">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1785178716">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2647,6 +2659,9 @@ gudTemp := fcSetBitInBitmask(gudTemp, 0);
 // 5) Auf globales Meldearray kopieren
 // =============================================================================
 
+//Warnungen
+
+//Fehler
 gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_FRISCHLUFT] := xFL_SensorFrischluft;
 gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_ABLUFT_BOX1] := xFL_SensorAbluftBox1;
 gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_ABLUFT_BOX2] := xFL_SensorAbluftBox2;
@@ -2661,7 +2676,7 @@ gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_VENTILATOR] := xFL_Ventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1784620920">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1785182087">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -2784,7 +2799,7 @@ CASE gAktModus OF
         
 		//Funktionsbaustein Strombegrenzung
 		Strombegrenzung.Freigabe	:= TRUE;
-		Strombegrenzung.AktZeit		:= sysClock.hours * 100 + sysClock.minutes;
+		Strombegrenzung.AktZeit		:= TO_REAL(sysClock.hours * 100 + sysClock.minutes);
 
         // ------------------------------------------------------------
         // Betriebslogik - nur vorhandene Aktoren
@@ -5482,6 +5497,20 @@ END_STRUCT;
 							<value>1</value>
 						</element>
 						<element name="SENSOR_TROCKENLUFT">
+							<value>2</value>
+						</element>
+					</elements>
+					<iecDeclaration active="FALSE"/>
+				</enum>
+				<enum name="eConfigFuehler" baseType="DINT" version="1.0.0">
+					<elements>
+						<element name="NONE">
+							<value>0</value>
+						</element>
+						<element name="FRISCHLUFT">
+							<value>1</value>
+						</element>
+						<element name="ABLUFT_BOX1">
 							<value>2</value>
 						</element>
 					</elements>
@@ -74282,6 +74311,8 @@ nSamples := cnt;
 	Par_Stocktemperatur_Box1_Hysterese AT %MW200.298 : REAL;
 		{G:"Parameters"}
 	Par_Stocktemperatur_Box2_Hysterese AT %MW200.300 : REAL;
+		{G:"Parameters"}
+	Par_Sensoren_Config_Analog AT %MW200.302 : USINT;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -77205,8 +77236,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11439 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 286; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11479 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 287; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -77219,9 +77250,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 1103114461;
+	dummyCrc32 := 748418202;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 302, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 1103114461 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 303, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 748418202 );
 
 END_PROGRAM
 
@@ -77290,7 +77321,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="14739">
+			<root name="CControl_Lite" nextID="15017">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77314,6 +77345,7 @@ END_PROGRAM
 					<Definition name="eTrockengut" id="11221"/>
 					<Definition name="eStellungKlappeBoxen" id="11273"/>
 					<Definition name="eWitterungSensor" id="13401"/>
+					<Definition name="eConfigFuehler" id="14881"/>
 				</folder>
 				<folder name="utils" id="51">
 					<Pou name="fbBoxenklappe" id="3023"/>
@@ -84536,6 +84568,55 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.300</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16678</ipa>
+								<address>16678</address>
+								<name>Par_Sensoren_Config_Analog</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.302</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -92831,7 +92912,7 @@ END_PROGRAM
 							<commstring>Modbus:1,1000,M6#COM:8,19200,E,8,1,H</commstring>
 							<values stopNodeParsing="true">
 								<value ipa="15716" subidx="0">0</value>
-								<value ipa="15717" subidx="0">2049</value>
+								<value ipa="15717" subidx="0">0</value>
 								<value ipa="15718" subidx="0">499</value>
 								<value ipa="8692" subidx="0">825</value>
 								<value ipa="8694" subidx="0">3</value>
@@ -93434,6 +93515,7 @@ END_PROGRAM
 								<value ipa="16673" subidx="0">0</value>
 								<value ipa="16674" subidx="0">0</value>
 								<value ipa="16676" subidx="0">0</value>
+								<value ipa="16678" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
