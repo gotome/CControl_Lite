@@ -195,41 +195,8 @@ END_VAR
 				</group>
 			</iecVarsDeclaration>
 			<functions>
-				<function name="fcSetBitInBitmask" version="1.0.0" creationDate="1785154221" lastModifiedDate="1785155993">
+				<function name="fcSetBitInBitmask" version="1.0.0" creationDate="1785154221" lastModifiedDate="1785247894">
 					<returnValue>UDINT</returnValue>
-					<vars>
-						<inputVars>
-							<var name="Bitmask" type="UDINT"/>
-							<var name="BitNr" type="USINT"/>
-						</inputVars>
-						<localVars>
-							<var name="ValBit" type="UDINT"/>
-						</localVars>
-					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[FUNCTION fcSetBitInBitmask: UDINT
-
-VAR
-	ValBit : UDINT;
-END_VAR
-
-VAR_INPUT
-	Bitmask : UDINT;
-	BitNr : USINT;
-END_VAR
-
-]]>
-					</iecDeclaration>
-					<sourceCode type="ST">
-						<![CDATA[//Bitstelle in Wert umwandeln
-ValBit := SHL(1, BitNr);
-//Bit in Bitmaske setzen
-fcSetBitInBitmask := Bitmask OR ValBit;
-]]>
-					</sourceCode>
-				</function>
-				<function name="fcClearBitInBitmask" version="1.0.0" creationDate="1785156421" lastModifiedDate="1785156496">
-					<returnValue>BOOL</returnValue>
 					<vars>
 						<inputVars>
 							<var name="Bitmask" type="UDINT"/>
@@ -242,12 +209,30 @@ fcSetBitInBitmask := Bitmask OR ValBit;
 					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
 						<![CDATA[// Bitstelle in Wert umwandeln
-
 ValBit := SHL(UDINT#1, BitNr);
 
+// Bit in Bitmaske setzen
+fcSetBitInBitmask := Bitmask OR ValBit;
+]]>
+					</sourceCode>
+				</function>
+				<function name="fcClearBitInBitmask" version="1.0.0" creationDate="1785156421" lastModifiedDate="1785247931">
+					<returnValue>UDINT</returnValue>
+					<vars>
+						<inputVars>
+							<var name="Bitmask" type="UDINT"/>
+							<var name="BitNr" type="USINT"/>
+						</inputVars>
+						<localVars>
+							<var name="ValBit" type="UDINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<sourceCode type="ST">
+						<![CDATA[// Bitstelle in Wert umwandeln
+ValBit := SHL(UDINT#1, BitNr);
 
 // Bit in Bitmaske löschen
-
 fcClearBitInBitmask := Bitmask AND NOT ValBit;
 ]]>
 					</sourceCode>
@@ -1701,7 +1686,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1785180641">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1785233689">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -1863,21 +1848,25 @@ IF gAktModus <> IOTEST THEN
     rFrischluftFeuchtRaw  := TO_REAL(hw_ai2);
     
     //Variable Fuehler, ueber HMI einstellbar
-    IF (Par_Sensoren_Config_Analog = FRISCHLUFT) THEN
+    IF (gBetriebsparameter.Ausstattung.SensorTrockenluft) THEN
 	    rTrockenluftTempRaw   := TO_REAL(hw_ai3);
 	    rTrockenluftFeuchtRaw := TO_REAL(hw_ai4);
-	ELSIF (Par_Sensoren_Config_Analog = ABLUFT_BOX1) THEN
-	    rAbluftBox1TempRaw    := TO_REAL(hw_ai3);
-	    rAbluftBox1FeuchtRaw  := TO_REAL(hw_ai4);	
+		rAbluftBox2TempRaw := 0.0;
+		rAbluftBox2FeuchtRaw := 0.0;	
+	ELSIF (gBetriebsparameter.Ausstattung.SensorAbluftBox2) THEN
+	    rAbluftBox2TempRaw    := TO_REAL(hw_ai3);
+	    rAbluftBox2FeuchtRaw  := TO_REAL(hw_ai4);
+		rTrockenluftTempRaw := 0.0;
+		rTrockenluftFeuchtRaw := 0.0;	
 	ELSE 
 		rTrockenluftTempRaw := 0.0;
 		rTrockenluftFeuchtRaw := 0.0;
-		rAbluftBox1TempRaw := 0.0;
-		rAbluftBox1FeuchtRaw := 0.0;	
+		rAbluftBox2TempRaw := 0.0;
+		rAbluftBox2FeuchtRaw := 0.0;	
     END_IF;
     
-    rAbluftBox2TempRaw    := TO_REAL(hw_ai5);
-    rAbluftBox2FeuchtRaw  := TO_REAL(hw_ai6);
+    rAbluftBox1TempRaw    := TO_REAL(hw_ai5);
+    rAbluftBox1FeuchtRaw  := TO_REAL(hw_ai6);
     rStocktempRaw         := TO_REAL(hw_ai7);
 
     (*
@@ -2082,8 +2071,8 @@ IF gAktModus <> IOTEST THEN
     ---------------------------------------------------------------------------
     *)
     hw_do1 := doFrgLuftaufber;
-    hw_do2 := doFrgBox1;
-    hw_do3 := doFrgBox2;
+    hw_do2 := doFrgBox1 AND gBetriebsparameter.Boxen[1].xBoxAktiv;
+    hw_do3 := doFrgBox2 AND gBetriebsparameter.Boxen[2].xBoxAktiv;
     hw_do4 := doFrgAbluftventilator;
     hw_do5 := doFrgVentilator;
 
@@ -2192,7 +2181,7 @@ ELSE
         y2 := gBetriebsparameter.Sensoren.FrischlFeuchtMessberMax
     );
     gIoTest.AnalogIn.aiFrischluftFeuchte := fbFrischluftFeuchtScal.y + gBetriebsparameter.Sensoren.OffsetFrischluftFeuchte;
-
+//IBN_FALSE
     fbTrockenluftTempAvg(
         enable := TRUE,
         x := TO_REAL(hw_ai3),
@@ -2415,7 +2404,7 @@ gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.Schlechtwett
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1785178716">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1785248593">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2524,7 +2513,7 @@ END_VAR
 // F02 Sensor Abluft Box 1
 xF_SensorAbluftBox1 :=
     gBetriebsparameter.Ausstattung.SensorAbluftBox1 AND (
-        (aiAbluftBox1Temp < gBetriebsparameter.Sensoren.AbluftTempMessberMin) OR (aiAbluftBox1Temp > gBetriebsparameter.Sensoren.AbluftTempMessberMin) OR
+        (aiAbluftBox1Temp < gBetriebsparameter.Sensoren.AbluftTempMessberMin) OR (aiAbluftBox1Temp > gBetriebsparameter.Sensoren.AbluftTempMessberMax) OR
         (aiAbluftBox1Feucht < gBetriebsparameter.Sensoren.AbluftFeuchtMessberMin) OR (aiAbluftBox1Feucht > gBetriebsparameter.Sensoren.AbluftFeuchtMessberMax)
     );
 
@@ -2621,6 +2610,11 @@ ELSIF gQuitErr AND NOT xF_Luftaufbereiter THEN
 	xFL_Luftaufbereiter   := FALSE; 
 END_IF;
 
+IF xF_Ventilator THEN 
+	xFL_Ventilator := TRUE;
+ELSIF gQuitErr AND NOT xF_Luftaufbereiter THEN 
+	xFL_Ventilator   := FALSE; 
+END_IF;
 
 // =============================================================================
 // 3) Sammelausgänge bilden
@@ -2666,7 +2660,7 @@ gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_FRISCHLUFT] := xFL_SensorFrischluft;
 gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_ABLUFT_BOX1] := xFL_SensorAbluftBox1;
 gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_ABLUFT_BOX2] := xFL_SensorAbluftBox2;
 gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_TROCKENLUFT] := xFL_SensorTrockenluft;
-gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_FRISCHLUFT] := xFL_SensorStocktemp;
+gStatusAnlage.Alarm.ArrFehler[FEHLER_SENSOR_STOCKTEMP] := xFL_SensorStocktemp;
 
 gStatusAnlage.Alarm.ArrFehler[FEHLER_ENDLAGEN_BOXENKLAPPE_1] := xFL_KlappeBox1;
 gStatusAnlage.Alarm.ArrFehler[FEHLER_ENDLAGEN_BOXENKLAPPE_2] := xFL_KlappeBox2;
@@ -3185,7 +3179,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1784635165">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1785253786">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3317,7 +3311,7 @@ gAktoren.xQuitFehler := gQuitErr;
 IF (gAktoren.Box[1].xSollOffen OR xNotbetriebBox1) THEN
 	
 	//Klappe 1
-	IF gBetriebsparameter.Boxen[1].StellungKlappe1 <> FBBOX_NICHT_VERWENDET THEN
+	IF gBetriebsparameter.Boxen[1].StellungKlappe1 <> FBBOX_NONE THEN
 		IF gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GESCHLOSSEN THEN
 			xFreigabeKlappe1Out	:= FALSE;
 		ELSE
@@ -3326,7 +3320,7 @@ IF (gAktoren.Box[1].xSollOffen OR xNotbetriebBox1) THEN
 	END_IF;
 
 	//Klappe 2
-	IF gBetriebsparameter.Boxen[1].StellungKlappe2 <> FBBOX_NICHT_VERWENDET THEN
+	IF gBetriebsparameter.Boxen[1].StellungKlappe2 <> FBBOX_NONE THEN
 		IF gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GESCHLOSSEN THEN
 			xFreigabeKlappe2Out	:= FALSE;
 		ELSE
@@ -3335,7 +3329,7 @@ IF (gAktoren.Box[1].xSollOffen OR xNotbetriebBox1) THEN
 	END_IF;
 ELSIF (gAktoren.Box[2].xSollOffen OR xNotbetriebBox2) THEN	
 	//Klappe 1
-	IF gBetriebsparameter.Boxen[2].StellungKlappe1 <> FBBOX_NICHT_VERWENDET THEN
+	IF gBetriebsparameter.Boxen[2].StellungKlappe1 <> FBBOX_NONE THEN
 		IF gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GESCHLOSSEN THEN
 			xFreigabeKlappe1Out	:= FALSE;
 		ELSE
@@ -3343,13 +3337,16 @@ ELSIF (gAktoren.Box[2].xSollOffen OR xNotbetriebBox2) THEN
 		END_IF;
 	END_IF;
 	//Klappe 2
-	IF gBetriebsparameter.Boxen[2].StellungKlappe2 <> FBBOX_NICHT_VERWENDET THEN
+	IF gBetriebsparameter.Boxen[2].StellungKlappe2 <> FBBOX_NONE THEN
 		IF gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GESCHLOSSEN THEN
 			xFreigabeKlappe2Out	:= FALSE;
 		ELSE
 			xFreigabeKlappe2Out	:= TRUE;
 		END_IF;
-	END_IF;		
+	END_IF;	
+ELSE 
+	xFreigabeKlappe1Out := FALSE;
+	xFreigabeKlappe2Out := FALSE;
 END_IF;
 
 (*
@@ -3367,7 +3364,7 @@ fbBoxenklappe1(
     Schliessen         := NOT xFreigabeKlappe1Out,
     EndlageOffen       := diBox1Offen,
     EndlageGeschl      := diBox1Geschl,
-    EndlagenVhd        := TRUE,
+    EndlagenVhd        := gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe1,
     LaufzeitOeffnen    := gBetriebsparameter.KlappenBoxen[1].Laufzeit,
     LaufzeitSchliessen := gBetriebsparameter.KlappenBoxen[1].Laufzeit,
     Stoerung           := diBox1Offen AND diBox1Geschl,
@@ -3378,10 +3375,14 @@ fbBoxenklappe1(
 doFrgBox1 := fbBoxenklappe1.OeffnenOut;
 
 //Box 1 hat ihre Endlage erreicht
-xBox1EndlErreicht := gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GEOEFFNET AND (diBox1Offen OR fbBoxenklappe1.KlappeIstOffenOut) OR 
-					 gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GESCHLOSSEN AND (diBox1Geschl OR fbBoxenklappe1.KlappeIstGeschlOut) OR 
-					 gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GEOEFFNET AND (diBox1Offen OR fbBoxenklappe1.KlappeIstOffenOut) OR 
-					 gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GESCHLOSSEN AND (diBox1Geschl OR fbBoxenklappe1.KlappeIstGeschlOut);
+xBox1EndlErreicht := //Klappe 1
+					 ((gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GEOEFFNET AND diBox1Offen) OR 
+					  (gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GESCHLOSSEN AND diBox1Geschl) OR
+					   gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_NONE) AND 
+					  //Klappe 2
+					 ((gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GEOEFFNET AND diBox2Offen) OR 
+					  (gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GESCHLOSSEN AND diBox2Geschl) OR
+					   gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_NONE);
 
 
 (*
@@ -3417,7 +3418,7 @@ fbBoxenklappe2(
     Schliessen         := NOT xFreigabeKlappe2Out,
     EndlageOffen       := diBox2Offen,
     EndlageGeschl      := diBox2Geschl,
-    EndlagenVhd        := TRUE,
+    EndlagenVhd        := gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe2,
     LaufzeitOeffnen    := gBetriebsparameter.KlappenBoxen[2].Laufzeit,
     LaufzeitSchliessen := gBetriebsparameter.KlappenBoxen[2].Laufzeit,
     Stoerung           := diBox2Offen AND diBox2Geschl,
@@ -3427,10 +3428,14 @@ fbBoxenklappe2(
 (* Physischer Ausgang Wechsler-Relais *)
 doFrgBox2 := fbBoxenklappe2.OeffnenOut;
 
-xBox2EndlErreicht := gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GEOEFFNET AND (diBox1Offen OR fbBoxenklappe1.KlappeIstOffenOut) OR 
-					 gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GESCHLOSSEN AND (diBox1Geschl OR fbBoxenklappe1.KlappeIstGeschlOut) OR 
-					 gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GEOEFFNET AND (diBox1Offen OR fbBoxenklappe1.KlappeIstOffenOut) OR 
-					 gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GESCHLOSSEN AND (diBox1Geschl OR fbBoxenklappe1.KlappeIstGeschlOut);
+xBox2EndlErreicht := //Klappe 1
+					 ((gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GEOEFFNET AND diBox1Offen) OR 
+					  (gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GESCHLOSSEN AND diBox1Geschl) OR
+					   gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_NONE) AND 
+					  //Klappe 2
+					 ((gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GEOEFFNET AND diBox2Offen) OR 
+					  (gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GESCHLOSSEN AND diBox2Geschl) OR
+					   gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_NONE);
 
 (*
 -------------------------------------------------------------------------------
@@ -3460,11 +3465,23 @@ END_IF;
 *)
 
 doFrgVentilator := gAktoren.xFrgVentilator AND 
-				  (gAktoren.Box[1].xSollOffen AND xBox1EndlErreicht) OR 
-				  (gAktoren.Box[2].xSollOffen AND xBox2EndlErreicht);
+				  (gAktoren.Box[1].xSollOffen AND xBox1EndlErreicht AND gBetriebsparameter.Boxen[1].xBoxAktiv) OR 
+				  (gAktoren.Box[2].xSollOffen AND xBox2EndlErreicht AND gBetriebsparameter.Boxen[2].xBoxAktiv);
+
 
 gAktoren.rVentilatorSollwert      := gCmdAnlage.Leistung.DrehzahlVentilator;
 gAktoren.rLuftaufbereiterSollwert := gCmdAnlage.Leistung.DrehzahlLuftaufbereitung;
+
+//Sollwert begrenzen wenn Freigabe Ventilator erteilt
+IF (doFrgVentilator) THEN
+	//Bei Betrieb Ventilator auf MIN/MAX Grenzen pruefen. 
+	gAktoren.rVentilatorSollwert  := LIMIT(IN := gAktoren.rVentilatorSollwert ,
+										   MN := gBetriebsparameter.Ventilator.DrehzahlMin,
+										   MX := gBetriebsparameter.Ventilator.DrehzahlMax);
+ELSE 
+	//Keine Freigabe - Drehzahl Ventilator auf 0 setzen da sonst minimalwert in der Visu angezeigt wird
+	gAktoren.rVentilatorSollwert  := 0.0;
+END_IF;
 
 aoFuVentilator := gAktoren.rVentilatorSollwert;
 aoLeistVorgLuftaufber := gAktoren.rLuftaufbereiterSollwert;
@@ -3539,7 +3556,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1785159416">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1785251977">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -3711,8 +3728,8 @@ gBetriebsparameter.Ventilator.DrehzahlFixLuftaufbereiter := Par_Ventilator_Drehz
 gBetriebsparameter.Ventilator.DrehzahlFixFrischluft := Par_Ventilator_DrehzahlFixFrischluft;
 gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung := Par_Ventilator_DrehzahlStrombegrenzung;
 gBetriebsparameter.Ventilator.DrehzahlLeistungsreduziert := Par_Ventilator_DrehzahlLeistungsreduz;
-gBetriebsparameter.Ventilator.ZeitRampeUp := Par_Ventilator_ZeitRampeUp;
-gBetriebsparameter.Ventilator.ZeitRampeDown := Par_Ventilator_ZeitRampeDown;
+gBetriebsparameter.Ventilator.ZeitRampeUp := Par_Ventilator_ZeitRampeUp;//[ms]
+gBetriebsparameter.Ventilator.ZeitRampeDown := Par_Ventilator_ZeitRampeDown;//[ms]
 
 
 (*
@@ -4176,8 +4193,11 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
 	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
 	//HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit
-
 ELSE 
+	//nichts zu tun
+END_IF;
+
+IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 //--- Nur eine Box verfuegbar - Box 1 ist einzige Box : Betriebsartenwahl (flankengesteuert) ---
 	firstStep := FALSE;
 	rt_Box_Aus(CLK := HMI_OUT_Box1_Aus);
@@ -4637,7 +4657,6 @@ END_IF;
 	EndlagenVhdBoxenklappe1 : BOOL;
 	EndlagenVhdBoxenklappe2 : BOOL;
 END_STRUCT;
-
 ]]>
 					</iecDeclaration>
 				</struct>
@@ -5476,7 +5495,7 @@ END_STRUCT;
 				</enum>
 				<enum name="eStellungKlappeBoxen" baseType="USINT" version="1.0.0">
 					<elements>
-						<element name="FBBOX_NICHT_VERWENDET">
+						<element name="FBBOX_NONE">
 							<value>0</value>
 						</element>
 						<element name="FBBOX_GESCHLOSSEN">
@@ -5497,20 +5516,6 @@ END_STRUCT;
 							<value>1</value>
 						</element>
 						<element name="SENSOR_TROCKENLUFT">
-							<value>2</value>
-						</element>
-					</elements>
-					<iecDeclaration active="FALSE"/>
-				</enum>
-				<enum name="eConfigFuehler" baseType="DINT" version="1.0.0">
-					<elements>
-						<element name="NONE">
-							<value>0</value>
-						</element>
-						<element name="FRISCHLUFT">
-							<value>1</value>
-						</element>
-						<element name="ABLUFT_BOX1">
 							<value>2</value>
 						</element>
 					</elements>
@@ -74311,8 +74316,6 @@ nSamples := cnt;
 	Par_Stocktemperatur_Box1_Hysterese AT %MW200.298 : REAL;
 		{G:"Parameters"}
 	Par_Stocktemperatur_Box2_Hysterese AT %MW200.300 : REAL;
-		{G:"Parameters"}
-	Par_Sensoren_Config_Analog AT %MW200.302 : USINT;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -77236,8 +77239,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11479 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 287; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11439 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 286; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -77250,9 +77253,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 748418202;
+	dummyCrc32 := 1425071362;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 303, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 748418202 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 302, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 1425071362 );
 
 END_PROGRAM
 
@@ -77321,7 +77324,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="15017">
+			<root name="CControl_Lite" nextID="15861">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77345,7 +77348,6 @@ END_PROGRAM
 					<Definition name="eTrockengut" id="11221"/>
 					<Definition name="eStellungKlappeBoxen" id="11273"/>
 					<Definition name="eWitterungSensor" id="13401"/>
-					<Definition name="eConfigFuehler" id="14881"/>
 				</folder>
 				<folder name="utils" id="51">
 					<Pou name="fbBoxenklappe" id="3023"/>
@@ -79015,7 +79017,7 @@ END_PROGRAM
 								<name>Klappen_Boxen_Box1_Laufzeit</name>
 								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
-								<value>0</value>
+								<value>160000</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -79064,7 +79066,7 @@ END_PROGRAM
 								<name>Klappen_Boxen_Box2_Laufzeit</name>
 								<typepar>3</typepar>
 								<typetarg>UDINT</typetarg>
-								<value>0</value>
+								<value>160000</value>
 								<min/>
 								<max/>
 								<ipamin/>
@@ -84568,55 +84570,6 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.300</dataBlock>
-								<label/>
-								<translation/>
-								<visibility>0</visibility>
-								<clientType>0</clientType>
-								<descriptioncode>CUS40000</descriptioncode>
-								<descriptioncode_language/>
-								<progressive/>
-								<category>1</category>
-								<groups/>
-								<groups_language/>
-								<complemented>1</complemented>
-								<measurementunit>num</measurementunit>
-								<measurementunit_language>en-GB</measurementunit_language>
-								<existence>FIX(1)</existence>
-								<type>0</type>
-								<writesequence/>
-								<softscope>0</softscope>
-								<iotype/>
-								<iolabel/>
-								<wizard/>
-								<wizardgroup/>
-								<installeraccesslevel>0</installeraccesslevel>
-								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
-								<groupscode/>
-								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
-								<TelevisIdentificationPar>0</TelevisIdentificationPar>
-							</param>
-							<param>
-								<ipa>16678</ipa>
-								<address>16678</address>
-								<name>Par_Sensoren_Config_Analog</name>
-								<typepar>7</typepar>
-								<typetarg>USINT</typetarg>
-								<value>0</value>
-								<min/>
-								<max/>
-								<ipamin/>
-								<ipamax/>
-								<scale>1</scale>
-								<offs>0</offs>
-								<um/>
-								<description/>
-								<note/>
-								<form/>
-								<accesslevel>3</accesslevel>
-								<readonly>0</readonly>
-								<shortname/>
-								<size>0</size>
-								<dataBlock>%MW200.302</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -92912,7 +92865,7 @@ END_PROGRAM
 							<commstring>Modbus:1,1000,M6#COM:8,19200,E,8,1,H</commstring>
 							<values stopNodeParsing="true">
 								<value ipa="15716" subidx="0">0</value>
-								<value ipa="15717" subidx="0">0</value>
+								<value ipa="15717" subidx="0">2049</value>
 								<value ipa="15718" subidx="0">499</value>
 								<value ipa="8692" subidx="0">825</value>
 								<value ipa="8694" subidx="0">3</value>
@@ -93350,21 +93303,21 @@ END_PROGRAM
 								<value ipa="8900" subidx="0">0</value>
 								<value ipa="8902" subidx="0">0</value>
 								<value ipa="8903" subidx="0">0</value>
-								<value ipa="8736" subidx="0">4</value>
-								<value ipa="8737" subidx="0">0</value>
-								<value ipa="8738" subidx="0">19</value>
-								<value ipa="8739" subidx="0">5</value>
-								<value ipa="8740" subidx="0">25</value>
-								<value ipa="8741" subidx="0">2</value>
-								<value ipa="8742" subidx="0">0</value>
-								<value ipa="8743" subidx="0">1</value>
-								<value ipa="8744" subidx="0">8</value>
-								<value ipa="8745" subidx="0">0</value>
-								<value ipa="8746" subidx="0">0</value>
-								<value ipa="8747" subidx="0">0</value>
-								<value ipa="8748" subidx="0">24</value>
-								<value ipa="8749" subidx="0">2</value>
-								<value ipa="8750" subidx="0">0</value>
+								<value ipa="8736" subidx="0">29</value>
+								<value ipa="8737" subidx="0">2</value>
+								<value ipa="8738" subidx="0">12</value>
+								<value ipa="8739" subidx="0">2</value>
+								<value ipa="8740" subidx="0">28</value>
+								<value ipa="8741" subidx="0">7</value>
+								<value ipa="8742" subidx="0">26</value>
+								<value ipa="8743" subidx="0">0</value>
+								<value ipa="8744" subidx="0">51</value>
+								<value ipa="8745" subidx="0">53</value>
+								<value ipa="8746" subidx="0">11</value>
+								<value ipa="8747" subidx="0">2</value>
+								<value ipa="8748" subidx="0">28</value>
+								<value ipa="8749" subidx="0">7</value>
+								<value ipa="8750" subidx="0">26</value>
 								<value ipa="8751" subidx="0">0</value>
 								<value ipa="24320" subidx="0">4294967295</value>
 								<value ipa="8756" subidx="0">0</value>
@@ -93515,7 +93468,6 @@ END_PROGRAM
 								<value ipa="16673" subidx="0">0</value>
 								<value ipa="16674" subidx="0">0</value>
 								<value ipa="16676" subidx="0">0</value>
-								<value ipa="16678" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
