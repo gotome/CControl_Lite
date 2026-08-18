@@ -2313,17 +2313,31 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1784921125">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1786113294">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
 							<var name="Trockenluftsensor" type="fbMathLuft"/>
 							<var name="fbSchlechtwetterBox1" type="fbCControlWitterung"/>
+							<var name="fbSchlechtwetterBox2" type="fbCControlWitterung"/>
 							<var name="idx" type="USINT"/>
 							<var name="idxStufe" type="USINT"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM BerechnungCyclic
+
+VAR
+	Frischluftsensor : fbMathLuft;
+	Trockenluftsensor : fbMathLuft;
+	fbSchlechtwetterBox1 : fbCControlWitterung;
+	fbSchlechtwetterBox2 : fbCControlWitterung;
+	idx : USINT;
+	idxStufe : USINT;
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -2397,14 +2411,102 @@ fbSchlechtwetterBox1();
 
 //Aktualwerte auf globale Werte schreiben
 gStatusAnlage.Box[1].WetterIstSchlecht := fbSchlechtwetterBox1.WetterIstSchlecht;
+gStatusAnlage.Box[1].IconWitterung := fbSchlechtwetterBox1.WetterIstSchlecht;
 gStatusAnlage.Box[1].AktSchlechtwetterPuls := fbSchlechtwetterBox1.SchlechtwetterPulszeitAktuell;
 gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.SchlechtwetterPausezeitAktuell;
+gStatusAnlage.Box[1].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[1].xBoxAktiv;
 
 
+(* TODO Restlaufzeit berechnen fuer Anzeige VISU
+	//Box 1 ************************************************
+	IF hmiParameter.Boxen[1].Aus THEN
+		hmiStatus.Box1.AnzeigeLaufRestzeit	:= ICON_HIDDEN;
+		hmiStatus.Box1.TextindexLaufzeit	:= 0;
+	ELSIF hmiParameter.Boxen[1].DauerbetriebEin THEN
+		hmiStatus.Box1.AnzeigeLaufRestzeit	:= ICON_VISIBLE;
+		//Schlechtwetter - LAUF
+		IF fbSchlechtwetterBox1.WetterIstSchlecht AND NOT Boxen.Box1In.LuftaufbIstVerfuegbar AND Boxen.Box1Out.BoxAktiv
+			AND (fbSchlechtwetterBox1.SchlechtwetterPausezeit <> 0) THEN
+			//Restlaufzeiten Schlechtwetter von [ms] in [h] und [min] umrechnen
+			loc_RestzeitSchlechtMillisek := UDINT_TO_REAL(Boxen.Box1Out.RestzeitSchlechtwetterPuls + 60000); //+1min
+			loc_RestzeitSchlechtStunden := TRUNC(loc_RestzeitSchlechtMillisek / 1000 / 60 / 60);
+			loc_RestzeitSchlechtMinuten := REAL_TO_UINT((loc_RestzeitSchlechtMillisek / 1000 / 60) - (60 * loc_RestzeitSchlechtStunden));
+			hmiStatus.Box1.TextindexLaufzeit	:= 2; 
+			hmiStatus.Box1.LaufRestzeitMinuten	:= loc_RestzeitSchlechtMinuten;
+			hmiStatus.Box1.LaufRestzeitStunden	:= UDINT_TO_UINT(loc_RestzeitSchlechtStunden);
+		//Schlechtwetter - PAUSE
+		ELSIF fbSchlechtwetterBox1.WetterIstSchlecht AND NOT  Boxen.Box1Out.BoxAktiv THEN
+			//Restlaufzeiten Schlechtwetter von [ms] in [h] und [min] umrechnen
+			loc_RestzeitSchlechtMillisek := UDINT_TO_REAL(Boxen.Box1Out.RestzeitSchlechtwetterPause + 60000);
+			loc_RestzeitSchlechtStunden := TRUNC(loc_RestzeitSchlechtMillisek / 1000 / 60 / 60);
+			loc_RestzeitSchlechtMinuten := REAL_TO_UINT((loc_RestzeitSchlechtMillisek / 1000 / 60) - (60 * loc_RestzeitSchlechtStunden));
+			hmiStatus.Box1.TextindexLaufzeit	:= 1; 
+			hmiStatus.Box1.LaufRestzeitMinuten	:= loc_RestzeitSchlechtMinuten;
+			hmiStatus.Box1.LaufRestzeitStunden	:= UDINT_TO_UINT(loc_RestzeitSchlechtStunden);
+		//Automatik und gute Witterung (oder Luftaufbereitung vhd.)
+		ELSE
+			hmiStatus.Box1.TextindexLaufzeit	:= 0; 
+			hmiStatus.Box1.LaufRestzeitMinuten	:= USINT_TO_UINT(hmiNutzungsdaten.Bst.Box1Min);
+			hmiStatus.Box1.LaufRestzeitStunden	:= UDINT_TO_UINT(hmiNutzungsdaten.Bst.Box1Std);
+		END_IF
+	ELSIF hmiParameter.Boxen[1].IntervallbetriebEin OR hmiParameter.Boxen[1].NachtrocknungEin THEN
+		hmiStatus.Box1.AnzeigeLaufRestzeit	:= ICON_VISIBLE;
+		hmiStatus.Box1.LaufRestzeitMinuten	:= gStatusAnlage.RestlaufzeitenBoxen.Box1Minuten;
+		hmiStatus.Box1.LaufRestzeitStunden	:= gStatusAnlage.RestlaufzeitenBoxen.Box1Stunden;
+		IF Boxen.Box1Out.BoxAktiv THEN
+			hmiStatus.Box1.TextindexLaufzeit := 2;
+		ELSE
+			hmiStatus.Box1.TextindexLaufzeit := 1;
+		END_IF
+	END_IF
+
+*)
+
+//Schlechtwetter Box 2
+//*****************************
+fbSchlechtwetterBox2.Freigabe                      := TRUE;
+fbSchlechtwetterBox2.AuswahlSensor                 := gBetriebsparameter.SchlechtwetterBoxen[2].AuswahlSensorGrenzwert;
+fbSchlechtwetterBox2.FrischluftSaettigungsdefizit  := gStatusAnlage.FrischluftSaettDefizit;
+fbSchlechtwetterBox2.TrockenluftSaettigungsdefizit := gStatusAnlage.TrockenluftSaettDefizit;
+
+//Sensor gilt nur als verfuegbar, wenn auch die Berechnung plausibel ist
+fbSchlechtwetterBox2.SensorFrischluftVhd  := gBetriebsparameter.Ausstattung.SensorFrischluft AND
+                                             //AND NOT alarmFehler[FEHLER_SENSOR_FRISCHLUFT] IBN_TRUE
+                                             Frischluftsensor.Gueltig;
+                                             
+fbSchlechtwetterBox2.SensorTrockenluftVhd := gBetriebsparameter.Ausstattung.SensorTrockenluft AND
+                                             //AND NOT alarmFehler[FEHLER_SENSOR_TROCKENLUFT] IBN_TRUE
+                                             Trockenluftsensor.Gueltig;
+
+
+FOR idx := 1 TO 6 DO
+	fbSchlechtwetterBox2.MaterialfeuchteStufe[idx] := gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[idx].MaterialfeuchteStufe;
+END_FOR;
+
+//Stufenabhaengige Werte - StufeAktuell stammt aus dem Vorzyklus
+idxStufe := fbSchlechtwetterBox2.StufeAktuell;
+IF (idxStufe < 1) OR (idxStufe > 6) THEN 
+	idxStufe := 1; 
+END_IF;
+
+fbSchlechtwetterBox2.GrenzwertStufeAktuell          := gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[idxStufe].Saettigungsdefizit;
+fbSchlechtwetterBox2.SchlechtwetterPulszeitAktuell  := gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[idxStufe].SchlechtwetterZeitLauf;
+fbSchlechtwetterBox2.SchlechtwetterPausezeitAktuell := gBetriebsparameter.SchlechtwetterBoxen[2].Stufe[idxStufe].SchlechtwetterZeitPause;
+fbSchlechtwetterBox2.VerzWetterwechsel := gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel;
+fbSchlechtwetterBox2.HystereseGrenzwert := gBetriebsparameter.SchlechtwetterBoxen[2].HystereseGrenzwert;
+fbSchlechtwetterBox2.MaterialfeuchteIst := gBetriebsparameter.SchlechtwetterBoxen[2].MaterialfeuchteIst;
+
+fbSchlechtwetterBox2();
+
+//Aktualwerte auf globale Werte schreiben
+gStatusAnlage.Box[2].WetterIstSchlecht := fbSchlechtwetterBox2.WetterIstSchlecht;
+gStatusAnlage.Box[2].AktSchlechtwetterPuls := fbSchlechtwetterBox2.SchlechtwetterPulszeitAktuell;
+gStatusAnlage.Box[2].AktSchlechtwetterPause := fbSchlechtwetterBox2.SchlechtwetterPausezeitAktuell;
+gStatusAnlage.Box[2].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[2].xBoxAktiv;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1785248593">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1787045409">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2546,7 +2648,9 @@ xF_KlappeBox2 := gBetriebsparameter.Ausstattung.Box2 AND
 	(gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_STOERUNG);
 
 // F08 Störmeldung Luftaufbereiter
-Ton_FaultBetriebLuftafber(IN := gAktoren.xFrgLuftaufbereiter AND NOT diBetriebLuftaufber, PT := 2000);
+Ton_FaultBetriebLuftafber(IN := gAktoren.xFrgLuftaufbereiter AND gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND NOT diBetriebLuftaufber,
+                          PT := gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung);
+                          
 gAlarmBetriebLuftaufber := Ton_FaultBetriebLuftafber.Q;
 xF_Luftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter AND gAlarmBetriebLuftaufber;
 
@@ -2850,53 +2954,37 @@ gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1782316593">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787051423">
 					<vars>
 						<localVars>
-							<var name="rVentSollMan" type="REAL"/>
-							<var name="rPidErr" type="REAL"/>
-							<var name="uiPidAlarm" type="UINT"/>
-							<var name="uiPidAlert" type="UINT"/>
 							<var name="xLuftaufbHystEin" type="BOOL">
 								<descr>Hysterese-Merker Automatikbetrieb</descr>
+							</var>
+							<var name="xLuftaufbPidEn" type="BOOL">
+								<descr>PID Heizregister aktiv</descr>
+							</var>
+							<var name="xAbluftBoxAktiv" type="BOOL">
+								<descr>eine Box aktiv + gueltiger Abluft-Feuchtewert</descr>
 							</var>
 							<var name="rLuftaufbLeistung" type="REAL">
 								<descr>berechnete Leistungsvorgabe</descr>
 							</var>
+							<var name="rAbluftFeuchteAkt" type="REAL">
+								<descr>Feuchtewert der aktiven Box</descr>
+							</var>
 							<var name="fbPidLuftaufb" type="PIDAdvanced"/>
-							<var name="xLuftaufbPidEn" type="BOOL"/>
-							<var name="xLuftaufbAnf" type="BOOL"/>
-							<var name="xLuftaufbHystMerker" type="BOOL">
-								<descr>Feuchte-Hysterese Merker</descr>
-							</var>
-							<var name="iLuftaufbSchritt" type="INT">
-								<descr>Schrittkennung 0..2</descr>
-							</var>
-							<var name="tonLuftaufbEin" type="TON">
-								<descr>Einschaltverzögerung</descr>
-							</var>
-							<var name="tonLuftaufbMin" type="TON">
-								<descr>Mindestlaufzeit</descr>
-							</var>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[PROGRAM LeistungCyclic
 
 VAR
-	rVentSollMan : REAL;
-	rPidErr : REAL;
-	uiPidAlarm : UINT;
-	uiPidAlert : UINT;
 	xLuftaufbHystEin : BOOL;	(* Hysterese-Merker Automatikbetrieb *)
-	rLuftaufbLeistung : REAL;	(* berechnete Leistungsvorgabe *)
-	fbPidLuftaufb    : PIDAdvanced;
-	xLuftaufbPidEn   : BOOL;
-	xLuftaufbAnf : BOOL;
-	xLuftaufbHystMerker : BOOL;	(* Feuchte-Hysterese Merker *)
-	iLuftaufbSchritt : INT;	(* Schrittkennung 0..2 *)
-	tonLuftaufbEin : TON;	(* Einschaltverzögerung *)
-	tonLuftaufbMin : TON;	(* Mindestlaufzeit *)
+	xLuftaufbPidEn : BOOL; 		(* PID Heizregister aktiv *)
+	xAbluftBoxAktiv   : BOOL;   (* eine Box aktiv + gueltiger Abluft-Feuchtewert *)
+	rLuftaufbLeistung : REAL;	(* berechnete Leistungsvorgabe *)	
+	rAbluftFeuchteAkt : REAL;   (* Feuchtewert der aktiven Box *)
+	fbPidLuftaufb : PIDAdvanced;
 END_VAR
 
 ]]>
@@ -2907,13 +2995,13 @@ END_VAR
 File        : LeistungCyclic.st
 Project     : CControl_Lite
 Description :
-    Leistungsregelung Lite ohne Luftgeschwindigkeitssensor.
-    Ventilator regelt auf Trockenluft-Feuchte (PIDAdvanced), falls verfügbar.
-    Sonst manuelle Vorgabe.
+    Leistungsregelung Lite.
     Luftaufbereitung: KEINER / HEIZREGISTER / OFEN (HMI-konfigurierbar).
-    Heizregister Automatik: Hysterese EIN/AUS auf Frischluft-Feuchte,
-                            PID Leistung auf Trockenluft-Temperatur.
-    Entfeuchter: Schrittsteuerung mit Einschaltverzögerung + Mindestlaufzeit.
+    EIN/AUS beider Luftaufbereitungen ueber Frischluft-Saettigungsdefizit.
+    Heizregister: Leistung per PID auf Trockenlufttemperatur.
+    Ofen: Solltemperatur-Vorgabe, Betriebsmeldung/Zuendzeit + Auskuehlzeit.
+    FB-Aufrufe (gAktoren.Heizregister/.Warmluftofen) erfolgen in AblaufstrgCyclic,
+    die Ein-/Ausgaenge werden hier beschaltet.
 ================================================================================
 *)
 
@@ -2922,18 +3010,18 @@ CASE gAktModus OF
     STILLSTAND:
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
+        gAktoren.xFrgAbluftventilator := FALSE;
 
         gCmdAnlage.Leistung.DrehzahlVentilator       := gBetriebsparameter.Ventilator.DrehzahlMin;
         gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
 
+        //Luftaufbereitungs-FBs sperren
+        gAktoren.Heizregister.Freigabe := FALSE;
+        gAktoren.Warmluftofen.Freigabe := FALSE;
+
         xLuftaufbHystEin     := FALSE;
         xLuftaufbPidEn       := FALSE;
         rLuftaufbLeistung    := 0.0;
-        iLuftaufbSchritt     := 0;
-        xLuftaufbHystMerker  := FALSE;
-        xLuftaufbAnf         := FALSE;
-        tonLuftaufbEin(IN := FALSE, PT := 0);
-        tonLuftaufbMin(IN := FALSE, PT := 0);
 
 
     BETRIEB:
@@ -2946,101 +3034,71 @@ CASE gAktModus OF
             ELSE
                 gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
             END_IF;
-        //Notbetrieb Ventilator -> Drehzahl Auskühlphase
-        ELSIF IBN_FALSE THEN // Notbetrieb Boxen und Boxenlogik
+        ELSIF IBN_FALSE THEN
             gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlBeiAuskuehlphase;
-        //Betrieb mit Fixdrehzahlen
         ELSE
             gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
         END_IF;
 
         (* --- Luftaufbereitung --- *)
+        //Grundfreigaben der FBs (werden je Typ unten aktiviert)
+        gAktoren.Heizregister.Freigabe := FALSE;
+        gAktoren.Warmluftofen.Freigabe := FALSE;
+
         CASE gBetriebsparameter.Luftaufbereitung.Typ OF
 
             KEINER:
-                //Variablen zuruecksetzen
                 gAktoren.xFrgLuftaufbereiter := FALSE;
                 xLuftaufbHystEin     := FALSE;
                 xLuftaufbPidEn       := FALSE;
                 rLuftaufbLeistung    := 0.0;
-                iLuftaufbSchritt     := 0;
-                xLuftaufbHystMerker  := FALSE;
-                xLuftaufbAnf         := FALSE;
-                tonLuftaufbEin(IN := FALSE, PT := 0);
-                tonLuftaufbMin(IN := FALSE, PT := 0);
 
-                //Aufruf Regler
                 fbPidLuftaufb(
-                    xEn := FALSE,
-                    rPv := aiTrockenluftTemp,
-                    rSetp := 0.0,
-                    xManualMode := TRUE,
-                    rManualValue := 0.0,
-                    xHold := FALSE,
-                    rHighLimit := 100.0,
-                    rLowLimit := 0.0,
-                    rDeadband := 0.5,
-                    xAutoTune := FALSE,
-                    rAutoTuneValue := 0.0,
-                    rKp := 1.0,
-                    uiTi := 1,
-                    uiTd := 0,
-                    xReset := FALSE
+                    xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
+                    xManualMode := TRUE, rManualValue := 0.0, xHold := FALSE,
+                    rHighLimit := 100.0, rLowLimit := 0.0, rDeadband := 0.5,
+                    xAutoTune := FALSE, rAutoTuneValue := 0.0,
+                    rKp := 1.0, uiTi := 1, uiTd := 0, xReset := FALSE
                 );
 
 
             HEIZREGISTER:
-                iLuftaufbSchritt    := 0;
-                xLuftaufbAnf        := FALSE;
-                xLuftaufbHystMerker := FALSE;
-                tonLuftaufbEin(IN := FALSE, PT := 0);
-                tonLuftaufbMin(IN := FALSE, PT := 0);
+                //--- EIN/AUS ueber Frischluft-Saettigungsdefizit (fbHeizregister) ---
+                //Eingaenge beschalten (Aufruf erfolgt in AblaufstrgCyclic)
+                gAktoren.Heizregister.Freigabe                  := TRUE;
+                gAktoren.Heizregister.QuitFehler                := gQuitErr;
+                gAktoren.Heizregister.Automatikbetrieb          := gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin;
+                gAktoren.Heizregister.Dauerbetrieb              := gBetriebsparameter.Luftaufbereitung.DauerbetriebEin;
+                gAktoren.Heizregister.FehlerSensorAussenluft    := NOT gBetriebsparameter.Ausstattung.SensorFrischluft;
+                gAktoren.Heizregister.FrischluftSattDefizitIst  := gStatusAnlage.FrischluftSaettDefizit;
+                gAktoren.Heizregister.FrischluftSattDefizitSoll := gBetriebsparameter.Luftaufbereitung.SaettigungFrischluftEin;
+                gAktoren.Heizregister.Hysterese                 := gBetriebsparameter.Luftaufbereitung.Hysterese;
+                gAktoren.Heizregister.UmschaltverzWitterung     := gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel;
+                gAktoren.Heizregister.WetterIstSchlecht         := FALSE;
+                gAktoren.Heizregister.DrehzahlHeizregisterSoll  := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin;
+
+                //Freigabe aus dem FB: Dauerbetrieb=immer EIN, Automatik=Saettigungsdefizit
+                xLuftaufbHystEin := gAktoren.Heizregister.FreigabeHeizregisterOut;
 
                 IF gBetriebsparameter.Luftaufbereitung.DauerbetriebEin THEN
-                    (* Dauerbetrieb: fixer Sollwert, kein PID *)
-                    xLuftaufbHystEin             := FALSE;
-                    xLuftaufbPidEn               := FALSE;
-                    gAktoren.xFrgLuftaufbereiter := TRUE;
-                    //Manuellen Sollwert begrenzen
+                    (* IMMER EIN: fixe Leistungsvorgabe (manuell), kein PID *)
+                    xLuftaufbPidEn    := FALSE;
                     rLuftaufbLeistung := gCmdAnlage.Leistung.DrehzahlLuftaufbereitung;
-                    //Aufruf PID Heizregister
                     fbPidLuftaufb(
-                        xEn := FALSE,
-                        rPv := aiTrockenluftTemp,
-                        rSetp := 0.0,
-                        xManualMode := TRUE,
-                        rManualValue := rLuftaufbLeistung,
-                        xHold := FALSE,
+                        xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
+                        xManualMode := TRUE, rManualValue := rLuftaufbLeistung, xHold := FALSE,
                         rHighLimit := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
                         rLowLimit  := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
-                        rDeadband := 0.5,
-                        xAutoTune := FALSE,
-                        rAutoTuneValue := 0.0,
+                        rDeadband := 0.5, xAutoTune := FALSE, rAutoTuneValue := 0.0,
                         rKp := gBetriebsparameter.Luftaufbereitung.P,
                         uiTi := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
                         uiTd := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
                         xReset := FALSE
                     );
-
-                ELSIF gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin
-                      AND gBetriebsparameter.Ausstattung.SensorFrischluft
-                      AND (aiFrischluftFeucht >= 0.0) AND (aiFrischluftFeucht <= 100.0) THEN
-                    (* Automatik: Hysterese EIN/AUS auf Frischluft-Feuchte *)
-                    (*            PID Leistung auf Trockenluft-Temperatur  *)
-                    IF NOT xLuftaufbHystEin THEN
-                        IF aiFrischluftFeucht >= (gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll
-                                                  + gBetriebsparameter.Luftaufbereitung.Hysterese) THEN
-                            xLuftaufbHystEin := TRUE;
-                        END_IF;
-                    ELSE
-                        IF aiFrischluftFeucht < (gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll
-                                                 - gBetriebsparameter.Luftaufbereitung.Hysterese) THEN
-                            xLuftaufbHystEin := FALSE;
-                        END_IF;
-                    END_IF;
-
+                ELSE
+                    (* AUTOMATIK: EIN/AUS ueber Saettigungsdefizit (FB),
+                       Leistung per PID auf Trockenlufttemperatur *)
                     xLuftaufbPidEn := xLuftaufbHystEin AND gBetriebsparameter.Ausstattung.SensorTrockenluft;
-                    //Aufruf Regler
                     fbPidLuftaufb(
                         xEn            := xLuftaufbPidEn,
                         rPv            := aiTrockenluftTemp,
@@ -3050,51 +3108,66 @@ CASE gAktModus OF
                         xHold          := FALSE,
                         rHighLimit     := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
                         rLowLimit      := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
-                        rDeadband      := 0.5,
-                        xAutoTune      := FALSE,
-                        rAutoTuneValue := 0.0,
+                        rDeadband      := 0.5, xAutoTune := FALSE, rAutoTuneValue := 0.0,
                         rKp            := gBetriebsparameter.Luftaufbereitung.P,
                         uiTi           := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
                         uiTd           := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
                         xReset         := gQuitErr
                     );
-                    //Sollwert beschreiben
-                    gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;
-                    //Grenzen festlegen
                     rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
                 END_IF;
 
+                gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;
+
+
             OFEN:
-                
+                xLuftaufbHystEin    := FALSE;
+                xLuftaufbPidEn      := FALSE;
+
+                //--- Warmluftofen: EIN/AUS ueber Saettigungsdefizit, Zuendzeit-/
+                //    Betriebsmeldungsueberwachung, Auskuehlzeit (fbBoxenWLO) ---
+                //Eingaenge beschalten (Aufruf erfolgt in AblaufstrgCyclic)
+                gAktoren.Warmluftofen.Freigabe                    := TRUE;
+                gAktoren.Warmluftofen.Automatikbetrieb            := gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin;
+                gAktoren.Warmluftofen.Dauerbetrieb                := gBetriebsparameter.Luftaufbereitung.DauerbetriebEin;
+                gAktoren.Warmluftofen.FehlerSensorAussenluft      := NOT gBetriebsparameter.Ausstattung.SensorFrischluft;
+                gAktoren.Warmluftofen.FrischluftSattDefizitIst    := gStatusAnlage.FrischluftSaettDefizit;
+                gAktoren.Warmluftofen.FrischluftSattDefizitSoll   := gBetriebsparameter.Luftaufbereitung.SaettigungFrischluftEin;
+                gAktoren.Warmluftofen.Hysterese                   := gBetriebsparameter.Luftaufbereitung.Hysterese;
+                gAktoren.Warmluftofen.UmschaltverzWitterung       := gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel;
+                gAktoren.Warmluftofen.WarmlufttemperaturVorgabe   := gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll;
+                gAktoren.Warmluftofen.OptionBetriebsmldgVhd       := gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh;
+                gAktoren.Warmluftofen.BetriebsmeldungWarmluftofen := diBetriebLuftaufber;
+                gAktoren.Warmluftofen.VerzBetriebsmeldung         := gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung;
+                gAktoren.Warmluftofen.Auskuehlzeit                := gBetriebsparameter.Luftaufbereitung.Auskuehlzeit;
+                gAktoren.Warmluftofen.QuitFehler                  := gQuitErr;
+                gAktoren.Warmluftofen.WetterIstSchlecht           := FALSE;
+
+                //Ausgaenge uebernehmen
+                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
+                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;
+
+                //PID (Heizregister) im Ofenbetrieb deaktiviert halten
+                fbPidLuftaufb(
+                    xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
+                    xManualMode := TRUE, rManualValue := 0.0, xHold := FALSE,
+                    rHighLimit := 100.0, rLowLimit := 0.0, rDeadband := 0.5,
+                    xAutoTune := FALSE, rAutoTuneValue := 0.0,
+                    rKp := 1.0, uiTi := 1, uiTd := 0, xReset := FALSE
+                );
 
         ELSE
             gAktoren.xFrgLuftaufbereiter := FALSE;
             xLuftaufbHystEin     := FALSE;
             xLuftaufbPidEn       := FALSE;
             rLuftaufbLeistung    := 0.0;
-            iLuftaufbSchritt     := 0;
-            xLuftaufbHystMerker  := FALSE;
-            xLuftaufbAnf         := FALSE;
-            tonLuftaufbEin(IN := FALSE, PT := 0);
-            tonLuftaufbMin(IN := FALSE, PT := 0);
 
-            //Aufruf Regler
             fbPidLuftaufb(
-                xEn := FALSE,
-                rPv := aiTrockenluftTemp,
-                rSetp := 0.0,
-                xManualMode := TRUE,
-                rManualValue := 0.0,
-                xHold := FALSE,
-                rHighLimit := 100.0,
-                rLowLimit := 0.0,
-                rDeadband := 0.5,
-                xAutoTune := FALSE,
-                rAutoTuneValue := 0.0,
-                rKp := 1.0,
-                uiTi := 1,
-                uiTd := 0,
-                xReset := FALSE
+                xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
+                xManualMode := TRUE, rManualValue := 0.0, xHold := FALSE,
+                rHighLimit := 100.0, rLowLimit := 0.0, rDeadband := 0.5,
+                xAutoTune := FALSE, rAutoTuneValue := 0.0,
+                rKp := 1.0, uiTi := 1, uiTd := 0, xReset := FALSE
             );
         END_CASE;
 
@@ -3105,39 +3178,69 @@ CASE gAktModus OF
             gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
         END_IF;
 
+	    (* --- Abluftventilator: Feuchteregelung der aktiven Box --- *)
+        IF gBetriebsparameter.Ausstattung.Abluftventilator THEN
+
+            //Aktive Box bestimmen + gueltigen Feuchtewert waehlen (nur aktive Box)
+            IF (gBetriebsparameter.Boxen[1].xBoxAktiv AND gAktoren.Box[1].xSollOffen
+                AND gBetriebsparameter.Ausstattung.SensorAbluftBox1) THEN
+                rAbluftFeuchteAkt := aiAbluftBox1Feucht;
+                xAbluftBoxAktiv   := TRUE;
+            ELSIF (gBetriebsparameter.Boxen[2].xBoxAktiv AND gAktoren.Box[2].xSollOffen
+                AND gBetriebsparameter.Ausstattung.SensorAbluftBox2) THEN
+                rAbluftFeuchteAkt := aiAbluftBox2Feucht;
+                xAbluftBoxAktiv   := TRUE;
+            ELSE
+                xAbluftBoxAktiv   := FALSE;
+            END_IF;
+
+            IF xAbluftBoxAktiv THEN
+                //Zustandsabhaengige Hysterese (Ventilator laeuft bei hoher Feuchte)
+                IF NOT gAktoren.xFrgAbluftventilator THEN
+                    //EIN wenn Feuchte deutlich ueber Sollwert
+                    IF (rAbluftFeuchteAkt >= gBetriebsparameter.Abluftventilator.FeuchteSoll
+                                            + gBetriebsparameter.Abluftventilator.Hysterese) THEN
+                        gAktoren.xFrgAbluftventilator := TRUE;
+                    END_IF;
+                ELSE
+                    //AUS wenn Feuchte deutlich unter Sollwert
+                    IF (rAbluftFeuchteAkt <= gBetriebsparameter.Abluftventilator.FeuchteSoll
+                                            - gBetriebsparameter.Abluftventilator.Hysterese) THEN
+                        gAktoren.xFrgAbluftventilator := FALSE;
+                    END_IF;
+                END_IF;
+            ELSE
+                //Keine aktive Box / kein gueltiger Wert -> Feuchteregelung aus
+                gAktoren.xFrgAbluftventilator := FALSE;
+            END_IF;
+
+        ELSE
+            //Kein Abluftventilator vorhanden -> Feuchtesensoren nur Anzeige
+            gAktoren.xFrgAbluftventilator := FALSE;
+        END_IF;
+
+
     IOTEST:
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
+        gAktoren.xFrgAbluftventilator := FALSE;
+        gAktoren.Heizregister.Freigabe := FALSE;
+        gAktoren.Warmluftofen.Freigabe := FALSE;
 
         xLuftaufbHystEin     := FALSE;
         xLuftaufbPidEn       := FALSE;
         rLuftaufbLeistung    := 0.0;
-        iLuftaufbSchritt     := 0;
-        xLuftaufbHystMerker  := FALSE;
-        xLuftaufbAnf         := FALSE;
-        tonLuftaufbEin(IN := FALSE, PT := 0);
-        tonLuftaufbMin(IN := FALSE, PT := 0);
+        
 
         gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
         gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
 
-        //Aufruf Regler Heizregister
         fbPidLuftaufb(
-            xEn := FALSE,
-            rPv := aiTrockenluftTemp,
-            rSetp := 0.0,
-            xManualMode := TRUE,
-            rManualValue := 0.0,
-            xHold := FALSE,
-            rHighLimit := 100.0,
-            rLowLimit := 0.0,
-            rDeadband := 0.5,
-            xAutoTune := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp := 1.0,
-            uiTi := 1,
-            uiTd := 0,
-            xReset := FALSE
+            xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
+            xManualMode := TRUE, rManualValue := 0.0, xHold := FALSE,
+            rHighLimit := 100.0, rLowLimit := 0.0, rDeadband := 0.5,
+            xAutoTune := FALSE, rAutoTuneValue := 0.0,
+            rKp := 1.0, uiTi := 1, uiTd := 0, xReset := FALSE
         );
 
     ELSE
@@ -3146,40 +3249,28 @@ CASE gAktModus OF
         gAktoren.xFrgLuftaufbereiter  := FALSE;
         gAktoren.xFrgAbluftventilator := FALSE;
 
+        gAktoren.Heizregister.Freigabe := FALSE;
+        gAktoren.Warmluftofen.Freigabe := FALSE;
+
         gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
         gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
 
         xLuftaufbHystEin     := FALSE;
         xLuftaufbPidEn       := FALSE;
         rLuftaufbLeistung    := 0.0;
-        iLuftaufbSchritt     := 0;
-        xLuftaufbHystMerker  := FALSE;
-        xLuftaufbAnf         := FALSE;
-        tonLuftaufbEin(IN := FALSE, PT := 0);
-        tonLuftaufbMin(IN := FALSE, PT := 0);
 
         fbPidLuftaufb(
-            xEn            := FALSE,
-            rPv            := aiTrockenluftTemp,
-            rSetp          := 0.0,
-            xManualMode    := TRUE,
-            rManualValue   := 0.0,
-            xHold          := FALSE,
-            rHighLimit     := 100.0,
-            rLowLimit      := 0.0,
-            rDeadband      := 0.5,
-            xAutoTune      := FALSE,
-            rAutoTuneValue := 0.0,
-            rKp            := 1.0,
-            uiTi           := 1,
-            uiTd           := 0,
-            xReset         := FALSE
+            xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
+            xManualMode := TRUE, rManualValue := 0.0, xHold := FALSE,
+            rHighLimit := 100.0, rLowLimit := 0.0, rDeadband := 0.5,
+            xAutoTune := FALSE, rAutoTuneValue := 0.0,
+            rKp := 1.0, uiTi := 1, uiTd := 0, xReset := FALSE
         );
 END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1785253786">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787045567">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3260,9 +3351,58 @@ END_CASE;
 							<var name="xBox2EndlErreicht" type="BOOL">
 								<initValue>FALSE</initValue>
 							</var>
+							<var name="TOF_LuftaufbAuskuehl" type="TOF">
+								<descr>Auskuehl-/Nachlaufzeit Luftaufbereitung</descr>
+							</var>
+							<var name="xLuftaufbNachlauf" type="BOOL">
+								<descr>Ventilator-Nachlauf durch Luftaufbereitung aktiv</descr>
+							</var>
+							<var name="xBoxAnf" type="BOOL">
+								<descr>Ventilatoranforderung durch eine Box</descr>
+							</var>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM AktorenMappingCyclic
+
+VAR
+	xStateEntryBox1 : BOOL := TRUE;
+	uiStepBox1 : UINT := 0;
+	xFehlerLaufzeitOeffnenBox1 : BOOL := FALSE;
+	xFehlerLaufzeitSchliessenBox1 : BOOL := FALSE;
+	xKlappeIstOffenBox1 : BOOL := FALSE;
+	xKlappeIstGeschlBox1 : BOOL := FALSE;
+	tonLaufzeitBox1 : TON;
+	tonAnzVerzBox1 : TON;
+	xStateEntryBox2 : BOOL := TRUE;
+	uiStepBox2 : UINT := 0;
+	xFehlerLaufzeitOeffnenBox2 : BOOL := FALSE;
+	xFehlerLaufzeitSchliessenBox2 : BOOL := FALSE;
+	xKlappeIstOffenBox2 : BOOL := FALSE;
+	xKlappeIstGeschlBox2 : BOOL := FALSE;
+	tonLaufzeitBox2 : TON;
+	tonAnzVerzBox2 : TON;
+	xBox1OeffnenOut : BOOL := FALSE;
+	xBox1SchliessenOut : BOOL := FALSE;
+	xBox2OeffnenOut : BOOL := FALSE;
+	xBox2SchliessenOut : BOOL := FALSE;
+	xStoerungBox1 : BOOL := FALSE;
+	xStoerungBox2 : BOOL := FALSE;
+	fbBoxenklappe1 : fbBoxenklappe;
+	fbBoxenklappe2 : fbBoxenklappe;
+	xFreigabeKlappe1Out : BOOL := FALSE;
+	xFreigabeKlappe2Out : BOOL := FALSE;
+	xNotbetriebBox1 : BOOL := FALSE;
+	xNotbetriebBox2 : BOOL := FALSE;
+	xBox1EndlErreicht : BOOL := FALSE;
+	xBox2EndlErreicht : BOOL := FALSE;
+	TOF_LuftaufbAuskuehl : TOF;    (* Auskuehl-/Nachlaufzeit Luftaufbereitung *)
+	xLuftaufbNachlauf    : BOOL;   (* Ventilator-Nachlauf durch Luftaufbereitung aktiv *)
+	xBoxAnf              : BOOL;   (* Ventilatoranforderung durch eine Box *)
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -3464,9 +3604,28 @@ END_IF;
 -------------------------------------------------------------------------------
 *)
 
-doFrgVentilator := gAktoren.xFrgVentilator AND 
-				  (gAktoren.Box[1].xSollOffen AND xBox1EndlErreicht AND gBetriebsparameter.Boxen[1].xBoxAktiv) OR 
-				  (gAktoren.Box[2].xSollOffen AND xBox2EndlErreicht AND gBetriebsparameter.Boxen[2].xBoxAktiv);
+(* 
+	============================================================================
+   	Ventilator-Nachlauf Luftaufbereitung (Betriebsmeldung / Auskuehlzeit)
+   	----------------------------------------------------------------------------
+   	Nach Wegnahme der Freigabe darf der Ventilator NICHT sofort abschalten:
+     - Betriebsmeldung vorhanden -> Ventilator bleibt EIN solange Betriebsmeldung EIN
+     - keine Betriebsmeldung     -> Ventilator bleibt EIN fuer die Auskuehlzeit
+	============================================================================ 
+*)
+TOF_LuftaufbAuskuehl(IN := gAktoren.xFrgLuftaufbereiter,
+                     PT := gBetriebsparameter.Luftaufbereitung.Auskuehlzeit);
+
+xLuftaufbNachlauf := gAktoren.xFrgLuftaufbereiter
+    OR (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND diBetriebLuftaufber)
+    OR (NOT  gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND TOF_LuftaufbAuskuehl.Q);
+
+//Physikalische Ventilatoranforderung der Boxen
+xBoxAnf := (gAktoren.Box[1].xSollOffen AND xBox1EndlErreicht AND gBetriebsparameter.Boxen[1].xBoxAktiv)
+        OR (gAktoren.Box[2].xSollOffen AND xBox2EndlErreicht AND gBetriebsparameter.Boxen[2].xBoxAktiv);
+
+//Ventilatorfreigabe: Box-Anforderung ODER Luftaufbereitungs-Nachlauf
+doFrgVentilator := gAktoren.xFrgVentilator AND (xBoxAnf OR xLuftaufbNachlauf);
 
 
 gAktoren.rVentilatorSollwert      := gCmdAnlage.Leistung.DrehzahlVentilator;
@@ -3474,17 +3633,24 @@ gAktoren.rLuftaufbereiterSollwert := gCmdAnlage.Leistung.DrehzahlLuftaufbereitun
 
 //Sollwert begrenzen wenn Freigabe Ventilator erteilt
 IF (doFrgVentilator) THEN
-	//Bei Betrieb Ventilator auf MIN/MAX Grenzen pruefen. 
-	gAktoren.rVentilatorSollwert  := LIMIT(IN := gAktoren.rVentilatorSollwert ,
-										   MN := gBetriebsparameter.Ventilator.DrehzahlMin,
-										   MX := gBetriebsparameter.Ventilator.DrehzahlMax);
-ELSE 
-	//Keine Freigabe - Drehzahl Ventilator auf 0 setzen da sonst minimalwert in der Visu angezeigt wird
-	gAktoren.rVentilatorSollwert  := 0.0;
+    IF (xLuftaufbNachlauf AND NOT xBoxAnf) THEN
+        //Nur die Luftaufbereitung haelt den Ventilator (Auskuehl-/Nachlaufphase):
+        //Drehzahl "bei Auskuehlphase", begrenzt auf Min/Max des Luftaufbereiters
+        //(diese Grenzen gelten vorrangig).
+        gAktoren.rVentilatorSollwert := LIMIT(
+            MN := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
+            IN := gBetriebsparameter.Ventilator.DrehzahlBeiAuskuehlphase,
+            MX := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax);
+    ELSE
+        //Bei Betrieb Ventilator auf MIN/MAX Grenzen pruefen.
+        gAktoren.rVentilatorSollwert := LIMIT(IN := gAktoren.rVentilatorSollwert,
+                                              MN := gBetriebsparameter.Ventilator.DrehzahlMin,
+                                              MX := gBetriebsparameter.Ventilator.DrehzahlMax);
+    END_IF;
+ELSE
+    //Keine Freigabe - Drehzahl Ventilator auf 0 setzen da sonst minimalwert in der Visu angezeigt wird
+    gAktoren.rVentilatorSollwert  := 0.0;
 END_IF;
-
-aoFuVentilator := gAktoren.rVentilatorSollwert;
-aoLeistVorgLuftaufber := gAktoren.rLuftaufbereiterSollwert;
 
 
 (*
@@ -3556,7 +3722,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1785251977">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787051695">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -3755,6 +3921,15 @@ gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll := Par_Luftaufbereitung_Temp
 //Spezifisch Ofen
 gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung := Par_Luftaufbereitung_VerzBetriebsmeldung;
 gBetriebsparameter.Luftaufbereitung.Auskuehlzeit := Par_Luftaufbereitung_Auskuehlzeit;
+gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh := Par_Luftaufbereitung_BetriebsmeldungVorh;
+
+(*
+---------------------------------------------------------------------------
+Abluft
+---------------------------------------------------------------------------
+*)
+gBetriebsparameter.Abluftventilator.FeuchteSoll := Par_Abluft_FeuchteSoll;
+gBetriebsparameter.Abluftventilator.Hysterese := Par_Abluft_FeuchteHysterese;
 
 (*
 ---------------------------------------------------------------------------
@@ -4010,9 +4185,10 @@ HMI_IN_Box1_LaufRestzeitStunden := gStatusAnlage.Box[1].LaufRestzeitStunden;
 HMI_IN_Box1_Status := TO_UINT(gStatusAnlage.Box[1].Status);
 HMI_IN_Box1_TextIndexLaufzeit := gStatusAnlage.Box[1].TextIndexLaufzeit;
 HMI_IN_Box1_TrockengutIcon := gStatusAnlage.Box[1].TrockengutIcon;
+HMI_IN_Box1_AnzeigeLaufRestzeit := gStatusAnlage.Box[1].AnzeigeLaufRestzeit;
+
 //TODO RIG: Noch zu verschalten
 //HMI_IN_Box1_RestzeitUmschVerzBetriebsart
-//HMI_IN_Box1_AnzeigeLaufRestzeit
 //HMI_IN_Box1_SperreDauerbetrieb
 //HMI_IN_Box1_SperreIntervallbetrieb
 
@@ -4022,9 +4198,10 @@ HMI_IN_Box2_LaufRestzeitStunden := gStatusAnlage.Box[2].LaufRestzeitStunden;
 HMI_IN_Box2_Status := TO_UINT(gStatusAnlage.Box[2].Status);
 HMI_IN_Box2_TextIndexLaufzeit := gStatusAnlage.Box[2].TextIndexLaufzeit;
 HMI_IN_Box2_TrockengutIcon := gStatusAnlage.Box[2].TrockengutIcon;
+HMI_IN_Box2_AnzeigeLaufRestzeit := gStatusAnlage.Box[2].AnzeigeLaufRestzeit;
+
 //TODO RIG: Noch zu verschalten
 //HMI_IN_Box2_RestzeitUmschVerzBetriebsart
-//HMI_IN_Box2_AnzeigeLaufRestzeit
 //HMI_IN_Box2_SperreDauerbetrieb
 //HMI_IN_Box2_SperreIntervallbetrieb
 
@@ -4103,15 +4280,13 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[1].IconWitterung;
 	HMI_IN_Box_Aktuell_Status := TO_INT(gStatusAnlage.Box[1].Status);
 	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[1].TextIndexLaufzeit;
-	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[1].WetterIstSchlecht;
+	HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit := gStatusAnlage.Box[1].AnzeigeLaufRestzeit;
 	
 	
 	//TODO RIG: Parameter die noch zu verschalten sind!
-	//HMI_OUT_Box1_TrockengutfeuchteAktuell
 	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
 	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
 	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
-	//HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit
 		
 	
 	
@@ -4184,15 +4359,13 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[2].IconWitterung;
 	HMI_IN_Box_Aktuell_Status := TO_INT(gStatusAnlage.Box[2].Status);
 	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[2].TextIndexLaufzeit;
-	HMI_IN_Box_Aktuell_IconWitterung := gStatusAnlage.Box[2].WetterIstSchlecht;
+	HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit := gStatusAnlage.Box[2].AnzeigeLaufRestzeit;
 	
 	
 	//TODO RIG: Parameter die noch zu verschalten sind!
-	//HMI_OUT_Box1_TrockengutfeuchteAktuell
 	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
 	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
 	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
-	//HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit
 ELSE 
 	//nichts zu tun
 END_IF;
@@ -4771,6 +4944,7 @@ END_STRUCT;
 						<var name="KlappenBoxen" type="ST_KlappenBoxen" idxMin0="1" idx0="2"/>
 						<var name="Luftaufbereitung" type="ST_ParLuftaufber"/>
 						<var name="Ventilator" type="ST_ParVentilator"/>
+						<var name="Abluftventilator" type="ST_ParAbluftvent"/>
 						<var name="Strombegrenzung" type="ST_ParZeitfenster"/>
 						<var name="Tarifabschaltung" type="ST_ParTarifabschaltung"/>
 						<var name="Boxen" type="ST_ParBoxen" idxMin0="1" idx0="2"/>
@@ -4784,6 +4958,7 @@ END_STRUCT;
 	KlappenBoxen : ARRAY[1..2] OF ST_KlappenBoxen;
 	Luftaufbereitung : ST_ParLuftaufber;
 	Ventilator : ST_ParVentilator;
+	Abluftventilator : ST_ParAbluftvent;
 	Strombegrenzung : ST_ParZeitfenster;
 	Tarifabschaltung : ST_ParTarifabschaltung;
 	Boxen : ARRAY[1..2] OF ST_ParBoxen;
@@ -4925,8 +5100,30 @@ END_STRUCT;
 						</var>
 						<var name="Auskuehlzeit" type="UDINT"/>
 						<var name="VerzBetriebsmeldung" type="UDINT"/>
+						<var name="BetriebsmeldungVorh" type="BOOL"/>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_ParLuftaufber: STRUCT
+	Typ : UINT;
+	VerzWetterwechsel : UDINT;
+	TempVorgabeSoll : REAL;	(* °C Solltemperatur – NEU *)
+	Hysterese : REAL;
+	AutomatikbetriebEin : BOOL;
+	DauerbetriebEin : BOOL;
+	Aus : BOOL;
+	SaettigungFrischluftEin : REAL;
+	DrehzahlVorgabeMin : REAL;
+	DrehzahlVorgabeMax : REAL;
+	P : REAL;	(* P Anteil Regler *)
+	I : REAL;	(* I Anteil Regler *)
+	D : REAL;	(* D Anteil Regler *)
+	Auskuehlzeit : UDINT;
+	VerzBetriebsmeldung : UDINT;
+	BetriebsmeldungVorh : BOOL;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
 				</struct>
 				<struct name="ST_ParVentilator" version="1.0.0">
 					<vars>
@@ -5020,6 +5217,7 @@ END_STRUCT;
 						<var name="AktSchlechtwetterPuls" type="UDINT"/>
 						<var name="AktSchlechtwetterPause" type="UDINT"/>
 						<var name="WetterIstSchlecht" type="BOOL"/>
+						<var name="AnzeigeLaufRestzeit" type="BOOL"/>
 						<var name="LaufRestzeitStunden" type="INT"/>
 						<var name="LaufRestzeitMinuten" type="INT"/>
 						<var name="TextIndexLaufzeit" type="USINT"/>
@@ -5032,6 +5230,7 @@ END_STRUCT;
 	AktSchlechtwetterPuls : UDINT;
 	AktSchlechtwetterPause : UDINT;
 	WetterIstSchlecht : BOOL;
+	AnzeigeLaufRestzeit : BOOL;
 	LaufRestzeitStunden : INT;
 	LaufRestzeitMinuten : INT;
 	TextIndexLaufzeit : USINT;
@@ -5078,6 +5277,24 @@ END_STRUCT;
 	ArrWarnung : ARRAY[0..63] OF BOOL;
 	ArrFehler : ARRAY[0..63] OF BOOL;
 	ArrSystem : ARRAY[0..32] OF BOOL;
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
+				</struct>
+				<struct name="ST_ParAbluftvent" version="1.0.0">
+					<vars>
+						<var name="FeuchteSoll" type="REAL">
+							<descr>%rF Sollwert Abluftfeuchte</descr>
+						</var>
+						<var name="Hysterese" type="REAL">
+							<descr>%rF Hysterese Ein/Aus</descr>
+						</var>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_ParAbluftvent: STRUCT
+	FeuchteSoll : REAL;   (* %rF Sollwert Abluftfeuchte *)
+	Hysterese   : REAL;   (* %rF Hysterese Ein/Aus *)
 END_STRUCT;
 
 ]]>
@@ -5445,15 +5662,7 @@ END_STRUCT;
 							<value>2</value>
 						</element>
 					</elements>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[eBoxIndex: USINT (
-	BOX_NONE:= 0,	(* Keine Box aktiv *)
-	BOX_1 := 1,	(* Box 1 Ansicht aktiv *)
-	BOX_2 := 2	(* Box 2 Ansicht aktiv *)
-);
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 				</enum>
 				<enum name="eTrockengut" baseType="UINT" version="1.0.0">
 					<elements>
@@ -74316,6 +74525,10 @@ nSamples := cnt;
 	Par_Stocktemperatur_Box1_Hysterese AT %MW200.298 : REAL;
 		{G:"Parameters"}
 	Par_Stocktemperatur_Box2_Hysterese AT %MW200.300 : REAL;
+		{G:"Parameters"}
+	Par_Abluft_FeuchteSoll AT %MW200.302 : REAL;
+		{G:"Parameters"}
+	Par_Abluft_FeuchteHysterese AT %MW200.304 : REAL;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -77239,8 +77452,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11439 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 286; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11519 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 288; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -77253,9 +77466,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 1425071362;
+	dummyCrc32 := 1711171130;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 302, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 1425071362 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 306, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 1711171130 );
 
 END_PROGRAM
 
@@ -77324,7 +77537,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="15861">
+			<root name="CControl_Lite" nextID="16758">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77387,6 +77600,7 @@ END_PROGRAM
 					<Definition name="ST_ParSchlechtwetterBoxen" id="13497"/>
 					<Definition name="ST_ParSchlechtwetterBoxenStufe" id="13498"/>
 					<Definition name="ST_Alarm" id="14671" genHidden="false"/>
+					<Definition name="ST_ParAbluftvent" id="16743"/>
 				</folder>
 				<folder name="types" id="910">
 					<Definition name="T_Betriebsparameter" id="912"/>
@@ -84570,6 +84784,104 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.300</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16678</ipa>
+								<address>16678</address>
+								<name>Par_Abluft_FeuchteSoll</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.302</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16680</ipa>
+								<address>16680</address>
+								<name>Par_Abluft_FeuchteHysterese</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.304</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -93354,8 +93666,8 @@ END_PROGRAM
 								<value ipa="16433" subidx="0">100</value>
 								<value ipa="16435" subidx="0">0</value>
 								<value ipa="16436" subidx="0">0</value>
-								<value ipa="16437" subidx="0">0</value>
-								<value ipa="16439" subidx="0">0</value>
+								<value ipa="16437" subidx="0">160000</value>
+								<value ipa="16439" subidx="0">160000</value>
 								<value ipa="16441" subidx="0">0</value>
 								<value ipa="16442" subidx="0">0</value>
 								<value ipa="16458" subidx="0"/>
@@ -93468,6 +93780,8 @@ END_PROGRAM
 								<value ipa="16673" subidx="0">0</value>
 								<value ipa="16674" subidx="0">0</value>
 								<value ipa="16676" subidx="0">0</value>
+								<value ipa="16678" subidx="0">0</value>
+								<value ipa="16680" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
