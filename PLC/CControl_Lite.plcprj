@@ -53,8 +53,8 @@
 						<initValue>'v1.0.0'</initValue>
 					</var>
 					<var name="gPlcKonfigId" type="UINT">
-						<descr>PLC Konfiguration [17...2.04]</descr>
-						<initValue>17</initValue>
+						<descr>PLC Konfiguration [8...2.04]</descr>
+						<initValue>8</initValue>
 					</var>
 					<var name="gQuitErr" type="BOOL">
 						<descr>Fehler quittieren</descr>
@@ -155,7 +155,7 @@
 	gCmdAnlage : T_CmdAnlage;
 	Strombegrenzung : fbTrockStrombegr;	(* Strombegrenzung Logik *)
 	gPlcSwVersion : STRING[ 32 ] := 'v1.0.0';	(* PLC Software Version *)
-	gPlcKonfigId : UINT := 17;	(* PLC Konfiguration [17...2.04] *)
+	gPlcKonfigId : UINT := 8;	(* PLC Konfiguration [8...2.04] *)
 	gQuitErr : BOOL;	(* Fehler quittieren *)
 	IBN_FALSE : BOOL;	(* Inbetriebnahmemerker false *)
 	IBN_TRUE : BOOL;	(* Inbetriebnahmemerker true *)
@@ -1686,7 +1686,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1785233689">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1787148064">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -1888,7 +1888,7 @@ IF gAktModus <> IOTEST THEN
     ---------------------------------------------------------------------------
     Frischlufttemperatur skalieren
     ---------------------------------------------------------------------------
-    Rohwert 0..32767 -> Engineering-Wert gemäß parametriertem Messbereich.
+    Rohwert 0..9999 -> Engineering-Wert gemäß parametriertem Messbereich.
     Anschließend wird der parametrierte Offset addiert.
     ---------------------------------------------------------------------------
     *)    
@@ -2080,7 +2080,7 @@ IF gAktModus <> IOTEST THEN
     ---------------------------------------------------------------------------
     Analogausgang FU-Ventilator skalieren
     ---------------------------------------------------------------------------
-    Sollwertbereich 0..100 % -> Hardware-Rohwert 0..32767
+    Sollwertbereich 0..100 % -> Hardware-Rohwert 0..1000
     ---------------------------------------------------------------------------
     *)
     fbAoFuVentilatorScal(
@@ -2096,7 +2096,7 @@ IF gAktModus <> IOTEST THEN
     ---------------------------------------------------------------------------
     Analogausgang Leistungsvorgabe Luftaufbereiter skalieren
     ---------------------------------------------------------------------------
-    Sollwertbereich 0..100 % -> Hardware-Rohwert 0..32767
+    Sollwertbereich 0..100 % -> Hardware-Rohwert 0..1000
     ---------------------------------------------------------------------------
     *)
     fbAoLuftaufberLeistungScal(
@@ -2121,6 +2121,7 @@ IF gAktModus <> IOTEST THEN
  	HMI_TEST_doFrgBox1 := FALSE;
 	HMI_TEST_doFrgBox2 := FALSE;
 	HMI_TEST_doFrgAbluftventilator := FALSE;
+	HMI_TEST_doFrgVentilator := FALSE;
 	
 	HMI_TEST_aoFuVentilator := 0.0;
 	HMI_TEST_aoLeistVorgLuftaufber := 0.0;
@@ -2954,7 +2955,7 @@ gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787051423">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787147029">
 					<vars>
 						<localVars>
 							<var name="xLuftaufbHystEin" type="BOOL">
@@ -3197,9 +3198,8 @@ CASE gAktModus OF
             IF xAbluftBoxAktiv THEN
                 //Zustandsabhaengige Hysterese (Ventilator laeuft bei hoher Feuchte)
                 IF NOT gAktoren.xFrgAbluftventilator THEN
-                    //EIN wenn Feuchte deutlich ueber Sollwert
-                    IF (rAbluftFeuchteAkt >= gBetriebsparameter.Abluftventilator.FeuchteSoll
-                                            + gBetriebsparameter.Abluftventilator.Hysterese) THEN
+                    //EIN wenn Feuchte ueber Sollwert
+                    IF (rAbluftFeuchteAkt >= gBetriebsparameter.Abluftventilator.FeuchteSoll) THEN
                         gAktoren.xFrgAbluftventilator := TRUE;
                     END_IF;
                 ELSE
@@ -3270,7 +3270,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787045567">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787061940">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3669,6 +3669,7 @@ ELSE
     gStatusAnlage.Aktor[AKTOR_VENTILATOR] := STATUS_NICHT_AKTIV;
 END_IF;
 
+aoFuVentilator := gAktoren.rVentilatorSollwert;
 
 (*
 ===============================================================================
@@ -3701,7 +3702,7 @@ ELSE
 END_IF;
 
 doFrgLuftaufber := gAktoren.xFrgLuftaufbereiter;
-
+aoLeistVorgLuftaufber := gAktoren.rLuftaufbereiterSollwert;
 
 (*
 ===============================================================================
@@ -3722,7 +3723,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787051695">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787146227">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -3730,6 +3731,9 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 							<var name="rt_Box_Intervall" type="R_TRIG"/>
 							<var name="rt_Box_Nachtr" type="R_TRIG"/>
 							<var name="rt_Box_Stocktemp" type="R_TRIG"/>
+							<var name="rt_Luftaufb_Auto" type="R_TRIG"/>
+							<var name="rt_Luftaufb_Dauer" type="R_TRIG"/>
+							<var name="rt_Luftaufb_Aus" type="R_TRIG"/>
 							<var name="lastBoxIndex" type="USINT"/>
 							<var name="uIdx" type="USINT"/>
 							<var name="firstStep" type="BOOL"/>
@@ -3744,6 +3748,9 @@ VAR
 	rt_Box_Intervall : R_TRIG;
 	rt_Box_Nachtr : R_TRIG;
 	rt_Box_Stocktemp : R_TRIG;
+	rt_Luftaufb_Auto : R_TRIG;
+	rt_Luftaufb_Dauer : R_TRIG;
+	rt_Luftaufb_Aus : R_TRIG;
 	lastBoxIndex : USINT;
 	uIdx : USINT;
 	firstStep : BOOL;
@@ -3908,9 +3915,29 @@ Luftaufbereitung
 gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel := Par_Luftaufbereitung_VerzWetterwechsel;
 gBetriebsparameter.Luftaufbereitung.SaettigungFrischluftEin := Par_Luftaufbereitung_SaettigungFrischlEin;
 gBetriebsparameter.Luftaufbereitung.Hysterese := Par_Luftaufbereitung_Hysterese;
-gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin:= Par_Luftaufbereitung_AutomatikbetriebEin;
-gBetriebsparameter.Luftaufbereitung.DauerbetriebEin := Par_Luftaufbereitung_DauerbetriebEin;
-gBetriebsparameter.Luftaufbereitung.Aus := Par_Luftaufbereitung_Aus;
+
+//Betriebsarten
+//--- Luftaufbereitung: Betriebsartenwahl (flankengesteuert, gegenseitig verriegelt) ---
+rt_Luftaufb_Auto (CLK := Par_Luftaufbereitung_AutomatikbetriebEin);
+rt_Luftaufb_Dauer(CLK := Par_Luftaufbereitung_DauerbetriebEin);
+rt_Luftaufb_Aus  (CLK := Par_Luftaufbereitung_Aus);
+
+IF rt_Luftaufb_Auto.Q THEN
+	Par_Luftaufbereitung_DauerbetriebEin     := FALSE;
+	Par_Luftaufbereitung_Aus                 := FALSE;
+ELSIF rt_Luftaufb_Dauer.Q THEN
+	Par_Luftaufbereitung_AutomatikbetriebEin := FALSE;
+	Par_Luftaufbereitung_Aus                 := FALSE;
+ELSIF rt_Luftaufb_Aus.Q THEN
+	Par_Luftaufbereitung_AutomatikbetriebEin := FALSE;
+	Par_Luftaufbereitung_DauerbetriebEin     := FALSE;
+END_IF;
+
+//Aufbereitete Anwahl an interne Betriebsparameter uebergeben
+gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin := Par_Luftaufbereitung_AutomatikbetriebEin;
+gBetriebsparameter.Luftaufbereitung.DauerbetriebEin     := Par_Luftaufbereitung_DauerbetriebEin;
+gBetriebsparameter.Luftaufbereitung.Aus                 := Par_Luftaufbereitung_Aus;
+
 //Spezifisch Heizregister
 gBetriebsparameter.Luftaufbereitung.P := Par_Luftaufbereitung_P;
 gBetriebsparameter.Luftaufbereitung.I := Par_Luftaufbereitung_I;
@@ -4218,7 +4245,7 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[1].DauerbetriebEin;
 		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[1].IntervallbetriebEin;
 		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[1].NachtrocknungEin;
-	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[2].StocktemperaturEin;
+	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[1].StocktemperaturEin;
 		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[1].Aus;	
 	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
 	 	HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
@@ -4377,7 +4404,7 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	rt_Box_Dauer(CLK := HMI_OUT_Box1_DauerbetriebEin);
 	rt_Box_Intervall(CLK := HMI_OUT_Box1_IntervallbetriebEIn);
 	rt_Box_Nachtr(CLK := HMI_OUT_Box1_NachtrocknungEin);
-	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box1_StocktemperaturEin);
 	
 	IF rt_Box_Aus.Q THEN
 	    HMI_OUT_Box1_DauerbetriebEin     := FALSE;
@@ -4440,6 +4467,32 @@ ELSE
 	HMI_Ventilator1_FarbeIcon := ICON_GRAU;
 END_IF;
 
+//Luftaufbereitung
+IF gBetriebsparameter.Ausstattung.Luftaufbereiter THEN 
+	IF gAlarmBetriebLuftaufber THEN 
+		Par_Luftaufbereitung_FarbeIcon := ICON_ROT;
+	ELSIF gAktoren.xFrgLuftaufbereiter THEN
+		Par_Luftaufbereitung_FarbeIcon := ICON_GELB;
+	ELSE 
+		Par_Luftaufbereitung_FarbeIcon := ICON_GRAU;
+	END_IF;
+ELSE 
+	Par_Luftaufbereitung_FarbeIcon := ICON_HIDDEN;	
+END_IF;
+
+//Abluftventilator
+IF gBetriebsparameter.Ausstattung.Abluftventilator THEN 
+	IF FALSE THEN //Abluftventilator hat keinen Alarm
+		HMI_Abluft_FarbeIcon := ICON_ROT;
+	ELSIF gAktoren.xFrgAbluftventilator THEN
+		HMI_Abluft_FarbeIcon := ICON_GELB;
+	ELSE 
+		HMI_Abluft_FarbeIcon := ICON_GRAU;
+	END_IF;
+ELSE 
+	HMI_Abluft_FarbeIcon := ICON_HIDDEN;	
+END_IF;
+
 (*
 -------------------------------------------------------------------------------
  ALARME fuer Visu aufbereiten ARRAY -> UDINT Maske da Arrays nicht direkt
@@ -4475,7 +4528,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1784925925">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787146678">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -4655,9 +4708,9 @@ xBox2Freigegeben := gCmdAnlage.Auto
 *)
 //===== BOX 1 - Stocktemperatur =====
 IF xStocktemperaturBox1Anwahl THEN
-    IF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[1].StocktemperaturSoll - gBetriebsparameter.Boxen[1].StocktemperaturHysterese) THEN
-        xStockHaltBox1 := TRUE;
-    ELSIF gStatusAnlage.StockTemperatur >= gBetriebsparameter.Boxen[1].StocktemperaturSoll THEN
+    IF gStatusAnlage.StockTemperatur > gBetriebsparameter.Boxen[1].StocktemperaturSoll THEN
+    	xStockHaltBox1 := TRUE;
+    ELSIF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[1].StocktemperaturSoll - gBetriebsparameter.Boxen[1].StocktemperaturHysterese) THEN
         xStockHaltBox1 := FALSE;
     END_IF;
     xStocktemperaturBox1Aktiv := xStockHaltBox1;
@@ -4667,9 +4720,9 @@ ELSE
 END_IF;
 //===== BOX 2 - Stocktemperatur =====
 IF xStocktemperaturBox2Anwahl THEN
-    IF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[2].StocktemperaturSoll - gBetriebsparameter.Boxen[2].StocktemperaturHysterese) THEN
+    IF gStatusAnlage.StockTemperatur > gBetriebsparameter.Boxen[2].StocktemperaturSoll THEN
         xStockHaltBox2 := TRUE;
-    ELSIF gStatusAnlage.StockTemperatur >= gBetriebsparameter.Boxen[2].StocktemperaturSoll THEN
+    ELSIF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[2].StocktemperaturSoll - gBetriebsparameter.Boxen[2].StocktemperaturHysterese) THEN
         xStockHaltBox2 := FALSE;
     END_IF;
     xStocktemperaturBox2Aktiv := xStockHaltBox2;
@@ -74809,6 +74862,8 @@ nSamples := cnt;
 	HMI_IN_ALARM_WARNMASKE_1 AT %MW201.188 : UDINT;
 		{G:"Variables"}
 	HMI_IN_ALARM_WARNMASKE_2 AT %MW201.190 : UDINT;
+		{G:"Variables"}
+	HMI_Abluft_FarbeIcon AT %MW201.192 : UINT := 0;
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -77452,8 +77507,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11519 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 288; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11559 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 289; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -77466,9 +77521,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 1711171130;
+	dummyCrc32 := 126313460;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 306, 2, 201, TO_DWORD( ADR(%MW201.0) ), 192, 2, 1711171130 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 306, 2, 201, TO_DWORD( ADR(%MW201.0) ), 193, 2, 126313460 );
 
 END_PROGRAM
 
@@ -77537,7 +77592,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="16758">
+			<root name="CControl_Lite" nextID="17350">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -91771,6 +91826,55 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>9150</ipa>
+								<address>9150</address>
+								<name>HMI_Abluft_FarbeIcon</name>
+								<typepar>2</typepar>
+								<typetarg>UINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.192</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</paramsRO>
 						<enums/>
 						<sysenums>
@@ -93922,6 +94026,7 @@ END_PROGRAM
 								<value ipa="9144" subidx="0">0</value>
 								<value ipa="9146" subidx="0">0</value>
 								<value ipa="9148" subidx="0">0</value>
+								<value ipa="9150" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-08-18T12:26:10"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-08-19T14:00:01"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
 	FEHLER_24VDC := 0,
 	FEHLER_BETRIEBSMLDG_VENTILATOR := 5,
 	FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER := 6,
@@ -57,12 +57,13 @@ END_STRUCT;
     aoLeistVorgLuftaufber     : REAL;   // 0..100 %
 END_STRUCT;
 
-]]></iecDecl></data></addData></dataType><dataType name="ST_IoTest"><baseType><struct><variable name="DigitalIn"><type><derived name="ST_IoTestDigitalIn"/></type></variable><variable name="DigitalOut"><type><derived name="ST_IoTestDigitalOut"/></type></variable><variable name="AnalogIn"><type><derived name="ST_IoTestAnalogIn"/></type></variable><variable name="AnalogOut"><type><derived name="ST_IoTestAnalogOut"/></type></variable></struct></baseType></dataType><dataType name="ST_Betriebsparameter"><baseType><struct><variable name="Sensoren"><type><derived name="ST_SensorParameter"/></type></variable><variable name="Ausstattung"><type><derived name="ST_Ausstattung"/></type></variable><variable name="KlappenBoxen"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_KlappenBoxen"/></baseType></array></type></variable><variable name="Luftaufbereitung"><type><derived name="ST_ParLuftaufber"/></type></variable><variable name="Ventilator"><type><derived name="ST_ParVentilator"/></type></variable><variable name="Strombegrenzung"><type><derived name="ST_ParZeitfenster"/></type></variable><variable name="Tarifabschaltung"><type><derived name="ST_ParTarifabschaltung"/></type></variable><variable name="Boxen"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_ParBoxen"/></baseType></array></type></variable><variable name="Allgemein"><type><derived name="ST_Anlage_Allgemein"/></type></variable><variable name="SchlechtwetterBoxen"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_ParSchlechtwetterBoxen"/></baseType></array></type></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_Betriebsparameter: STRUCT
+]]></iecDecl></data></addData></dataType><dataType name="ST_IoTest"><baseType><struct><variable name="DigitalIn"><type><derived name="ST_IoTestDigitalIn"/></type></variable><variable name="DigitalOut"><type><derived name="ST_IoTestDigitalOut"/></type></variable><variable name="AnalogIn"><type><derived name="ST_IoTestAnalogIn"/></type></variable><variable name="AnalogOut"><type><derived name="ST_IoTestAnalogOut"/></type></variable></struct></baseType></dataType><dataType name="ST_Betriebsparameter"><baseType><struct><variable name="Sensoren"><type><derived name="ST_SensorParameter"/></type></variable><variable name="Ausstattung"><type><derived name="ST_Ausstattung"/></type></variable><variable name="KlappenBoxen"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_KlappenBoxen"/></baseType></array></type></variable><variable name="Luftaufbereitung"><type><derived name="ST_ParLuftaufber"/></type></variable><variable name="Ventilator"><type><derived name="ST_ParVentilator"/></type></variable><variable name="Abluftventilator"><type><derived name="ST_ParAbluftvent"/></type></variable><variable name="Strombegrenzung"><type><derived name="ST_ParZeitfenster"/></type></variable><variable name="Tarifabschaltung"><type><derived name="ST_ParTarifabschaltung"/></type></variable><variable name="Boxen"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_ParBoxen"/></baseType></array></type></variable><variable name="Allgemein"><type><derived name="ST_Anlage_Allgemein"/></type></variable><variable name="SchlechtwetterBoxen"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_ParSchlechtwetterBoxen"/></baseType></array></type></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_Betriebsparameter: STRUCT
 	Sensoren : ST_SensorParameter;
 	Ausstattung : ST_Ausstattung;
 	KlappenBoxen : ARRAY[1..2] OF ST_KlappenBoxen;
 	Luftaufbereitung : ST_ParLuftaufber;
 	Ventilator : ST_ParVentilator;
+	Abluftventilator : ST_ParAbluftvent;
 	Strombegrenzung : ST_ParZeitfenster;
 	Tarifabschaltung : ST_ParTarifabschaltung;
 	Boxen : ARRAY[1..2] OF ST_ParBoxen;
@@ -154,6 +155,11 @@ END_STRUCT;
 	ArrWarnung : ARRAY[0..63] OF BOOL;
 	ArrFehler : ARRAY[0..63] OF BOOL;
 	ArrSystem : ARRAY[0..32] OF BOOL;
+END_STRUCT;
+
+]]></iecDecl></data></addData></dataType><dataType name="ST_ParAbluftvent"><baseType><struct><variable name="FeuchteSoll"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">%rF Sollwert Abluftfeuchte</xhtml></documentation></variable><variable name="Hysterese"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">%rF Hysterese Ein/Aus</xhtml></documentation></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_ParAbluftvent: STRUCT
+	FeuchteSoll : REAL;   (* %rF Sollwert Abluftfeuchte *)
+	Hysterese   : REAL;   (* %rF Hysterese Ein/Aus *)
 END_STRUCT;
 
 ]]></iecDecl></data></addData></dataType></dataTypes><pous><pou name="IOMappingCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="fbFrischluftTempAvg"><type><derived name="FB_MovAvgFlt"/></type></variable><variable name="fbAbluftBox1TempAvg"><type><derived name="FB_MovAvgFlt"/></type></variable><variable name="fbAbluftBox2TempAvg"><type><derived name="FB_MovAvgFlt"/></type></variable><variable name="fbTrockenluftTempAvg"><type><derived name="FB_MovAvgFlt"/></type></variable><variable name="fbStockTempAvg"><type><derived name="FB_MovAvgFlt"/></type></variable><variable name="fbFrischluftTempScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbFrischluftFeuchtScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbAbluftBox1TempScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbAbluftBox1FeuchtScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbTrockenluftTempScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbTrockenluftFeuchtScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbAbluftBox2TempScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbAbluftBox2FeuchtScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbStocktempScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbAoFuVentilatorScal"><type><derived name="FB_LimScal"/></type></variable><variable name="fbAoLuftaufberLeistungScal"><type><derived name="FB_LimScal"/></type></variable><variable name="rFrischluftTempRaw"><type><REAL/></type></variable><variable name="rFrischluftFeuchtRaw"><type><REAL/></type></variable><variable name="rAbluftBox1TempRaw"><type><REAL/></type></variable><variable name="rAbluftBox1FeuchtRaw"><type><REAL/></type></variable><variable name="rAbluftBox2TempRaw"><type><REAL/></type></variable><variable name="rAbluftBox2FeuchtRaw"><type><REAL/></type></variable><variable name="rTrockenluftTempRaw"><type><REAL/></type></variable><variable name="rTrockenluftFeuchtRaw"><type><REAL/></type></variable><variable name="rStocktempRaw"><type><REAL/></type></variable><variable name="gInitDone"><type><BOOL/></type><initialValue><simpleValue value="FALSE"/></initialValue></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
@@ -1311,7 +1317,7 @@ Strombegrenzung();
 
 gAktoren.Heizregister();
 gAktoren.Warmluftofen();
-]]></xhtml:p></ST></body><addData/></pou><pou name="LeistungCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="xLuftaufbHystEin"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Hysterese-Merker Automatikbetrieb</xhtml></documentation></variable><variable name="xLuftaufbPidEn"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">PID Heizregister aktiv</xhtml></documentation></variable><variable name="rLuftaufbLeistung"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">berechnete Leistungsvorgabe</xhtml></documentation></variable><variable name="fbPidLuftaufb"><type><derived name="PIDAdvanced"/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
+]]></xhtml:p></ST></body><addData/></pou><pou name="LeistungCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="xLuftaufbHystEin"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Hysterese-Merker Automatikbetrieb</xhtml></documentation></variable><variable name="xLuftaufbPidEn"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">PID Heizregister aktiv</xhtml></documentation></variable><variable name="xAbluftBoxAktiv"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">eine Box aktiv + gueltiger Abluft-Feuchtewert</xhtml></documentation></variable><variable name="rLuftaufbLeistung"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">berechnete Leistungsvorgabe</xhtml></documentation></variable><variable name="rAbluftFeuchteAkt"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Feuchtewert der aktiven Box</xhtml></documentation></variable><variable name="fbPidLuftaufb"><type><derived name="PIDAdvanced"/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
 ================================================================================
 File        : LeistungCyclic.st
 Project     : CControl_Lite
@@ -1331,6 +1337,7 @@ CASE gAktModus OF
     STILLSTAND:
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
+        gAktoren.xFrgAbluftventilator := FALSE;
 
         gCmdAnlage.Leistung.DrehzahlVentilator       := gBetriebsparameter.Ventilator.DrehzahlMin;
         gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
@@ -1498,17 +1505,59 @@ CASE gAktModus OF
             gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
         END_IF;
 
+	    (* --- Abluftventilator: Feuchteregelung der aktiven Box --- *)
+        IF gBetriebsparameter.Ausstattung.Abluftventilator THEN
+
+            //Aktive Box bestimmen + gueltigen Feuchtewert waehlen (nur aktive Box)
+            IF (gBetriebsparameter.Boxen[1].xBoxAktiv AND gAktoren.Box[1].xSollOffen
+                AND gBetriebsparameter.Ausstattung.SensorAbluftBox1) THEN
+                rAbluftFeuchteAkt := aiAbluftBox1Feucht;
+                xAbluftBoxAktiv   := TRUE;
+            ELSIF (gBetriebsparameter.Boxen[2].xBoxAktiv AND gAktoren.Box[2].xSollOffen
+                AND gBetriebsparameter.Ausstattung.SensorAbluftBox2) THEN
+                rAbluftFeuchteAkt := aiAbluftBox2Feucht;
+                xAbluftBoxAktiv   := TRUE;
+            ELSE
+                xAbluftBoxAktiv   := FALSE;
+            END_IF;
+
+            IF xAbluftBoxAktiv THEN
+                //Zustandsabhaengige Hysterese (Ventilator laeuft bei hoher Feuchte)
+                IF NOT gAktoren.xFrgAbluftventilator THEN
+                    //EIN wenn Feuchte deutlich ueber Sollwert
+                    IF (rAbluftFeuchteAkt >= gBetriebsparameter.Abluftventilator.FeuchteSoll
+                                            + gBetriebsparameter.Abluftventilator.Hysterese) THEN
+                        gAktoren.xFrgAbluftventilator := TRUE;
+                    END_IF;
+                ELSE
+                    //AUS wenn Feuchte deutlich unter Sollwert
+                    IF (rAbluftFeuchteAkt <= gBetriebsparameter.Abluftventilator.FeuchteSoll
+                                            - gBetriebsparameter.Abluftventilator.Hysterese) THEN
+                        gAktoren.xFrgAbluftventilator := FALSE;
+                    END_IF;
+                END_IF;
+            ELSE
+                //Keine aktive Box / kein gueltiger Wert -> Feuchteregelung aus
+                gAktoren.xFrgAbluftventilator := FALSE;
+            END_IF;
+
+        ELSE
+            //Kein Abluftventilator vorhanden -> Feuchtesensoren nur Anzeige
+            gAktoren.xFrgAbluftventilator := FALSE;
+        END_IF;
+
 
     IOTEST:
         gAktoren.xFrgVentilator       := FALSE;
         gAktoren.xFrgLuftaufbereiter  := FALSE;
-
+        gAktoren.xFrgAbluftventilator := FALSE;
         gAktoren.Heizregister.Freigabe := FALSE;
         gAktoren.Warmluftofen.Freigabe := FALSE;
 
         xLuftaufbHystEin     := FALSE;
         xLuftaufbPidEn       := FALSE;
         rLuftaufbLeistung    := 0.0;
+        
 
         gCmdAnlage.Leistung.DrehzahlVentilator       := 0.0;
         gCmdAnlage.Leistung.DrehzahlLuftaufbereitung := 0.0;
@@ -1550,7 +1599,9 @@ END_CASE;
 VAR
 	xLuftaufbHystEin : BOOL;	(* Hysterese-Merker Automatikbetrieb *)
 	xLuftaufbPidEn : BOOL; 		(* PID Heizregister aktiv *)
-	rLuftaufbLeistung : REAL;	(* berechnete Leistungsvorgabe *)
+	xAbluftBoxAktiv   : BOOL;   (* eine Box aktiv + gueltiger Abluft-Feuchtewert *)
+	rLuftaufbLeistung : REAL;	(* berechnete Leistungsvorgabe *)	
+	rAbluftFeuchteAkt : REAL;   (* Feuchtewert der aktiven Box *)
 	fbPidLuftaufb : PIDAdvanced;
 END_VAR
 
@@ -1819,6 +1870,7 @@ ELSE
     gStatusAnlage.Aktor[AKTOR_VENTILATOR] := STATUS_NICHT_AKTIV;
 END_IF;
 
+aoFuVentilator := gAktoren.rVentilatorSollwert;
 
 (*
 ===============================================================================
@@ -1851,7 +1903,7 @@ ELSE
 END_IF;
 
 doFrgLuftaufber := gAktoren.xFrgLuftaufbereiter;
-
+aoLeistVorgLuftaufber := gAktoren.rLuftaufbereiterSollwert;
 
 (*
 ===============================================================================
@@ -1907,7 +1959,7 @@ VAR
 	xBoxAnf              : BOOL;   (* Ventilatoranforderung durch eine Box *)
 END_VAR
 
-]]></iecDecl></data></addData></pou><pou name="HmiMappingCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="rt_Box_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Intervall"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Nachtr"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Stocktemp"><type><derived name="R_TRIG"/></type></variable><variable name="lastBoxIndex"><type><USINT/></type></variable><variable name="uIdx"><type><USINT/></type></variable><variable name="firstStep"><type><BOOL/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
+]]></iecDecl></data></addData></pou><pou name="HmiMappingCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="rt_Box_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Intervall"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Nachtr"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Stocktemp"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Auto"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="lastBoxIndex"><type><USINT/></type></variable><variable name="uIdx"><type><USINT/></type></variable><variable name="firstStep"><type><BOOL/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
 ================================================================================
  File        : HMIMappingCyclic.st
  Project     : CControl_Lite
@@ -2063,9 +2115,26 @@ Luftaufbereitung
 gBetriebsparameter.Luftaufbereitung.VerzWetterwechsel := Par_Luftaufbereitung_VerzWetterwechsel;
 gBetriebsparameter.Luftaufbereitung.SaettigungFrischluftEin := Par_Luftaufbereitung_SaettigungFrischlEin;
 gBetriebsparameter.Luftaufbereitung.Hysterese := Par_Luftaufbereitung_Hysterese;
-gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin:= Par_Luftaufbereitung_AutomatikbetriebEin;
-gBetriebsparameter.Luftaufbereitung.DauerbetriebEin := Par_Luftaufbereitung_DauerbetriebEin;
-gBetriebsparameter.Luftaufbereitung.Aus := Par_Luftaufbereitung_Aus;
+//--- Luftaufbereitung: Betriebsartenwahl (flankengesteuert, gegenseitig verriegelt) ---
+rt_Luftaufb_Auto (CLK := Par_Luftaufbereitung_AutomatikbetriebEin);
+rt_Luftaufb_Dauer(CLK := Par_Luftaufbereitung_DauerbetriebEin);
+rt_Luftaufb_Aus  (CLK := Par_Luftaufbereitung_Aus);
+
+IF rt_Luftaufb_Auto.Q THEN
+	Par_Luftaufbereitung_DauerbetriebEin     := FALSE;
+	Par_Luftaufbereitung_Aus                 := FALSE;
+ELSIF rt_Luftaufb_Dauer.Q THEN
+	Par_Luftaufbereitung_AutomatikbetriebEin := FALSE;
+	Par_Luftaufbereitung_Aus                 := FALSE;
+ELSIF rt_Luftaufb_Aus.Q THEN
+	Par_Luftaufbereitung_AutomatikbetriebEin := FALSE;
+	Par_Luftaufbereitung_DauerbetriebEin     := FALSE;
+END_IF;
+
+//Aufbereitete Anwahl an interne Betriebsparameter uebergeben
+gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin := Par_Luftaufbereitung_AutomatikbetriebEin;
+gBetriebsparameter.Luftaufbereitung.DauerbetriebEin     := Par_Luftaufbereitung_DauerbetriebEin;
+gBetriebsparameter.Luftaufbereitung.Aus                 := Par_Luftaufbereitung_Aus;
 //Spezifisch Heizregister
 gBetriebsparameter.Luftaufbereitung.P := Par_Luftaufbereitung_P;
 gBetriebsparameter.Luftaufbereitung.I := Par_Luftaufbereitung_I;
@@ -2077,6 +2146,14 @@ gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll := Par_Luftaufbereitung_Temp
 gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung := Par_Luftaufbereitung_VerzBetriebsmeldung;
 gBetriebsparameter.Luftaufbereitung.Auskuehlzeit := Par_Luftaufbereitung_Auskuehlzeit;
 gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh := Par_Luftaufbereitung_BetriebsmeldungVorh;
+
+(*
+---------------------------------------------------------------------------
+Abluft
+---------------------------------------------------------------------------
+*)
+gBetriebsparameter.Abluftventilator.FeuchteSoll := Par_Abluft_FeuchteSoll;
+gBetriebsparameter.Abluftventilator.Hysterese := Par_Abluft_FeuchteHysterese;
 
 (*
 ---------------------------------------------------------------------------
@@ -2365,7 +2442,7 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[1].DauerbetriebEin;
 		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[1].IntervallbetriebEin;
 		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[1].NachtrocknungEin;
-	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[2].StocktemperaturEin;
+	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[1].StocktemperaturEin;
 		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[1].Aus;	
 	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
 	 	HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
@@ -2524,7 +2601,7 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	rt_Box_Dauer(CLK := HMI_OUT_Box1_DauerbetriebEin);
 	rt_Box_Intervall(CLK := HMI_OUT_Box1_IntervallbetriebEIn);
 	rt_Box_Nachtr(CLK := HMI_OUT_Box1_NachtrocknungEin);
-	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box1_StocktemperaturEin);
 	
 	IF rt_Box_Aus.Q THEN
 	    HMI_OUT_Box1_DauerbetriebEin     := FALSE;
@@ -2587,6 +2664,32 @@ ELSE
 	HMI_Ventilator1_FarbeIcon := ICON_GRAU;
 END_IF;
 
+//Luftaufbereitung
+IF gBetriebsparameter.Ausstattung.Luftaufbereiter THEN 
+	IF gAlarmBetriebLuftaufber THEN 
+		Par_Luftaufbereitung_FarbeIcon := ICON_ROT;
+	ELSIF gAktoren.xFrgLuftaufbereiter THEN
+		Par_Luftaufbereitung_FarbeIcon := ICON_GELB;
+	ELSE 
+		Par_Luftaufbereitung_FarbeIcon := ICON_GRAU;
+	END_IF;
+ELSE 
+	Par_Luftaufbereitung_FarbeIcon := ICON_HIDDEN;	
+END_IF;
+
+//Abluftventilator
+IF gBetriebsparameter.Ausstattung.Abluftventilator THEN 
+	IF FALSE THEN //Abluftventilator hat keinen Alarm
+		HMI_Abluft_FarbeIcon := ICON_ROT;
+	ELSIF gAktoren.xFrgAbluftventilator THEN
+		HMI_Abluft_FarbeIcon := ICON_GELB;
+	ELSE 
+		HMI_Abluft_FarbeIcon := ICON_GRAU;
+	END_IF;
+ELSE 
+	HMI_Abluft_FarbeIcon := ICON_HIDDEN;	
+END_IF;
+
 (*
 -------------------------------------------------------------------------------
  ALARME fuer Visu aufbereiten ARRAY -> UDINT Maske da Arrays nicht direkt
@@ -2627,6 +2730,9 @@ VAR
 	rt_Box_Intervall : R_TRIG;
 	rt_Box_Nachtr : R_TRIG;
 	rt_Box_Stocktemp : R_TRIG;
+	rt_Luftaufb_Auto : R_TRIG;
+	rt_Luftaufb_Dauer : R_TRIG;
+	rt_Luftaufb_Aus : R_TRIG;
 	lastBoxIndex : USINT;
 	uIdx : USINT;
 	firstStep : BOOL;
