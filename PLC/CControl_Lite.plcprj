@@ -1686,7 +1686,7 @@ END_IF;
 				</functionBlock>
 			</functionBlocks>
 			<programs>
-				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1787148064">
+				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1787255891">
 					<vars>
 						<localVars>
 							<var name="fbFrischluftTempAvg" type="FB_MovAvgFlt"/>
@@ -2071,8 +2071,8 @@ IF gAktModus <> IOTEST THEN
     ---------------------------------------------------------------------------
     *)
     hw_do1 := doFrgLuftaufber;
-    hw_do2 := doFrgBox1 AND gBetriebsparameter.Boxen[1].xBoxAktiv;
-    hw_do3 := doFrgBox2 AND gBetriebsparameter.Boxen[2].xBoxAktiv;
+    hw_do2 := doFrgBox1;
+    hw_do3 := doFrgBox2;
     hw_do4 := doFrgAbluftventilator;
     hw_do5 := doFrgVentilator;
 
@@ -2314,7 +2314,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1786113294">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1787254756">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
@@ -2501,6 +2501,7 @@ fbSchlechtwetterBox2();
 
 //Aktualwerte auf globale Werte schreiben
 gStatusAnlage.Box[2].WetterIstSchlecht := fbSchlechtwetterBox2.WetterIstSchlecht;
+gStatusAnlage.Box[2].IconWitterung := fbSchlechtwetterBox2.WetterIstSchlecht;
 gStatusAnlage.Box[2].AktSchlechtwetterPuls := fbSchlechtwetterBox2.SchlechtwetterPulszeitAktuell;
 gStatusAnlage.Box[2].AktSchlechtwetterPause := fbSchlechtwetterBox2.SchlechtwetterPausezeitAktuell;
 gStatusAnlage.Box[2].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[2].xBoxAktiv;
@@ -2775,7 +2776,7 @@ gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_VENTILATOR] := xFL_Ventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1785182087">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1787254384">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -2789,9 +2790,29 @@ gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_VENTILATOR] := xFL_Ventilator;
 							</var>
 							<var name="uStromBegrStart1" type="UINT"/>
 							<var name="uStromBegrStopp1" type="UINT"/>
+							<var name="nAktMin" type="UINT"/>
+							<var name="nTarifStart" type="UINT"/>
+							<var name="nTarifStop" type="UINT"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM AblaufstrgCyclic
+
+VAR
+	stateEntry : BOOL := TRUE;
+	xStartFreigabe : BOOL;
+	xStopAnforderung : BOOL;
+	xTestbetrieb : BOOL;
+	nextModus : eBetriebsmodus := STILLSTAND;
+	uStromBegrStart1 : UINT;
+	uStromBegrStopp1 : UINT;
+	nAktMin       : UINT;
+	nTarifStart   : UINT;
+	nTarifStop    : UINT;
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -2950,12 +2971,30 @@ Strombegrenzung.StartZeit1 := TO_REAL(uStromBegrStart1);
 Strombegrenzung.StoppZeit1 := TO_REAL(uStromBegrStopp1);
 Strombegrenzung();
 
+(* ============================================================================
+   TARIFABSCHALTUNG - Zeitfenster (Minuten des Tages 0..1439)
+   ============================================================================ *)
+nAktMin     := TO_UINT(sysClock.hours) * 60 + TO_UINT(sysClock.minutes);
+nTarifStart := gBetriebsparameter.Tarifabschaltung.Zeitfenster.StartStd * 60
+             + gBetriebsparameter.Tarifabschaltung.Zeitfenster.StartMin;
+nTarifStop  := gBetriebsparameter.Tarifabschaltung.Zeitfenster.StoppStd * 60
+             + gBetriebsparameter.Tarifabschaltung.Zeitfenster.StoppMin;
+
+//Tarif-Fenster aktiv? (mit Mitternachts-Umschlag)
+IF nTarifStart = nTarifStop THEN
+    gCmdAnlage.xTarifAbschaltung := FALSE;                 //kein Fenster parametriert
+ELSIF nTarifStart < nTarifStop THEN
+    gCmdAnlage.xTarifAbschaltung := (nAktMin >= nTarifStart) AND (nAktMin < nTarifStop);
+ELSE
+    gCmdAnlage.xTarifAbschaltung := (nAktMin >= nTarifStart) OR  (nAktMin < nTarifStop);
+END_IF;
+
 gAktoren.Heizregister();
 gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787147029">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787255015">
 					<vars>
 						<localVars>
 							<var name="xLuftaufbHystEin" type="BOOL">
@@ -2964,6 +3003,7 @@ gAktoren.Warmluftofen();
 							<var name="xLuftaufbPidEn" type="BOOL">
 								<descr>PID Heizregister aktiv</descr>
 							</var>
+							<var name="xTrocknungAktiv" type="BOOL"/>
 							<var name="xAbluftBoxAktiv" type="BOOL">
 								<descr>eine Box aktiv + gueltiger Abluft-Feuchtewert</descr>
 							</var>
@@ -2973,23 +3013,11 @@ gAktoren.Warmluftofen();
 							<var name="rAbluftFeuchteAkt" type="REAL">
 								<descr>Feuchtewert der aktiven Box</descr>
 							</var>
+							<var name="rVentDrehzahlBasis" type="REAL"/>
 							<var name="fbPidLuftaufb" type="PIDAdvanced"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[PROGRAM LeistungCyclic
-
-VAR
-	xLuftaufbHystEin : BOOL;	(* Hysterese-Merker Automatikbetrieb *)
-	xLuftaufbPidEn : BOOL; 		(* PID Heizregister aktiv *)
-	xAbluftBoxAktiv   : BOOL;   (* eine Box aktiv + gueltiger Abluft-Feuchtewert *)
-	rLuftaufbLeistung : REAL;	(* berechnete Leistungsvorgabe *)	
-	rAbluftFeuchteAkt : REAL;   (* Feuchtewert der aktiven Box *)
-	fbPidLuftaufb : PIDAdvanced;
-END_VAR
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -3029,22 +3057,33 @@ CASE gAktModus OF
         gAktoren.xFrgVentilator  := TRUE;
 
         //*** Drehzahlvorgabe Ventilator 1 ***
+        //Basisdrehzahl: mit aktiver Luftaufbereitung -> DrehzahlFixLuftaufbereiter,
+        //sonst Frischluft-Drehzahl (xFrgLuftaufbereiter aus Vorzyklus, unkritisch).
+        IF gAktoren.xFrgLuftaufbereiter THEN
+            rVentDrehzahlBasis := gBetriebsparameter.Ventilator.DrehzahlFixLuftaufbereiter;
+        ELSE
+            rVentDrehzahlBasis := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
+        END_IF;
+		//Strombegrenzung
         IF Strombegrenzung.StrombegrenzungEin THEN
-            IF (gBetriebsparameter.Ventilator.DrehzahlFixFrischluft > gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung) THEN
+            IF (rVentDrehzahlBasis > gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung) THEN
                 gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlStrombegrenzung;
             ELSE
-                gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
+                gCmdAnlage.Leistung.DrehzahlVentilator := rVentDrehzahlBasis;
             END_IF;
-        ELSIF IBN_FALSE THEN
-            gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlBeiAuskuehlphase;
         ELSE
-            gCmdAnlage.Leistung.DrehzahlVentilator := gBetriebsparameter.Ventilator.DrehzahlFixFrischluft;
+            gCmdAnlage.Leistung.DrehzahlVentilator := rVentDrehzahlBasis;
         END_IF;
-
+		
         (* --- Luftaufbereitung --- *)
-        //Grundfreigaben der FBs (werden je Typ unten aktiviert)
+        //Grundfreigaben der FBs (werden je Typ unten aktiviert wenn jeweilige Luftaufbereitung wirklich aktiv)
         gAktoren.Heizregister.Freigabe := FALSE;
         gAktoren.Warmluftofen.Freigabe := FALSE;
+        
+		//Ermittlung ob Trocknung aktiv (fuer Luftaufbereitung)
+		//-> im Tarif-Fenster Luftaufbereitung sperren (startet Auskuehlung)
+		xTrocknungAktiv := (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv)
+		                 AND NOT gCmdAnlage.xTarifAbschaltung;
 
         CASE gBetriebsparameter.Luftaufbereitung.Typ OF
 
@@ -3063,10 +3102,10 @@ CASE gAktModus OF
                 );
 
 
-            HEIZREGISTER:
+            HEIZREGISTER:				
                 //--- EIN/AUS ueber Frischluft-Saettigungsdefizit (fbHeizregister) ---
                 //Eingaenge beschalten (Aufruf erfolgt in AblaufstrgCyclic)
-                gAktoren.Heizregister.Freigabe                  := TRUE;
+                gAktoren.Heizregister.Freigabe                  := xTrocknungAktiv;
                 gAktoren.Heizregister.QuitFehler                := gQuitErr;
                 gAktoren.Heizregister.Automatikbetrieb          := gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin;
                 gAktoren.Heizregister.Dauerbetrieb              := gBetriebsparameter.Luftaufbereitung.DauerbetriebEin;
@@ -3128,7 +3167,7 @@ CASE gAktModus OF
                 //--- Warmluftofen: EIN/AUS ueber Saettigungsdefizit, Zuendzeit-/
                 //    Betriebsmeldungsueberwachung, Auskuehlzeit (fbBoxenWLO) ---
                 //Eingaenge beschalten (Aufruf erfolgt in AblaufstrgCyclic)
-                gAktoren.Warmluftofen.Freigabe                    := TRUE;
+                gAktoren.Warmluftofen.Freigabe                    := xTrocknungAktiv;
                 gAktoren.Warmluftofen.Automatikbetrieb            := gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin;
                 gAktoren.Warmluftofen.Dauerbetrieb                := gBetriebsparameter.Luftaufbereitung.DauerbetriebEin;
                 gAktoren.Warmluftofen.FehlerSensorAussenluft      := NOT gBetriebsparameter.Ausstattung.SensorFrischluft;
@@ -3181,18 +3220,28 @@ CASE gAktModus OF
 
 	    (* --- Abluftventilator: Feuchteregelung der aktiven Box --- *)
         IF gBetriebsparameter.Ausstattung.Abluftventilator THEN
+            
+            //Aktive Box bestimmen + Feuchtewert waehlen.
+            //Bei nur 1 Abluftfuehler wird dieser als Ersatz fuer die andere Box genutzt.
+            xAbluftBoxAktiv := FALSE;
 
-            //Aktive Box bestimmen + gueltigen Feuchtewert waehlen (nur aktive Box)
-            IF (gBetriebsparameter.Boxen[1].xBoxAktiv AND gAktoren.Box[1].xSollOffen
-                AND gBetriebsparameter.Ausstattung.SensorAbluftBox1) THEN
-                rAbluftFeuchteAkt := aiAbluftBox1Feucht;
-                xAbluftBoxAktiv   := TRUE;
-            ELSIF (gBetriebsparameter.Boxen[2].xBoxAktiv AND gAktoren.Box[2].xSollOffen
-                AND gBetriebsparameter.Ausstattung.SensorAbluftBox2) THEN
-                rAbluftFeuchteAkt := aiAbluftBox2Feucht;
-                xAbluftBoxAktiv   := TRUE;
-            ELSE
-                xAbluftBoxAktiv   := FALSE;
+            IF (gBetriebsparameter.Boxen[1].xBoxAktiv AND gAktoren.Box[1].xSollOffen) THEN
+                IF gBetriebsparameter.Ausstattung.SensorAbluftBox1 THEN
+                    rAbluftFeuchteAkt := aiAbluftBox1Feucht;
+                    xAbluftBoxAktiv   := TRUE;
+                ELSIF gBetriebsparameter.Ausstattung.SensorAbluftBox2 THEN
+                    rAbluftFeuchteAkt := aiAbluftBox2Feucht;   //Ersatzfuehler
+                    xAbluftBoxAktiv   := TRUE;
+                END_IF;
+
+            ELSIF (gBetriebsparameter.Boxen[2].xBoxAktiv AND gAktoren.Box[2].xSollOffen) THEN
+                IF gBetriebsparameter.Ausstattung.SensorAbluftBox2 THEN
+                    rAbluftFeuchteAkt := aiAbluftBox2Feucht;
+                    xAbluftBoxAktiv   := TRUE;
+                ELSIF gBetriebsparameter.Ausstattung.SensorAbluftBox1 THEN
+                    rAbluftFeuchteAkt := aiAbluftBox1Feucht;   //Ersatzfuehler (nur 1 Fuehler)
+                    xAbluftBoxAktiv   := TRUE;
+                END_IF;
             END_IF;
 
             IF xAbluftBoxAktiv THEN
@@ -3270,7 +3319,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787212213">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787255928">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3463,6 +3512,10 @@ gAktoren.xQuitFehler := gQuitErr;
  FALSE = schließen
 -------------------------------------------------------------------------------
 *)
+
+//Standard: Klappen zu -> verhindert Nachhaengen, wenn eine aktive Box eine Klappe = NONE hat
+xFreigabeKlappe1Out := FALSE;
+xFreigabeKlappe2Out := FALSE;
 
 IF (gAktoren.Box[1].xSollOffen OR xNotbetriebBox1) THEN
 	
@@ -3660,6 +3713,9 @@ xLuftaufbNachlauf := gAktoren.xFrgLuftaufbereiter
     OR (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND diBetriebLuftaufber)
     OR (NOT  gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND TOF_LuftaufbAuskuehl.Q);
 
+//global Spiegeln
+gAktoren.xLuftaufbNachlauf := xLuftaufbNachlauf;
+
 //Physikalische Ventilatoranforderung der Boxen
 xBoxAnf := (gAktoren.Box[1].xSollOffen AND xBox1EndlErreicht AND gBetriebsparameter.Boxen[1].xBoxAktiv)
         OR (gAktoren.Box[2].xSollOffen AND xBox2EndlErreicht AND gBetriebsparameter.Boxen[2].xBoxAktiv);
@@ -3673,7 +3729,7 @@ gAktoren.rLuftaufbereiterSollwert := gCmdAnlage.Leistung.DrehzahlLuftaufbereitun
 
 //Sollwert begrenzen wenn Freigabe Ventilator erteilt
 IF (doFrgVentilator) THEN
-    IF (xLuftaufbNachlauf AND NOT xBoxAnf) THEN
+        IF (xLuftaufbNachlauf AND NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv)) THEN
         //Nur die Luftaufbereitung haelt den Ventilator (Auskuehl-/Nachlaufphase):
         //Drehzahl "bei Auskuehlphase", begrenzt auf Min/Max des Luftaufbereiters
         //(diese Grenzen gelten vorrangig).
@@ -3763,7 +3819,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787217577">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787254702">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -4482,7 +4538,6 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
-	HMI_IN_Box1_IconWitterung := gStatusAnlage.Box[1].WetterIstSchlecht;
 	//Detailansicht Box 2
 	
 	//BOX 2 HIER EINFACH NUR GEH LOSSN!!! Wird in der VISU verwaltet!
@@ -4569,7 +4624,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787218029">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787253115">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -4587,6 +4642,7 @@ END_FOR;
 							<var name="xStocktemperaturBox2Aktiv" type="BOOL"/>
 							<var name="xBox1Freigegeben" type="BOOL"/>
 							<var name="xBox2Freigegeben" type="BOOL"/>
+							<var name="xTarifStopWirksam" type="BOOL"/>
 							<var name="usAktStunde" type="USINT"/>
 							<var name="udIntervallMaskeBox1" type="UDINT"/>
 							<var name="udIntervallMaskeBox2" type="UDINT"/>
@@ -4609,6 +4665,7 @@ END_FOR;
 							<var name="xLuftaufbVorhanden" type="BOOL">
 								<descr>Heizregister oder Ofen vorhanden -&gt; kein Puls/Pause</descr>
 							</var>
+							<var name="xAnlageBetrieb" type="BOOL"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -4630,6 +4687,7 @@ VAR
 	xStocktemperaturBox2Aktiv : BOOL;
 	xBox1Freigegeben : BOOL;
 	xBox2Freigegeben : BOOL;
+	xTarifStopWirksam : BOOL;
 	usAktStunde : USINT;
 	udIntervallMaskeBox1 : UDINT;
 	udIntervallMaskeBox2 : UDINT;
@@ -4644,6 +4702,7 @@ VAR
 	xStockHaltBox1 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 1 *)
 	xStockHaltBox2 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 2 *)
 	xLuftaufbVorhanden : BOOL;   (* Heizregister oder Ofen vorhanden -> kein Puls/Pause *)
+	xAnlageBetrieb : BOOL;
 END_VAR
 
 ]]>
@@ -4733,12 +4792,12 @@ END_IF;
  waehrend einer Sperre oder Stoerung abgezaehlt wird.
 ================================================================================
 *)
-
-// Die Nachtrocknungssperre wirkt nur für Box 2. Haben beide Boxen
-// Nachtrocknung aktiv und ueberlappende Stundenmasken, laeuft nur
-// Box 1.
+                    
+// Nachtrocknung hat Vorrang und uebersteuert die jeweils andere (aktive) Box.
+// Bei beidseitiger Nachtrocknung mit ueberlappenden Stundenmasken laeuft nur Box 1.
 xBox1Freigegeben := gCmdAnlage.Auto
-                    AND NOT gCmdAnlage.FehlerStopp;
+                    AND NOT gCmdAnlage.FehlerStopp
+                    AND NOT (xNachtrocknungBox2Anwahl AND NOT xNachtrocknungBox1Anwahl);
 
 xBox2Freigegeben := gCmdAnlage.Auto
                     AND NOT gCmdAnlage.FehlerStopp
@@ -4867,12 +4926,22 @@ xExternStop  := gCmdAnlage.StoppExtern;
 (* Fehlerstopp vorerst ohne Alarmmatrix, Variable wird in AlarmCyclic beschrieben *)
 //gCmdAnlage.FehlerStopp := FALSE;
 
+//Anlage laeuft solange eine Box aktiv ODER die Luftaufbereitung noch auskuehlt
+xAnlageBetrieb := xMindEineBoxAktiv OR gAktoren.xLuftaufbNachlauf;
+
+//Tarifabschaltung wirkt erst, wenn Luftaufbereitung/Auskuehlung/Betriebsmeldung
+//abgeschlossen sind (diese haben Vorrang).
+xTarifStopWirksam := gCmdAnlage.xTarifAbschaltung AND NOT gAktoren.xLuftaufbNachlauf;
+
 gCmdAnlage.Start := gCmdAnlage.Auto
-                    AND (xMindEineBoxAktiv OR xExternStart)
-                    AND NOT gCmdAnlage.FehlerStopp;
+                    AND (xAnlageBetrieb OR xExternStart)
+                    AND NOT gCmdAnlage.FehlerStopp
+                    AND NOT xTarifStopWirksam;
 
 gCmdAnlage.Stopp := gCmdAnlage.Auto
-                    AND ((NOT xMindEineBoxAktiv) OR xExternStop OR gCmdAnlage.FehlerStopp);
+                    AND ((NOT xAnlageBetrieb) OR xExternStop
+                         OR gCmdAnlage.FehlerStopp
+                         OR xTarifStopWirksam);
 ]]>
 					</sourceCode>
 				</program>
@@ -5128,28 +5197,32 @@ END_STRUCT;
 						<var name="Heizregister" type="fbHeizregister">
 							<descr>Heizregister Logik</descr>
 						</var>
-						<var name="xFrgVentilator" type="BOOL"/>
-						<var name="xFrgLuftaufbereiter" type="BOOL"/>
-						<var name="xFrgAbluftventilator" type="BOOL"/>
-						<var name="xQuitFehler" type="BOOL"/>
 						<var name="rVentilatorSollwert" type="REAL"/>
 						<var name="rLuftaufbereiterSollwert" type="REAL"/>
 						<var name="eStatusVentilator" type="eStatus"/>
 						<var name="eStatusLuftaufbereiter" type="eStatus"/>
+						<var name="xFrgVentilator" type="BOOL"/>
+						<var name="xFrgLuftaufbereiter" type="BOOL"/>
+						<var name="xFrgAbluftventilator" type="BOOL"/>
+						<var name="xQuitFehler" type="BOOL"/>
+						<var name="xLuftaufbNachlauf" type="BOOL">
+							<descr>Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung)</descr>
+						</var>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[ST_Aktor_Allgemein: STRUCT
 	Box : ARRAY[1..2] OF ST_Aktor_Box;
 	Warmluftofen : fbBoxenWLO;	(* Warmluftofen Logik *)
 	Heizregister : fbHeizregister;	(* Heizregister Logik *)
-	xFrgVentilator : BOOL;
-	xFrgLuftaufbereiter : BOOL;
-	xFrgAbluftventilator : BOOL;
-	xQuitFehler : BOOL;
 	rVentilatorSollwert : REAL;
 	rLuftaufbereiterSollwert : REAL;
 	eStatusVentilator : eStatus;
 	eStatusLuftaufbereiter : eStatus;
+	xFrgVentilator : BOOL;
+	xFrgLuftaufbereiter : BOOL;
+	xFrgAbluftventilator : BOOL;
+	xQuitFehler : BOOL;
+	xLuftaufbNachlauf : BOOL;   (* Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung) *)
 END_STRUCT;
 
 ]]>
@@ -5165,8 +5238,25 @@ END_STRUCT;
 						<var name="Start" type="BOOL"/>
 						<var name="Stopp" type="BOOL"/>
 						<var name="FehlerStopp" type="BOOL"/>
+						<var name="xTarifAbschaltung" type="BOOL">
+							<descr>Tarif-Zeitfenster aktiv</descr>
+						</var>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[ST_CmdAnlage: STRUCT
+	Test : BOOL;
+	Auto : BOOL;
+	Leistung : ST_CmdLeistung;
+	StoppExtern : BOOL;
+	StartExtern : BOOL;
+	Start : BOOL;
+	Stopp : BOOL;
+	FehlerStopp : BOOL;
+	xTarifAbschaltung : BOOL;	(* Tarif-Zeitfenster aktiv *)
+END_STRUCT;
+
+]]>
+					</iecDeclaration>
 				</struct>
 				<struct name="ST_CmdLeistung" version="1.0.0">
 					<vars>
@@ -77645,7 +77735,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="17497">
+			<root name="CControl_Lite" nextID="18075">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
