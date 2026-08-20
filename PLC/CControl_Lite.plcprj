@@ -3270,7 +3270,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787061940">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787212213">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3360,6 +3360,18 @@ END_CASE;
 							<var name="xBoxAnf" type="BOOL">
 								<descr>Ventilatoranforderung durch eine Box</descr>
 							</var>
+							<var name="xKlappe1OffenErr" type="BOOL">
+								<descr>Klappe 1 Position  offen  erreicht (DI oder zeitbasiert)</descr>
+							</var>
+							<var name="xKlappe1GeschlErr" type="BOOL">
+								<descr>Klappe 1 Position  geschlossen  erreicht</descr>
+							</var>
+							<var name="xKlappe2OffenErr" type="BOOL">
+								<descr>Klappe 2 Position  offen  erreicht</descr>
+							</var>
+							<var name="xKlappe2GeschlErr" type="BOOL">
+								<descr>Klappe 2 Position  geschlossen  erreicht</descr>
+							</var>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -3399,6 +3411,10 @@ VAR
 	TOF_LuftaufbAuskuehl : TOF;    (* Auskuehl-/Nachlaufzeit Luftaufbereitung *)
 	xLuftaufbNachlauf    : BOOL;   (* Ventilator-Nachlauf durch Luftaufbereitung aktiv *)
 	xBoxAnf              : BOOL;   (* Ventilatoranforderung durch eine Box *)
+	xKlappe1OffenErr  : BOOL;   (* Klappe 1 Position "offen" erreicht (DI oder zeitbasiert) *)
+	xKlappe1GeschlErr : BOOL;   (* Klappe 1 Position "geschlossen" erreicht *)
+	xKlappe2OffenErr  : BOOL;   (* Klappe 2 Position "offen" erreicht *)
+	xKlappe2GeschlErr : BOOL;   (* Klappe 2 Position "geschlossen" erreicht *)
 END_VAR
 
 ]]>
@@ -3498,7 +3514,6 @@ END_IF;
 -------------------------------------------------------------------------------
 *) 
 
-
 fbBoxenklappe1(
     Oeffnen            := xFreigabeKlappe1Out,
     Schliessen         := NOT xFreigabeKlappe1Out,
@@ -3513,16 +3528,6 @@ fbBoxenklappe1(
 
 (* Physischer Ausgang Wechsler-Relais *)
 doFrgBox1 := fbBoxenklappe1.OeffnenOut;
-
-//Box 1 hat ihre Endlage erreicht
-xBox1EndlErreicht := //Klappe 1
-					 ((gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GEOEFFNET AND diBox1Offen) OR 
-					  (gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GESCHLOSSEN AND diBox1Geschl) OR
-					   gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_NONE) AND 
-					  //Klappe 2
-					 ((gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GEOEFFNET AND diBox2Offen) OR 
-					  (gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GESCHLOSSEN AND diBox2Geschl) OR
-					   gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_NONE);
 
 
 (*
@@ -3568,14 +3573,7 @@ fbBoxenklappe2(
 (* Physischer Ausgang Wechsler-Relais *)
 doFrgBox2 := fbBoxenklappe2.OeffnenOut;
 
-xBox2EndlErreicht := //Klappe 1
-					 ((gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GEOEFFNET AND diBox1Offen) OR 
-					  (gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GESCHLOSSEN AND diBox1Geschl) OR
-					   gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_NONE) AND 
-					  //Klappe 2
-					 ((gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GEOEFFNET AND diBox2Offen) OR 
-					  (gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GESCHLOSSEN AND diBox2Geschl) OR
-					   gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_NONE);
+
 
 (*
 -------------------------------------------------------------------------------
@@ -3595,6 +3593,48 @@ ELSIF diBox2Geschl THEN
 ELSE
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_UNBEKANNT;
 END_IF;
+
+
+(* ============================================================================
+   Klappen-Position "erreicht" je physischer Klappe
+   ----------------------------------------------------------------------------
+   Mit Endlagenueberwachung  -> reale Endlagen-DI
+   Ohne Endlagenueberwachung -> zeitbasierter FB-Ausgang (KlappeIstOffen/Geschl)
+   -> FU startet auch ohne Endlagenschalter nach Ablauf der Klappenlaufzeit,
+      statt bedingungslos auf "Endlage offen" zu warten.
+   ============================================================================ *)
+IF gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe1 THEN
+    xKlappe1OffenErr  := diBox1Offen;
+    xKlappe1GeschlErr := diBox1Geschl;
+ELSE
+    xKlappe1OffenErr  := fbBoxenklappe1.KlappeIstOffenOut;
+    xKlappe1GeschlErr := fbBoxenklappe1.KlappeIstGeschlOut;
+END_IF;
+
+IF gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe2 THEN
+    xKlappe2OffenErr  := diBox2Offen;
+    xKlappe2GeschlErr := diBox2Geschl;
+ELSE
+    xKlappe2OffenErr  := fbBoxenklappe2.KlappeIstOffenOut;
+    xKlappe2GeschlErr := fbBoxenklappe2.KlappeIstGeschlOut;
+END_IF;
+
+xBox1EndlErreicht :=
+    ((gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GEOEFFNET   AND xKlappe1OffenErr)  OR
+     (gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_GESCHLOSSEN AND xKlappe1GeschlErr) OR
+      gBetriebsparameter.Boxen[1].StellungKlappe1 = FBBOX_NONE) AND
+    ((gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GEOEFFNET   AND xKlappe2OffenErr)  OR
+     (gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GESCHLOSSEN AND xKlappe2GeschlErr) OR
+      gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_NONE);
+
+xBox2EndlErreicht :=
+    ((gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GEOEFFNET   AND xKlappe1OffenErr)  OR
+     (gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GESCHLOSSEN AND xKlappe1GeschlErr) OR
+      gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_NONE) AND
+    ((gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GEOEFFNET   AND xKlappe2OffenErr)  OR
+     (gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GESCHLOSSEN AND xKlappe2GeschlErr) OR
+      gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_NONE);
+
 
 (*
 ===============================================================================
@@ -3723,7 +3763,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787146227">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787217577">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -4175,6 +4215,7 @@ gIoTest.AnalogOut.aoFuVentilator			:= HMI_TEST_aoFuVentilator;
 gIoTest.AnalogOut.aoLeistVorgLuftaufber 	:= HMI_TEST_aoLeistVorgLuftaufber;
 
 
+
 (*
 -------------------------------------------------------------------------------
  IO-MAPPING BOXEN 
@@ -4528,7 +4569,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787146678">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787218029">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -4565,6 +4606,9 @@ END_FOR;
 								<descr>Haltebit Zweipunkt Box 2</descr>
 								<initValue>FALSE</initValue>
 							</var>
+							<var name="xLuftaufbVorhanden" type="BOOL">
+								<descr>Heizregister oder Ofen vorhanden -&gt; kein Puls/Pause</descr>
+							</var>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -4599,6 +4643,7 @@ VAR
 	xSchlechtwetterBox2Aktiv : BOOL;
 	xStockHaltBox1 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 1 *)
 	xStockHaltBox2 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 2 *)
+	xLuftaufbVorhanden : BOOL;   (* Heizregister oder Ofen vorhanden -> kein Puls/Pause *)
 END_VAR
 
 ]]>
@@ -4740,11 +4785,18 @@ END_IF;
 ================================================================================
 *)
 
+//Luftaufbereitung vorhanden (Heizregister oder Ofen) -> im Automatikbetrieb
+//durchgehend trocknen statt Lauf/Pause
+xLuftaufbVorhanden := gBetriebsparameter.Ausstattung.Luftaufbereiter
+                      AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER 
+                      	   OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN);
+
 //===== BOX 1 =====
 xSchlechtwetterBox1Aktiv := xDauerbetriebBox1Anwahl
                             AND xBox1Freigegeben
                             AND gStatusAnlage.Box[1].WetterIstSchlecht
-                            AND (gStatusAnlage.Box[1].AktSchlechtwetterPause <> 0);
+                            AND (gStatusAnlage.Box[1].AktSchlechtwetterPause <> 0)
+                            AND NOT xLuftaufbVorhanden;
 
 fbPulsPauseBox1.Freigabe      := xSchlechtwetterBox1Aktiv;
 fbPulsPauseBox1.StartMitPause := FALSE;   //bei Wetterumschlag zuerst trocknen
@@ -4764,7 +4816,8 @@ END_IF;
 xSchlechtwetterBox2Aktiv := xDauerbetriebBox2Anwahl
                             AND xBox2Freigegeben
                             AND gStatusAnlage.Box[2].WetterIstSchlecht
-                            AND (gStatusAnlage.Box[2].AktSchlechtwetterPause <> 0);
+                            AND (gStatusAnlage.Box[2].AktSchlechtwetterPause <> 0)
+                            AND NOT xLuftaufbVorhanden;
 
 fbPulsPauseBox2.Freigabe      := xSchlechtwetterBox2Aktiv;
 fbPulsPauseBox2.StartMitPause := FALSE;
@@ -77592,7 +77645,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="17350">
+			<root name="CControl_Lite" nextID="17497">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
