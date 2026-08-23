@@ -2508,7 +2508,7 @@ gStatusAnlage.Box[2].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[2].xBoxAkt
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1787045409">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1787509528">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2531,8 +2531,15 @@ gStatusAnlage.Box[2].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[2].xBoxAkt
 							<var name="xFL_Ventilator" type="BOOL"/>
 							<var name="xSummeFehler" type="BOOL"/>
 							<var name="xSummeWarnung" type="BOOL"/>
-							<var name="Ton_FaultBetriebLuftafber" type="TON"/>
-							<var name="Ton_FaultBetriebVentilator" type="TON"/>
+							<var name="TonF_SensorFrischluft" type="TON"/>
+							<var name="TonF_SensorAbluftBox1" type="TON"/>
+							<var name="TonF_SensorAbluftBox2" type="TON"/>
+							<var name="TonF_SensorTrockenluft" type="TON"/>
+							<var name="TonF_SensorStocktemp" type="TON"/>
+							<var name="TonF_KlappeBox1" type="TON"/>
+							<var name="TonF_KlappeBox2" type="TON"/>
+							<var name="TonF_Luftaufbereiter" type="TON"/>
+							<var name="TonF_Ventilator" type="TON"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -2559,8 +2566,15 @@ VAR
 	xFL_Ventilator : BOOL;
 	xSummeFehler : BOOL;
 	xSummeWarnung : BOOL;
-	Ton_FaultBetriebLuftafber : TON;
-	Ton_FaultBetriebVentilator : TON;
+	TonF_SensorFrischluft  : TON;
+    TonF_SensorAbluftBox1  : TON;
+    TonF_SensorAbluftBox2  : TON;
+    TonF_SensorTrockenluft : TON;
+    TonF_SensorStocktemp   : TON;
+    TonF_KlappeBox1        : TON;
+    TonF_KlappeBox2        : TON;
+    TonF_Luftaufbereiter   : TON;
+    TonF_Ventilator        : TON;
 END_VAR
 
 ]]>
@@ -2649,79 +2663,88 @@ xF_KlappeBox1 := gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] = STATUS_STOERUNG;
 xF_KlappeBox2 := gBetriebsparameter.Ausstattung.Box2 AND 
 	(gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_STOERUNG);
 
-// F08 Störmeldung Luftaufbereiter
-Ton_FaultBetriebLuftafber(IN := gAktoren.xFrgLuftaufbereiter AND gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND NOT diBetriebLuftaufber,
-                          PT := gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung);
-                          
-gAlarmBetriebLuftaufber := Ton_FaultBetriebLuftafber.Q;
-xF_Luftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter AND gAlarmBetriebLuftaufber;
+// F08 Störmeldung Luftaufbereiter (Rohbedingung; Verzögerung einheitlich unten)
+xF_Luftaufbereiter := gBetriebsparameter.Ausstattung.Luftaufbereiter
+                      AND gAktoren.xFrgLuftaufbereiter
+                      AND gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh
+                      AND NOT diBetriebLuftaufber;
 
-// F09 Störmeldung Ventilator
-Ton_FaultBetriebVentilator(IN := doFrgVentilator AND NOT diBetriebVentilator, PT := 2000);
-gAlarmBetriebVentilator := Ton_FaultBetriebVentilator.Q;
-xF_Ventilator := gAlarmBetriebVentilator;
+// F09 Störmeldung Ventilator (Rohbedingung)
+xF_Ventilator := doFrgVentilator AND NOT diBetriebVentilator;
 
 
 // =============================================================================
-// 2) SR-Latches
-//    Setzen: Fehlerbedingung aktiv
-//    Rücksetzen: Quit UND Fehler nicht mehr aktiv
+// 2) Verzoegerung (Verzoegerungen.Fehler) + SR-Latch je Fehler
+//    Setzen:    Fehler stand PT ms an
+//    Rücksetzen: Quit UND Rohbedingung nicht mehr aktiv
 // =============================================================================
+TonF_SensorFrischluft (IN := xF_SensorFrischluft,  PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_SensorAbluftBox1 (IN := xF_SensorAbluftBox1,  PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_SensorAbluftBox2 (IN := xF_SensorAbluftBox2,  PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_SensorTrockenluft(IN := xF_SensorTrockenluft, PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_SensorStocktemp  (IN := xF_SensorStocktemp,   PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_KlappeBox1       (IN := xF_KlappeBox1,        PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_KlappeBox2       (IN := xF_KlappeBox2,        PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_Luftaufbereiter  (IN := xF_Luftaufbereiter,   PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_Ventilator       (IN := xF_Ventilator,        PT := gBetriebsparameter.Verzoegerungen.Fehler);
 
-IF xF_SensorFrischluft THEN 
-	xFL_SensorFrischluft  := TRUE;
+IF TonF_SensorFrischluft.Q THEN 
+	xFL_SensorFrischluft := TRUE;
 ELSIF gQuitErr AND NOT xF_SensorFrischluft THEN 
-	xFL_SensorFrischluft  := FALSE; 
+	xFL_SensorFrischluft := FALSE; 
 END_IF;
 
-IF xF_SensorAbluftBox1  THEN 
-	xFL_SensorAbluftBox1  := TRUE;
+IF TonF_SensorAbluftBox1.Q THEN 
+	xFL_SensorAbluftBox1 := TRUE;
 ELSIF gQuitErr AND NOT xF_SensorAbluftBox1 THEN 
-	xFL_SensorAbluftBox1  := FALSE; 
+	xFL_SensorAbluftBox1 := FALSE; 
 END_IF;
 
-IF xF_SensorAbluftBox2  THEN 
-	xFL_SensorAbluftBox2  := TRUE;
+IF TonF_SensorAbluftBox2.Q THEN 
+	xFL_SensorAbluftBox2 := TRUE;
 ELSIF gQuitErr AND NOT xF_SensorAbluftBox2 THEN 
-	xFL_SensorAbluftBox2  := FALSE; 
+	xFL_SensorAbluftBox2 := FALSE; 
 END_IF;
 
-IF xF_SensorTrockenluft THEN 
+IF TonF_SensorTrockenluft.Q THEN 
 	xFL_SensorTrockenluft := TRUE;
 ELSIF gQuitErr AND NOT xF_SensorTrockenluft THEN 
 	xFL_SensorTrockenluft := FALSE; 
 END_IF;
 
-IF xF_SensorStocktemp   THEN 
-	xFL_SensorStocktemp   := TRUE;
+IF TonF_SensorStocktemp.Q THEN 
+	xFL_SensorStocktemp := TRUE;
 ELSIF gQuitErr AND NOT xF_SensorStocktemp THEN 
-	xFL_SensorStocktemp   := FALSE; 
+	xFL_SensorStocktemp := FALSE; 
 END_IF;
 
-IF xF_KlappeBox1 THEN 
+IF TonF_KlappeBox1.Q THEN 
 	xFL_KlappeBox1 := TRUE;
 ELSIF gQuitErr AND NOT xF_KlappeBox1 THEN 
 	xFL_KlappeBox1 := FALSE; 
 END_IF;
 
-IF xF_KlappeBox2        THEN 
-	xFL_KlappeBox2        := TRUE;
+IF TonF_KlappeBox2.Q THEN 
+	xFL_KlappeBox2 := TRUE;
 ELSIF gQuitErr AND NOT xF_KlappeBox2 THEN 
-	xFL_KlappeBox2 := FALSE;
+	xFL_KlappeBox2 := FALSE; 
 END_IF;
 
-IF xF_Luftaufbereiter THEN 
+IF TonF_Luftaufbereiter.Q THEN 
 	xFL_Luftaufbereiter := TRUE;
 ELSIF gQuitErr AND NOT xF_Luftaufbereiter THEN 
-	xFL_Luftaufbereiter   := FALSE; 
+	xFL_Luftaufbereiter := FALSE; 
 END_IF;
 
-IF xF_Ventilator THEN 
+IF TonF_Ventilator.Q THEN 
 	xFL_Ventilator := TRUE;
-ELSIF gQuitErr AND NOT xF_Luftaufbereiter THEN 
-	xFL_Ventilator   := FALSE; 
-END_IF;
+ELSIF gQuitErr AND NOT xF_Ventilator THEN 
+	xFL_Ventilator := FALSE; 
+END_IF;   
 
+// Sammelmeldungen (verzögert)
+gAlarmBetriebLuftaufber := TonF_Luftaufbereiter.Q;
+gAlarmBetriebVentilator := TonF_Ventilator.Q;
 // =============================================================================
 // 3) Sammelausgänge bilden
 // =============================================================================
@@ -2776,7 +2799,7 @@ gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_VENTILATOR] := xFL_Ventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1787254384">
+				<program name="AblaufstrgCyclic" version="1.0.0" creationDate="1773514261" lastModifiedDate="1787486215">
 					<vars>
 						<localVars>
 							<var name="stateEntry" type="BOOL">
@@ -2793,6 +2816,8 @@ gStatusAnlage.Alarm.ArrFehler[FEHLER_BETRIEBSMLDG_VENTILATOR] := xFL_Ventilator;
 							<var name="nAktMin" type="UINT"/>
 							<var name="nTarifStart" type="UINT"/>
 							<var name="nTarifStop" type="UINT"/>
+							<var name="nVorlaufMin" type="UINT"/>
+							<var name="nTarifStartLuftaufb" type="UINT"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -2809,6 +2834,8 @@ VAR
 	nAktMin       : UINT;
 	nTarifStart   : UINT;
 	nTarifStop    : UINT;
+	nVorlaufMin         : UINT;
+    nTarifStartLuftaufb : UINT;
 END_VAR
 
 ]]>
@@ -2951,6 +2978,10 @@ CASE gAktModus OF
 			Strombegrenzung.Freigabe	:= FALSE;
             gStatusAnlage.Aktor[AKTOR_SCHRITTKETTE] := STATUS_TESTBETRIEB;
         END_IF;
+        
+        // NEU: keine automatische Box-Anforderung im I/O-Test
+        gAktoren.Box[1].xSollOffen := FALSE;
+        gAktoren.Box[2].xSollOffen := FALSE;
 
         // ------------------------------------------------------------
         // Zustandswechsel
@@ -2989,12 +3020,28 @@ ELSE
     gCmdAnlage.xTarifAbschaltung := (nAktMin >= nTarifStart) OR  (nAktMin < nTarifStop);
 END_IF;
 
+// --- Vorlaufzeit: Luftaufbereitung/Trocknung früher abschalten -------------
+nVorlaufMin := TO_UINT(gBetriebsparameter.Tarifabschaltung.VorlaufzeitAbschaltungLuftaufb / 60000); // ms -> min  (*)
+IF nTarifStart >= nVorlaufMin THEN
+    nTarifStartLuftaufb := nTarifStart - nVorlaufMin;
+ELSE
+    nTarifStartLuftaufb := 1440 + nTarifStart - nVorlaufMin;   // Tagesumschlag
+END_IF;
+
+IF nTarifStart = nTarifStop THEN
+    gCmdAnlage.xTarifAbschaltungLuftaufb := FALSE;             // kein Fenster
+ELSIF nTarifStartLuftaufb < nTarifStop THEN
+    gCmdAnlage.xTarifAbschaltungLuftaufb := (nAktMin >= nTarifStartLuftaufb) AND (nAktMin < nTarifStop);
+ELSE
+    gCmdAnlage.xTarifAbschaltungLuftaufb := (nAktMin >= nTarifStartLuftaufb) OR  (nAktMin < nTarifStop);
+END_IF;
+
 gAktoren.Heizregister();
 gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787255015">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1787486258">
 					<vars>
 						<localVars>
 							<var name="xLuftaufbHystEin" type="BOOL">
@@ -3083,7 +3130,7 @@ CASE gAktModus OF
 		//Ermittlung ob Trocknung aktiv (fuer Luftaufbereitung)
 		//-> im Tarif-Fenster Luftaufbereitung sperren (startet Auskuehlung)
 		xTrocknungAktiv := (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv)
-		                 AND NOT gCmdAnlage.xTarifAbschaltung;
+		                 AND NOT gCmdAnlage.xTarifAbschaltungLuftaufb;
 
         CASE gBetriebsparameter.Luftaufbereitung.Typ OF
 
@@ -3247,8 +3294,9 @@ CASE gAktModus OF
             IF xAbluftBoxAktiv THEN
                 //Zustandsabhaengige Hysterese (Ventilator laeuft bei hoher Feuchte)
                 IF NOT gAktoren.xFrgAbluftventilator THEN
-                    //EIN wenn Feuchte ueber Sollwert
-                    IF (rAbluftFeuchteAkt >= gBetriebsparameter.Abluftventilator.FeuchteSoll) THEN
+                    //EIN wenn Feuchte ueber Sollwert + Hysterese
+                    IF (rAbluftFeuchteAkt >= gBetriebsparameter.Abluftventilator.FeuchteSoll
+                                            + gBetriebsparameter.Abluftventilator.Hysterese) THEN
                         gAktoren.xFrgAbluftventilator := TRUE;
                     END_IF;
                 ELSE
@@ -3319,7 +3367,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787255928">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787513163">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3567,21 +3615,24 @@ END_IF;
 -------------------------------------------------------------------------------
 *) 
 
-fbBoxenklappe1(
-    Oeffnen            := xFreigabeKlappe1Out,
-    Schliessen         := NOT xFreigabeKlappe1Out,
-    EndlageOffen       := diBox1Offen,
-    EndlageGeschl      := diBox1Geschl,
-    EndlagenVhd        := gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe1,
-    LaufzeitOeffnen    := gBetriebsparameter.KlappenBoxen[1].Laufzeit,
-    LaufzeitSchliessen := gBetriebsparameter.KlappenBoxen[1].Laufzeit,
-    Stoerung           := diBox1Offen AND diBox1Geschl,
-    QuitFehler         := gAktoren.xQuitFehler 
-);
-
-(* Physischer Ausgang Wechsler-Relais *)
-doFrgBox1 := fbBoxenklappe1.OeffnenOut;
-
+// Im IOTEST wird der FB NICHT aufgerufen -> Timer/Endlagenlogik eingefroren,
+// doFrgBox1/2 bleiben stehen und werden ohnehin von IOMapping (Testzweig) überschrieben.
+IF gAktModus <> IOTEST THEN
+	fbBoxenklappe1(
+	    Oeffnen            := xFreigabeKlappe1Out,
+	    Schliessen         := NOT xFreigabeKlappe1Out,
+	    EndlageOffen       := diBox1Offen,
+	    EndlageGeschl      := diBox1Geschl,
+	    EndlagenVhd        := gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe1,
+	    LaufzeitOeffnen    := gBetriebsparameter.KlappenBoxen[1].Laufzeit,
+	    LaufzeitSchliessen := gBetriebsparameter.KlappenBoxen[1].Laufzeit,
+	    Stoerung           := diBox1Offen AND diBox1Geschl,
+	    QuitFehler         := gAktoren.xQuitFehler 
+	);
+	
+	(* Physischer Ausgang Wechsler-Relais *)
+	doFrgBox1 := fbBoxenklappe1.OeffnenOut;
+END_IF;
 
 (*
 -------------------------------------------------------------------------------
@@ -3611,21 +3662,25 @@ END_IF;
  FALSE = schließen
 -------------------------------------------------------------------------------
 *)
-fbBoxenklappe2(
-    Oeffnen            := xFreigabeKlappe2Out,
-    Schliessen         := NOT xFreigabeKlappe2Out,
-    EndlageOffen       := diBox2Offen,
-    EndlageGeschl      := diBox2Geschl,
-    EndlagenVhd        := gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe2,
-    LaufzeitOeffnen    := gBetriebsparameter.KlappenBoxen[2].Laufzeit,
-    LaufzeitSchliessen := gBetriebsparameter.KlappenBoxen[2].Laufzeit,
-    Stoerung           := diBox2Offen AND diBox2Geschl,
-    QuitFehler         := gAktoren.xQuitFehler
-);
 
-(* Physischer Ausgang Wechsler-Relais *)
-doFrgBox2 := fbBoxenklappe2.OeffnenOut;
-
+// Im IOTEST wird der FB NICHT aufgerufen -> Timer/Endlagenlogik eingefroren,
+// doFrgBox1/2 bleiben stehen und werden ohnehin von IOMapping (Testzweig) überschrieben.
+IF gAktModus <> IOTEST THEN
+	fbBoxenklappe2(
+	    Oeffnen            := xFreigabeKlappe2Out,
+	    Schliessen         := NOT xFreigabeKlappe2Out,
+	    EndlageOffen       := diBox2Offen,
+	    EndlageGeschl      := diBox2Geschl,
+	    EndlagenVhd        := gBetriebsparameter.Ausstattung.EndlagenVhdBoxenklappe2,
+	    LaufzeitOeffnen    := gBetriebsparameter.KlappenBoxen[2].Laufzeit,
+	    LaufzeitSchliessen := gBetriebsparameter.KlappenBoxen[2].Laufzeit,
+	    Stoerung           := diBox2Offen AND diBox2Geschl,
+	    QuitFehler         := gAktoren.xQuitFehler
+	);
+	
+	(* Physischer Ausgang Wechsler-Relais *)
+	doFrgBox2 := fbBoxenklappe2.OeffnenOut;
+END_IF;
 
 
 (*
@@ -3720,8 +3775,8 @@ gAktoren.xLuftaufbNachlauf := xLuftaufbNachlauf;
 xBoxAnf := (gAktoren.Box[1].xSollOffen AND xBox1EndlErreicht AND gBetriebsparameter.Boxen[1].xBoxAktiv)
         OR (gAktoren.Box[2].xSollOffen AND xBox2EndlErreicht AND gBetriebsparameter.Boxen[2].xBoxAktiv);
 
-//Ventilatorfreigabe: Box-Anforderung ODER Luftaufbereitungs-Nachlauf
-doFrgVentilator := gAktoren.xFrgVentilator AND (xBoxAnf OR xLuftaufbNachlauf);
+//Ventilatorfreigabe: normale Box-Anforderung ODER Nachlauf/Betriebsmeldung (übersteuert, auch bei Störung/AUS)
+doFrgVentilator := (gAktoren.xFrgVentilator AND xBoxAnf) OR (xLuftaufbNachlauf AND (gAktModus <> IOTEST));
 
 
 gAktoren.rVentilatorSollwert      := gCmdAnlage.Leistung.DrehzahlVentilator;
@@ -3819,7 +3874,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787254702">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787512718">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -3830,6 +3885,14 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 							<var name="rt_Luftaufb_Auto" type="R_TRIG"/>
 							<var name="rt_Luftaufb_Dauer" type="R_TRIG"/>
 							<var name="rt_Luftaufb_Aus" type="R_TRIG"/>
+							<var name="TOF_UmschBoxAktuell" type="TOF">
+								<descr>gemeinsam für Block A/B (schließen sich aus)</descr>
+							</var>
+							<var name="TOF_UmschBox1" type="TOF">
+								<descr>Block C (Einzelbox)</descr>
+							</var>
+							<var name="xUmschSelAktuell" type="BOOL"/>
+							<var name="xUmschSelBox1" type="BOOL"/>
 							<var name="lastBoxIndex" type="USINT"/>
 							<var name="uIdx" type="USINT"/>
 							<var name="firstStep" type="BOOL"/>
@@ -3847,6 +3910,10 @@ VAR
 	rt_Luftaufb_Auto : R_TRIG;
 	rt_Luftaufb_Dauer : R_TRIG;
 	rt_Luftaufb_Aus : R_TRIG;
+	TOF_UmschBoxAktuell : TOF;   // gemeinsam für Block A/B (schließen sich aus)
+    TOF_UmschBox1       : TOF;   // Block C (Einzelbox)
+    xUmschSelAktuell    : BOOL;
+    xUmschSelBox1       : BOOL;
 	lastBoxIndex : USINT;
 	uIdx : USINT;
 	firstStep : BOOL;
@@ -4165,6 +4232,23 @@ gBetriebsparameter.Tarifabschaltung.Zeitfenster.StartStd := Par_Tarifabschaltung
 gBetriebsparameter.Tarifabschaltung.Zeitfenster.StartMin := Par_Tarifabschaltung_Start_Min;
 gBetriebsparameter.Tarifabschaltung.Zeitfenster.StoppStd := Par_Tarifabschaltung_Stopp_Std;
 gBetriebsparameter.Tarifabschaltung.Zeitfenster.StoppMin := Par_Tarifabschaltung_Stopp_Min;
+gBetriebsparameter.Tarifabschaltung.VorlaufzeitAbschaltungLuftaufb := Par_Vorlaufzeit_Luftaufb_Tarifabschalt;
+
+(*
+---------------------------------------------------------------------------
+Verzoegerungen (alle in ms) 
+---------------------------------------------------------------------------
+*)
+gBetriebsparameter.Verzoegerungen.Fehler                    := Par_Verz_Fehler;
+gBetriebsparameter.Verzoegerungen.Warnungen                 := Par_Verz_Warnungen;
+gBetriebsparameter.Verzoegerungen.AenderungKlappenstellung  := Par_Verz_Aenderung_Klappenstellung;
+gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox := Par_Verz_Umsch_Betriebsart_Box;
+
+(*
+---------------------------------------------------------------------------
+Vorlaufzeit Tarifabschaltung
+---------------------------------------------------------------------------
+*)
 
 (*
 -------------------------------------------------------------------------------
@@ -4384,11 +4468,22 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;		
 	END_IF;
 	
-	gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
-	gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-	gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
-	gBetriebsparameter.Boxen[1].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
-	gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
+	//--- Betriebsart verzögert übernehmen (alte halten bis TOF abgelaufen) ---
+	xUmschSelAktuell := rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q
+	                    OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q;
+	                    
+	TOF_UmschBoxAktuell(IN := xUmschSelAktuell,
+	                    PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
+
+	IF NOT TOF_UmschBoxAktuell.Q THEN
+		gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
+		gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+		gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
+		gBetriebsparameter.Boxen[1].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
+		gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
+	END_IF;
+	
+	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart :=	TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_UmschBoxAktuell.ET);
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -4410,7 +4505,6 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	//TODO RIG: Parameter die noch zu verschalten sind!
 	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
 	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
-	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
 		
 	
 	
@@ -4464,11 +4558,21 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;		
 	END_IF;
 	
-	gBetriebsparameter.Boxen[2].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
-	gBetriebsparameter.Boxen[2].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-	gBetriebsparameter.Boxen[2].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
-	gBetriebsparameter.Boxen[2].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
-	gBetriebsparameter.Boxen[2].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
+	//--- Betriebsart verzögert übernehmen ---
+	xUmschSelAktuell := rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q
+	                    OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q;
+	TOF_UmschBoxAktuell(IN := xUmschSelAktuell,
+	                    PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
+
+	IF NOT TOF_UmschBoxAktuell.Q THEN
+		gBetriebsparameter.Boxen[2].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
+		gBetriebsparameter.Boxen[2].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+		gBetriebsparameter.Boxen[2].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
+		gBetriebsparameter.Boxen[2].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
+		gBetriebsparameter.Boxen[2].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
+	END_IF;
+	
+	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_UmschBoxAktuell.ET);
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[2].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -4489,7 +4593,6 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	//TODO RIG: Parameter die noch zu verschalten sind!
 	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
 	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
-	//HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart
 ELSE 
 	//nichts zu tun
 END_IF;
@@ -4530,11 +4633,20 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	    HMI_OUT_Box1_NachtrocknungEin 	 := FALSE;		
 	END_IF;
 	
-	gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box1_DauerbetriebEin;
-	gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box1_IntervallbetriebEIn;
-	gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box1_NachtrocknungEin;
-	gBetriebsparameter.Boxen[1].StocktemperaturEin  := HMI_OUT_Box1_StocktemperaturEin;
-	gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box1_Aus;
+	//--- Betriebsart verzögert übernehmen ---
+	xUmschSelBox1 := rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q
+	                 OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q;
+	TOF_UmschBox1(IN := xUmschSelBox1,
+	              PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
+
+	IF NOT TOF_UmschBox1.Q THEN
+		gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box1_DauerbetriebEin;
+		gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box1_IntervallbetriebEIn;
+		gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box1_NachtrocknungEin;
+		gBetriebsparameter.Boxen[1].StocktemperaturEin  := HMI_OUT_Box1_StocktemperaturEin;
+		gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box1_Aus;
+	END_IF;
+	HMI_IN_Box1_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_UmschBox1.ET);
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -4624,7 +4736,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787253115">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787475730">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -4812,7 +4924,7 @@ xBox2Freigegeben := gCmdAnlage.Auto
 *)
 //===== BOX 1 - Stocktemperatur =====
 IF xStocktemperaturBox1Anwahl THEN
-    IF gStatusAnlage.StockTemperatur > gBetriebsparameter.Boxen[1].StocktemperaturSoll THEN
+    IF gStatusAnlage.StockTemperatur > (gBetriebsparameter.Boxen[1].StocktemperaturSoll + gBetriebsparameter.Boxen[1].StocktemperaturHysterese) THEN
     	xStockHaltBox1 := TRUE;
     ELSIF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[1].StocktemperaturSoll - gBetriebsparameter.Boxen[1].StocktemperaturHysterese) THEN
         xStockHaltBox1 := FALSE;
@@ -4824,7 +4936,7 @@ ELSE
 END_IF;
 //===== BOX 2 - Stocktemperatur =====
 IF xStocktemperaturBox2Anwahl THEN
-    IF gStatusAnlage.StockTemperatur > gBetriebsparameter.Boxen[2].StocktemperaturSoll THEN
+    IF gStatusAnlage.StockTemperatur > (gBetriebsparameter.Boxen[2].StocktemperaturSoll + gBetriebsparameter.Boxen[2].StocktemperaturHysterese) THEN
         xStockHaltBox2 := TRUE;
     ELSIF gStatusAnlage.StockTemperatur < (gBetriebsparameter.Boxen[2].StocktemperaturSoll - gBetriebsparameter.Boxen[2].StocktemperaturHysterese) THEN
         xStockHaltBox2 := FALSE;
@@ -5125,24 +5237,9 @@ END_STRUCT;
 						<var name="Boxen" type="ST_ParBoxen" idxMin0="1" idx0="2"/>
 						<var name="Allgemein" type="ST_Anlage_Allgemein"/>
 						<var name="SchlechtwetterBoxen" type="ST_ParSchlechtwetterBoxen" idxMin0="1" idx0="2"/>
+						<var name="Verzoegerungen" type="ST_ParVerzoegerungen"/>
 					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[ST_Betriebsparameter: STRUCT
-	Sensoren : ST_SensorParameter;
-	Ausstattung : ST_Ausstattung;
-	KlappenBoxen : ARRAY[1..2] OF ST_KlappenBoxen;
-	Luftaufbereitung : ST_ParLuftaufber;
-	Ventilator : ST_ParVentilator;
-	Abluftventilator : ST_ParAbluftvent;
-	Strombegrenzung : ST_ParZeitfenster;
-	Tarifabschaltung : ST_ParTarifabschaltung;
-	Boxen : ARRAY[1..2] OF ST_ParBoxen;
-	Allgemein : ST_Anlage_Allgemein;
-	SchlechtwetterBoxen : ARRAY[1..2] OF ST_ParSchlechtwetterBoxen;
-END_STRUCT;
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 				</struct>
 				<struct name="ST_KlappenBoxen" version="1.0.0">
 					<vars>
@@ -5241,22 +5338,11 @@ END_STRUCT;
 						<var name="xTarifAbschaltung" type="BOOL">
 							<descr>Tarif-Zeitfenster aktiv</descr>
 						</var>
+						<var name="xTarifAbschaltungLuftaufb" type="BOOL">
+							<descr>Tarif-Vorabschaltung nur Luftaufbereitung/Trocknung</descr>
+						</var>
 					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[ST_CmdAnlage: STRUCT
-	Test : BOOL;
-	Auto : BOOL;
-	Leistung : ST_CmdLeistung;
-	StoppExtern : BOOL;
-	StartExtern : BOOL;
-	Start : BOOL;
-	Stopp : BOOL;
-	FehlerStopp : BOOL;
-	xTarifAbschaltung : BOOL;	(* Tarif-Zeitfenster aktiv *)
-END_STRUCT;
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 				</struct>
 				<struct name="ST_CmdLeistung" version="1.0.0">
 					<vars>
@@ -5362,7 +5448,7 @@ END_STRUCT;
 				<struct name="ST_ParTarifabschaltung" version="1.0.0">
 					<vars>
 						<var name="Zeitfenster" type="ST_ParZeitfenster"/>
-						<var name="VorlaufzeitAbschaltungLuftaufb" type="USINT"/>
+						<var name="VorlaufzeitAbschaltungLuftaufb" type="UDINT"/>
 					</vars>
 					<iecDeclaration active="FALSE"/>
 				</struct>
@@ -5495,6 +5581,23 @@ END_STRUCT;
 
 ]]>
 					</iecDeclaration>
+				</struct>
+				<struct name="ST_ParVerzoegerungen" version="1.0.0">
+					<vars>
+						<var name="Fehler" type="UDINT">
+							<descr>ms - Verzoegerung bis Fehler aktiv</descr>
+						</var>
+						<var name="Warnungen" type="UDINT">
+							<descr>ms - Verzoegerung bis Warnung aktiv</descr>
+						</var>
+						<var name="AenderungKlappenstellung" type="UDINT">
+							<descr>ms</descr>
+						</var>
+						<var name="UmschaltungBetriebsartBox" type="UDINT">
+							<descr>ms</descr>
+						</var>
+					</vars>
+					<iecDeclaration active="FALSE"/>
 				</struct>
 			</structs>
 			<typedefs>
@@ -74725,6 +74828,16 @@ nSamples := cnt;
 	Par_Abluft_FeuchteSoll AT %MW200.302 : REAL;
 		{G:"Parameters"}
 	Par_Abluft_FeuchteHysterese AT %MW200.304 : REAL;
+		{G:"Parameters"}
+	Par_Verz_Fehler AT %MW200.306 : UDINT;
+		{G:"Parameters"}
+	Par_Verz_Warnungen AT %MW200.308 : UDINT;
+		{G:"Parameters"}
+	Par_Verz_Aenderung_Klappenstellung AT %MW200.310 : UDINT;
+		{G:"Parameters"}
+	Par_Verz_Umsch_Betriebsart_Box AT %MW200.312 : UDINT;
+		{G:"Parameters"}
+	Par_Vorlaufzeit_Luftaufb_Tarifabschalt AT %MW200.314 : UDINT;
 		{G:"Variables"}
 	HMI_TEST_doFrgLuftaufber AT %MW201.0 : BOOL := 0;
 		{G:"Variables"}
@@ -77650,8 +77763,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11559 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 289; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11759 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 294; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -77664,9 +77777,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 126313460;
+	dummyCrc32 := 1879886271;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 306, 2, 201, TO_DWORD( ADR(%MW201.0) ), 193, 2, 126313460 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 316, 2, 201, TO_DWORD( ADR(%MW201.0) ), 193, 2, 1879886271 );
 
 END_PROGRAM
 
@@ -77735,7 +77848,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="18075">
+			<root name="CControl_Lite" nextID="18499">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77799,6 +77912,7 @@ END_PROGRAM
 					<Definition name="ST_ParSchlechtwetterBoxenStufe" id="13498"/>
 					<Definition name="ST_Alarm" id="14671" genHidden="false"/>
 					<Definition name="ST_ParAbluftvent" id="16743"/>
+					<Definition name="ST_ParVerzoegerungen" id="18362"/>
 				</folder>
 				<folder name="types" id="910">
 					<Definition name="T_Betriebsparameter" id="912"/>
@@ -85080,6 +85194,251 @@ END_PROGRAM
 								<shortname/>
 								<size>0</size>
 								<dataBlock>%MW200.304</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16682</ipa>
+								<address>16682</address>
+								<name>Par_Verz_Fehler</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.306</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16684</ipa>
+								<address>16684</address>
+								<name>Par_Verz_Warnungen</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.308</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16686</ipa>
+								<address>16686</address>
+								<name>Par_Verz_Aenderung_Klappenstellung</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.310</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16688</ipa>
+								<address>16688</address>
+								<name>Par_Verz_Umsch_Betriebsart_Box</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.312</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>16690</ipa>
+								<address>16690</address>
+								<name>Par_Vorlaufzeit_Luftaufb_Tarifabschalt</name>
+								<typepar>3</typepar>
+								<typetarg>UDINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW200.314</dataBlock>
 								<label/>
 								<translation/>
 								<visibility>0</visibility>
@@ -94029,6 +94388,11 @@ END_PROGRAM
 								<value ipa="16676" subidx="0">0</value>
 								<value ipa="16678" subidx="0">0</value>
 								<value ipa="16680" subidx="0">0</value>
+								<value ipa="16682" subidx="0">0</value>
+								<value ipa="16684" subidx="0">0</value>
+								<value ipa="16686" subidx="0">0</value>
+								<value ipa="16688" subidx="0">0</value>
+								<value ipa="16690" subidx="0">0</value>
 								<value ipa="8960" subidx="0">0</value>
 								<value ipa="8961" subidx="0">0</value>
 								<value ipa="8962" subidx="0">0</value>
