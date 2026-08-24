@@ -48,14 +48,6 @@
 					<var name="Strombegrenzung" type="fbTrockStrombegr">
 						<descr>Strombegrenzung Logik</descr>
 					</var>
-					<var name="gPlcSwVersion" type="STRING" length="32">
-						<descr>PLC Software Version</descr>
-						<initValue>'v1.0.0'</initValue>
-					</var>
-					<var name="gPlcKonfigId" type="UINT">
-						<descr>PLC Konfiguration [8...2.04]</descr>
-						<initValue>8</initValue>
-					</var>
 					<var name="gQuitErr" type="BOOL">
 						<descr>Fehler quittieren</descr>
 					</var>
@@ -141,56 +133,37 @@
 					<var name="hmiNutzungsdaten" type="ST_HmiNutzungsdaten"/>
 				</group>
 			</globalVars>
-			<retainVars/>
-			<constantVars/>
+			<retainVars>
+				<group name="var_glob_retain" version="1.0.0">
+					<var name="gBstBox1Min" type="UINT"/>
+					<var name="gBstBox1Std" type="UDINT"/>
+					<var name="gBstBox2Min" type="UINT"/>
+					<var name="gBstBox2Std" type="UDINT"/>
+				</group>
+			</retainVars>
+			<constantVars>
+				<group name="var_glob" version="1.0.0">
+					<const name="gPlcSwVersion" type="STRING" length="32">
+						<descr>PLC Software Version</descr>
+						<initValue>'v1.0.0'</initValue>
+					</const>
+					<const name="gPlcKonfigId" type="UINT">
+						<descr>PLC Konfiguration [8...2.04]</descr>
+						<initValue>8</initValue>
+					</const>
+				</group>
+			</constantVars>
 			<iecVarsDeclaration>
 				<group name="var_glob">
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[VAR_GLOBAL
-	gAktModus : eBetriebsmodus := BETRIEB;
-	gStatusAnlage : T_StatAnlage;
-	gBetriebsparameter : T_Betriebsparameter;
-	gAktoren : T_Aktor;
-	gIoTest : T_IoTest;
-	gCmdAnlage : T_CmdAnlage;
-	Strombegrenzung : fbTrockStrombegr;	(* Strombegrenzung Logik *)
-	gPlcSwVersion : STRING[ 32 ] := 'v1.0.0';	(* PLC Software Version *)
-	gPlcKonfigId : UINT := 8;	(* PLC Konfiguration [8...2.04] *)
-	gQuitErr : BOOL;	(* Fehler quittieren *)
-	IBN_FALSE : BOOL;	(* Inbetriebnahmemerker false *)
-	IBN_TRUE : BOOL;	(* Inbetriebnahmemerker true *)
-	diBox1Offen : BOOL;	(* Rückmeldung Box 1 offen *)
-	diBox1Geschl : BOOL;	(* Rückmeldung Box 1 geschlossen *)
-	diBox2Offen : BOOL;	(* Rückmeldung Box 2 offen *)
-	diBox2Geschl : BOOL;	(* Rückmeldung Box 2 geschlossen *)
-	diBetriebLuftaufber : BOOL;	(* Betriebsmeldung Luftaufbereitung *)
-	diBetriebVentilator : BOOL;	(* Betriebsmeldung Ventilator *)
-	aiFrischluftTemp : REAL;	(* Frischlufttemperatur *)
-	aiFrischluftFeucht : REAL;	(* Frischluftfeuchte *)
-	aiAbluftBox1Temp : REAL;	(* Ablufttemperatur Box 1 *)
-	aiAbluftBox1Feucht : REAL;	(* Abluftfeuchte Box 1 *)
-	aiTrockenluftTemp : REAL;	(* Trockenlufttemperatur *)
-	aiTrockenluftFeucht : REAL;	(* Trockenluftfeuchte *)
-	aiAbluftBox2Temp : REAL;	(* Ablufttemperatur Box 2 *)
-	aiAbluftBox2Feucht : REAL;	(* Abluftfeuchte Box 2 *)
-	aiStocktemp : REAL;	(* Stock- bzw. Produkttemperatur *)
-	doFrgLuftaufber : BOOL;	(* Freigabe Luftaufbereiter (Digitaler Ausgang) *)
-	doFrgBox1 : BOOL;	(* Freigabe Box 1 (z.B. Klappe / Aktor Box 1) *)
-	doFrgBox2 : BOOL;	(* Freigabe Box 2 (z.B. Klappe / Aktor Box 2) *)
-	doFrgAbluftventilator : BOOL;	(* Freigabe Abluftventilator *)
-	doFrgVentilator : BOOL;	(* Freigabe Ventilator *)
-	aoFuVentilator : REAL;	(* Sollwert Frequenzumrichter Ventilator [%] *)
-	aoLeistVorgLuftaufber : REAL;	(* Leistungsvorgabe Luftaufbereiter [%] *)
-	gudTemp : UDINT;
-END_VAR
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 				</group>
 				<group name="varAlarm">
 					<iecDeclaration active="FALSE"/>
 				</group>
 				<group name="var_VisuIo">
+					<iecDeclaration active="FALSE"/>
+				</group>
+				<group name="var_glob_retain">
 					<iecDeclaration active="FALSE"/>
 				</group>
 			</iecVarsDeclaration>
@@ -1684,6 +1657,145 @@ END_IF;
 ]]>
 					</sourceCode>
 				</functionBlock>
+				<functionBlock name="fbRestzeit" version="1.0.0" creationDate="1787595702" lastModifiedDate="1787595760">
+					<vars>
+						<inoutVars>
+							<var name="ZeitfensterIn" type="BOOL" dim0="24"/>
+						</inoutVars>
+						<inputVars>
+							<var name="Freigabe" type="BOOL"/>
+							<var name="AktuelleStunde" type="USINT">
+								<descr>0..23</descr>
+							</var>
+							<var name="AktuelleMinute" type="USINT">
+								<descr>0..59</descr>
+							</var>
+						</inputVars>
+						<outputVars>
+							<var name="ZeitfensterAktiv" type="BOOL"/>
+							<var name="RestzeitStundenOut" type="UINT"/>
+							<var name="RestzeitMinutenOut" type="UINT"/>
+						</outputVars>
+						<localVars>
+							<var name="i" type="INT"/>
+							<var name="ii" type="INT"/>
+							<var name="stundeEndeTag" type="INT"/>
+							<var name="minRestTag" type="UINT"/>
+							<var name="minRestFolgetag" type="UINT"/>
+							<var name="minRestGesamt" type="UINT"/>
+							<var name="restStd" type="UINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="FALSE"/>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[IF Freigabe THEN
+    ZeitfensterAktiv := ZeitfensterIn[AktuelleStunde];
+
+    (* Ende des aktuellen (gleichbleibenden) Blocks heute suchen *)
+    stundeEndeTag := 23;
+    FOR i := TO_INT(AktuelleStunde) + 1 TO 23 DO
+        IF ZeitfensterIn[i] <> ZeitfensterAktiv THEN
+            stundeEndeTag := i - 1;
+            EXIT;
+        END_IF;
+    END_FOR;
+
+    (* Restminuten heute *)
+    minRestTag := 60 - AktuelleMinute;
+    IF stundeEndeTag > TO_INT(AktuelleStunde) THEN
+        minRestTag := minRestTag + TO_UINT(stundeEndeTag - TO_INT(AktuelleStunde)) * 60;
+    END_IF;
+
+    (* Folgetag nur, wenn Block bis 23 Uhr durchlaeuft *)
+    minRestFolgetag := 0;
+    IF stundeEndeTag = 23 THEN
+        FOR ii := 0 TO 23 DO
+            IF ZeitfensterIn[ii] = ZeitfensterAktiv THEN
+                minRestFolgetag := minRestFolgetag + 60;
+            ELSE
+                EXIT;
+            END_IF;
+        END_FOR;
+    END_IF;
+
+    minRestGesamt := minRestTag + minRestFolgetag;
+    restStd := minRestGesamt / 60;
+    IF restStd <= 24 THEN
+        RestzeitStundenOut := restStd;
+        RestzeitMinutenOut := minRestGesamt - (restStd * 60);
+    ELSE
+        RestzeitStundenOut := 65535;   (* >24h -> keine Anzeige *)
+        RestzeitMinutenOut := 65535;
+    END_IF;
+ELSE
+    ZeitfensterAktiv   := FALSE;
+    RestzeitStundenOut := 65535;
+    RestzeitMinutenOut := 65535;
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
+				<functionBlock name="fbBetriebsstunden" version="1.0.0" creationDate="1787595782" lastModifiedDate="1787595798">
+					<vars>
+						<inoutVars>
+							<var name="Minuten" type="UINT">
+								<descr>Retain-Global, 0..59</descr>
+							</var>
+							<var name="Stunden" type="UDINT">
+								<descr>Retain-Global</descr>
+							</var>
+						</inoutVars>
+						<inputVars>
+							<var name="Aktiv" type="BOOL"/>
+							<var name="sekTick" type="BOOL">
+								<descr>1-Sekunden-Puls</descr>
+							</var>
+							<var name="Reset" type="BOOL"/>
+						</inputVars>
+						<localVars>
+							<var name="Sekunden" type="USINT"/>
+						</localVars>
+					</vars>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[FUNCTION_BLOCK fbBetriebsstunden
+
+VAR_INPUT
+    Aktiv   : BOOL;
+    sekTick : BOOL;   (* 1-Sekunden-Puls *)
+    Reset   : BOOL;
+END_VAR
+VAR_IN_OUT
+    Minuten : UINT;    (* Retain-Global, 0..59 *)
+    Stunden : UDINT;   (* Retain-Global *)
+END_VAR
+VAR
+    Sekunden : USINT;
+END_VAR
+]]>
+					</iecDeclaration>
+					<interfaces/>
+					<methods/>
+					<sourceCode type="ST">
+						<![CDATA[IF Reset THEN
+    Sekunden := 0;  Minuten := 0;  Stunden := 0;
+ELSIF (Aktiv AND sekTick) THEN
+    IF Sekunden < 59 THEN
+        Sekunden := Sekunden + 1;
+    ELSE
+        Sekunden := 0;
+        IF Minuten < 59 THEN
+            Minuten := Minuten + 1;
+        ELSE
+            Minuten := 0;
+            Stunden := Stunden + 1;
+        END_IF;
+    END_IF;
+END_IF;
+]]>
+					</sourceCode>
+				</functionBlock>
 			</functionBlocks>
 			<programs>
 				<program name="IOMappingCyclic" version="1.0.0" creationDate="0" lastModifiedDate="1787255891">
@@ -2314,7 +2426,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1787254756">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1787597155">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
@@ -2323,22 +2435,15 @@ END_IF;
 							<var name="fbSchlechtwetterBox2" type="fbCControlWitterung"/>
 							<var name="idx" type="USINT"/>
 							<var name="idxStufe" type="USINT"/>
+							<var name="fbRestzeitBox1" type="fbRestzeit"/>
+							<var name="fbRestzeitBox2" type="fbRestzeit"/>
+							<var name="fbBetrStdBox1" type="fbBetriebsstunden"/>
+							<var name="fbBetrStdBox2" type="fbBetriebsstunden"/>
+							<var name="TON_SekTick" type="TON"/>
+							<var name="loc_ms" type="UDINT"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[PROGRAM BerechnungCyclic
-
-VAR
-	Frischluftsensor : fbMathLuft;
-	Trockenluftsensor : fbMathLuft;
-	fbSchlechtwetterBox1 : fbCControlWitterung;
-	fbSchlechtwetterBox2 : fbCControlWitterung;
-	idx : USINT;
-	idxStufe : USINT;
-END_VAR
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -2415,53 +2520,74 @@ gStatusAnlage.Box[1].WetterIstSchlecht := fbSchlechtwetterBox1.WetterIstSchlecht
 gStatusAnlage.Box[1].IconWitterung := fbSchlechtwetterBox1.WetterIstSchlecht;
 gStatusAnlage.Box[1].AktSchlechtwetterPuls := fbSchlechtwetterBox1.SchlechtwetterPulszeitAktuell;
 gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.SchlechtwetterPausezeitAktuell;
-gStatusAnlage.Box[1].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[1].xBoxAktiv;
 
+// 1-Sekunden-Takt fuer Betriebsstunden
+TON_SekTick(IN := NOT TON_SekTick.Q, PT := 1000);
 
-(* TODO Restlaufzeit berechnen fuer Anzeige VISU
-	//Box 1 ************************************************
-	IF hmiParameter.Boxen[1].Aus THEN
-		hmiStatus.Box1.AnzeigeLaufRestzeit	:= ICON_HIDDEN;
-		hmiStatus.Box1.TextindexLaufzeit	:= 0;
-	ELSIF hmiParameter.Boxen[1].DauerbetriebEin THEN
-		hmiStatus.Box1.AnzeigeLaufRestzeit	:= ICON_VISIBLE;
-		//Schlechtwetter - LAUF
-		IF fbSchlechtwetterBox1.WetterIstSchlecht AND NOT Boxen.Box1In.LuftaufbIstVerfuegbar AND Boxen.Box1Out.BoxAktiv
-			AND (fbSchlechtwetterBox1.SchlechtwetterPausezeit <> 0) THEN
-			//Restlaufzeiten Schlechtwetter von [ms] in [h] und [min] umrechnen
-			loc_RestzeitSchlechtMillisek := UDINT_TO_REAL(Boxen.Box1Out.RestzeitSchlechtwetterPuls + 60000); //+1min
-			loc_RestzeitSchlechtStunden := TRUNC(loc_RestzeitSchlechtMillisek / 1000 / 60 / 60);
-			loc_RestzeitSchlechtMinuten := REAL_TO_UINT((loc_RestzeitSchlechtMillisek / 1000 / 60) - (60 * loc_RestzeitSchlechtStunden));
-			hmiStatus.Box1.TextindexLaufzeit	:= 2; 
-			hmiStatus.Box1.LaufRestzeitMinuten	:= loc_RestzeitSchlechtMinuten;
-			hmiStatus.Box1.LaufRestzeitStunden	:= UDINT_TO_UINT(loc_RestzeitSchlechtStunden);
-		//Schlechtwetter - PAUSE
-		ELSIF fbSchlechtwetterBox1.WetterIstSchlecht AND NOT  Boxen.Box1Out.BoxAktiv THEN
-			//Restlaufzeiten Schlechtwetter von [ms] in [h] und [min] umrechnen
-			loc_RestzeitSchlechtMillisek := UDINT_TO_REAL(Boxen.Box1Out.RestzeitSchlechtwetterPause + 60000);
-			loc_RestzeitSchlechtStunden := TRUNC(loc_RestzeitSchlechtMillisek / 1000 / 60 / 60);
-			loc_RestzeitSchlechtMinuten := REAL_TO_UINT((loc_RestzeitSchlechtMillisek / 1000 / 60) - (60 * loc_RestzeitSchlechtStunden));
-			hmiStatus.Box1.TextindexLaufzeit	:= 1; 
-			hmiStatus.Box1.LaufRestzeitMinuten	:= loc_RestzeitSchlechtMinuten;
-			hmiStatus.Box1.LaufRestzeitStunden	:= UDINT_TO_UINT(loc_RestzeitSchlechtStunden);
-		//Automatik und gute Witterung (oder Luftaufbereitung vhd.)
-		ELSE
-			hmiStatus.Box1.TextindexLaufzeit	:= 0; 
-			hmiStatus.Box1.LaufRestzeitMinuten	:= USINT_TO_UINT(hmiNutzungsdaten.Bst.Box1Min);
-			hmiStatus.Box1.LaufRestzeitStunden	:= UDINT_TO_UINT(hmiNutzungsdaten.Bst.Box1Std);
-		END_IF
-	ELSIF hmiParameter.Boxen[1].IntervallbetriebEin OR hmiParameter.Boxen[1].NachtrocknungEin THEN
-		hmiStatus.Box1.AnzeigeLaufRestzeit	:= ICON_VISIBLE;
-		hmiStatus.Box1.LaufRestzeitMinuten	:= gStatusAnlage.RestlaufzeitenBoxen.Box1Minuten;
-		hmiStatus.Box1.LaufRestzeitStunden	:= gStatusAnlage.RestlaufzeitenBoxen.Box1Stunden;
-		IF Boxen.Box1Out.BoxAktiv THEN
-			hmiStatus.Box1.TextindexLaufzeit := 2;
-		ELSE
-			hmiStatus.Box1.TextindexLaufzeit := 1;
-		END_IF
-	END_IF
+// Betriebsstundenzaehler (zaehlt solange Box aktiv)
+fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := FALSE,
+              Minuten := gBstBox1Min, Stunden := gBstBox1Std);
+fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := FALSE,
+              Minuten := gBstBox2Min, Stunden := gBstBox2Std);
 
-*)
+// Rest-Laufzeit Intervall/Nachtrocknung (Zeitfenster je nach Modus)
+IF gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
+    fbRestzeitBox1(Freigabe := TRUE, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
+                   ZeitfensterIn := gBetriebsparameter.Boxen[1].NachtrocknungZeiten);
+ELSE
+    fbRestzeitBox1(Freigabe := gBetriebsparameter.Boxen[1].IntervallbetriebEin, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
+                   ZeitfensterIn := gBetriebsparameter.Boxen[1].IntervallbetriebZeiten);
+END_IF;
+IF gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
+    fbRestzeitBox2(Freigabe := TRUE, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
+                   ZeitfensterIn := gBetriebsparameter.Boxen[2].NachtrocknungZeiten);
+ELSE
+    fbRestzeitBox2(Freigabe := gBetriebsparameter.Boxen[2].IntervallbetriebEin, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
+                   ZeitfensterIn := gBetriebsparameter.Boxen[2].IntervallbetriebZeiten);
+END_IF;
+
+// ===================== BOX 1 Anzeige =====================
+IF gBetriebsparameter.Boxen[1].Aus THEN
+    gStatusAnlage.Box[1].AnzeigeLaufRestzeit := FALSE;
+    gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
+
+ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
+    gStatusAnlage.Box[1].AnzeigeLaufRestzeit := TRUE;
+    IF gStatusAnlage.Box[1].SchlechtwetterPulsOut THEN
+        // laeuft noch (running in)
+        loc_ms := gStatusAnlage.Box[1].RestSchlechtwetterPuls + 60000;
+        gStatusAnlage.Box[1].TextIndexLaufzeit   := 2;
+        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
+        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[1].LaufRestzeitStunden) * 60));
+    ELSIF gStatusAnlage.Box[1].SchlechtwetterPauseOut THEN
+        // pause in
+        loc_ms := gStatusAnlage.Box[1].RestSchlechtwetterPause + 60000;
+        gStatusAnlage.Box[1].TextIndexLaufzeit   := 1;
+        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
+        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[1].LaufRestzeitStunden) * 60));
+    ELSE
+        // Schoenwetter / Dauerbetrieb -> Betriebsstunden (running since)
+        gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
+        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(gBstBox1Std);
+        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(gBstBox1Min);
+    END_IF;
+
+ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin OR gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
+    gStatusAnlage.Box[1].AnzeigeLaufRestzeit := TRUE;
+    gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(fbRestzeitBox1.RestzeitStundenOut);
+    gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(fbRestzeitBox1.RestzeitMinutenOut);
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 2;   // running in
+    ELSE
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // pause in
+    END_IF;
+
+ELSE
+    // z.B. Stocktemperatur-Betrieb: keine Restzeit
+    gStatusAnlage.Box[1].AnzeigeLaufRestzeit := FALSE;
+    gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
+END_IF;
+
 
 //Schlechtwetter Box 2
 //*****************************
@@ -2504,7 +2630,49 @@ gStatusAnlage.Box[2].WetterIstSchlecht := fbSchlechtwetterBox2.WetterIstSchlecht
 gStatusAnlage.Box[2].IconWitterung := fbSchlechtwetterBox2.WetterIstSchlecht;
 gStatusAnlage.Box[2].AktSchlechtwetterPuls := fbSchlechtwetterBox2.SchlechtwetterPulszeitAktuell;
 gStatusAnlage.Box[2].AktSchlechtwetterPause := fbSchlechtwetterBox2.SchlechtwetterPausezeitAktuell;
-gStatusAnlage.Box[2].AnzeigeLaufRestzeit :=  gBetriebsparameter.Boxen[2].xBoxAktiv;
+
+
+// ===================== BOX 2 Anzeige  =====================
+IF gBetriebsparameter.Boxen[2].Aus THEN
+    gStatusAnlage.Box[2].AnzeigeLaufRestzeit := FALSE;
+    gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
+
+ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
+    gStatusAnlage.Box[2].AnzeigeLaufRestzeit := TRUE;
+    IF gStatusAnlage.Box[2].SchlechtwetterPulsOut THEN
+        // laeuft noch (running in)
+        loc_ms := gStatusAnlage.Box[2].RestSchlechtwetterPuls + 60000;
+        gStatusAnlage.Box[2].TextIndexLaufzeit   := 2;
+        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
+        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[2].LaufRestzeitStunden) * 60));
+    ELSIF gStatusAnlage.Box[2].SchlechtwetterPauseOut THEN
+        // pause in
+        loc_ms := gStatusAnlage.Box[2].RestSchlechtwetterPause + 60000;
+        gStatusAnlage.Box[2].TextIndexLaufzeit   := 1;
+        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
+        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[2].LaufRestzeitStunden) * 60));
+    ELSE
+        // Schoenwetter / Dauerbetrieb -> Betriebsstunden (running since)
+        gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
+        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(gBstBox2Std);
+        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(gBstBox2Min);
+    END_IF;
+
+ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin OR gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
+    gStatusAnlage.Box[2].AnzeigeLaufRestzeit := TRUE;
+    gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(fbRestzeitBox2.RestzeitStundenOut);
+    gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(fbRestzeitBox2.RestzeitMinutenOut);
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 2;   // running in
+    ELSE
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // pause in
+    END_IF;
+
+ELSE
+    // z.B. Stocktemperatur-Betrieb: keine Restzeit
+    gStatusAnlage.Box[2].AnzeigeLaufRestzeit := FALSE;
+    gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
+END_IF;
 ]]>
 					</sourceCode>
 				</program>
@@ -3874,7 +4042,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787512718">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787597770">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -3896,6 +4064,8 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 							<var name="lastBoxIndex" type="USINT"/>
 							<var name="uIdx" type="USINT"/>
 							<var name="firstStep" type="BOOL"/>
+							<var name="xBox1BelegtLuefter" type="BOOL"/>
+							<var name="xBox2BelegtLuefter" type="BOOL"/>
 						</localVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
@@ -3917,6 +4087,8 @@ VAR
 	lastBoxIndex : USINT;
 	uIdx : USINT;
 	firstStep : BOOL;
+	xBox1BelegtLuefter : BOOL;
+    xBox2BelegtLuefter : BOOL;
 END_VAR
 
 ]]>
@@ -4386,6 +4558,61 @@ gBetriebsparameter.Boxen[2].StellungKlappe2 := Par_Box2_StellungKlappe2;
 gBetriebsparameter.Boxen[1].StocktemperaturHysterese := Par_Stocktemperatur_Box1_Hysterese;
 gBetriebsparameter.Boxen[2].StocktemperaturHysterese := Par_Stocktemperatur_Box2_Hysterese;
 
+(*
+-------------------------------------------------------------------------------
+ Verriegelung Box-Betriebsarten (1 Luefter -> nur eine Box gleichzeitig)
+ Belegt eine Box den Luefter durchgehend, wird bei der anderen Box
+ Dauer-/Intervallbetrieb gesperrt (nur HMI-Hinweis).
+-------------------------------------------------------------------------------
+*)
+// Reset
+gStatusAnlage.Box[1].SperreDauerbetrieb     := FALSE;
+gStatusAnlage.Box[1].SperreIntervallbetrieb := FALSE;
+gStatusAnlage.Box[2].SperreDauerbetrieb     := FALSE;
+gStatusAnlage.Box[2].SperreIntervallbetrieb := FALSE;
+
+IF gBetriebsparameter.Ausstattung.Box2 THEN
+
+    // "belegt den Luefter durchgehend" = Dauerbetrieb oder Stocktemperatur
+    xBox1BelegtLuefter := gBetriebsparameter.Boxen[1].DauerbetriebEin
+                          OR gBetriebsparameter.Boxen[1].StocktemperaturEin;
+    xBox2BelegtLuefter := gBetriebsparameter.Boxen[2].DauerbetriebEin
+                          OR gBetriebsparameter.Boxen[2].StocktemperaturEin;
+
+    // Box 2 belegt den Luefter -> Box 1 sperren
+    IF xBox2BelegtLuefter THEN
+        gStatusAnlage.Box[1].SperreDauerbetrieb     := TRUE;
+        gStatusAnlage.Box[1].SperreIntervallbetrieb := TRUE;
+    ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin THEN
+        // Intervall der einen Box -> Dauerbetrieb der anderen wuerde stoeren
+        gStatusAnlage.Box[1].SperreDauerbetrieb     := TRUE;
+    END_IF;
+
+    // Box 1 belegt den Luefter -> Box 2 sperren
+    IF xBox1BelegtLuefter THEN
+        gStatusAnlage.Box[2].SperreDauerbetrieb     := TRUE;
+        gStatusAnlage.Box[2].SperreIntervallbetrieb := TRUE;
+    ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin THEN
+        gStatusAnlage.Box[2].SperreDauerbetrieb     := TRUE;
+    END_IF;
+
+END_IF;
+
+// --- HMI-Spiegel ---
+HMI_IN_Box1_SperreDauerbetrieb     := gStatusAnlage.Box[1].SperreDauerbetrieb;
+HMI_IN_Box1_SperreIntervallbetrieb := gStatusAnlage.Box[1].SperreIntervallbetrieb;
+HMI_IN_Box2_SperreDauerbetrieb     := gStatusAnlage.Box[2].SperreDauerbetrieb;
+HMI_IN_Box2_SperreIntervallbetrieb := gStatusAnlage.Box[2].SperreIntervallbetrieb;
+
+// Aktuell-PopUp je nach angezeigter Box
+IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
+    HMI_IN_Box_Aktuell_SperreDauerbetrieb     := gStatusAnlage.Box[2].SperreDauerbetrieb;
+    HMI_IN_Box_Aktuell_SperreIntervallbetrieb := gStatusAnlage.Box[2].SperreIntervallbetrieb;
+ELSE
+    HMI_IN_Box_Aktuell_SperreDauerbetrieb     := gStatusAnlage.Box[1].SperreDauerbetrieb;
+    HMI_IN_Box_Aktuell_SperreIntervallbetrieb := gStatusAnlage.Box[1].SperreIntervallbetrieb;
+END_IF;
+
 //======== Box 1 =========
 HMI_IN_Box1_IconWitterung := gStatusAnlage.Box[1].IconWitterung;
 HMI_IN_Box1_LaufRestzeitMinuten := gStatusAnlage.Box[1].LaufRestzeitMinuten;
@@ -4397,8 +4624,6 @@ HMI_IN_Box1_AnzeigeLaufRestzeit := gStatusAnlage.Box[1].AnzeigeLaufRestzeit;
 
 //TODO RIG: Noch zu verschalten
 //HMI_IN_Box1_RestzeitUmschVerzBetriebsart
-//HMI_IN_Box1_SperreDauerbetrieb
-//HMI_IN_Box1_SperreIntervallbetrieb
 
 //======== Box 2 =========
 HMI_IN_Box2_LaufRestzeitMinuten := gStatusAnlage.Box[2].LaufRestzeitMinuten;
@@ -4410,12 +4635,46 @@ HMI_IN_Box2_AnzeigeLaufRestzeit := gStatusAnlage.Box[2].AnzeigeLaufRestzeit;
 
 //TODO RIG: Noch zu verschalten
 //HMI_IN_Box2_RestzeitUmschVerzBetriebsart
-//HMI_IN_Box2_SperreDauerbetrieb
-//HMI_IN_Box2_SperreIntervallbetrieb
 
 IF lastBoxIndex <> HMI_OUT_Box_Aktuell_BoxIndex THEN
 	firstStep := TRUE;
 	lastBoxIndex := HMI_OUT_Box_Aktuell_BoxIndex;
+END_IF;
+
+(*
+-------------------------------------------------------------------------------
+ Zusatzmeldung Anlagenstatus (vereinfacht fuer Lite) - nur Statustext
+-------------------------------------------------------------------------------
+*)
+IF gAktModus = STILLSTAND THEN
+    IF gAktoren.xLuftaufbNachlauf THEN
+        HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;      // Auskuehlung laeuft
+    ELSIF gCmdAnlage.FehlerStopp THEN
+        HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_FEHLERSTOPP;      // Fehler - kein Start
+    ELSE
+        HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_BEREIT;          // bereit
+    END_IF;
+
+ELSIF gAktModus = IOTEST THEN
+    HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_IOTEST_NICHT_ABGE;    // I/O-Test aktiv
+
+ELSE   // BETRIEB
+    IF gCmdAnlage.xTarifAbschaltung THEN
+        HMI_Zusatzmeldung_Statustext := ZM_TARIFABSCHALTUNG_AKTIV;
+    ELSIF gCmdAnlage.xTarifAbschaltungLuftaufb THEN
+        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTB_VLZ_TARIF;       // Vorlaufzeit Tarif (Text anpassen)
+    ELSIF Strombegrenzung.StrombegrenzungEin THEN
+        HMI_Zusatzmeldung_Statustext := ZM_STROMBEGRENZUNG_AKTIV;
+    ELSIF (gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] = STATUS_IN_BEWEGUNG)
+       OR (gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_IN_BEWEGUNG) THEN
+        HMI_Zusatzmeldung_Statustext := ZM_KLAPPEN_WERDEN_UMGESCHALTET;
+    ELSIF gAktoren.xLuftaufbNachlauf THEN
+        HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;      // Auskuehlung im Betrieb
+    ELSIF NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv) THEN
+        HMI_Zusatzmeldung_Statustext := ZM_WARTE_AUF_ANFORDERUNG_BOX;
+    ELSE
+        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTBETRIEB;          // "Anlage in Betrieb" (Text anpassen)
+    END_IF;
 END_IF;
 
 
@@ -4505,6 +4764,7 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	//TODO RIG: Parameter die noch zu verschalten sind!
 	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
 	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
+	//HMI_Zusatzmeldung_Statustext 
 		
 	
 	
@@ -4736,7 +4996,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787475730">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787595930">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -4975,6 +5235,11 @@ fbPulsPauseBox1.ZeitPuls      := gStatusAnlage.Box[1].AktSchlechtwetterPuls;
 fbPulsPauseBox1.ZeitPause     := gStatusAnlage.Box[1].AktSchlechtwetterPause;
 fbPulsPauseBox1();
 
+gStatusAnlage.Box[1].SchlechtwetterPulsOut   := fbPulsPauseBox1.PulsOut;
+gStatusAnlage.Box[1].SchlechtwetterPauseOut  := fbPulsPauseBox1.PauseOut;
+gStatusAnlage.Box[1].RestSchlechtwetterPuls  := fbPulsPauseBox1.RestzeitPuls;
+gStatusAnlage.Box[1].RestSchlechtwetterPause := fbPulsPauseBox1.RestzeitPause;
+
 IF xSchlechtwetterBox1Aktiv THEN
 	//Schlechtwetter: nur waehrend der Pulszeit trocknen
 	xDauerbetriebBox1Trocknet := fbPulsPauseBox1.PulsOut;
@@ -4995,6 +5260,11 @@ fbPulsPauseBox2.StartMitPause := FALSE;
 fbPulsPauseBox2.ZeitPuls      := gStatusAnlage.Box[2].AktSchlechtwetterPuls;
 fbPulsPauseBox2.ZeitPause     := gStatusAnlage.Box[2].AktSchlechtwetterPause;
 fbPulsPauseBox2();
+
+gStatusAnlage.Box[2].SchlechtwetterPulsOut   := fbPulsPauseBox2.PulsOut;
+gStatusAnlage.Box[2].SchlechtwetterPauseOut  := fbPulsPauseBox2.PauseOut;
+gStatusAnlage.Box[2].RestSchlechtwetterPuls  := fbPulsPauseBox2.RestzeitPuls;
+gStatusAnlage.Box[2].RestSchlechtwetterPause := fbPulsPauseBox2.RestzeitPause;
 
 IF xSchlechtwetterBox2Aktiv THEN
 	xDauerbetriebBox2Trocknet := fbPulsPauseBox2.PulsOut;
@@ -5506,23 +5776,18 @@ END_STRUCT;
 						<var name="TrockengutIcon" type="eIcon"/>
 						<var name="IconWitterung" type="USINT"/>
 						<var name="Status" type="eStatus"/>
+						<var name="SchlechtwetterPulsOut" type="BOOL"/>
+						<var name="SchlechtwetterPauseOut" type="BOOL"/>
+						<var name="RestSchlechtwetterPuls" type="UDINT">
+							<descr>ms verbleibende Pulszeit</descr>
+						</var>
+						<var name="RestSchlechtwetterPause" type="UDINT">
+							<descr>ms verbleibende Pausezeit</descr>
+						</var>
+						<var name="SperreDauerbetrieb" type="BOOL"/>
+						<var name="SperreIntervallbetrieb" type="BOOL"/>
 					</vars>
-					<iecDeclaration active="TRUE" valid="TRUE">
-						<![CDATA[ST_StatBoxen: STRUCT
-	AktSchlechtwetterPuls : UDINT;
-	AktSchlechtwetterPause : UDINT;
-	WetterIstSchlecht : BOOL;
-	AnzeigeLaufRestzeit : BOOL;
-	LaufRestzeitStunden : INT;
-	LaufRestzeitMinuten : INT;
-	TextIndexLaufzeit : USINT;
-	TrockengutIcon : eIcon;
-	IconWitterung : USINT;
-	Status : eStatus;
-END_STRUCT;
-
-]]>
-					</iecDeclaration>
+					<iecDeclaration active="FALSE"/>
 				</struct>
 				<struct name="ST_Anlage_Allgemein" version="1.0.0">
 					<vars>
@@ -5848,9 +6113,111 @@ END_STRUCT;
 					</elements>
 					<iecDeclaration active="FALSE"/>
 				</enum>
-				<enum name="eZusatzmeldungen" baseType="DINT" version="1.0.0">
-					<elements/>
-					<iecDeclaration active="FALSE"/>
+				<enum name="eZusatzmeldungen" baseType="USINT" version="1.0.0">
+					<elements>
+						<element name="ZM_STILLSTAND_IOTEST_NICHT_ABGE">
+							<value>0</value>
+						</element>
+						<element name="ZM_STILLSTAND_FEHLER">
+							<value>1</value>
+						</element>
+						<element name="ZM_STILLSTAND_BEREIT">
+							<value>2</value>
+						</element>
+						<element name="ZM_STILLSTAND_ENTF_NOCH_IN_BETR">
+							<value>3</value>
+						</element>
+						<element name="ZM_WARTE_AUF_NOTSTROM">
+							<value>4</value>
+						</element>
+						<element name="ZM_AUSKUEHLZEIT_WLO_AKTIV">
+							<value>5</value>
+						</element>
+						<element name="ZM_AUSKUEHLZEIT_SHO_AKTIV">
+							<value>6</value>
+						</element>
+						<element name="ZM_ANLAUFVERZ_VENT2_AKTIV">
+							<value>7</value>
+						</element>
+						<element name="ZM_ANLAUFVERZ_VENT1_AKTIV">
+							<value>8</value>
+						</element>
+						<element name="ZM_TARIFABSCHALTUNG_AKTIV">
+							<value>9</value>
+						</element>
+						<element name="ZM_STROMBEGRENZUNG_AKTIV">
+							<value>10</value>
+						</element>
+						<element name="ZM_KLAPPEN_WERDEN_UMGESCHALTET">
+							<value>11</value>
+						</element>
+						<element name="ZM_FRISCHLUFTBETRIEB">
+							<value>12</value>
+						</element>
+						<element name="ZM_DACHABSAUGUNGSBETRIEB">
+							<value>13</value>
+						</element>
+						<element name="ZM_UMLUFTBETRIEB">
+							<value>14</value>
+						</element>
+						<element name="ZM_WARTE_AUF_ANFORDERUNG_BOX">
+							<value>15</value>
+						</element>
+						<element name="ZM_STILLSTAND_FEHLERSTOPP">
+							<value>16</value>
+						</element>
+						<element name="ZM_FRISCHLUFTB_VLZ_TARIF">
+							<value>17</value>
+						</element>
+						<element name="ZM_DACHABSAUGUNGSB_VLZ_TARIF">
+							<value>18</value>
+						</element>
+						<element name="ZM_UMLUFTBETR_VLZ_TARIF">
+							<value>19</value>
+						</element>
+						<element name="ZM_INSELBETRIEB_AUS">
+							<value>20</value>
+						</element>
+						<element name="ZM_INSELBETRIEB_STANDBY">
+							<value>21</value>
+						</element>
+						<element name="ZM_INSELBETRIEB_AKTIV">
+							<value>22</value>
+						</element>
+						<element name="ZM_INSELBETRIEB_VENT_NICHT_AKTIV">
+							<value>23</value>
+						</element>
+					</elements>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[eZusatzmeldungen: USINT (
+	ZM_STILLSTAND_IOTEST_NICHT_ABGE := 0,
+	ZM_STILLSTAND_FEHLER := 1,
+	ZM_STILLSTAND_BEREIT := 2,
+	ZM_STILLSTAND_ENTF_NOCH_IN_BETR := 3,
+	ZM_WARTE_AUF_NOTSTROM := 4,
+	ZM_AUSKUEHLZEIT_WLO_AKTIV := 5,
+	ZM_AUSKUEHLZEIT_SHO_AKTIV := 6,
+	ZM_ANLAUFVERZ_VENT2_AKTIV := 7,
+	ZM_ANLAUFVERZ_VENT1_AKTIV := 8,
+	ZM_TARIFABSCHALTUNG_AKTIV := 9,
+	ZM_STROMBEGRENZUNG_AKTIV := 10,
+	ZM_KLAPPEN_WERDEN_UMGESCHALTET := 11,
+	ZM_FRISCHLUFTBETRIEB := 12,
+	ZM_DACHABSAUGUNGSBETRIEB := 13,
+	ZM_UMLUFTBETRIEB := 14,
+	ZM_WARTE_AUF_ANFORDERUNG_BOX := 15,
+	ZM_STILLSTAND_FEHLERSTOPP := 16,
+	ZM_FRISCHLUFTB_VLZ_TARIF := 17,
+	ZM_DACHABSAUGUNGSB_VLZ_TARIF := 18,
+	ZM_UMLUFTBETR_VLZ_TARIF := 19,
+	ZM_INSELBETRIEB_AUS := 20,
+	ZM_INSELBETRIEB_STANDBY := 21,
+	ZM_INSELBETRIEB_AKTIV := 22,
+	ZM_INSELBETRIEB_VENT_NICHT_AKTIV := 23
+);
+
+]]>
+					</iecDeclaration>
 				</enum>
 				<enum name="eLuftaufbereiterTyp" baseType="DINT" version="1.0.0">
 					<elements>
@@ -77848,7 +78215,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="18499">
+			<root name="CControl_Lite" nextID="18795">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -77884,6 +78251,8 @@ END_PROGRAM
 					<Pou name="fcSetBitInBitmask" id="14563"/>
 					<Pou name="fcClearBitInBitmask" id="14666"/>
 					<Pou name="fcResetBitmask" id="14670"/>
+					<Pou name="fbRestzeit" id="18718"/>
+					<Pou name="fbBetriebsstunden" id="18734"/>
 				</folder>
 				<folder name="struct" id="52">
 					<Definition name="ST_Ausstattung" id="56"/>
@@ -77937,6 +78306,7 @@ END_PROGRAM
 					<Pou name="BackgroundTask" id="12591"/>
 				</folder>
 				<GlobalVars name="var_VisuIo" id="4241"/>
+				<GlobalVars name="var_glob_retain" id="18668"/>
 			</root>
 		</workspace>
 	</sources>
