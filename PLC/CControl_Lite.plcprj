@@ -547,7 +547,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</functionBlock>
-				<functionBlock name="fbBoxenWLO" version="1.0.0" creationDate="1782317384" lastModifiedDate="1782319420">
+				<functionBlock name="fbBoxenWLO" version="1.0.0" creationDate="1782317384" lastModifiedDate="1787947628">
 					<vars>
 						<inputVars>
 							<var name="Freigabe" type="BOOL">
@@ -764,7 +764,10 @@ IF Freigabe THEN
             WarmlufttempSollOut     := WarmlufttemperaturVorgabe;
 
             //Verzögerung Überwachung Betriebsmeldung (Zündzeit)
-            TON_VerzBetriebsmeldung(IN := FreigabeWarmluftofenOut AND OptionBetriebsmldgVhd AND NOT BetriebsmeldungWarmluftofen, PT := VerzBetriebsmeldung);
+            TON_VerzBetriebsmeldung(IN := FreigabeWarmluftofenOut AND OptionBetriebsmldgVhd
+                              			  AND NOT BetriebsmeldungWarmluftofen
+                            			  AND (VerzBetriebsmeldung > 0),
+                        			PT := VerzBetriebsmeldung);
 
             //Fehler keine Betriebsmeldung
             IF TON_VerzBetriebsmeldung.Q THEN
@@ -2426,7 +2429,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1787597155">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1788118615">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
@@ -2552,34 +2555,20 @@ IF gBetriebsparameter.Boxen[1].Aus THEN
     gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
 
 ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
+    // Puls-/Pause-Restzeitanzeige (nur VISU) entfernt -> immer Betriebsstunden ("Betrieb seit")
     gStatusAnlage.Box[1].AnzeigeLaufRestzeit := TRUE;
-    IF gStatusAnlage.Box[1].SchlechtwetterPulsOut THEN
-        // laeuft noch (running in)
-        loc_ms := gStatusAnlage.Box[1].RestSchlechtwetterPuls + 60000;
-        gStatusAnlage.Box[1].TextIndexLaufzeit   := 2;
-        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[1].LaufRestzeitStunden) * 60));
-    ELSIF gStatusAnlage.Box[1].SchlechtwetterPauseOut THEN
-        // pause in
-        loc_ms := gStatusAnlage.Box[1].RestSchlechtwetterPause + 60000;
-        gStatusAnlage.Box[1].TextIndexLaufzeit   := 1;
-        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[1].LaufRestzeitStunden) * 60));
-    ELSE
-        // Schoenwetter / Dauerbetrieb -> Betriebsstunden (running since)
-        gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
-        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(gBstBox1Std);
-        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(gBstBox1Min);
-    END_IF;
+    gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
+    gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(gBstBox1Std);
+    gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(gBstBox1Min);
 
 ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin OR gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
     gStatusAnlage.Box[1].AnzeigeLaufRestzeit := TRUE;
     gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(fbRestzeitBox1.RestzeitStundenOut);
     gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(fbRestzeitBox1.RestzeitMinutenOut);
     IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
-        gStatusAnlage.Box[1].TextIndexLaufzeit := 2;   // running in
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // running in
     ELSE
-        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // pause in
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 2;   // pause in
     END_IF;
 
 ELSE
@@ -2638,34 +2627,20 @@ IF gBetriebsparameter.Boxen[2].Aus THEN
     gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
 
 ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
+    // Puls-/Pause-Restzeitanzeige (nur VISU) entfernt -> immer Betriebsstunden ("Betrieb seit")
     gStatusAnlage.Box[2].AnzeigeLaufRestzeit := TRUE;
-    IF gStatusAnlage.Box[2].SchlechtwetterPulsOut THEN
-        // laeuft noch (running in)
-        loc_ms := gStatusAnlage.Box[2].RestSchlechtwetterPuls + 60000;
-        gStatusAnlage.Box[2].TextIndexLaufzeit   := 2;
-        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[2].LaufRestzeitStunden) * 60));
-    ELSIF gStatusAnlage.Box[2].SchlechtwetterPauseOut THEN
-        // pause in
-        loc_ms := gStatusAnlage.Box[2].RestSchlechtwetterPause + 60000;
-        gStatusAnlage.Box[2].TextIndexLaufzeit   := 1;
-        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[2].LaufRestzeitStunden) * 60));
-    ELSE
-        // Schoenwetter / Dauerbetrieb -> Betriebsstunden (running since)
-        gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
-        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(gBstBox2Std);
-        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(gBstBox2Min);
-    END_IF;
+    gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
+    gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(gBstBox2Std);
+    gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(gBstBox2Min);
 
 ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin OR gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
     gStatusAnlage.Box[2].AnzeigeLaufRestzeit := TRUE;
     gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(fbRestzeitBox2.RestzeitStundenOut);
     gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(fbRestzeitBox2.RestzeitMinutenOut);
     IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
-        gStatusAnlage.Box[2].TextIndexLaufzeit := 2;   // running in
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // running in
     ELSE
-        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // pause in
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 2;   // pause in
     END_IF;
 
 ELSE
@@ -2676,7 +2651,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1787509528">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1787947489">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2853,7 +2828,7 @@ TonF_SensorTrockenluft(IN := xF_SensorTrockenluft, PT := gBetriebsparameter.Verz
 TonF_SensorStocktemp  (IN := xF_SensorStocktemp,   PT := gBetriebsparameter.Verzoegerungen.Fehler);
 TonF_KlappeBox1       (IN := xF_KlappeBox1,        PT := gBetriebsparameter.Verzoegerungen.Fehler);
 TonF_KlappeBox2       (IN := xF_KlappeBox2,        PT := gBetriebsparameter.Verzoegerungen.Fehler);
-TonF_Luftaufbereiter  (IN := xF_Luftaufbereiter,   PT := gBetriebsparameter.Verzoegerungen.Fehler);
+TonF_Luftaufbereiter  (IN := xF_Luftaufbereiter,   PT := gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung);
 TonF_Ventilator       (IN := xF_Ventilator,        PT := gBetriebsparameter.Verzoegerungen.Fehler);
 
 IF TonF_SensorFrischluft.Q THEN 
@@ -3535,7 +3510,7 @@ END_CASE;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1787513163">
+				<program name="AktorenMappingCyclic" version="1.0.0" creationDate="1773515395" lastModifiedDate="1788115061">
 					<vars>
 						<localVars>
 							<var name="xStateEntryBox1" type="BOOL">
@@ -3809,13 +3784,13 @@ END_IF;
 *)
 IF fbBoxenklappe1.FehlerLaufzeitOeffnen OR fbBoxenklappe1.FehlerLaufzeitSchliessen OR (diBox1Offen AND diBox1Geschl) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] := STATUS_STOERUNG;
-ELSIF fbBoxenklappe1.OeffnenOut AND NOT diBox1Offen THEN
+ELSIF fbBoxenklappe1.OeffnenOut AND NOT (diBox1Offen OR fbBoxenklappe1.KlappeIstOffenOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] := STATUS_IN_BEWEGUNG;
-ELSIF fbBoxenklappe1.SchliessenOut AND NOT diBox1Geschl THEN
+ELSIF fbBoxenklappe1.SchliessenOut AND NOT (diBox1Geschl OR fbBoxenklappe1.KlappeIstGeschlOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] := STATUS_IN_BEWEGUNG;
-ELSIF diBox1Offen THEN
+ELSIF (diBox1Offen OR fbBoxenklappe1.KlappeIstOffenOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] := STATUS_OFFEN;
-ELSIF diBox1Geschl THEN
+ELSIF (diBox1Geschl OR fbBoxenklappe1.KlappeIstGeschlOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] := STATUS_GESCHLOSSEN;
 ELSE
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] := STATUS_UNBEKANNT;
@@ -3858,13 +3833,13 @@ END_IF;
 *)
 IF fbBoxenklappe2.FehlerLaufzeitOeffnen OR fbBoxenklappe2.FehlerLaufzeitSchliessen OR (diBox2Offen AND diBox2Geschl) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_STOERUNG;
-ELSIF fbBoxenklappe2.OeffnenOut AND NOT diBox2Offen THEN
+ELSIF fbBoxenklappe2.OeffnenOut AND NOT (diBox2Offen OR fbBoxenklappe2.KlappeIstOffenOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_IN_BEWEGUNG;
-ELSIF fbBoxenklappe2.SchliessenOut AND NOT diBox2Geschl THEN
+ELSIF fbBoxenklappe2.SchliessenOut AND NOT (diBox2Geschl OR fbBoxenklappe2.KlappeIstGeschlOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_IN_BEWEGUNG;
-ELSIF diBox2Offen THEN
+ELSIF (diBox2Offen OR fbBoxenklappe2.KlappeIstOffenOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_OFFEN;
-ELSIF diBox2Geschl THEN
+ELSIF (diBox2Geschl OR fbBoxenklappe2.KlappeIstGeschlOut) THEN
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_GESCHLOSSEN;
 ELSE
     gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] := STATUS_UNBEKANNT;
@@ -3936,6 +3911,9 @@ xLuftaufbNachlauf := gAktoren.xFrgLuftaufbereiter
     OR (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND diBetriebLuftaufber)
     OR (NOT  gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND TOF_LuftaufbAuskuehl.Q);
 
+// Rest/Auskühlzeit berechnen
+gAktoren.uRestAuskuehlzeitLuftaufb := TO_UINT((gBetriebsparameter.Luftaufbereitung.Auskuehlzeit - TO_UDINT(TOF_LuftaufbAuskuehl.ET)) / 1000);   // ms -> s
+
 //global Spiegeln
 gAktoren.xLuftaufbNachlauf := xLuftaufbNachlauf;
 
@@ -3952,7 +3930,14 @@ gAktoren.rLuftaufbereiterSollwert := gCmdAnlage.Leistung.DrehzahlLuftaufbereitun
 
 //Sollwert begrenzen wenn Freigabe Ventilator erteilt
 IF (doFrgVentilator) THEN
-        IF (xLuftaufbNachlauf AND NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv)) THEN
+        IF ((gBetriebsparameter.Boxen[1].xBoxAktiv AND NOT xBox1EndlErreicht)
+            OR (gBetriebsparameter.Boxen[2].xBoxAktiv AND NOT xBox2EndlErreicht)) THEN
+        //Klappenumschaltung: angeforderte Box noch nicht in Endlage -> Umschaltdrehzahl
+        gAktoren.rVentilatorSollwert := LIMIT(
+            MN := gBetriebsparameter.Ventilator.DrehzahlMin,
+            IN := gBetriebsparameter.Ventilator.DrzUmschaltung,
+            MX := gBetriebsparameter.Ventilator.DrehzahlMax);
+    ELSIF (xLuftaufbNachlauf AND NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv)) THEN
         //Nur die Luftaufbereitung haelt den Ventilator (Auskuehl-/Nachlaufphase):
         //Drehzahl "bei Auskuehlphase", begrenzt auf Min/Max des Luftaufbereiters
         //(diese Grenzen gelten vorrangig).
@@ -4042,7 +4027,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1787597770">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1788120993">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -4416,11 +4401,6 @@ gBetriebsparameter.Verzoegerungen.Warnungen                 := Par_Verz_Warnunge
 gBetriebsparameter.Verzoegerungen.AenderungKlappenstellung  := Par_Verz_Aenderung_Klappenstellung;
 gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox := Par_Verz_Umsch_Betriebsart_Box;
 
-(*
----------------------------------------------------------------------------
-Vorlaufzeit Tarifabschaltung
----------------------------------------------------------------------------
-*)
 
 (*
 -------------------------------------------------------------------------------
@@ -4483,6 +4463,15 @@ HMI_IN_doFrgVentilator	     	:= doFrgVentilator;
 HMI_IN_aoFuVentilator   	  := aoFuVentilator;
 HMI_IN_aoLeistVorgLuftaufber  := aoLeistVorgLuftaufber;
 
+
+(*
+-------------------------------------------------------------------------------
+ Berechnete Werte an HMI übergeben
+-------------------------------------------------------------------------------
+*)
+HMI_IN_FrischlSaettigunsDefizit := gStatusAnlage.FrischluftSaettDefizit;
+HMI_IN_TrockenluftSaettigunsDefizit := gStatusAnlage.TrockenluftSaettDefizit;
+
 (*
 -------------------------------------------------------------------------------
  I/O-Testdaten an HMI übergeben
@@ -4491,6 +4480,7 @@ HMI_IN_aoLeistVorgLuftaufber  := aoLeistVorgLuftaufber;
  Testwerte gerade anliegen.
 -------------------------------------------------------------------------------
 *)
+
 
 (* PLC OUT - HMI IN *)
 
@@ -4647,7 +4637,7 @@ END_IF;
 -------------------------------------------------------------------------------
 *)
 IF gAktModus = STILLSTAND THEN
-    IF gAktoren.xLuftaufbNachlauf THEN
+    IF gAktoren.xLuftaufbNachlauf AND NOT gAktoren.xFrgLuftaufbereiter THEN
         HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;      // Auskuehlung laeuft
     ELSIF gCmdAnlage.FehlerStopp THEN
         HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_FEHLERSTOPP;      // Fehler - kein Start
@@ -4659,21 +4649,24 @@ ELSIF gAktModus = IOTEST THEN
     HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_IOTEST_NICHT_ABGE;    // I/O-Test aktiv
 
 ELSE   // BETRIEB
+    HMI_Zusatzmeldung_Restzeit 	:= 0;   //Kein Countdown
+    HMI_Zusatzmeldung_Sanduhr 	:= 0;	//Keine Sanduhr
     IF gCmdAnlage.xTarifAbschaltung THEN
         HMI_Zusatzmeldung_Statustext := ZM_TARIFABSCHALTUNG_AKTIV;
     ELSIF gCmdAnlage.xTarifAbschaltungLuftaufb THEN
-        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTB_VLZ_TARIF;       // Vorlaufzeit Tarif (Text anpassen)
+        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTB_VLZ_TARIF;
     ELSIF Strombegrenzung.StrombegrenzungEin THEN
         HMI_Zusatzmeldung_Statustext := ZM_STROMBEGRENZUNG_AKTIV;
     ELSIF (gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] = STATUS_IN_BEWEGUNG)
        OR (gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_IN_BEWEGUNG) THEN
         HMI_Zusatzmeldung_Statustext := ZM_KLAPPEN_WERDEN_UMGESCHALTET;
-    ELSIF gAktoren.xLuftaufbNachlauf THEN
-        HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;      // Auskuehlung im Betrieb
-    ELSIF NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv) THEN
-        HMI_Zusatzmeldung_Statustext := ZM_WARTE_AUF_ANFORDERUNG_BOX;
+        HMI_Zusatzmeldung_Restzeit   := HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart;  
+        HMI_Zusatzmeldung_Sanduhr := 1;
+    ELSIF gAktoren.xLuftaufbNachlauf AND NOT gAktoren.xFrgLuftaufbereiter THEN
+        HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;
+        HMI_Zusatzmeldung_Restzeit   := gAktoren.uRestAuskuehlzeitLuftaufb;   
     ELSE
-        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTBETRIEB;          // "Anlage in Betrieb" (Text anpassen)
+        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTBETRIEB;
     END_IF;
 END_IF;
 
@@ -4918,7 +4911,7 @@ END_IF;
 
 (*
 -------------------------------------------------------------------------------
- SICHTBARKEITEN 
+ SICHTBARKEITEN UND STATUS
 -------------------------------------------------------------------------------
 *)
 
@@ -4935,7 +4928,7 @@ ELSE
 	HMI_Ventilator1_FarbeIcon := ICON_GRAU;
 END_IF;
 
-//Luftaufbereitung
+//Luftaufbereitung Icon
 IF gBetriebsparameter.Ausstattung.Luftaufbereiter THEN 
 	IF gAlarmBetriebLuftaufber THEN 
 		Par_Luftaufbereitung_FarbeIcon := ICON_ROT;
@@ -4948,6 +4941,9 @@ ELSE
 	Par_Luftaufbereitung_FarbeIcon := ICON_HIDDEN;	
 END_IF;
 
+//Statusindex Textbox Luftaufbereiter PopUp
+HMI_IN_LuftaufberStatusIndex := gStatusAnlage.Aktor[AKTOR_LUFTAUFBER];
+
 //Abluftventilator
 IF gBetriebsparameter.Ausstattung.Abluftventilator THEN 
 	IF FALSE THEN //Abluftventilator hat keinen Alarm
@@ -4959,6 +4955,93 @@ IF gBetriebsparameter.Ausstattung.Abluftventilator THEN
 	END_IF;
 ELSE 
 	HMI_Abluft_FarbeIcon := ICON_HIDDEN;	
+END_IF;
+
+// ===================== BOX 1 Status (Text fuer VISU) =====================
+IF gCmdAnlage.Test THEN
+    gStatusAnlage.Box[1].Status := STATUS_TESTBETRIEB;
+ELSIF gBetriebsparameter.Boxen[1].Aus THEN
+    gStatusAnlage.Box[1].Status := STATUS_STILLSTAND;
+ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
+    IF gStatusAnlage.Box[1].WetterIstSchlecht
+       AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
+                AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+        IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+            gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_LAUF;
+        ELSE
+            gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_PAUSE;
+        END_IF;
+    ELSIF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_DAUERBETRIEB;
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_DAUERBETRIEB_PAUSIERT;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin THEN
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_INTERVALL_LAUF;
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_INTERVALL_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_NACHTROCKNUNG_LAUF;
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_NACHTROCKNUNG_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[1].StocktemperaturEin THEN
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_STOCKTEMPERATUR_LAUF;       
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_STOCKTEMPERATUR_PAUSE;
+    END_IF;
+ELSE
+    gStatusAnlage.Box[1].Status := STATUS_STILLSTAND;
+END_IF;
+
+//BOX 2
+// ===================== BOX 2 Status (Text fuer VISU) =====================
+IF NOT gBetriebsparameter.Ausstattung.Box2 THEN
+    gStatusAnlage.Box[2].Status := STATUS_NICHT_VERFUEGBAR;
+ELSIF gCmdAnlage.Test THEN
+    gStatusAnlage.Box[2].Status := STATUS_TESTBETRIEB;
+ELSIF gBetriebsparameter.Boxen[2].Aus THEN
+    gStatusAnlage.Box[2].Status := STATUS_STILLSTAND;
+ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
+    IF gStatusAnlage.Box[2].WetterIstSchlecht
+       AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
+                AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+        IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+            gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_LAUF;
+        ELSE
+            gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_PAUSE;
+        END_IF;
+    ELSIF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_DAUERBETRIEB;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_DAUERBETRIEB_PAUSIERT;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin THEN
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_INTERVALL_LAUF;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_INTERVALL_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_NACHTROCKNUNG_LAUF;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_NACHTROCKNUNG_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[2].StocktemperaturEin THEN
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_STOCKTEMPERATUR_LAUF;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_STOCKTEMPERATUR_PAUSE;
+    END_IF;
+ELSE
+    gStatusAnlage.Box[2].Status := STATUS_STILLSTAND;
 END_IF;
 
 (*
@@ -4996,7 +5079,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787595930">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787946511">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -5034,7 +5117,7 @@ END_FOR;
 								<descr>Haltebit Zweipunkt Box 2</descr>
 								<initValue>FALSE</initValue>
 							</var>
-							<var name="xLuftaufbVorhanden" type="BOOL">
+							<var name="xLuftaufbAktiv" type="BOOL">
 								<descr>Heizregister oder Ofen vorhanden -&gt; kein Puls/Pause</descr>
 							</var>
 							<var name="xAnlageBetrieb" type="BOOL"/>
@@ -5073,7 +5156,7 @@ VAR
 	xSchlechtwetterBox2Aktiv : BOOL;
 	xStockHaltBox1 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 1 *)
 	xStockHaltBox2 : BOOL := FALSE;	(* Haltebit Zweipunkt Box 2 *)
-	xLuftaufbVorhanden : BOOL;   (* Heizregister oder Ofen vorhanden -> kein Puls/Pause *)
+	xLuftaufbAktiv : BOOL;   (* Heizregister oder Ofen vorhanden -> kein Puls/Pause *)
 	xAnlageBetrieb : BOOL;
 END_VAR
 
@@ -5216,18 +5299,25 @@ END_IF;
 ================================================================================
 *)
 
-//Luftaufbereitung vorhanden (Heizregister oder Ofen) -> im Automatikbetrieb
-//durchgehend trocknen statt Lauf/Pause
-xLuftaufbVorhanden := gBetriebsparameter.Ausstattung.Luftaufbereiter
-                      AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER 
-                      	   OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN);
+//Luftaufbereitung aktiv (Heizregister oder Ofen laeuft in Automatik- oder
+//Dauerbetrieb) -> im Automatikbetrieb durchgehend trocknen statt Lauf/Pause.
+//Ausnahme: Stellt der Bediener die Luftaufbereitung auf AUS (weder Automatik-
+//noch Dauerbetrieb), soll die Witterung mit dem Lauf/Pause-Programm wieder
+//greifen -> dann gilt die Luftaufbereitung als nicht aktiv.
+//Bewusst ueber die aktiven Betriebsarten abgefragt (nicht ueber '.Aus'), da beim
+//Steuerungsstart nicht sicher ist, dass '.Aus' gesetzt ist.
+xLuftaufbAktiv := gBetriebsparameter.Ausstattung.Luftaufbereiter
+                  AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER
+                       OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
+                  AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin
+                       OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin);
 
 //===== BOX 1 =====
 xSchlechtwetterBox1Aktiv := xDauerbetriebBox1Anwahl
                             AND xBox1Freigegeben
                             AND gStatusAnlage.Box[1].WetterIstSchlecht
                             AND (gStatusAnlage.Box[1].AktSchlechtwetterPause <> 0)
-                            AND NOT xLuftaufbVorhanden;
+                            AND NOT xLuftaufbAktiv;
 
 fbPulsPauseBox1.Freigabe      := xSchlechtwetterBox1Aktiv;
 fbPulsPauseBox1.StartMitPause := FALSE;   //bei Wetterumschlag zuerst trocknen
@@ -5253,7 +5343,7 @@ xSchlechtwetterBox2Aktiv := xDauerbetriebBox2Anwahl
                             AND xBox2Freigegeben
                             AND gStatusAnlage.Box[2].WetterIstSchlecht
                             AND (gStatusAnlage.Box[2].AktSchlechtwetterPause <> 0)
-                            AND NOT xLuftaufbVorhanden;
+                            AND NOT xLuftaufbAktiv;
 
 fbPulsPauseBox2.Freigabe      := xSchlechtwetterBox2Aktiv;
 fbPulsPauseBox2.StartMitPause := FALSE;
@@ -5575,6 +5665,7 @@ END_STRUCT;
 						<var name="xLuftaufbNachlauf" type="BOOL">
 							<descr>Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung)</descr>
 						</var>
+						<var name="uRestAuskuehlzeitLuftaufb" type="UINT"/>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[ST_Aktor_Allgemein: STRUCT
@@ -5590,6 +5681,7 @@ END_STRUCT;
 	xFrgAbluftventilator : BOOL;
 	xQuitFehler : BOOL;
 	xLuftaufbNachlauf : BOOL;   (* Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung) *)
+	uRestAuskuehlzeitLuftaufb : UINT;
 END_STRUCT;
 
 ]]>
@@ -6092,6 +6184,12 @@ END_STRUCT;
 						</element>
 						<element name="STATUS_SCHLECHTWETTER_PAUSE">
 							<value>26</value>
+						</element>
+						<element name="STATUS_STOCKTEMPERATUR_LAUF">
+							<value>27</value>
+						</element>
+						<element name="STATUS_STOCKTEMPERATUR_PAUSE">
+							<value>28</value>
 						</element>
 					</elements>
 					<iecDeclaration active="FALSE"/>
@@ -75487,6 +75585,12 @@ nSamples := cnt;
 	HMI_IN_ALARM_WARNMASKE_2 AT %MW201.190 : UDINT;
 		{G:"Variables"}
 	HMI_Abluft_FarbeIcon AT %MW201.192 : UINT := 0;
+		{G:"Variables"}
+	HMI_IN_FrischlSaettigunsDefizit AT %MW201.194 : REAL := 0;
+		{G:"Variables"}
+	HMI_IN_TrockenluftSaettigunsDefizit AT %MW201.196 : REAL := 0;
+		{G:"Variables"}
+	HMI_IN_LuftaufberStatusIndex AT %MW201.198 : USINT := 0;
 		{G:"IO_Mapping_Local"}
 	hw_di1 AT %IX0.0 : BOOL;  {DE:"DIL1 digital input"}
 		{G:"IO_Mapping_Local"}
@@ -78130,8 +78234,8 @@ TYPE
 END_TYPE
 
 VAR_GLOBAL CONSTANT
-$$ParDB : ARRAY[ 0..11759 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
-$$ParDBLength  : DWORD := 294; { HIDDEN:ON }
+$$ParDB : ARRAY[ 0..11879 ] OF USINT; { HIDDEN:ON } { INIT:"CControl_Lite.PLK+0" }
+$$ParDBLength  : DWORD := 297; { HIDDEN:ON }
 END_VAR
 
 PROGRAM InitParDB WITH Init;
@@ -78144,9 +78248,9 @@ PROGRAM InitParDB
 		dummyCrc32: UDINT;
 	END_VAR
 
-	dummyCrc32 := 1879886271;
+	dummyCrc32 := 648242601;
 
-	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 316, 2, 201, TO_DWORD( ADR(%MW201.0) ), 193, 2, 1879886271 );
+	warningsKiller := sysDBase_SetExtTable( TO_DWORD( ADR($$ParDB) ), $$ParDBLength, 200, TO_DWORD( ADR(%MW200.0) ), 316, 2, 201, TO_DWORD( ADR(%MW201.0) ), 199, 2, 648242601 );
 
 END_PROGRAM
 
@@ -78215,7 +78319,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="18795">
+			<root name="CControl_Lite" nextID="19742">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
@@ -92747,6 +92851,153 @@ END_PROGRAM
 								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
 								<TelevisIdentificationPar>0</TelevisIdentificationPar>
 							</param>
+							<param>
+								<ipa>9151</ipa>
+								<address>9151</address>
+								<name>HMI_IN_FrischlSaettigunsDefizit</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.194</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9153</ipa>
+								<address>9153</address>
+								<name>HMI_IN_TrockenluftSaettigunsDefizit</name>
+								<typepar>4</typepar>
+								<typetarg>REAL</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.196</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
+							<param>
+								<ipa>9155</ipa>
+								<address>9155</address>
+								<name>HMI_IN_LuftaufberStatusIndex</name>
+								<typepar>7</typepar>
+								<typetarg>USINT</typetarg>
+								<value>0</value>
+								<min/>
+								<max/>
+								<ipamin/>
+								<ipamax/>
+								<scale>1</scale>
+								<offs>0</offs>
+								<um/>
+								<description/>
+								<note/>
+								<form/>
+								<accesslevel>3</accesslevel>
+								<readonly>0</readonly>
+								<shortname/>
+								<size>0</size>
+								<dataBlock>%MW201.198</dataBlock>
+								<label/>
+								<translation/>
+								<visibility>0</visibility>
+								<clientType>0</clientType>
+								<descriptioncode>CUS40000</descriptioncode>
+								<descriptioncode_language/>
+								<progressive/>
+								<category>1</category>
+								<groups/>
+								<groups_language/>
+								<complemented>1</complemented>
+								<measurementunit>num</measurementunit>
+								<measurementunit_language>en-GB</measurementunit_language>
+								<existence>FIX(1)</existence>
+								<type>0</type>
+								<writesequence/>
+								<softscope>0</softscope>
+								<iotype/>
+								<iolabel/>
+								<wizard/>
+								<wizardgroup/>
+								<installeraccesslevel>0</installeraccesslevel>
+								<autogeneratedfrombusconfig>0</autogeneratedfrombusconfig>
+								<groupscode/>
+								<measurementunitcode>FIX(VMU00020)</measurementunitcode>
+								<TelevisIdentificationPar>0</TelevisIdentificationPar>
+							</param>
 						</paramsRO>
 						<enums/>
 						<sysenums>
@@ -94904,6 +95155,9 @@ END_PROGRAM
 								<value ipa="9146" subidx="0">0</value>
 								<value ipa="9148" subidx="0">0</value>
 								<value ipa="9150" subidx="0">0</value>
+								<value ipa="9151" subidx="0">0</value>
+								<value ipa="9153" subidx="0">0</value>
+								<value ipa="9155" subidx="0">0</value>
 							</values>
 							<commDisabled>0</commDisabled>
 							<downloadVolume>0</downloadVolume>
