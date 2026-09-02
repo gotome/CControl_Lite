@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-08-30T19:04:53"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-09-01T20:50:15"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
 	FEHLER_24VDC := 0,
 	FEHLER_BETRIEBSMLDG_VENTILATOR := 5,
 	FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER := 6,
@@ -22,7 +22,7 @@
 	FEHLER_ENTF_FREMD_BETRMLDG := 36
 );
 
-]]></iecDecl></data></addData></dataType><dataType name="eStatus"><baseType><enum><baseType><DINT/></baseType><values><value name="STATUS_NICHT_VERFUEGBAR" value="0"/><value name="STATUS_STILLSTAND" value="1"/><value name="STATUS_TESTBETRIEB" value="2"/><value name="STATUS_DAUERBETRIEB" value="3"/><value name="STATUS_INTERVALL_LAUF" value="4"/><value name="STATUS_INTERVALL_PAUSE" value="5"/><value name="STATUS_NACHTROCKNUNG_LAUF" value="6"/><value name="STATUS_NACHTROCKNUNG_PAUSE" value="7"/><value name="STATUS_BEREIT" value="8"/><value name="STATUS_STOERUNG" value="9"/><value name="STATUS_AKTIV" value="10"/><value name="STATUS_NICHT_AKTIV" value="11"/><value name="STATUS_OFFEN" value="12"/><value name="STATUS_GESCHLOSSEN" value="13"/><value name="STATUS_NICHT_FREIGEGEBEN" value="14"/><value name="STATUS_UNBEKANNT" value="15"/><value name="STATUS_IN_BEWEGUNG" value="16"/><value name="STATUS_ENTF_ABTAUUNG" value="17"/><value name="STATUS_ANLAGE_IN_BETRIEB" value="18"/><value name="STATUS_AUSKUEHLPHASE" value="19"/><value name="STATUS_ENTF_STANDBY" value="20"/><value name="STATUS_KLAPPE_FRISCHLUFT" value="21"/><value name="STATUS_KLAPPE_DACHLUFT" value="22"/><value name="STATUS_KLAPPE_UMLUFT" value="23"/><value name="STATUS_DAUERBETRIEB_PAUSIERT" value="24"/><value name="STATUS_SCHLECHTWETTER_LAUF" value="25"/><value name="STATUS_SCHLECHTWETTER_PAUSE" value="26"/></values></enum></baseType></dataType><dataType name="eWarnung"><baseType><enum><baseType><DINT/></baseType><values><value name="WARNUNG_Res1" value="0"/><value name="WARNUNG_Res2" value="1"/><value name="WARNUNG_Res3" value="2"/><value name="WARNUNG_Res4" value="3"/></values></enum></baseType></dataType><dataType name="eZusatzmeldungen"><baseType><enum><baseType><USINT/></baseType><values><value name="ZM_STILLSTAND_IOTEST_NICHT_ABGE" value="0"/><value name="ZM_STILLSTAND_FEHLER" value="1"/><value name="ZM_STILLSTAND_BEREIT" value="2"/><value name="ZM_STILLSTAND_ENTF_NOCH_IN_BETR" value="3"/><value name="ZM_WARTE_AUF_NOTSTROM" value="4"/><value name="ZM_AUSKUEHLZEIT_WLO_AKTIV" value="5"/><value name="ZM_AUSKUEHLZEIT_SHO_AKTIV" value="6"/><value name="ZM_ANLAUFVERZ_VENT2_AKTIV" value="7"/><value name="ZM_ANLAUFVERZ_VENT1_AKTIV" value="8"/><value name="ZM_TARIFABSCHALTUNG_AKTIV" value="9"/><value name="ZM_STROMBEGRENZUNG_AKTIV" value="10"/><value name="ZM_KLAPPEN_WERDEN_UMGESCHALTET" value="11"/><value name="ZM_FRISCHLUFTBETRIEB" value="12"/><value name="ZM_DACHABSAUGUNGSBETRIEB" value="13"/><value name="ZM_UMLUFTBETRIEB" value="14"/><value name="ZM_WARTE_AUF_ANFORDERUNG_BOX" value="15"/><value name="ZM_STILLSTAND_FEHLERSTOPP" value="16"/><value name="ZM_FRISCHLUFTB_VLZ_TARIF" value="17"/><value name="ZM_DACHABSAUGUNGSB_VLZ_TARIF" value="18"/><value name="ZM_UMLUFTBETR_VLZ_TARIF" value="19"/><value name="ZM_INSELBETRIEB_AUS" value="20"/><value name="ZM_INSELBETRIEB_STANDBY" value="21"/><value name="ZM_INSELBETRIEB_AKTIV" value="22"/><value name="ZM_INSELBETRIEB_VENT_NICHT_AKTIV" value="23"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eZusatzmeldungen: USINT (
+]]></iecDecl></data></addData></dataType><dataType name="eStatus"><baseType><enum><baseType><DINT/></baseType><values><value name="STATUS_NICHT_VERFUEGBAR" value="0"/><value name="STATUS_STILLSTAND" value="1"/><value name="STATUS_TESTBETRIEB" value="2"/><value name="STATUS_DAUERBETRIEB" value="3"/><value name="STATUS_INTERVALL_LAUF" value="4"/><value name="STATUS_INTERVALL_PAUSE" value="5"/><value name="STATUS_NACHTROCKNUNG_LAUF" value="6"/><value name="STATUS_NACHTROCKNUNG_PAUSE" value="7"/><value name="STATUS_BEREIT" value="8"/><value name="STATUS_STOERUNG" value="9"/><value name="STATUS_AKTIV" value="10"/><value name="STATUS_NICHT_AKTIV" value="11"/><value name="STATUS_OFFEN" value="12"/><value name="STATUS_GESCHLOSSEN" value="13"/><value name="STATUS_NICHT_FREIGEGEBEN" value="14"/><value name="STATUS_UNBEKANNT" value="15"/><value name="STATUS_IN_BEWEGUNG" value="16"/><value name="STATUS_ENTF_ABTAUUNG" value="17"/><value name="STATUS_ANLAGE_IN_BETRIEB" value="18"/><value name="STATUS_AUSKUEHLPHASE" value="19"/><value name="STATUS_ENTF_STANDBY" value="20"/><value name="STATUS_KLAPPE_FRISCHLUFT" value="21"/><value name="STATUS_KLAPPE_DACHLUFT" value="22"/><value name="STATUS_KLAPPE_UMLUFT" value="23"/><value name="STATUS_DAUERBETRIEB_PAUSIERT" value="24"/><value name="STATUS_SCHLECHTWETTER_LAUF" value="25"/><value name="STATUS_SCHLECHTWETTER_PAUSE" value="26"/><value name="STATUS_STOCKTEMPERATUR_LAUF" value="27"/><value name="STATUS_STOCKTEMPERATUR_PAUSE" value="28"/></values></enum></baseType></dataType><dataType name="eWarnung"><baseType><enum><baseType><DINT/></baseType><values><value name="WARNUNG_Res1" value="0"/><value name="WARNUNG_Res2" value="1"/><value name="WARNUNG_Res3" value="2"/><value name="WARNUNG_Res4" value="3"/></values></enum></baseType></dataType><dataType name="eZusatzmeldungen"><baseType><enum><baseType><USINT/></baseType><values><value name="ZM_STILLSTAND_IOTEST_NICHT_ABGE" value="0"/><value name="ZM_STILLSTAND_FEHLER" value="1"/><value name="ZM_STILLSTAND_BEREIT" value="2"/><value name="ZM_STILLSTAND_ENTF_NOCH_IN_BETR" value="3"/><value name="ZM_WARTE_AUF_NOTSTROM" value="4"/><value name="ZM_AUSKUEHLZEIT_WLO_AKTIV" value="5"/><value name="ZM_AUSKUEHLZEIT_SHO_AKTIV" value="6"/><value name="ZM_ANLAUFVERZ_VENT2_AKTIV" value="7"/><value name="ZM_ANLAUFVERZ_VENT1_AKTIV" value="8"/><value name="ZM_TARIFABSCHALTUNG_AKTIV" value="9"/><value name="ZM_STROMBEGRENZUNG_AKTIV" value="10"/><value name="ZM_KLAPPEN_WERDEN_UMGESCHALTET" value="11"/><value name="ZM_FRISCHLUFTBETRIEB" value="12"/><value name="ZM_DACHABSAUGUNGSBETRIEB" value="13"/><value name="ZM_UMLUFTBETRIEB" value="14"/><value name="ZM_WARTE_AUF_ANFORDERUNG_BOX" value="15"/><value name="ZM_STILLSTAND_FEHLERSTOPP" value="16"/><value name="ZM_FRISCHLUFTB_VLZ_TARIF" value="17"/><value name="ZM_DACHABSAUGUNGSB_VLZ_TARIF" value="18"/><value name="ZM_UMLUFTBETR_VLZ_TARIF" value="19"/><value name="ZM_INSELBETRIEB_AUS" value="20"/><value name="ZM_INSELBETRIEB_STANDBY" value="21"/><value name="ZM_INSELBETRIEB_AKTIV" value="22"/><value name="ZM_INSELBETRIEB_VENT_NICHT_AKTIV" value="23"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eZusatzmeldungen: USINT (
 	ZM_STILLSTAND_IOTEST_NICHT_ABGE := 0,
 	ZM_STILLSTAND_FEHLER := 1,
 	ZM_STILLSTAND_BEREIT := 2,
@@ -88,7 +88,7 @@ END_STRUCT;
 	Laufzeit : UDINT;
 END_STRUCT;
 
-]]></iecDecl></data></addData></dataType><dataType name="ST_StatAnlage"><baseType><struct><variable name="Aktor"><type><array><dimension lower="0" upper="39"/><baseType><derived name="eStatus"/></baseType></array></type></variable><variable name="FrischluftTemperatur"><type><REAL/></type></variable><variable name="FrischluftFeuchte"><type><REAL/></type></variable><variable name="TrockenluftTemperatur"><type><REAL/></type></variable><variable name="TrockenluftFeuchte"><type><REAL/></type></variable><variable name="StockTemperatur"><type><REAL/></type></variable><variable name="AbluftBox1Temp"><type><REAL/></type></variable><variable name="AbluftBox1Feuchte"><type><REAL/></type></variable><variable name="AbluftBox2Temp"><type><REAL/></type></variable><variable name="AbluftBox2Feuchte"><type><REAL/></type></variable><variable name="FrischluftSaettDefizit"><type><REAL/></type></variable><variable name="TrockenluftSaettDefizit"><type><REAL/></type></variable><variable name="LuftaufberTyp"><type><UINT/></type></variable><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_StatBoxen"/></baseType></array></type></variable><variable name="Alarm"><type><derived name="ST_Alarm"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Box"><baseType><struct><variable name="xSollOffen"><type><BOOL/></type></variable><variable name="xIstOffen"><type><BOOL/></type></variable><variable name="xIstGeschlossen"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitAuf"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitZu"><type><BOOL/></type></variable><variable name="xStoerung"><type><BOOL/></type></variable><variable name="eStatus"><type><derived name="eStatus"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Allgemein"><baseType><struct><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_Aktor_Box"/></baseType></array></type></variable><variable name="Warmluftofen"><type><derived name="fbBoxenWLO"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Warmluftofen Logik</xhtml></documentation></variable><variable name="Heizregister"><type><derived name="fbHeizregister"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Heizregister Logik</xhtml></documentation></variable><variable name="rVentilatorSollwert"><type><REAL/></type></variable><variable name="rLuftaufbereiterSollwert"><type><REAL/></type></variable><variable name="eStatusVentilator"><type><derived name="eStatus"/></type></variable><variable name="eStatusLuftaufbereiter"><type><derived name="eStatus"/></type></variable><variable name="xFrgVentilator"><type><BOOL/></type></variable><variable name="xFrgLuftaufbereiter"><type><BOOL/></type></variable><variable name="xFrgAbluftventilator"><type><BOOL/></type></variable><variable name="xQuitFehler"><type><BOOL/></type></variable><variable name="xLuftaufbNachlauf"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung)</xhtml></documentation></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_Aktor_Allgemein: STRUCT
+]]></iecDecl></data></addData></dataType><dataType name="ST_StatAnlage"><baseType><struct><variable name="Aktor"><type><array><dimension lower="0" upper="39"/><baseType><derived name="eStatus"/></baseType></array></type></variable><variable name="FrischluftTemperatur"><type><REAL/></type></variable><variable name="FrischluftFeuchte"><type><REAL/></type></variable><variable name="TrockenluftTemperatur"><type><REAL/></type></variable><variable name="TrockenluftFeuchte"><type><REAL/></type></variable><variable name="StockTemperatur"><type><REAL/></type></variable><variable name="AbluftBox1Temp"><type><REAL/></type></variable><variable name="AbluftBox1Feuchte"><type><REAL/></type></variable><variable name="AbluftBox2Temp"><type><REAL/></type></variable><variable name="AbluftBox2Feuchte"><type><REAL/></type></variable><variable name="FrischluftSaettDefizit"><type><REAL/></type></variable><variable name="TrockenluftSaettDefizit"><type><REAL/></type></variable><variable name="LuftaufberTyp"><type><UINT/></type></variable><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_StatBoxen"/></baseType></array></type></variable><variable name="Alarm"><type><derived name="ST_Alarm"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Box"><baseType><struct><variable name="xSollOffen"><type><BOOL/></type></variable><variable name="xIstOffen"><type><BOOL/></type></variable><variable name="xIstGeschlossen"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitAuf"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitZu"><type><BOOL/></type></variable><variable name="xStoerung"><type><BOOL/></type></variable><variable name="eStatus"><type><derived name="eStatus"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Allgemein"><baseType><struct><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_Aktor_Box"/></baseType></array></type></variable><variable name="Warmluftofen"><type><derived name="fbBoxenWLO"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Warmluftofen Logik</xhtml></documentation></variable><variable name="Heizregister"><type><derived name="fbHeizregister"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Heizregister Logik</xhtml></documentation></variable><variable name="rVentilatorSollwert"><type><REAL/></type></variable><variable name="rLuftaufbereiterSollwert"><type><REAL/></type></variable><variable name="eStatusVentilator"><type><derived name="eStatus"/></type></variable><variable name="eStatusLuftaufbereiter"><type><derived name="eStatus"/></type></variable><variable name="xFrgVentilator"><type><BOOL/></type></variable><variable name="xFrgLuftaufbereiter"><type><BOOL/></type></variable><variable name="xFrgAbluftventilator"><type><BOOL/></type></variable><variable name="xQuitFehler"><type><BOOL/></type></variable><variable name="xLuftaufbNachlauf"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung)</xhtml></documentation></variable><variable name="uRestAuskuehlzeitLuftaufb"><type><UINT/></type></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_Aktor_Allgemein: STRUCT
 	Box : ARRAY[1..2] OF ST_Aktor_Box;
 	Warmluftofen : fbBoxenWLO;	(* Warmluftofen Logik *)
 	Heizregister : fbHeizregister;	(* Heizregister Logik *)
@@ -101,6 +101,7 @@ END_STRUCT;
 	xFrgAbluftventilator : BOOL;
 	xQuitFehler : BOOL;
 	xLuftaufbNachlauf : BOOL;   (* Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung) *)
+	uRestAuskuehlzeitLuftaufb : UINT;
 END_STRUCT;
 
 ]]></iecDecl></data></addData></dataType><dataType name="ST_CmdAnlage"><baseType><struct><variable name="Test"><type><BOOL/></type></variable><variable name="Auto"><type><BOOL/></type></variable><variable name="Leistung"><type><derived name="ST_CmdLeistung"/></type></variable><variable name="StoppExtern"><type><BOOL/></type></variable><variable name="StartExtern"><type><BOOL/></type></variable><variable name="Start"><type><BOOL/></type></variable><variable name="Stopp"><type><BOOL/></type></variable><variable name="FehlerStopp"><type><BOOL/></type></variable><variable name="xTarifAbschaltung"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Tarif-Zeitfenster aktiv</xhtml></documentation></variable><variable name="xTarifAbschaltungLuftaufb"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Tarif-Vorabschaltung nur Luftaufbereitung/Trocknung</xhtml></documentation></variable></struct></baseType></dataType><dataType name="ST_CmdLeistung"><baseType><struct><variable name="DrehzahlVentilator"><type><REAL/></type></variable><variable name="DrehzahlLuftaufbereitung"><type><REAL/></type></variable></struct></baseType></dataType><dataType name="ST_HmiNutzungsdaten"><baseType><struct><variable name="LetzterModus"><type><derived name="eBetriebsmodus"/></type></variable></struct></baseType></dataType><dataType name="ST_ParLuftaufber"><baseType><struct><variable name="Typ"><type><UINT/></type></variable><variable name="VerzWetterwechsel"><type><UDINT/></type></variable><variable name="TempVorgabeSoll"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">°C Solltemperatur – NEU</xhtml></documentation></variable><variable name="Hysterese"><type><REAL/></type></variable><variable name="AutomatikbetriebEin"><type><BOOL/></type></variable><variable name="DauerbetriebEin"><type><BOOL/></type></variable><variable name="Aus"><type><BOOL/></type></variable><variable name="SaettigungFrischluftEin"><type><REAL/></type></variable><variable name="DrehzahlVorgabeMin"><type><REAL/></type></variable><variable name="DrehzahlVorgabeMax"><type><REAL/></type></variable><variable name="P"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">P Anteil Regler</xhtml></documentation></variable><variable name="I"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">I Anteil Regler</xhtml></documentation></variable><variable name="D"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">D Anteil Regler</xhtml></documentation></variable><variable name="Auskuehlzeit"><type><UDINT/></type></variable><variable name="VerzBetriebsmeldung"><type><UDINT/></type></variable><variable name="BetriebsmeldungVorh"><type><BOOL/></type></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_ParLuftaufber: STRUCT
@@ -858,34 +859,20 @@ IF gBetriebsparameter.Boxen[1].Aus THEN
     gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
 
 ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
+    // Puls-/Pause-Restzeitanzeige (nur VISU) entfernt -> immer Betriebsstunden ("Betrieb seit")
     gStatusAnlage.Box[1].AnzeigeLaufRestzeit := TRUE;
-    IF gStatusAnlage.Box[1].SchlechtwetterPulsOut THEN
-        // laeuft noch (running in)
-        loc_ms := gStatusAnlage.Box[1].RestSchlechtwetterPuls + 60000;
-        gStatusAnlage.Box[1].TextIndexLaufzeit   := 2;
-        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[1].LaufRestzeitStunden) * 60));
-    ELSIF gStatusAnlage.Box[1].SchlechtwetterPauseOut THEN
-        // pause in
-        loc_ms := gStatusAnlage.Box[1].RestSchlechtwetterPause + 60000;
-        gStatusAnlage.Box[1].TextIndexLaufzeit   := 1;
-        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[1].LaufRestzeitStunden) * 60));
-    ELSE
-        // Schoenwetter / Dauerbetrieb -> Betriebsstunden (running since)
-        gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
-        gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(gBstBox1Std);
-        gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(gBstBox1Min);
-    END_IF;
+    gStatusAnlage.Box[1].TextIndexLaufzeit   := 0;
+    gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(gBstBox1Std);
+    gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(gBstBox1Min);
 
 ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin OR gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
     gStatusAnlage.Box[1].AnzeigeLaufRestzeit := TRUE;
     gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(fbRestzeitBox1.RestzeitStundenOut);
     gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(fbRestzeitBox1.RestzeitMinutenOut);
     IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
-        gStatusAnlage.Box[1].TextIndexLaufzeit := 2;   // running in
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // running in
     ELSE
-        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // pause in
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 2;   // pause in
     END_IF;
 
 ELSE
@@ -944,34 +931,20 @@ IF gBetriebsparameter.Boxen[2].Aus THEN
     gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
 
 ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
+    // Puls-/Pause-Restzeitanzeige (nur VISU) entfernt -> immer Betriebsstunden ("Betrieb seit")
     gStatusAnlage.Box[2].AnzeigeLaufRestzeit := TRUE;
-    IF gStatusAnlage.Box[2].SchlechtwetterPulsOut THEN
-        // laeuft noch (running in)
-        loc_ms := gStatusAnlage.Box[2].RestSchlechtwetterPuls + 60000;
-        gStatusAnlage.Box[2].TextIndexLaufzeit   := 2;
-        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[2].LaufRestzeitStunden) * 60));
-    ELSIF gStatusAnlage.Box[2].SchlechtwetterPauseOut THEN
-        // pause in
-        loc_ms := gStatusAnlage.Box[2].RestSchlechtwetterPause + 60000;
-        gStatusAnlage.Box[2].TextIndexLaufzeit   := 1;
-        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(loc_ms / 3600000);
-        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT((loc_ms / 60000) - (TO_UDINT(gStatusAnlage.Box[2].LaufRestzeitStunden) * 60));
-    ELSE
-        // Schoenwetter / Dauerbetrieb -> Betriebsstunden (running since)
-        gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
-        gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(gBstBox2Std);
-        gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(gBstBox2Min);
-    END_IF;
+    gStatusAnlage.Box[2].TextIndexLaufzeit   := 0;
+    gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(gBstBox2Std);
+    gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(gBstBox2Min);
 
 ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin OR gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
     gStatusAnlage.Box[2].AnzeigeLaufRestzeit := TRUE;
     gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(fbRestzeitBox2.RestzeitStundenOut);
     gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(fbRestzeitBox2.RestzeitMinutenOut);
     IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
-        gStatusAnlage.Box[2].TextIndexLaufzeit := 2;   // running in
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // running in
     ELSE
-        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // pause in
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 2;   // pause in
     END_IF;
 
 ELSE
@@ -1992,6 +1965,9 @@ xLuftaufbNachlauf := gAktoren.xFrgLuftaufbereiter
     OR (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND diBetriebLuftaufber)
     OR (NOT  gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND TOF_LuftaufbAuskuehl.Q);
 
+// Rest/Auskühlzeit berechnen
+gAktoren.uRestAuskuehlzeitLuftaufb := TO_UINT((gBetriebsparameter.Luftaufbereitung.Auskuehlzeit - TO_UDINT(TOF_LuftaufbAuskuehl.ET)) / 1000);   // ms -> s
+
 //global Spiegeln
 gAktoren.xLuftaufbNachlauf := xLuftaufbNachlauf;
 
@@ -2702,7 +2678,7 @@ END_IF;
 -------------------------------------------------------------------------------
 *)
 IF gAktModus = STILLSTAND THEN
-    IF gAktoren.xLuftaufbNachlauf THEN
+    IF gAktoren.xLuftaufbNachlauf AND NOT gAktoren.xFrgLuftaufbereiter THEN
         HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;      // Auskuehlung laeuft
     ELSIF gCmdAnlage.FehlerStopp THEN
         HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_FEHLERSTOPP;      // Fehler - kein Start
@@ -2714,21 +2690,24 @@ ELSIF gAktModus = IOTEST THEN
     HMI_Zusatzmeldung_Statustext := ZM_STILLSTAND_IOTEST_NICHT_ABGE;    // I/O-Test aktiv
 
 ELSE   // BETRIEB
+    HMI_Zusatzmeldung_Restzeit 	:= 0;   //Kein Countdown
+    HMI_Zusatzmeldung_Sanduhr 	:= 0;	//Keine Sanduhr
     IF gCmdAnlage.xTarifAbschaltung THEN
         HMI_Zusatzmeldung_Statustext := ZM_TARIFABSCHALTUNG_AKTIV;
     ELSIF gCmdAnlage.xTarifAbschaltungLuftaufb THEN
-        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTB_VLZ_TARIF;       // Vorlaufzeit Tarif (Text anpassen)
+        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTB_VLZ_TARIF;
     ELSIF Strombegrenzung.StrombegrenzungEin THEN
         HMI_Zusatzmeldung_Statustext := ZM_STROMBEGRENZUNG_AKTIV;
     ELSIF (gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_1] = STATUS_IN_BEWEGUNG)
        OR (gStatusAnlage.Aktor[AKTOR_KLAPPE_BOX_2] = STATUS_IN_BEWEGUNG) THEN
         HMI_Zusatzmeldung_Statustext := ZM_KLAPPEN_WERDEN_UMGESCHALTET;
-    ELSIF gAktoren.xLuftaufbNachlauf THEN
-        HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;      // Auskuehlung im Betrieb
-    ELSIF NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv) THEN
-        HMI_Zusatzmeldung_Statustext := ZM_WARTE_AUF_ANFORDERUNG_BOX;
+        HMI_Zusatzmeldung_Restzeit   := HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart;  
+        HMI_Zusatzmeldung_Sanduhr := 1;
+    ELSIF gAktoren.xLuftaufbNachlauf AND NOT gAktoren.xFrgLuftaufbereiter THEN
+        HMI_Zusatzmeldung_Statustext := ZM_AUSKUEHLZEIT_WLO_AKTIV;
+        HMI_Zusatzmeldung_Restzeit   := gAktoren.uRestAuskuehlzeitLuftaufb;   
     ELSE
-        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTBETRIEB;          // "Anlage in Betrieb" (Text anpassen)
+        HMI_Zusatzmeldung_Statustext := ZM_FRISCHLUFTBETRIEB;
     END_IF;
 END_IF;
 
@@ -2973,7 +2952,7 @@ END_IF;
 
 (*
 -------------------------------------------------------------------------------
- SICHTBARKEITEN 
+ SICHTBARKEITEN UND STATUS
 -------------------------------------------------------------------------------
 *)
 
@@ -2990,7 +2969,7 @@ ELSE
 	HMI_Ventilator1_FarbeIcon := ICON_GRAU;
 END_IF;
 
-//Luftaufbereitung
+//Luftaufbereitung Icon
 IF gBetriebsparameter.Ausstattung.Luftaufbereiter THEN 
 	IF gAlarmBetriebLuftaufber THEN 
 		Par_Luftaufbereitung_FarbeIcon := ICON_ROT;
@@ -3003,6 +2982,9 @@ ELSE
 	Par_Luftaufbereitung_FarbeIcon := ICON_HIDDEN;	
 END_IF;
 
+//Statusindex Textbox Luftaufbereiter PopUp
+HMI_IN_LuftaufberStatusIndex := gStatusAnlage.Aktor[AKTOR_LUFTAUFBER];
+
 //Abluftventilator
 IF gBetriebsparameter.Ausstattung.Abluftventilator THEN 
 	IF FALSE THEN //Abluftventilator hat keinen Alarm
@@ -3014,6 +2996,93 @@ IF gBetriebsparameter.Ausstattung.Abluftventilator THEN
 	END_IF;
 ELSE 
 	HMI_Abluft_FarbeIcon := ICON_HIDDEN;	
+END_IF;
+
+// ===================== BOX 1 Status (Text fuer VISU) =====================
+IF gCmdAnlage.Test THEN
+    gStatusAnlage.Box[1].Status := STATUS_TESTBETRIEB;
+ELSIF gBetriebsparameter.Boxen[1].Aus THEN
+    gStatusAnlage.Box[1].Status := STATUS_STILLSTAND;
+ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
+    IF gStatusAnlage.Box[1].WetterIstSchlecht
+       AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
+                AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+        IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+            gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_LAUF;
+        ELSE
+            gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_PAUSE;
+        END_IF;
+    ELSIF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_DAUERBETRIEB;
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_DAUERBETRIEB_PAUSIERT;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin THEN
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_INTERVALL_LAUF;
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_INTERVALL_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_NACHTROCKNUNG_LAUF;
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_NACHTROCKNUNG_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[1].StocktemperaturEin THEN
+    IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+        gStatusAnlage.Box[1].Status := STATUS_STOCKTEMPERATUR_LAUF;       
+    ELSE
+        gStatusAnlage.Box[1].Status := STATUS_STOCKTEMPERATUR_PAUSE;
+    END_IF;
+ELSE
+    gStatusAnlage.Box[1].Status := STATUS_STILLSTAND;
+END_IF;
+
+//BOX 2
+// ===================== BOX 2 Status (Text fuer VISU) =====================
+IF NOT gBetriebsparameter.Ausstattung.Box2 THEN
+    gStatusAnlage.Box[2].Status := STATUS_NICHT_VERFUEGBAR;
+ELSIF gCmdAnlage.Test THEN
+    gStatusAnlage.Box[2].Status := STATUS_TESTBETRIEB;
+ELSIF gBetriebsparameter.Boxen[2].Aus THEN
+    gStatusAnlage.Box[2].Status := STATUS_STILLSTAND;
+ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
+    IF gStatusAnlage.Box[2].WetterIstSchlecht
+       AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
+                AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+        IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+            gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_LAUF;
+        ELSE
+            gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_PAUSE;
+        END_IF;
+    ELSIF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_DAUERBETRIEB;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_DAUERBETRIEB_PAUSIERT;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin THEN
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_INTERVALL_LAUF;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_INTERVALL_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_NACHTROCKNUNG_LAUF;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_NACHTROCKNUNG_PAUSE;
+    END_IF;
+ELSIF gBetriebsparameter.Boxen[2].StocktemperaturEin THEN
+    IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+        gStatusAnlage.Box[2].Status := STATUS_STOCKTEMPERATUR_LAUF;
+    ELSE
+        gStatusAnlage.Box[2].Status := STATUS_STOCKTEMPERATUR_PAUSE;
+    END_IF;
+ELSE
+    gStatusAnlage.Box[2].Status := STATUS_STILLSTAND;
 END_IF;
 
 (*
