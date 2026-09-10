@@ -1,1 +1,1 @@
-C:\Program Files\Schneider Electric\EcoStruxure Operator Terminal Expert 4.2\Buildtime\PropertyDefinitions\ScreenDesign\GraphicObjects\04-Cliparts
+C:\Program Files\Schneider Electric\EcoStruxure Operator Terminal Expert 4.4\Buildtime\PropertyDefinitions\ScreenDesign\GraphicObjects\04-Cliparts
