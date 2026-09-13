@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-09-01T20:50:15"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-09-13T16:20:51"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
 	FEHLER_24VDC := 0,
 	FEHLER_BETRIEBSMLDG_VENTILATOR := 5,
 	FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER := 6,
@@ -88,7 +88,7 @@ END_STRUCT;
 	Laufzeit : UDINT;
 END_STRUCT;
 
-]]></iecDecl></data></addData></dataType><dataType name="ST_StatAnlage"><baseType><struct><variable name="Aktor"><type><array><dimension lower="0" upper="39"/><baseType><derived name="eStatus"/></baseType></array></type></variable><variable name="FrischluftTemperatur"><type><REAL/></type></variable><variable name="FrischluftFeuchte"><type><REAL/></type></variable><variable name="TrockenluftTemperatur"><type><REAL/></type></variable><variable name="TrockenluftFeuchte"><type><REAL/></type></variable><variable name="StockTemperatur"><type><REAL/></type></variable><variable name="AbluftBox1Temp"><type><REAL/></type></variable><variable name="AbluftBox1Feuchte"><type><REAL/></type></variable><variable name="AbluftBox2Temp"><type><REAL/></type></variable><variable name="AbluftBox2Feuchte"><type><REAL/></type></variable><variable name="FrischluftSaettDefizit"><type><REAL/></type></variable><variable name="TrockenluftSaettDefizit"><type><REAL/></type></variable><variable name="LuftaufberTyp"><type><UINT/></type></variable><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_StatBoxen"/></baseType></array></type></variable><variable name="Alarm"><type><derived name="ST_Alarm"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Box"><baseType><struct><variable name="xSollOffen"><type><BOOL/></type></variable><variable name="xIstOffen"><type><BOOL/></type></variable><variable name="xIstGeschlossen"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitAuf"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitZu"><type><BOOL/></type></variable><variable name="xStoerung"><type><BOOL/></type></variable><variable name="eStatus"><type><derived name="eStatus"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Allgemein"><baseType><struct><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_Aktor_Box"/></baseType></array></type></variable><variable name="Warmluftofen"><type><derived name="fbBoxenWLO"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Warmluftofen Logik</xhtml></documentation></variable><variable name="Heizregister"><type><derived name="fbHeizregister"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Heizregister Logik</xhtml></documentation></variable><variable name="rVentilatorSollwert"><type><REAL/></type></variable><variable name="rLuftaufbereiterSollwert"><type><REAL/></type></variable><variable name="eStatusVentilator"><type><derived name="eStatus"/></type></variable><variable name="eStatusLuftaufbereiter"><type><derived name="eStatus"/></type></variable><variable name="xFrgVentilator"><type><BOOL/></type></variable><variable name="xFrgLuftaufbereiter"><type><BOOL/></type></variable><variable name="xFrgAbluftventilator"><type><BOOL/></type></variable><variable name="xQuitFehler"><type><BOOL/></type></variable><variable name="xLuftaufbNachlauf"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung)</xhtml></documentation></variable><variable name="uRestAuskuehlzeitLuftaufb"><type><UINT/></type></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_Aktor_Allgemein: STRUCT
+]]></iecDecl></data></addData></dataType><dataType name="ST_StatAnlage"><baseType><struct><variable name="Aktor"><type><array><dimension lower="0" upper="39"/><baseType><derived name="eStatus"/></baseType></array></type></variable><variable name="FrischluftTemperatur"><type><REAL/></type></variable><variable name="FrischluftFeuchte"><type><REAL/></type></variable><variable name="TrockenluftTemperatur"><type><REAL/></type></variable><variable name="TrockenluftFeuchte"><type><REAL/></type></variable><variable name="StockTemperatur"><type><REAL/></type></variable><variable name="AbluftBox1Temp"><type><REAL/></type></variable><variable name="AbluftBox1Feuchte"><type><REAL/></type></variable><variable name="AbluftBox2Temp"><type><REAL/></type></variable><variable name="AbluftBox2Feuchte"><type><REAL/></type></variable><variable name="FrischluftSaettDefizit"><type><REAL/></type></variable><variable name="TrockenluftSaettDefizit"><type><REAL/></type></variable><variable name="LuftaufberTyp"><type><UINT/></type></variable><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_StatBoxen"/></baseType></array></type></variable><variable name="Alarm"><type><derived name="ST_Alarm"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Box"><baseType><struct><variable name="xSollOffen"><type><BOOL/></type></variable><variable name="xIstOffen"><type><BOOL/></type></variable><variable name="xIstGeschlossen"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitAuf"><type><BOOL/></type></variable><variable name="xFehlerLaufzeitZu"><type><BOOL/></type></variable><variable name="xStoerung"><type><BOOL/></type></variable><variable name="xEndlErreicht"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Klappe(n) der Box in Soll-Stellung erreicht</xhtml></documentation></variable><variable name="eStatus"><type><derived name="eStatus"/></type></variable></struct></baseType></dataType><dataType name="ST_Aktor_Allgemein"><baseType><struct><variable name="Box"><type><array><dimension lower="1" upper="2"/><baseType><derived name="ST_Aktor_Box"/></baseType></array></type></variable><variable name="Warmluftofen"><type><derived name="fbBoxenWLO"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Warmluftofen Logik</xhtml></documentation></variable><variable name="Heizregister"><type><derived name="fbHeizregister"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Heizregister Logik</xhtml></documentation></variable><variable name="rVentilatorSollwert"><type><REAL/></type></variable><variable name="rLuftaufbereiterSollwert"><type><REAL/></type></variable><variable name="eStatusVentilator"><type><derived name="eStatus"/></type></variable><variable name="eStatusLuftaufbereiter"><type><derived name="eStatus"/></type></variable><variable name="xFrgVentilator"><type><BOOL/></type></variable><variable name="xFrgLuftaufbereiter"><type><BOOL/></type></variable><variable name="xFrgAbluftventilator"><type><BOOL/></type></variable><variable name="xQuitFehler"><type><BOOL/></type></variable><variable name="xLuftaufbNachlauf"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Ventilator-Nachlauf Luftaufbereitung aktiv (Auskuehl/Betriebsmeldung)</xhtml></documentation></variable><variable name="uRestAuskuehlzeitLuftaufb"><type><UINT/></type></variable></struct></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[ST_Aktor_Allgemein: STRUCT
 	Box : ARRAY[1..2] OF ST_Aktor_Box;
 	Warmluftofen : fbBoxenWLO;	(* Warmluftofen Logik *)
 	Heizregister : fbHeizregister;	(* Heizregister Logik *)
@@ -773,7 +773,11 @@ Frischluftsensor.LuftRelFeuchte						:= gStatusAnlage.FrischluftFeuchte;
 Frischluftsensor.MeterUeberAdria					:= TO_REAL(gBetriebsparameter.Allgemein.StandortHoehe);
 Frischluftsensor();
 
-gStatusAnlage.FrischluftSaettDefizit := Frischluftsensor.LuftSaettigungsdefizit;
+IF Frischluftsensor.Gueltig THEN
+	gStatusAnlage.FrischluftSaettDefizit := Frischluftsensor.LuftSaettigungsdefizit;
+ELSE 
+	gStatusAnlage.FrischluftSaettDefizit := 0.0;
+END_IF;
 
 //Berechnungen Trockenluft
 //*****************************
@@ -783,7 +787,12 @@ Trockenluftsensor.LuftRelFeuchte					:= gStatusAnlage.TrockenluftFeuchte;
 Trockenluftsensor.MeterUeberAdria					:= TO_REAL(gBetriebsparameter.Allgemein.StandortHoehe);
 Trockenluftsensor();
 
-gStatusAnlage.TrockenluftSaettDefizit := Trockenluftsensor.LuftSaettigungsdefizit;
+
+IF Trockenluftsensor.Gueltig THEN
+	gStatusAnlage.TrockenluftSaettDefizit := Trockenluftsensor.LuftSaettigungsdefizit;
+ELSE
+	gStatusAnlage.TrockenluftSaettDefizit := 0.0;
+END_IF;
 
 
 //Schlechtwetter Box 1
@@ -1202,7 +1211,7 @@ VAR
     TonF_Ventilator        : TON;
 END_VAR
 
-]]></iecDecl></data></addData></pou><pou name="AblaufstrgCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="stateEntry"><type><BOOL/></type><initialValue><simpleValue value="TRUE"/></initialValue></variable><variable name="xStartFreigabe"><type><BOOL/></type></variable><variable name="xStopAnforderung"><type><BOOL/></type></variable><variable name="xTestbetrieb"><type><BOOL/></type></variable><variable name="nextModus"><type><derived name="eBetriebsmodus"/></type><initialValue><simpleValue value="STILLSTAND"/></initialValue></variable><variable name="uStromBegrStart1"><type><UINT/></type></variable><variable name="uStromBegrStopp1"><type><UINT/></type></variable><variable name="nAktMin"><type><UINT/></type></variable><variable name="nTarifStart"><type><UINT/></type></variable><variable name="nTarifStop"><type><UINT/></type></variable><variable name="nVorlaufMin"><type><UINT/></type></variable><variable name="nTarifStartLuftaufb"><type><UINT/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
+]]></iecDecl></data></addData></pou><pou name="AblaufstrgCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="stateEntry"><type><BOOL/></type><initialValue><simpleValue value="TRUE"/></initialValue></variable><variable name="xStartFreigabe"><type><BOOL/></type></variable><variable name="xStopAnforderung"><type><BOOL/></type></variable><variable name="xTestbetrieb"><type><BOOL/></type></variable><variable name="nextModus"><type><derived name="eBetriebsmodus"/></type><initialValue><simpleValue value="STILLSTAND"/></initialValue></variable><variable name="uStromBegrStart1"><type><UINT/></type></variable><variable name="uStromBegrStopp1"><type><UINT/></type></variable><variable name="nAktMin"><type><UINT/></type></variable><variable name="nTarifStart"><type><UINT/></type></variable><variable name="nTarifStop"><type><UINT/></type></variable><variable name="nVorlaufMin"><type><UINT/></type></variable><variable name="nTarifStartLuftaufb"><type><UINT/></type></variable><variable name="letzteAktiveBox"><type><USINT/></type><initialValue><simpleValue value="0"/></initialValue><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">zuletzt aktive Box (fuer Nachlauf Luftaufbereitung)</xhtml></documentation></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
 ================================================================================
  File        : MainControl.st
  Project     : CControl_Lite
@@ -1356,6 +1365,25 @@ CASE gAktModus OF
 
 END_CASE;
 
+// --- Zuletzt aktive Box merken (Quelle der Luftaufbereitung/Trocknung) ---
+IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
+	letzteAktiveBox := 1;
+ELSIF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
+	letzteAktiveBox := 2;
+END_IF;
+
+// --- Nachlauf Luftaufbereitung: zuletzt aktive Box offen halten -----------
+// Solange Auskuehlzeit laeuft ODER DI-Betriebsmeldung ansteht (= xLuftaufbNachlauf)
+// und keine Box mehr aktiv ist, bleibt die zuletzt aktive Boxenklappe offen.
+// Ende des Nachlaufs -> xLuftaufbNachlauf = FALSE -> Klappe schliesst.
+IF (gAktModus <> IOTEST) AND gAktoren.xLuftaufbNachlauf AND NOT (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv) THEN
+	IF letzteAktiveBox = 1 THEN
+		gAktoren.Box[1].xSollOffen := TRUE;
+	ELSIF letzteAktiveBox = 2 THEN
+		gAktoren.Box[2].xSollOffen := TRUE;
+	END_IF;
+END_IF;
+
 //Funktionsbausteine aufrufen
 uStromBegrStart1 := (gBetriebsparameter.Strombegrenzung.StartStd * 100) + gBetriebsparameter.Strombegrenzung.StartMin;
 uStromBegrStopp1 := (gBetriebsparameter.Strombegrenzung.StoppStd * 100) + gBetriebsparameter.Strombegrenzung.StoppMin;
@@ -1399,24 +1427,7 @@ END_IF;
 
 gAktoren.Heizregister();
 gAktoren.Warmluftofen();
-]]></xhtml:p></ST></body><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[PROGRAM AblaufstrgCyclic
-
-VAR
-	stateEntry : BOOL := TRUE;
-	xStartFreigabe : BOOL;
-	xStopAnforderung : BOOL;
-	xTestbetrieb : BOOL;
-	nextModus : eBetriebsmodus := STILLSTAND;
-	uStromBegrStart1 : UINT;
-	uStromBegrStopp1 : UINT;
-	nAktMin       : UINT;
-	nTarifStart   : UINT;
-	nTarifStop    : UINT;
-	nVorlaufMin         : UINT;
-    nTarifStartLuftaufb : UINT;
-END_VAR
-
-]]></iecDecl></data></addData></pou><pou name="LeistungCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="xLuftaufbHystEin"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Hysterese-Merker Automatikbetrieb</xhtml></documentation></variable><variable name="xLuftaufbPidEn"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">PID Heizregister aktiv</xhtml></documentation></variable><variable name="xTrocknungAktiv"><type><BOOL/></type></variable><variable name="xAbluftBoxAktiv"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">eine Box aktiv + gueltiger Abluft-Feuchtewert</xhtml></documentation></variable><variable name="rLuftaufbLeistung"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">berechnete Leistungsvorgabe</xhtml></documentation></variable><variable name="rAbluftFeuchteAkt"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Feuchtewert der aktiven Box</xhtml></documentation></variable><variable name="rVentDrehzahlBasis"><type><REAL/></type></variable><variable name="fbPidLuftaufb"><type><derived name="PIDAdvanced"/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
+]]></xhtml:p></ST></body><addData/></pou><pou name="LeistungCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="xLuftaufbHystEin"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Hysterese-Merker Automatikbetrieb</xhtml></documentation></variable><variable name="xLuftaufbPidEn"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">PID Heizregister aktiv</xhtml></documentation></variable><variable name="xTrocknungAktiv"><type><BOOL/></type></variable><variable name="xAbluftBoxAktiv"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">eine Box aktiv + gueltiger Abluft-Feuchtewert</xhtml></documentation></variable><variable name="rLuftaufbLeistung"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">berechnete Leistungsvorgabe</xhtml></documentation></variable><variable name="rAbluftFeuchteAkt"><type><REAL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Feuchtewert der aktiven Box</xhtml></documentation></variable><variable name="rVentDrehzahlBasis"><type><REAL/></type></variable><variable name="fbPidLuftaufb"><type><derived name="PIDAdvanced"/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
 ================================================================================
 File        : LeistungCyclic.st
 Project     : CControl_Lite
@@ -1478,9 +1489,10 @@ CASE gAktModus OF
         gAktoren.Warmluftofen.Freigabe := FALSE;
         
 		//Ermittlung ob Trocknung aktiv (fuer Luftaufbereitung)
-		//-> im Tarif-Fenster Luftaufbereitung sperren (startet Auskuehlung)
-		xTrocknungAktiv := (gBetriebsparameter.Boxen[1].xBoxAktiv OR gBetriebsparameter.Boxen[2].xBoxAktiv)
-		                 AND NOT gCmdAnlage.xTarifAbschaltungLuftaufb;
+		//-> im Tarif-Fenster Luftaufbereitung sperren (startet Auskuehlung)		                 
+	    xTrocknungAktiv := ((gBetriebsparameter.Boxen[1].xBoxAktiv AND gAktoren.Box[1].xEndlErreicht) OR 
+                  			(gBetriebsparameter.Boxen[2].xBoxAktiv AND gAktoren.Box[2].xEndlErreicht))
+                 		    AND NOT gCmdAnlage.xTarifAbschaltungLuftaufb;
 
         CASE gBetriebsparameter.Luftaufbereitung.Typ OF
 
@@ -1932,6 +1944,8 @@ xBox1EndlErreicht :=
      (gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_GESCHLOSSEN AND xKlappe2GeschlErr) OR
       gBetriebsparameter.Boxen[1].StellungKlappe2 = FBBOX_NONE);
 
+gAktoren.Box[1].xEndlErreicht := xBox1EndlErreicht;
+
 xBox2EndlErreicht :=
     ((gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GEOEFFNET   AND xKlappe1OffenErr)  OR
      (gBetriebsparameter.Boxen[2].StellungKlappe1 = FBBOX_GESCHLOSSEN AND xKlappe1GeschlErr) OR
@@ -1940,6 +1954,7 @@ xBox2EndlErreicht :=
      (gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_GESCHLOSSEN AND xKlappe2GeschlErr) OR
       gBetriebsparameter.Boxen[2].StellungKlappe2 = FBBOX_NONE);
 
+gAktoren.Box[2].xEndlErreicht := xBox2EndlErreicht;
 
 (*
 ===============================================================================
@@ -2120,7 +2135,7 @@ VAR
 	xKlappe2GeschlErr : BOOL;   (* Klappe 2 Position "geschlossen" erreicht *)
 END_VAR
 
-]]></iecDecl></data></addData></pou><pou name="HmiMappingCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="rt_Box_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Intervall"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Nachtr"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Stocktemp"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Auto"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="TOF_UmschBoxAktuell"><type><derived name="TOF"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">gemeinsam für Block A/B (schließen sich aus)</xhtml></documentation></variable><variable name="TOF_UmschBox1"><type><derived name="TOF"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Block C (Einzelbox)</xhtml></documentation></variable><variable name="xUmschSelAktuell"><type><BOOL/></type></variable><variable name="xUmschSelBox1"><type><BOOL/></type></variable><variable name="lastBoxIndex"><type><USINT/></type></variable><variable name="uIdx"><type><USINT/></type></variable><variable name="firstStep"><type><BOOL/></type></variable><variable name="xBox1BelegtLuefter"><type><BOOL/></type></variable><variable name="xBox2BelegtLuefter"><type><BOOL/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
+]]></iecDecl></data></addData></pou><pou name="HmiMappingCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="rt_Box_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Intervall"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Nachtr"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Box_Stocktemp"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Auto"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Dauer"><type><derived name="R_TRIG"/></type></variable><variable name="rt_Luftaufb_Aus"><type><derived name="R_TRIG"/></type></variable><variable name="TOF_UmschBoxAktuell"><type><derived name="TOF"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">gemeinsam für Block A/B (schließen sich aus)</xhtml></documentation></variable><variable name="TOF_UmschBox1"><type><derived name="TOF"/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Block C (Einzelbox)</xhtml></documentation></variable><variable name="xUmschSelAktuell"><type><BOOL/></type></variable><variable name="xUmschSelBox1"><type><BOOL/></type></variable><variable name="lastBoxIndex"><type><USINT/></type></variable><variable name="uIdx"><type><USINT/></type></variable><variable name="firstStep"><type><BOOL/></type></variable><variable name="xBox1BelegtLuefter"><type><BOOL/></type></variable><variable name="xBox2BelegtLuefter"><type><BOOL/></type></variable><variable name="TOF_Umsch"><type><array><dimension lower="1" upper="2"/><baseType><derived name="TOF"/></baseType></array></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">eigener Hintergrund-Timer je Box</xhtml></documentation></variable><variable name="xUmschTrig"><type><array><dimension lower="1" upper="2"/><baseType><BOOL/></baseType></array></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Start-/Nachtrigger (Puls) je Box</xhtml></documentation></variable><variable name="xZielAus"><type><array><dimension lower="1" upper="2"/><baseType><BOOL/></baseType></array></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">gewaehlte, noch nicht uebernommene Betriebsart</xhtml></documentation></variable><variable name="xZielDauer"><type><array><dimension lower="1" upper="2"/><baseType><BOOL/></baseType></array></type></variable><variable name="xZielIntervall"><type><array><dimension lower="1" upper="2"/><baseType><BOOL/></baseType></array></type></variable><variable name="xZielNachtr"><type><array><dimension lower="1" upper="2"/><baseType><BOOL/></baseType></array></type></variable><variable name="xZielStocktemp"><type><array><dimension lower="1" upper="2"/><baseType><BOOL/></baseType></array></type></variable><variable name="xInitUmsch"><type><BOOL/></type><initialValue><simpleValue value="TRUE"/></initialValue></variable></localVars></interface><body><ST><xhtml:p><![CDATA[(*
 ================================================================================
  File        : HMIMappingCyclic.st
  Project     : CControl_Lite
@@ -2657,6 +2672,7 @@ HMI_IN_Box1_AnzeigeLaufRestzeit := gStatusAnlage.Box[1].AnzeigeLaufRestzeit;
 //HMI_IN_Box1_RestzeitUmschVerzBetriebsart
 
 //======== Box 2 =========
+HMI_IN_Box2_IconWitterung := gStatusAnlage.Box[2].IconWitterung;
 HMI_IN_Box2_LaufRestzeitMinuten := gStatusAnlage.Box[2].LaufRestzeitMinuten;
 HMI_IN_Box2_LaufRestzeitStunden := gStatusAnlage.Box[2].LaufRestzeitStunden;
 HMI_IN_Box2_Status := TO_UINT(gStatusAnlage.Box[2].Status);
@@ -2716,67 +2732,27 @@ END_IF;
 IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	
 	IF firstStep THEN
-		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[1].DauerbetriebEin;
-		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[1].IntervallbetriebEin;
-		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[1].NachtrocknungEin;
-	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[1].StocktemperaturEin;
-		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[1].Aus;	
-	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
-	 	HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
-		firstStep := FALSE;	
+		HMI_OUT_Box_Aktuell_Aus                 := xZielAus[1];
+		HMI_OUT_Box_Aktuell_DauerbetriebEin     := xZielDauer[1];
+		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := xZielIntervall[1];
+		HMI_OUT_Box_Aktuell_NachtrocknungEin    := xZielNachtr[1];
+		HMI_OUT_Box_Aktuell_StocktemperaturEin  := xZielStocktemp[1];
+		HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell := gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
+		HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
+		firstStep := FALSE;
+	END_IF;
+		
+	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
+	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
+		xZielAus[1]       := HMI_OUT_Box_Aktuell_Aus;
+		xZielDauer[1]     := HMI_OUT_Box_Aktuell_DauerbetriebEin;
+		xZielIntervall[1] := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+		xZielNachtr[1]    := HMI_OUT_Box_Aktuell_NachtrocknungEin;
+		xZielStocktemp[1] := HMI_OUT_Box_Aktuell_StocktemperaturEin;
+		xUmschTrig[1]     := TRUE;
 	END_IF;
 	
-	//HMI -> PLC
-	//--- Detailansicht Box 1 : Betriebsartenwahl (flankengesteuert) ---
-	rt_Box_Aus(CLK := HMI_OUT_Box_Aktuell_Aus);
-	rt_Box_Dauer(CLK := HMI_OUT_Box_Aktuell_DauerbetriebEin);
-	rt_Box_Intervall(CLK := HMI_OUT_Box_Aktuell_IntervallbetriebEIn);
-	rt_Box_Nachtr(CLK := HMI_OUT_Box_Aktuell_NachtrocknungEin);
-	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
-	
-	IF rt_Box_Aus.Q THEN
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Dauer.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Intervall.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Nachtr.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Stocktemp.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;		
-	END_IF;
-	
-	//--- Betriebsart verzögert übernehmen (alte halten bis TOF abgelaufen) ---
-	xUmschSelAktuell := rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q
-	                    OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q;
-	                    
-	TOF_UmschBoxAktuell(IN := xUmschSelAktuell,
-	                    PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
-
-	IF NOT TOF_UmschBoxAktuell.Q THEN
-		gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
-		gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-		gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
-		gBetriebsparameter.Boxen[1].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
-		gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
-	END_IF;
-	
-	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart :=	TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_UmschBoxAktuell.ET);
+	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[1].ET);
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -2795,78 +2771,32 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit := gStatusAnlage.Box[1].AnzeigeLaufRestzeit;
 	
 	
-	//TODO RIG: Parameter die noch zu verschalten sind!
-	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
-	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
-	//HMI_Zusatzmeldung_Statustext 
-		
-	
-	
 //Box 2 auf Aktualfenster-PopUp schreiben
 ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 
-	
 	IF firstStep THEN
-		HMI_OUT_Box_Aktuell_DauerbetriebEin := gBetriebsparameter.Boxen[2].DauerbetriebEin;
-		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := gBetriebsparameter.Boxen[2].IntervallbetriebEin;
-		HMI_OUT_Box_Aktuell_NachtrocknungEin := gBetriebsparameter.Boxen[2].NachtrocknungEin;
-	 	HMI_OUT_Box_Aktuell_StocktemperaturEin := gBetriebsparameter.Boxen[2].StocktemperaturEin ;
-		HMI_OUT_Box_Aktuell_Aus := gBetriebsparameter.Boxen[2].Aus;	
-	 	HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell:= gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
-	 	HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[2].StocktemperaturSoll;
-		firstStep := FALSE;	
+		HMI_OUT_Box_Aktuell_Aus                 := xZielAus[2];
+		HMI_OUT_Box_Aktuell_DauerbetriebEin     := xZielDauer[2];
+		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := xZielIntervall[2];
+		HMI_OUT_Box_Aktuell_NachtrocknungEin    := xZielNachtr[2];
+		HMI_OUT_Box_Aktuell_StocktemperaturEin  := xZielStocktemp[2];
+		HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell := gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
+		HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[2].StocktemperaturSoll;
+		firstStep := FALSE;
 	END_IF;
 
-	//HMI -> PLC
-	//--- Detailansicht Box 2 : Betriebsartenwahl (flankengesteuert) ---
-	rt_Box_Aus(CLK := HMI_OUT_Box_Aktuell_Aus);
-	rt_Box_Dauer(CLK := HMI_OUT_Box_Aktuell_DauerbetriebEin);
-	rt_Box_Intervall(CLK := HMI_OUT_Box_Aktuell_IntervallbetriebEIn);
-	rt_Box_Nachtr(CLK := HMI_OUT_Box_Aktuell_NachtrocknungEin);
-	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
-	
-	IF rt_Box_Aus.Q THEN
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Dauer.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Intervall.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Nachtr.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
-	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
-	ELSIF rt_Box_Stocktemp.Q THEN
-	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
-	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
-	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
-	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;		
+	//HMI -> PLC	
+	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
+	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
+		xZielAus[2]       := HMI_OUT_Box_Aktuell_Aus;
+		xZielDauer[2]     := HMI_OUT_Box_Aktuell_DauerbetriebEin;
+		xZielIntervall[2] := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+		xZielNachtr[2]    := HMI_OUT_Box_Aktuell_NachtrocknungEin;
+		xZielStocktemp[2] := HMI_OUT_Box_Aktuell_StocktemperaturEin;
+		xUmschTrig[2]     := TRUE;
 	END_IF;
 	
-	//--- Betriebsart verzögert übernehmen ---
-	xUmschSelAktuell := rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q
-	                    OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q;
-	TOF_UmschBoxAktuell(IN := xUmschSelAktuell,
-	                    PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
-
-	IF NOT TOF_UmschBoxAktuell.Q THEN
-		gBetriebsparameter.Boxen[2].DauerbetriebEin    	:= HMI_OUT_Box_Aktuell_DauerbetriebEin;
-		gBetriebsparameter.Boxen[2].IntervallbetriebEin	:= HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-		gBetriebsparameter.Boxen[2].NachtrocknungEin   	:= HMI_OUT_Box_Aktuell_NachtrocknungEin;
-		gBetriebsparameter.Boxen[2].StocktemperaturEin 	:= HMI_OUT_Box_Aktuell_StocktemperaturEin;
-		gBetriebsparameter.Boxen[2].Aus                	:= HMI_OUT_Box_Aktuell_Aus;
-	END_IF;
-	
-	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_UmschBoxAktuell.ET);
+	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[2].ET);
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[2].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -2883,10 +2813,6 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	HMI_IN_Box_Aktuell_TextIndexLaufzeit := gStatusAnlage.Box[2].TextIndexLaufzeit;
 	HMI_IN_Box_Aktuell_AnzeigeLaufRestzeit := gStatusAnlage.Box[2].AnzeigeLaufRestzeit;
 	
-	
-	//TODO RIG: Parameter die noch zu verschalten sind!
-	//HMI_IN_Box_Aktuell_SperreDauerbetrieb
-	//HMI_IN_Box_Aktuell_SperreIntervallbetrieb
 ELSE 
 	//nichts zu tun
 END_IF;
@@ -2928,19 +2854,18 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	END_IF;
 	
 	//--- Betriebsart verzögert übernehmen ---
-	xUmschSelBox1 := rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q
-	                 OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q;
-	TOF_UmschBox1(IN := xUmschSelBox1,
-	              PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
-
-	IF NOT TOF_UmschBox1.Q THEN
-		gBetriebsparameter.Boxen[1].DauerbetriebEin    	:= HMI_OUT_Box1_DauerbetriebEin;
-		gBetriebsparameter.Boxen[1].IntervallbetriebEin	:= HMI_OUT_Box1_IntervallbetriebEIn;
-		gBetriebsparameter.Boxen[1].NachtrocknungEin   	:= HMI_OUT_Box1_NachtrocknungEin;
-		gBetriebsparameter.Boxen[1].StocktemperaturEin  := HMI_OUT_Box1_StocktemperaturEin;
-		gBetriebsparameter.Boxen[1].Aus                	:= HMI_OUT_Box1_Aus;
+	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
+	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
+		xZielAus[1]       := HMI_OUT_Box1_Aus;
+		xZielDauer[1]     := HMI_OUT_Box1_DauerbetriebEin;
+		xZielIntervall[1] := HMI_OUT_Box1_IntervallbetriebEIn;
+		xZielNachtr[1]    := HMI_OUT_Box1_NachtrocknungEin;
+		xZielStocktemp[1] := HMI_OUT_Box1_StocktemperaturEin;
+		xUmschTrig[1]     := TRUE;
 	END_IF;
-	HMI_IN_Box1_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_UmschBox1.ET);
+	
+	HMI_IN_Box1_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[1].ET);	
+	
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -2949,6 +2874,40 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	//BOX 2 HIER EINFACH NUR GEH LOSSN!!! Wird in der VISU verwaltet!
 	
 END_IF;
+
+//======================================================================
+// Verzoegerte Betriebsart-Umschaltung (Hintergrund, eigener Timer je Box)
+// - laeuft immer, auch wenn das Popup geschlossen ist
+// - solange Timer laeuft bleibt die ALTE Betriebsart aktiv
+// - erst nach Ablauf wird die neue Betriebsart uebernommen
+//======================================================================
+IF xInitUmsch THEN
+	// Ziel = aktuell aktive Betriebsart -> kein Umschalten beim Anlauf
+	FOR uIdx := 1 TO 2 DO
+		xZielAus[uIdx]       := gBetriebsparameter.Boxen[uIdx].Aus;
+		xZielDauer[uIdx]     := gBetriebsparameter.Boxen[uIdx].DauerbetriebEin;
+		xZielIntervall[uIdx] := gBetriebsparameter.Boxen[uIdx].IntervallbetriebEin;
+		xZielNachtr[uIdx]    := gBetriebsparameter.Boxen[uIdx].NachtrocknungEin;
+		xZielStocktemp[uIdx] := gBetriebsparameter.Boxen[uIdx].StocktemperaturEin;
+	END_FOR;
+	xInitUmsch := FALSE;
+END_IF;
+
+FOR uIdx := 1 TO 2 DO
+	TOF_Umsch[uIdx](IN := xUmschTrig[uIdx],
+	                PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
+	xUmschTrig[uIdx] := FALSE;   // Trigger ist nur ein Puls (Timer haelt selbst nach)
+
+	// Solange Timer laeuft (Q=TRUE) NICHT uebernehmen -> alte Betriebsart bleibt.
+	// Nach Ablauf (Q=FALSE) neue Betriebsart uebernehmen.
+	IF NOT TOF_Umsch[uIdx].Q THEN
+		gBetriebsparameter.Boxen[uIdx].Aus                 := xZielAus[uIdx];
+		gBetriebsparameter.Boxen[uIdx].DauerbetriebEin     := xZielDauer[uIdx];
+		gBetriebsparameter.Boxen[uIdx].IntervallbetriebEin := xZielIntervall[uIdx];
+		gBetriebsparameter.Boxen[uIdx].NachtrocknungEin    := xZielNachtr[uIdx];
+		gBetriebsparameter.Boxen[uIdx].StocktemperaturEin  := xZielStocktemp[uIdx];
+	END_IF;
+END_FOR;
 
 (*
 -------------------------------------------------------------------------------
@@ -2983,7 +2942,7 @@ ELSE
 END_IF;
 
 //Statusindex Textbox Luftaufbereiter PopUp
-HMI_IN_LuftaufberStatusIndex := gStatusAnlage.Aktor[AKTOR_LUFTAUFBER];
+HMI_IN_LuftaufberStatusIndex := TO_USINT(gStatusAnlage.Aktor[AKTOR_LUFTAUFBER]);
 
 //Abluftventilator
 IF gBetriebsparameter.Ausstattung.Abluftventilator THEN 
@@ -3117,29 +3076,7 @@ FOR uIdx := 0 TO 31 DO
 		HMI_IN_ALARM_STOERMASKE_2 := fcSetBitInBitmask(Bitmask := HMI_IN_ALARM_STOERMASKE_2, BitNr:= uIdx);
 	END_IF;
 END_FOR;
-]]></xhtml:p></ST></body><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[PROGRAM HmiMappingCyclic
-
-VAR
-	rt_Box_Aus : R_TRIG;
-	rt_Box_Dauer : R_TRIG;
-	rt_Box_Intervall : R_TRIG;
-	rt_Box_Nachtr : R_TRIG;
-	rt_Box_Stocktemp : R_TRIG;
-	rt_Luftaufb_Auto : R_TRIG;
-	rt_Luftaufb_Dauer : R_TRIG;
-	rt_Luftaufb_Aus : R_TRIG;
-	TOF_UmschBoxAktuell : TOF;   // gemeinsam für Block A/B (schließen sich aus)
-    TOF_UmschBox1       : TOF;   // Block C (Einzelbox)
-    xUmschSelAktuell    : BOOL;
-    xUmschSelBox1       : BOOL;
-	lastBoxIndex : USINT;
-	uIdx : USINT;
-	firstStep : BOOL;
-	xBox1BelegtLuefter : BOOL;
-    xBox2BelegtLuefter : BOOL;
-END_VAR
-
-]]></iecDecl></data></addData></pou><pou name="StartStoppCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="xMindEineBoxAktiv"><type><BOOL/></type></variable><variable name="xExternStart"><type><BOOL/></type></variable><variable name="xExternStop"><type><BOOL/></type></variable><variable name="xDauerbetriebBox1Anwahl"><type><BOOL/></type></variable><variable name="xDauerbetriebBox2Anwahl"><type><BOOL/></type></variable><variable name="xIntervallBox1Anwahl"><type><BOOL/></type></variable><variable name="xIntervallBox2Anwahl"><type><BOOL/></type></variable><variable name="xNachtrocknungBox1Anwahl"><type><BOOL/></type></variable><variable name="xNachtrocknungBox2Anwahl"><type><BOOL/></type></variable><variable name="xStocktemperaturBox1Anwahl"><type><BOOL/></type></variable><variable name="xStocktemperaturBox2Anwahl"><type><BOOL/></type></variable><variable name="xStocktemperaturBox1Aktiv"><type><BOOL/></type></variable><variable name="xStocktemperaturBox2Aktiv"><type><BOOL/></type></variable><variable name="xBox1Freigegeben"><type><BOOL/></type></variable><variable name="xBox2Freigegeben"><type><BOOL/></type></variable><variable name="xTarifStopWirksam"><type><BOOL/></type></variable><variable name="usAktStunde"><type><USINT/></type></variable><variable name="udIntervallMaskeBox1"><type><UDINT/></type></variable><variable name="udIntervallMaskeBox2"><type><UDINT/></type></variable><variable name="udNachtrocknungMaskeBox1"><type><UDINT/></type></variable><variable name="udNachtrocknungMaskeBox2"><type><UDINT/></type></variable><variable name="fbPulsPauseBox1"><type><derived name="fbPulsPause"/></type></variable><variable name="xDauerbetriebBox1Trocknet"><type><BOOL/></type></variable><variable name="xSchlechtwetterBox1Aktiv"><type><BOOL/></type></variable><variable name="fbPulsPauseBox2"><type><derived name="fbPulsPause"/></type></variable><variable name="xDauerbetriebBox2Trocknet"><type><BOOL/></type></variable><variable name="xSchlechtwetterBox2Aktiv"><type><BOOL/></type></variable><variable name="xStockHaltBox1"><type><BOOL/></type><initialValue><simpleValue value="FALSE"/></initialValue><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Haltebit Zweipunkt Box 1</xhtml></documentation></variable><variable name="xStockHaltBox2"><type><BOOL/></type><initialValue><simpleValue value="FALSE"/></initialValue><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Haltebit Zweipunkt Box 2</xhtml></documentation></variable><variable name="xLuftaufbAktiv"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Heizregister oder Ofen vorhanden -&gt; kein Puls/Pause</xhtml></documentation></variable><variable name="xAnlageBetrieb"><type><BOOL/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[
+]]></xhtml:p></ST></body><addData/></pou><pou name="StartStoppCyclic" pouType="program"><interface><localVars constant="false" retain="false"><variable name="xMindEineBoxAktiv"><type><BOOL/></type></variable><variable name="xExternStart"><type><BOOL/></type></variable><variable name="xExternStop"><type><BOOL/></type></variable><variable name="xDauerbetriebBox1Anwahl"><type><BOOL/></type></variable><variable name="xDauerbetriebBox2Anwahl"><type><BOOL/></type></variable><variable name="xIntervallBox1Anwahl"><type><BOOL/></type></variable><variable name="xIntervallBox2Anwahl"><type><BOOL/></type></variable><variable name="xNachtrocknungBox1Anwahl"><type><BOOL/></type></variable><variable name="xNachtrocknungBox2Anwahl"><type><BOOL/></type></variable><variable name="xStocktemperaturBox1Anwahl"><type><BOOL/></type></variable><variable name="xStocktemperaturBox2Anwahl"><type><BOOL/></type></variable><variable name="xStocktemperaturBox1Aktiv"><type><BOOL/></type></variable><variable name="xStocktemperaturBox2Aktiv"><type><BOOL/></type></variable><variable name="xBox1Freigegeben"><type><BOOL/></type></variable><variable name="xBox2Freigegeben"><type><BOOL/></type></variable><variable name="xTarifStopWirksam"><type><BOOL/></type></variable><variable name="usAktStunde"><type><USINT/></type></variable><variable name="udIntervallMaskeBox1"><type><UDINT/></type></variable><variable name="udIntervallMaskeBox2"><type><UDINT/></type></variable><variable name="udNachtrocknungMaskeBox1"><type><UDINT/></type></variable><variable name="udNachtrocknungMaskeBox2"><type><UDINT/></type></variable><variable name="fbPulsPauseBox1"><type><derived name="fbPulsPause"/></type></variable><variable name="xDauerbetriebBox1Trocknet"><type><BOOL/></type></variable><variable name="xSchlechtwetterBox1Aktiv"><type><BOOL/></type></variable><variable name="fbPulsPauseBox2"><type><derived name="fbPulsPause"/></type></variable><variable name="xDauerbetriebBox2Trocknet"><type><BOOL/></type></variable><variable name="xSchlechtwetterBox2Aktiv"><type><BOOL/></type></variable><variable name="xStockHaltBox1"><type><BOOL/></type><initialValue><simpleValue value="FALSE"/></initialValue><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Haltebit Zweipunkt Box 1</xhtml></documentation></variable><variable name="xStockHaltBox2"><type><BOOL/></type><initialValue><simpleValue value="FALSE"/></initialValue><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Haltebit Zweipunkt Box 2</xhtml></documentation></variable><variable name="xLuftaufbAktiv"><type><BOOL/></type><documentation><xhtml xmlns="http://www.w3.org/1999/xhtml">Heizregister oder Ofen vorhanden -&gt; kein Puls/Pause</xhtml></documentation></variable><variable name="xAnlageBetrieb"><type><BOOL/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[
 (*
 ================================================================================
 File        : StartStoppCyclic.st
@@ -3523,6 +3460,7 @@ IF (NOT Stoerung) THEN
             END_IF;
 
             (* state exit *)
+            (*
             IF EndlagenVhd OR (LaufzeitOeffnen = 0) THEN
                 IF Oeffnen AND NOT FehlerLaufzeitOeffnen THEN
                     stateEntry := TRUE;
@@ -3546,6 +3484,32 @@ IF (NOT Stoerung) THEN
                     uiStep := 2;
                 END_IF;
             END_IF;
+            *)
+            
+            (* state exit *)
+			IF EndlagenVhd THEN
+			    IF Oeffnen AND NOT FehlerLaufzeitOeffnen THEN
+			        stateEntry := TRUE;
+			        uiStep  := 1;
+			    END_IF;
+			ELSE
+			    IF Oeffnen AND NOT KlappeIstOffenOut THEN     // ohne Endlagen IMMER zeitbasiert (auch Laufzeit=0)
+			        stateEntry := TRUE;
+			        uiStep  := 1;
+			    END_IF;
+			END_IF;
+			
+			IF EndlagenVhd THEN
+			    IF Schliessen AND NOT FehlerLaufzeitSchliessen THEN
+			        stateEntry := TRUE;
+			        uiStep  := 2;
+			    END_IF;
+			ELSE
+			    IF Schliessen AND NOT KlappeIstGeschlOut THEN
+			        stateEntry := TRUE;
+			        uiStep := 2;
+			    END_IF;
+			END_IF;
 
 
         (*
@@ -3567,11 +3531,15 @@ IF (NOT Stoerung) THEN
             END_IF;
 
             (* state during *)
+            (*
             TON_Laufzeit(IN := OeffnenOut AND NOT EndlageOffen, PT := LaufzeitOeffnen);
+            *)            
+            TON_Laufzeit(IN := OeffnenOut AND (NOT EndlageOffen OR NOT EndlagenVhd), PT := LaufzeitOeffnen);
             TON_AnzVerz(IN := TRUE, PT := 40);
             OeffnenOut := TON_AnzVerz.Q;
 
             (* state exit *)
+            (*
             IF (NOT Oeffnen) OR Schliessen OR (TON_Laufzeit.Q AND (LaufzeitOeffnen <> 0)) THEN
                 IF (TON_Laufzeit.Q AND (LaufzeitOeffnen <> 0) AND NOT EndlagenVhd) THEN
                     KlappeIstOffenOut := TRUE;
@@ -3582,6 +3550,20 @@ IF (NOT Stoerung) THEN
                 stateEntry := TRUE;
                 uiStep  := 0;
             END_IF;
+            *)
+            
+            (* state exit *)
+			IF (NOT Oeffnen) OR Schliessen OR (TON_Laufzeit.Q AND (LaufzeitOeffnen <> 0))
+			    OR (NOT EndlagenVhd AND (LaufzeitOeffnen = 0)) THEN
+			    IF (NOT EndlagenVhd) AND (TON_Laufzeit.Q OR (LaufzeitOeffnen = 0)) THEN
+			        KlappeIstOffenOut := TRUE;            // ohne Endlagen: nach Laufzeit ODER sofort (Laufzeit=0)
+			    ELSIF (TON_Laufzeit.Q AND (LaufzeitOeffnen <> 0)) THEN
+			        FehlerLaufzeitOeffnen := TRUE;        // mit Endlagen: Laufzeitueberschreitung = Fehler
+			    END_IF;
+			
+			    stateEntry := TRUE;
+			    uiStep  := 0;
+			END_IF;
 
 
         (*
@@ -3603,11 +3585,12 @@ IF (NOT Stoerung) THEN
             END_IF;
 
             (* state during *)
-            TON_Laufzeit(IN := SchliessenOut AND NOT EndlageGeschl, PT := LaufzeitSchliessen);
+            //TON_Laufzeit(IN := SchliessenOut AND NOT EndlageGeschl, PT := LaufzeitSchliessen);
+            TON_Laufzeit(IN := SchliessenOut AND (NOT EndlageGeschl OR NOT EndlagenVhd), PT := LaufzeitSchliessen);
             TON_AnzVerz(IN := TRUE, PT := 40);
             SchliessenOut := TON_AnzVerz.Q;
 
-            (* state exit *)
+            (* state exit *)(*
             IF (NOT Schliessen) OR Oeffnen OR (TON_Laufzeit.Q AND (LaufzeitSchliessen <> 0)) THEN
                 IF (TON_Laufzeit.Q AND (LaufzeitSchliessen <> 0) AND NOT EndlagenVhd) THEN
                     KlappeIstGeschlOut := TRUE;
@@ -3618,6 +3601,19 @@ IF (NOT Stoerung) THEN
                 stateEntry := TRUE;
                 uiStep := 0;
             END_IF;
+            *)
+            (* state exit *)
+			IF (NOT Schliessen) OR Oeffnen OR (TON_Laufzeit.Q AND (LaufzeitSchliessen <> 0))
+			    OR (NOT EndlagenVhd AND (LaufzeitSchliessen = 0)) THEN
+			    IF (NOT EndlagenVhd) AND (TON_Laufzeit.Q OR (LaufzeitSchliessen = 0)) THEN
+			        KlappeIstGeschlOut := TRUE;
+			    ELSIF (TON_Laufzeit.Q AND (LaufzeitSchliessen <> 0)) THEN
+			        FehlerLaufzeitSchliessen := TRUE;
+			    END_IF;
+			
+			    stateEntry := TRUE;
+			    uiStep := 0;
+			END_IF;
 
     END_CASE;
 
