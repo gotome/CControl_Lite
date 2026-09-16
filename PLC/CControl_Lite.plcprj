@@ -3256,7 +3256,7 @@ gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1789308650">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1789586652">
 					<vars>
 						<localVars>
 							<var name="xLuftaufbHystEin" type="BOOL">
@@ -3420,7 +3420,14 @@ CASE gAktModus OF
                     rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
                 END_IF;
 
-                gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;
+			    //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
+		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
+		            gAktoren.xFrgLuftaufbereiter := FALSE;
+		            rLuftaufbLeistung := 0.0;
+		        ELSE 
+		        //sonst immer Luftaufbereitung einschalten
+                	gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;		        
+		        END_IF;
 
 
             OFEN:
@@ -3446,9 +3453,15 @@ CASE gAktModus OF
                 gAktoren.Warmluftofen.QuitFehler                  := gQuitErr;
                 gAktoren.Warmluftofen.WetterIstSchlecht           := FALSE;
 
-                //Ausgaenge uebernehmen
-                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
-                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;
+                //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
+		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
+		            gAktoren.xFrgLuftaufbereiter := FALSE;
+		            rLuftaufbLeistung := 0.0;
+		        ELSE 
+		        //sonst immer Luftaufbereitung einschalten
+	                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
+	                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;		        
+		        END_IF;
 
                 //PID (Heizregister) im Ofenbetrieb deaktiviert halten
                 fbPidLuftaufb(
@@ -4103,7 +4116,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1789322937">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1789587853">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -5047,7 +5060,10 @@ ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
     IF gStatusAnlage.Box[1].WetterIstSchlecht
        AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
                 AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
-                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                //15.09.2026: Betriebsmeldung fehlt -> Luftaufbereitung gilt als NICHT aktiv (identisch zu xLuftaufbAktiv)
+                AND (NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                     OR diBetriebLuftaufber)) THEN
         IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
             gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_LAUF;
         ELSE
@@ -5092,7 +5108,10 @@ ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
     IF gStatusAnlage.Box[2].WetterIstSchlecht
        AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
                 AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
-                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                //15.09.2026: Betriebsmeldung fehlt -> Luftaufbereitung gilt als NICHT aktiv (identisch zu xLuftaufbAktiv)
+                AND (NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                     OR diBetriebLuftaufber)) THEN
         IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
             gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_LAUF;
         ELSE
@@ -78412,7 +78431,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="20610">
+			<root name="CControl_Lite" nextID="20778">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
