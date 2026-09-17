@@ -3256,7 +3256,7 @@ gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1789308650">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1789586652">
 					<vars>
 						<localVars>
 							<var name="xLuftaufbHystEin" type="BOOL">
@@ -3420,7 +3420,14 @@ CASE gAktModus OF
                     rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
                 END_IF;
 
-                gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;
+			    //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
+		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
+		            gAktoren.xFrgLuftaufbereiter := FALSE;
+		            rLuftaufbLeistung := 0.0;
+		        ELSE 
+		        //sonst immer Luftaufbereitung einschalten
+                	gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;		        
+		        END_IF;
 
 
             OFEN:
@@ -3446,9 +3453,15 @@ CASE gAktModus OF
                 gAktoren.Warmluftofen.QuitFehler                  := gQuitErr;
                 gAktoren.Warmluftofen.WetterIstSchlecht           := FALSE;
 
-                //Ausgaenge uebernehmen
-                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
-                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;
+                //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
+		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
+		            gAktoren.xFrgLuftaufbereiter := FALSE;
+		            rLuftaufbLeistung := 0.0;
+		        ELSE 
+		        //sonst immer Luftaufbereitung einschalten
+	                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
+	                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;		        
+		        END_IF;
 
                 //PID (Heizregister) im Ofenbetrieb deaktiviert halten
                 fbPidLuftaufb(
@@ -4103,7 +4116,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1789309059">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1789587853">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -4753,6 +4766,40 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
 		firstStep := FALSE;
 	END_IF;
+	
+	//HMI -> PLC  (Betriebsartenwahl flankengesteuert + Verriegelung)
+	rt_Box_Aus(CLK := HMI_OUT_Box_Aktuell_Aus);
+	rt_Box_Dauer(CLK := HMI_OUT_Box_Aktuell_DauerbetriebEin);
+	rt_Box_Intervall(CLK := HMI_OUT_Box_Aktuell_IntervallbetriebEIn);
+	rt_Box_Nachtr(CLK := HMI_OUT_Box_Aktuell_NachtrocknungEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
+
+	IF rt_Box_Aus.Q THEN
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Dauer.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Intervall.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Nachtr.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Stocktemp.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	END_IF;
 		
 	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
 	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
@@ -4795,6 +4842,40 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 		HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell := gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
 		HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[2].StocktemperaturSoll;
 		firstStep := FALSE;
+	END_IF;
+	
+	//HMI -> PLC  (Betriebsartenwahl flankengesteuert + Verriegelung)
+	rt_Box_Aus(CLK := HMI_OUT_Box_Aktuell_Aus);
+	rt_Box_Dauer(CLK := HMI_OUT_Box_Aktuell_DauerbetriebEin);
+	rt_Box_Intervall(CLK := HMI_OUT_Box_Aktuell_IntervallbetriebEIn);
+	rt_Box_Nachtr(CLK := HMI_OUT_Box_Aktuell_NachtrocknungEin);
+	rt_Box_Stocktemp(CLK := HMI_OUT_Box_Aktuell_StocktemperaturEin);
+
+	IF rt_Box_Aus.Q THEN
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Dauer.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Intervall.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Nachtr.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
+	    HMI_OUT_Box_Aktuell_StocktemperaturEin  := FALSE;
+	ELSIF rt_Box_Stocktemp.Q THEN
+	    HMI_OUT_Box_Aktuell_Aus                 := FALSE;
+	    HMI_OUT_Box_Aktuell_DauerbetriebEin     := FALSE;
+	    HMI_OUT_Box_Aktuell_NachtrocknungEin    := FALSE;
+	    HMI_OUT_Box_Aktuell_IntervallbetriebEIn := FALSE;
 	END_IF;
 
 	//HMI -> PLC	
@@ -4908,7 +4989,6 @@ END_IF;
 FOR uIdx := 1 TO 2 DO
 	TOF_Umsch[uIdx](IN := xUmschTrig[uIdx],
 	                PT := gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox);
-	xUmschTrig[uIdx] := FALSE;   // Trigger ist nur ein Puls (Timer haelt selbst nach)
 
 	// Solange Timer laeuft (Q=TRUE) NICHT uebernehmen -> alte Betriebsart bleibt.
 	// Nach Ablauf (Q=FALSE) neue Betriebsart uebernehmen.
@@ -4919,6 +4999,8 @@ FOR uIdx := 1 TO 2 DO
 		gBetriebsparameter.Boxen[uIdx].NachtrocknungEin    := xZielNachtr[uIdx];
 		gBetriebsparameter.Boxen[uIdx].StocktemperaturEin  := xZielStocktemp[uIdx];
 	END_IF;
+	
+	xUmschTrig[uIdx] := FALSE;   // Trigger ist nur ein Puls (Timer haelt selbst nach)
 END_FOR;
 
 (*
@@ -4978,7 +5060,10 @@ ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
     IF gStatusAnlage.Box[1].WetterIstSchlecht
        AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
                 AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
-                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                //15.09.2026: Betriebsmeldung fehlt -> Luftaufbereitung gilt als NICHT aktiv (identisch zu xLuftaufbAktiv)
+                AND (NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                     OR diBetriebLuftaufber)) THEN
         IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
             gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_LAUF;
         ELSE
@@ -5023,7 +5108,10 @@ ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
     IF gStatusAnlage.Box[2].WetterIstSchlecht
        AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
                 AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
-                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                //15.09.2026: Betriebsmeldung fehlt -> Luftaufbereitung gilt als NICHT aktiv (identisch zu xLuftaufbAktiv)
+                AND (NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                     OR diBetriebLuftaufber)) THEN
         IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
             gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_LAUF;
         ELSE
@@ -5091,7 +5179,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1787946511">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1789384357">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -5322,7 +5410,14 @@ xLuftaufbAktiv := gBetriebsparameter.Ausstattung.Luftaufbereiter
                   AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER
                        OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
                   AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin
-                       OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin);
+                       OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                  // 14.09.2026 LaW: Bei aktiver Betriebsmeldungsueberwachung (Verz > 0)
+                  // gilt die Luftaufbereitung nur mit anstehender Betriebsmeldung als aktiv.
+                  // Fehlt sie (kommt nicht / faellt im Betrieb weg) -> Witterungsbestimmung,
+                  // wie wenn keine Luftaufbereitung ausgeruestet waere.
+                  AND ( NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh
+                             AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                        OR diBetriebLuftaufber );
 
 //===== BOX 1 =====
 xSchlechtwetterBox1Aktiv := xDauerbetriebBox1Anwahl
@@ -78336,7 +78431,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="20346">
+			<root name="CControl_Lite" nextID="20778">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
