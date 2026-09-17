@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-09-16T21:06:57"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xhtml="http://www.w3.org/1999/xhtml"><fileHeader companyName="Schneider Electric" companyURL="http://www.schneider-electric.com" productName="EcoStruxure ME HVAC" productVersion="1.9.0" creationDateTime="2026-09-17T10:58:13"/><contentHeader name="" version="" author=""><coordinateInfo><fbd><scaling x="1" y="1"/></fbd><ld><scaling x="1" y="1"/></ld><sfc><scaling x="1" y="1"/></sfc></coordinateInfo></contentHeader><types><dataTypes><dataType name="T_Betriebsparameter"><baseType><derived name="ST_Betriebsparameter"/></baseType></dataType><dataType name="T_IoTest"><baseType><derived name="ST_IoTest"/></baseType></dataType><dataType name="T_StatAnlage"><baseType><derived name="ST_StatAnlage"/></baseType></dataType><dataType name="T_Aktor"><baseType><derived name="ST_Aktor_Allgemein"/></baseType></dataType><dataType name="T_CmdAnlage"><baseType><derived name="ST_CmdAnlage"/></baseType></dataType><dataType name="eAktor"><baseType><enum><baseType><DINT/></baseType><values><value name="AKTOR_SCHRITTKETTE" value="0"/><value name="AKTOR_VENTILATOR" value="1"/><value name="AKTOR_KLAPPE_BOX_1" value="2"/><value name="AKTOR_KLAPPE_BOX_2" value="3"/><value name="AKTOR_LUFTAUFBER" value="4"/><value name="AKTOR_ABLUFTVENTILATOR" value="5"/></values></enum></baseType></dataType><dataType name="eBetriebsmodus"><baseType><enum><baseType><DINT/></baseType><values><value name="STILLSTAND" value="0"/><value name="BETRIEB" value="1"/><value name="IOTEST" value="2"/></values></enum></baseType></dataType><dataType name="eFehler"><baseType><enum><baseType><DINT/></baseType><values><value name="FEHLER_24VDC" value="0"/><value name="FEHLER_BETRIEBSMLDG_VENTILATOR" value="5"/><value name="FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER" value="6"/><value name="FEHLER_BETRIEBSMLDG_NOTSTROM" value="7"/><value name="FEHLER_SENSOR_FRISCHLUFT" value="10"/><value name="FEHLER_SENSOR_TROCKENLUFT" value="11"/><value name="FEHLER_SENSOR_ABLUFT_BOX1" value="12"/><value name="FEHLER_SENSOR_ABLUFT_BOX2" value="13"/><value name="FEHLER_SENSOR_STOCKTEMP" value="14"/><value name="FEHLER_ENDLAGEN_BYPASSKLAPPE" value="20"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE1" value="21"/><value name="FEHLER_ENDLAGEN_UMSCHALTKLAPPE2" value="22"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_1" value="23"/><value name="FEHLER_ENDLAGEN_BOXENKLAPPE_2" value="24"/><value name="FEHLER_EINTRITT_TEMP_ZU_HOCH" value="30"/><value name="FEHLER_EINTRITT_TEMP_ZU_NIEDRIG" value="31"/><value name="FEHLER_LZ_PUMPDOWN_MOD1" value="32"/><value name="FEHLER_LZ_PUMPDOWN_MOD2" value="33"/><value name="FEHLER_ENTF_FREMD_STOERMELDUNG" value="35"/><value name="FEHLER_ENTF_FREMD_BETRMLDG" value="36"/></values></enum></baseType><addData><data handleUnknown="dismiss"><iecDecl><![CDATA[eFehler: DINT (
 	FEHLER_24VDC := 0,
 	FEHLER_BETRIEBSMLDG_VENTILATOR := 5,
 	FEHLER_BETRIEBSMLDG_LUFTAUFBEREITER := 6,
@@ -841,9 +841,9 @@ gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.Schlechtwett
 TON_SekTick(IN := NOT TON_SekTick.Q, PT := 1000);
 
 // Betriebsstundenzaehler (zaehlt solange Box aktiv)
-fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := FALSE,
+fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := NOT gBetriebsparameter.Boxen[1].xBoxAktiv,
               Minuten := gBstBox1Min, Stunden := gBstBox1Std);
-fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := FALSE,
+fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := NOT gBetriebsparameter.Boxen[2].xBoxAktiv,
               Minuten := gBstBox2Min, Stunden := gBstBox2Std);
 
 // Rest-Laufzeit Intervall/Nachtrocknung (Zeitfenster je nach Modus)
@@ -1566,7 +1566,14 @@ CASE gAktModus OF
                     rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
                 END_IF;
 
-                gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;
+			    //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
+		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
+		            gAktoren.xFrgLuftaufbereiter := FALSE;
+		            rLuftaufbLeistung := 0.0;
+		        ELSE 
+		        //sonst immer Luftaufbereitung einschalten
+                	gAktoren.xFrgLuftaufbereiter := xLuftaufbHystEin;		        
+		        END_IF;
 
 
             OFEN:
@@ -1592,9 +1599,15 @@ CASE gAktModus OF
                 gAktoren.Warmluftofen.QuitFehler                  := gQuitErr;
                 gAktoren.Warmluftofen.WetterIstSchlecht           := FALSE;
 
-                //Ausgaenge uebernehmen
-                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
-                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;
+                //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
+		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
+		            gAktoren.xFrgLuftaufbereiter := FALSE;
+		            rLuftaufbLeistung := 0.0;
+		        ELSE 
+		        //sonst immer Luftaufbereitung einschalten
+	                gAktoren.xFrgLuftaufbereiter := gAktoren.Warmluftofen.FreigabeWarmluftofenOut;
+	                rLuftaufbLeistung            := gAktoren.Warmluftofen.WarmlufttempSollOut;		        
+		        END_IF;
 
                 //PID (Heizregister) im Ofenbetrieb deaktiviert halten
                 fbPidLuftaufb(
@@ -3035,7 +3048,10 @@ ELSIF gBetriebsparameter.Boxen[1].DauerbetriebEin THEN
     IF gStatusAnlage.Box[1].WetterIstSchlecht
        AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
                 AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
-                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                //15.09.2026: Betriebsmeldung fehlt -> Luftaufbereitung gilt als NICHT aktiv (identisch zu xLuftaufbAktiv)
+                AND (NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                     OR diBetriebLuftaufber)) THEN
         IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
             gStatusAnlage.Box[1].Status := STATUS_SCHLECHTWETTER_LAUF;
         ELSE
@@ -3080,7 +3096,10 @@ ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
     IF gStatusAnlage.Box[2].WetterIstSchlecht
        AND NOT (gBetriebsparameter.Ausstattung.Luftaufbereiter
                 AND (gBetriebsparameter.Luftaufbereitung.Typ = HEIZREGISTER OR gBetriebsparameter.Luftaufbereitung.Typ = OFEN)
-                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)) THEN
+                AND (gBetriebsparameter.Luftaufbereitung.AutomatikbetriebEin OR gBetriebsparameter.Luftaufbereitung.DauerbetriebEin)
+                //15.09.2026: Betriebsmeldung fehlt -> Luftaufbereitung gilt als NICHT aktiv (identisch zu xLuftaufbAktiv)
+                AND (NOT (gBetriebsparameter.Luftaufbereitung.BetriebsmeldungVorh AND gBetriebsparameter.Luftaufbereitung.VerzBetriebsmeldung > 0)
+                     OR diBetriebLuftaufber)) THEN
         IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
             gStatusAnlage.Box[2].Status := STATUS_SCHLECHTWETTER_LAUF;
         ELSE

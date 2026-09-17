@@ -2488,7 +2488,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1788895455">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1789635678">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
@@ -2596,9 +2596,9 @@ gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.Schlechtwett
 TON_SekTick(IN := NOT TON_SekTick.Q, PT := 1000);
 
 // Betriebsstundenzaehler (zaehlt solange Box aktiv)
-fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := FALSE,
+fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := gBetriebsparameter.Boxen[1].Aus,
               Minuten := gBstBox1Min, Stunden := gBstBox1Std);
-fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := FALSE,
+fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := gBetriebsparameter.Boxen[2].Aus,
               Minuten := gBstBox2Min, Stunden := gBstBox2Std);
 
 // Rest-Laufzeit Intervall/Nachtrocknung (Zeitfenster je nach Modus)
@@ -2719,7 +2719,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1787947489">
+				<program name="AlarmCyclic" version="1.0.0" creationDate="1773514141" lastModifiedDate="1789639378">
 					<vars>
 						<localVars>
 							<var name="xF_SensorFrischluft" type="BOOL"/>
@@ -2941,9 +2941,9 @@ ELSIF gQuitErr AND NOT xF_KlappeBox2 THEN
 	xFL_KlappeBox2 := FALSE; 
 END_IF;
 
-IF TonF_Luftaufbereiter.Q THEN 
+IF TonF_Luftaufbereiter.Q OR gAktoren.Warmluftofen.FehlerBetriebsmeldungOut THEN 
 	xFL_Luftaufbereiter := TRUE;
-ELSIF gQuitErr AND NOT xF_Luftaufbereiter THEN 
+ELSIF gQuitErr AND NOT xF_Luftaufbereiter AND NOT gAktoren.Warmluftofen.FehlerBetriebsmeldungOut THEN 
 	xFL_Luftaufbereiter := FALSE; 
 END_IF;
 
@@ -78431,7 +78431,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="20778">
+			<root name="CControl_Lite" nextID="21063">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>

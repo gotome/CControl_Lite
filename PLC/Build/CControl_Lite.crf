@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0xFF8BC4A7" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x704C50F1" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -884,6 +884,8 @@
 			<ref op="RD" pos="P:MAIN:AktorenMappingCyclic#360"/>
 			<ref op="RD" pos="P:MAIN:AktorenMappingCyclic#367"/>
 			<ref op="RD" pos="P:MAIN:AlarmCyclic#85"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#151"/>
+			<ref op="RD" pos="P:MAIN:AlarmCyclic#153"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#560"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#585"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#587"/>
