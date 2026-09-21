@@ -139,6 +139,13 @@
 					<var name="gBstBox1Std" type="UDINT"/>
 					<var name="gBstBox2Min" type="UINT"/>
 					<var name="gBstBox2Std" type="UDINT"/>
+					<var name="xZielBetriebsartAus" type="BOOL" idxMin0="1" idx0="2">
+						<descr>gemerkte Betriebsart je Box (remanent)</descr>
+					</var>
+					<var name="xZielBetriebsartDauer" type="BOOL" idxMin0="1" idx0="2"/>
+					<var name="xZielBetriebsartIntervall" type="BOOL" idxMin0="1" idx0="2"/>
+					<var name="xZielBetriebsartNachtr" type="BOOL" idxMin0="1" idx0="2"/>
+					<var name="xZielBetriebsartStocktemp" type="BOOL" idxMin0="1" idx0="2"/>
 				</group>
 			</retainVars>
 			<constantVars>
@@ -1536,7 +1543,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</functionBlock>
-				<functionBlock name="fbPulsPause" version="1.0.0" creationDate="1784739313" lastModifiedDate="1784741563">
+				<functionBlock name="fbPulsPause" version="1.0.0" creationDate="1784739313" lastModifiedDate="1790014719">
 					<vars>
 						<inputVars>
 							<var name="Freigabe" type="BOOL">
@@ -1630,13 +1637,17 @@ END_VAR
 
 		(* --- INIT --- *)
 		0:
-			TON_PulsPause(IN := FALSE, PT := 0);
-			stateEntry := TRUE;
-			IF StartMitPause THEN
-				curStep := 2;
-			ELSE
-				curStep := 1;
-			END_IF;
+		    TON_PulsPause(IN := FALSE, PT := 0);
+		    stateEntry := TRUE;
+		    IF StartMitPause THEN
+		        curStep  := 2;
+		        PulsOut  := FALSE;
+		        PauseOut := TRUE;
+		    ELSE
+		        curStep  := 1;
+		        PulsOut  := TRUE;     // sofort Puls -> kein 1-Zyklus-Loch beim Freigeben
+		        PauseOut := FALSE;
+		    END_IF;
 
 		(* --- PULS: Box trocknet --- *)
 		1:
@@ -4116,7 +4127,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1789587853">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1790017192">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -4146,19 +4157,39 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 							<var name="xUmschTrig" type="BOOL" idxMin0="1" idx0="2">
 								<descr>Start-/Nachtrigger (Puls) je Box</descr>
 							</var>
-							<var name="xZielAus" type="BOOL" idxMin0="1" idx0="2">
-								<descr>gewaehlte, noch nicht uebernommene Betriebsart</descr>
-							</var>
-							<var name="xZielDauer" type="BOOL" idxMin0="1" idx0="2"/>
-							<var name="xZielIntervall" type="BOOL" idxMin0="1" idx0="2"/>
-							<var name="xZielNachtr" type="BOOL" idxMin0="1" idx0="2"/>
-							<var name="xZielStocktemp" type="BOOL" idxMin0="1" idx0="2"/>
 							<var name="xInitUmsch" type="BOOL">
 								<initValue>TRUE</initValue>
 							</var>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM HmiMappingCyclic
+
+VAR
+	rt_Box_Aus : R_TRIG;
+	rt_Box_Dauer : R_TRIG;
+	rt_Box_Intervall : R_TRIG;
+	rt_Box_Nachtr : R_TRIG;
+	rt_Box_Stocktemp : R_TRIG;
+	rt_Luftaufb_Auto : R_TRIG;
+	rt_Luftaufb_Dauer : R_TRIG;
+	rt_Luftaufb_Aus : R_TRIG;
+	TOF_UmschBoxAktuell : TOF;	(* gemeinsam für Block A/B (schließen sich aus) *)
+	TOF_UmschBox1 : TOF;	(* Block C (Einzelbox) *)
+	xUmschSelAktuell : BOOL;
+	xUmschSelBox1 : BOOL;
+	lastBoxIndex : USINT;
+	uIdx : USINT;
+	firstStep : BOOL;
+	xBox1BelegtLuefter : BOOL;
+	xBox2BelegtLuefter : BOOL;
+	TOF_Umsch : ARRAY[1..2] OF TOF;	(* eigener Hintergrund-Timer je Box *)
+	xUmschTrig : ARRAY[1..2] OF BOOL;	(* Start-/Nachtrigger (Puls) je Box *)
+	xInitUmsch : BOOL := TRUE;
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -4457,10 +4488,10 @@ gBetriebsparameter.Luftaufbereitung.Typ := Ausstattung_Luftaufbereiter_Typ;
 Strombegrenzung
 ---------------------------------------------------------------------------
 *)
-gBetriebsparameter.Strombegrenzung.StartStd := Par_Strombegrenzung_StartMin;
-gBetriebsparameter.Strombegrenzung.StartMin := Par_Strombegrenzung_StartStd;
-gBetriebsparameter.Strombegrenzung.StoppStd := Par_Strombegrenzung_StoppMin;
-gBetriebsparameter.Strombegrenzung.StoppMin := Par_Strombegrenzung_StoppStd;
+gBetriebsparameter.Strombegrenzung.StartStd := Par_Strombegrenzung_StartStd;
+gBetriebsparameter.Strombegrenzung.StartMin := Par_Strombegrenzung_StartMin;
+gBetriebsparameter.Strombegrenzung.StoppStd := Par_Strombegrenzung_StoppStd;
+gBetriebsparameter.Strombegrenzung.StoppMin := Par_Strombegrenzung_StoppMin;
 (*
 ---------------------------------------------------------------------------
 Tarifabschaltung
@@ -4757,11 +4788,11 @@ END_IF;
 IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 	
 	IF firstStep THEN
-		HMI_OUT_Box_Aktuell_Aus                 := xZielAus[1];
-		HMI_OUT_Box_Aktuell_DauerbetriebEin     := xZielDauer[1];
-		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := xZielIntervall[1];
-		HMI_OUT_Box_Aktuell_NachtrocknungEin    := xZielNachtr[1];
-		HMI_OUT_Box_Aktuell_StocktemperaturEin  := xZielStocktemp[1];
+		HMI_OUT_Box_Aktuell_Aus                 := xZielBetriebsartAus[1];
+		HMI_OUT_Box_Aktuell_DauerbetriebEin     := xZielBetriebsartDauer[1];
+		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := xZielBetriebsartIntervall[1];
+		HMI_OUT_Box_Aktuell_NachtrocknungEin    := xZielBetriebsartNachtr[1];
+		HMI_OUT_Box_Aktuell_StocktemperaturEin  := xZielBetriebsartStocktemp[1];
 		HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell := gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte;
 		HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[1].StocktemperaturSoll;
 		firstStep := FALSE;
@@ -4803,11 +4834,11 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		
 	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
 	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
-		xZielAus[1]       := HMI_OUT_Box_Aktuell_Aus;
-		xZielDauer[1]     := HMI_OUT_Box_Aktuell_DauerbetriebEin;
-		xZielIntervall[1] := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-		xZielNachtr[1]    := HMI_OUT_Box_Aktuell_NachtrocknungEin;
-		xZielStocktemp[1] := HMI_OUT_Box_Aktuell_StocktemperaturEin;
+		xZielBetriebsartAus[1]       := HMI_OUT_Box_Aktuell_Aus;
+		xZielBetriebsartDauer[1]     := HMI_OUT_Box_Aktuell_DauerbetriebEin;
+		xZielBetriebsartIntervall[1] := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+		xZielBetriebsartNachtr[1]    := HMI_OUT_Box_Aktuell_NachtrocknungEin;
+		xZielBetriebsartStocktemp[1] := HMI_OUT_Box_Aktuell_StocktemperaturEin;
 		xUmschTrig[1]     := TRUE;
 	END_IF;
 	
@@ -4834,11 +4865,11 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 
 	IF firstStep THEN
-		HMI_OUT_Box_Aktuell_Aus                 := xZielAus[2];
-		HMI_OUT_Box_Aktuell_DauerbetriebEin     := xZielDauer[2];
-		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := xZielIntervall[2];
-		HMI_OUT_Box_Aktuell_NachtrocknungEin    := xZielNachtr[2];
-		HMI_OUT_Box_Aktuell_StocktemperaturEin  := xZielStocktemp[2];
+		HMI_OUT_Box_Aktuell_Aus                 := xZielBetriebsartAus[2];
+		HMI_OUT_Box_Aktuell_DauerbetriebEin     := xZielBetriebsartDauer[2];
+		HMI_OUT_Box_Aktuell_IntervallbetriebEIn := xZielBetriebsartIntervall[2];
+		HMI_OUT_Box_Aktuell_NachtrocknungEin    := xZielBetriebsartNachtr[2];
+		HMI_OUT_Box_Aktuell_StocktemperaturEin  := xZielBetriebsartStocktemp[2];
 		HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell := gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte;
 		HMI_OUT_Box_Aktuell_StocktemperaturSoll := gBetriebsparameter.Boxen[2].StocktemperaturSoll;
 		firstStep := FALSE;
@@ -4881,11 +4912,11 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 	//HMI -> PLC	
 	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
 	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
-		xZielAus[2]       := HMI_OUT_Box_Aktuell_Aus;
-		xZielDauer[2]     := HMI_OUT_Box_Aktuell_DauerbetriebEin;
-		xZielIntervall[2] := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
-		xZielNachtr[2]    := HMI_OUT_Box_Aktuell_NachtrocknungEin;
-		xZielStocktemp[2] := HMI_OUT_Box_Aktuell_StocktemperaturEin;
+		xZielBetriebsartAus[2]       := HMI_OUT_Box_Aktuell_Aus;
+		xZielBetriebsartDauer[2]     := HMI_OUT_Box_Aktuell_DauerbetriebEin;
+		xZielBetriebsartIntervall[2] := HMI_OUT_Box_Aktuell_IntervallbetriebEIn;
+		xZielBetriebsartNachtr[2]    := HMI_OUT_Box_Aktuell_NachtrocknungEin;
+		xZielBetriebsartStocktemp[2] := HMI_OUT_Box_Aktuell_StocktemperaturEin;
 		xUmschTrig[2]     := TRUE;
 	END_IF;
 	
@@ -4949,11 +4980,11 @@ IF (NOT gBetriebsparameter.Ausstattung.Box2) THEN
 	//--- Betriebsart verzögert übernehmen ---
 	//--- Gewaehlte Betriebsart als Ziel merken + Hintergrund-Timer starten ---
 	IF rt_Box_Aus.Q OR rt_Box_Dauer.Q OR rt_Box_Intervall.Q OR rt_Box_Nachtr.Q OR rt_Box_Stocktemp.Q THEN
-		xZielAus[1]       := HMI_OUT_Box1_Aus;
-		xZielDauer[1]     := HMI_OUT_Box1_DauerbetriebEin;
-		xZielIntervall[1] := HMI_OUT_Box1_IntervallbetriebEIn;
-		xZielNachtr[1]    := HMI_OUT_Box1_NachtrocknungEin;
-		xZielStocktemp[1] := HMI_OUT_Box1_StocktemperaturEin;
+		xZielBetriebsartAus[1]       := HMI_OUT_Box1_Aus;
+		xZielBetriebsartDauer[1]     := HMI_OUT_Box1_DauerbetriebEin;
+		xZielBetriebsartIntervall[1] := HMI_OUT_Box1_IntervallbetriebEIn;
+		xZielBetriebsartNachtr[1]    := HMI_OUT_Box1_NachtrocknungEin;
+		xZielBetriebsartStocktemp[1] := HMI_OUT_Box1_StocktemperaturEin;
 		xUmschTrig[1]     := TRUE;
 	END_IF;
 	
@@ -4975,13 +5006,17 @@ END_IF;
 // - erst nach Ablauf wird die neue Betriebsart uebernommen
 //======================================================================
 IF xInitUmsch THEN
-	// Ziel = aktuell aktive Betriebsart -> kein Umschalten beim Anlauf
+	// xZielBetriebsart* sind RETAIN -> beim (Wieder-)Anlauf die gemerkte Betriebsart wiederherstellen
 	FOR uIdx := 1 TO 2 DO
-		xZielAus[uIdx]       := gBetriebsparameter.Boxen[uIdx].Aus;
-		xZielDauer[uIdx]     := gBetriebsparameter.Boxen[uIdx].DauerbetriebEin;
-		xZielIntervall[uIdx] := gBetriebsparameter.Boxen[uIdx].IntervallbetriebEin;
-		xZielNachtr[uIdx]    := gBetriebsparameter.Boxen[uIdx].NachtrocknungEin;
-		xZielStocktemp[uIdx] := gBetriebsparameter.Boxen[uIdx].StocktemperaturEin;
+		// Nach Neuprogrammierung (Retain leer) ist keine Betriebsart gemerkt -> AUS
+		IF NOT (xZielBetriebsartAus[uIdx] OR xZielBetriebsartDauer[uIdx] OR xZielBetriebsartIntervall[uIdx] OR xZielBetriebsartNachtr[uIdx] OR xZielBetriebsartStocktemp[uIdx]) THEN
+			xZielBetriebsartAus[uIdx] := TRUE;
+		END_IF;
+		gBetriebsparameter.Boxen[uIdx].Aus                 := xZielBetriebsartAus[uIdx];
+		gBetriebsparameter.Boxen[uIdx].DauerbetriebEin     := xZielBetriebsartDauer[uIdx];
+		gBetriebsparameter.Boxen[uIdx].IntervallbetriebEin := xZielBetriebsartIntervall[uIdx];
+		gBetriebsparameter.Boxen[uIdx].NachtrocknungEin    := xZielBetriebsartNachtr[uIdx];
+		gBetriebsparameter.Boxen[uIdx].StocktemperaturEin  := xZielBetriebsartStocktemp[uIdx];
 	END_FOR;
 	xInitUmsch := FALSE;
 END_IF;
@@ -4993,11 +5028,11 @@ FOR uIdx := 1 TO 2 DO
 	// Solange Timer laeuft (Q=TRUE) NICHT uebernehmen -> alte Betriebsart bleibt.
 	// Nach Ablauf (Q=FALSE) neue Betriebsart uebernehmen.
 	IF NOT TOF_Umsch[uIdx].Q THEN
-		gBetriebsparameter.Boxen[uIdx].Aus                 := xZielAus[uIdx];
-		gBetriebsparameter.Boxen[uIdx].DauerbetriebEin     := xZielDauer[uIdx];
-		gBetriebsparameter.Boxen[uIdx].IntervallbetriebEin := xZielIntervall[uIdx];
-		gBetriebsparameter.Boxen[uIdx].NachtrocknungEin    := xZielNachtr[uIdx];
-		gBetriebsparameter.Boxen[uIdx].StocktemperaturEin  := xZielStocktemp[uIdx];
+		gBetriebsparameter.Boxen[uIdx].Aus                 := xZielBetriebsartAus[uIdx];
+		gBetriebsparameter.Boxen[uIdx].DauerbetriebEin     := xZielBetriebsartDauer[uIdx];
+		gBetriebsparameter.Boxen[uIdx].IntervallbetriebEin := xZielBetriebsartIntervall[uIdx];
+		gBetriebsparameter.Boxen[uIdx].NachtrocknungEin    := xZielBetriebsartNachtr[uIdx];
+		gBetriebsparameter.Boxen[uIdx].StocktemperaturEin  := xZielBetriebsartStocktemp[uIdx];
 	END_IF;
 	
 	xUmschTrig[uIdx] := FALSE;   // Trigger ist nur ein Puls (Timer haelt selbst nach)
@@ -78431,7 +78466,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="21063">
+			<root name="CControl_Lite" nextID="21504">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>

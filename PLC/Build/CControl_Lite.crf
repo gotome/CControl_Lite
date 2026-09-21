@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x704C50F1" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x1A42BE85" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -15,16 +15,16 @@
 	<functions>
 		<function name="fcSetBitInBitmask" source="MAIN" sid="F:MAIN:fcSetBitInBitmask">
 			<ref op="RD" pos="P:MAIN:AlarmCyclic#196"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1002"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1006"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1010"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1014"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1018"/>
 		</function>
 		<function name="fcResetBitmask" source="MAIN" sid="F:MAIN:fcResetBitmask">
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#993"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#994"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#995"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#996"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#997"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#998"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#999"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1000"/>
 		</function>
 		<function name="sysOverwriteSerialDisplay" source="TGT" sid="F:TGT:sysOverwriteSerialDisplay"/>
 		<function name="sysClearRowDisp" source="TGT" sid="F:TGT:sysClearRowDisp"/>
@@ -356,40 +356,40 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#743"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#744"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#745"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#877"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#894"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#896"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#899"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#906"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#908"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#911"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#913"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#881"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#898"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#900"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#903"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#910"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#912"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#915"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#917"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#919"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#921"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#923"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#925"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#927"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#929"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#931"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#934"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#940"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#942"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#933"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#935"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#938"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#944"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#947"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#954"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#956"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#959"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#961"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#946"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#948"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#951"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#958"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#960"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#963"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#965"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#967"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#969"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#971"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#973"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#975"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#977"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#979"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#982"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1001"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#981"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#983"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#986"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1005"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1009"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1013"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1017"/>
 			<ref op="RD" pos="P:MAIN:LeistungCyclic#93"/>
 			<ref op="RD" pos="P:MAIN:LeistungCyclic#161"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#105"/>
@@ -676,42 +676,42 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#798"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#801"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#802"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#818"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#819"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#820"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#821"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#822"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#828"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#834"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#835"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#836"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#837"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#822"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#823"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#824"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#825"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#826"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#832"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#838"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#864"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#880"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#895"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#897"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#839"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#840"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#841"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#842"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#868"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#884"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#899"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#905"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#910"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#915"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#916"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#921"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#922"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#927"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#928"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#939"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#901"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#903"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#909"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#914"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#919"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#920"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#925"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#926"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#931"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#932"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#943"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#945"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#947"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#953"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#958"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#963"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#964"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#969"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#970"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#975"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#976"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#949"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#951"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#957"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#962"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#967"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#968"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#973"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#974"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#979"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#980"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#95"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#100"/>
 			<ref op="RD" pos="P:MAIN:IOMappingCyclic#126"/>
@@ -889,9 +889,9 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#560"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#585"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#587"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#857"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#867"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#883"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#861"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#871"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#887"/>
 			<ref op="WR" pos="P:MAIN:LeistungCyclic#19"/>
 			<ref op="WR" pos="P:MAIN:LeistungCyclic#20"/>
 			<ref op="WR" pos="P:MAIN:LeistungCyclic#21"/>
@@ -1021,8 +1021,8 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#562"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#574"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#576"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#893"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#941"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#897"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#945"/>
 			<ref op="WR" pos="P:MAIN:LeistungCyclic#23"/>
 			<ref op="WR" pos="P:MAIN:LeistungCyclic#24"/>
 			<ref op="WR" pos="P:MAIN:LeistungCyclic#49"/>
@@ -1126,8 +1126,8 @@
 			<ref op="RD" pos="P:MAIN:AktorenMappingCyclic#336"/>
 			<ref op="RD" pos="P:MAIN:AlarmCyclic#85"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#340"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#899"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#947"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#903"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#951"/>
 			<ref op="WR" pos="P:MAIN:IOMappingCyclic#82"/>
 			<ref op="RD" pos="P:MAIN:LeistungCyclic#167"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#144"/>
@@ -1247,31 +1247,82 @@
 			<ref op="RD" pos="P:MAIN:AktorenMappingCyclic#334"/>
 			<ref op="RD" pos="P:MAIN:AktorenMappingCyclic#342"/>
 			<ref op="WR" pos="P:MAIN:AlarmCyclic#164"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#865"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#869"/>
 		</var>
 		<var name="gAlarmBetriebVentilator" source="MAIN" sid="V:MAIN:gAlarmBetriebVentilator">
 			<ref op="WR" pos="P:MAIN:AlarmCyclic#165"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#855"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#859"/>
 		</var>
 		<var name="hmiNutzungsdaten" source="MAIN" sid="V:MAIN:hmiNutzungsdaten">
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#100"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#121"/>
 		</var>
-		<var name="gBstBox1Min" source="MAIN" sid="V:MAIN:gBstBox1Min">
+		<var name="gBstBox1Min" sid="V::gBstBox1Min">
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#90"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#121"/>
 		</var>
-		<var name="gBstBox1Std" source="MAIN" sid="V:MAIN:gBstBox1Std">
+		<var name="gBstBox1Std" sid="V::gBstBox1Std">
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#91"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#120"/>
 		</var>
-		<var name="gBstBox2Min" source="MAIN" sid="V:MAIN:gBstBox2Min">
+		<var name="gBstBox2Min" sid="V::gBstBox2Min">
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#92"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#193"/>
 		</var>
-		<var name="gBstBox2Std" source="MAIN" sid="V:MAIN:gBstBox2Std">
+		<var name="gBstBox2Std" sid="V::gBstBox2Std">
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#93"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#192"/>
+		</var>
+		<var name="xZielBetriebsartAus" sid="V::xZielBetriebsartAus">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#598"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#644"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#675"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#722"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#790"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#819"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#820"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#822"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#838"/>
+		</var>
+		<var name="xZielBetriebsartDauer" sid="V::xZielBetriebsartDauer">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#599"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#645"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#676"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#723"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#791"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#819"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#823"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#839"/>
+		</var>
+		<var name="xZielBetriebsartIntervall" sid="V::xZielBetriebsartIntervall">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#600"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#646"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#677"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#724"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#792"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#819"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#824"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#840"/>
+		</var>
+		<var name="xZielBetriebsartNachtr" sid="V::xZielBetriebsartNachtr">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#601"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#647"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#678"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#725"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#793"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#819"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#825"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#841"/>
+		</var>
+		<var name="xZielBetriebsartStocktemp" sid="V::xZielBetriebsartStocktemp">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#602"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#648"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#679"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#726"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#794"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#819"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#826"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#842"/>
 		</var>
 		<var name="Ausstattung_Box2" source="Configuration_variables" sid="V:Configuration_variables:Ausstattung_Box2">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#119"/>
@@ -1503,22 +1554,22 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#144"/>
 		</var>
 		<var name="Par_Strombegrenzung_StartStd" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StartStd">
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#299"/>
-		</var>
-		<var name="Par_Strombegrenzung_StartMin" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StartMin">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#298"/>
 		</var>
-		<var name="Par_Strombegrenzung_StoppStd" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StoppStd">
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#301"/>
+		<var name="Par_Strombegrenzung_StartMin" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StartMin">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#299"/>
 		</var>
-		<var name="Par_Strombegrenzung_StoppMin" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StoppMin">
+		<var name="Par_Strombegrenzung_StoppStd" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StoppStd">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#300"/>
 		</var>
+		<var name="Par_Strombegrenzung_StoppMin" source="Configuration_variables" sid="V:Configuration_variables:Par_Strombegrenzung_StoppMin">
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#301"/>
+		</var>
 		<var name="Par_Luftaufbereitung_FarbeIcon" source="Configuration_variables" sid="V:Configuration_variables:Par_Luftaufbereitung_FarbeIcon">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#866"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#868"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#870"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#873"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#872"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#874"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#877"/>
 		</var>
 		<var name="Par_Luftaufbereitung_BetriebsmeldungVorh" source="Configuration_variables" sid="V:Configuration_variables:Par_Luftaufbereitung_BetriebsmeldungVorh">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#190"/>
@@ -1934,9 +1985,9 @@
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#587"/>
 		</var>
 		<var name="HMI_Ventilator1_FarbeIcon" source="Configuration_variables" sid="V:Configuration_variables:HMI_Ventilator1_FarbeIcon">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#856"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#858"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#860"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#862"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#864"/>
 		</var>
 		<var name="HMI_IN_Res" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_Res"/>
 		<var name="HMI_OUT_Box_Aktuell_DauerbetriebEin" source="Configuration_variables" sid="V:Configuration_variables:HMI_OUT_Box_Aktuell_DauerbetriebEin">
@@ -2116,7 +2167,7 @@
 		</var>
 		<var name="HMI_IN_Box1_AnzeigeLaufRestzeit" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_Box1_AnzeigeLaufRestzeit">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#532"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#851"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#855"/>
 		</var>
 		<var name="HMI_IN_Box1_IconWitterung" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_Box1_IconWitterung">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#526"/>
@@ -2144,7 +2195,7 @@
 		</var>
 		<var name="HMI_IN_Box2_AnzeigeLaufRestzeit" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_Box2_AnzeigeLaufRestzeit">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#544"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#852"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#856"/>
 		</var>
 		<var name="HMI_IN_Box2_TrockengutIcon" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_Box2_TrockengutIcon">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#543"/>
@@ -2217,30 +2268,30 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#802"/>
 		</var>
 		<var name="HMI_IN_ALARM_STOERMASKE_1" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_STOERMASKE_1">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#995"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1010"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1010"/>
-		</var>
-		<var name="HMI_IN_ALARM_STOERMASKE_2" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_STOERMASKE_2">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#996"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#999"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1014"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1014"/>
 		</var>
-		<var name="HMI_IN_ALARM_WARNMASKE_1" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_WARNMASKE_1">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#993"/>
-			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1002"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1002"/>
+		<var name="HMI_IN_ALARM_STOERMASKE_2" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_STOERMASKE_2">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1000"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1018"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1018"/>
 		</var>
-		<var name="HMI_IN_ALARM_WARNMASKE_2" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_WARNMASKE_2">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#994"/>
+		<var name="HMI_IN_ALARM_WARNMASKE_1" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_WARNMASKE_1">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#997"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1006"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1006"/>
 		</var>
+		<var name="HMI_IN_ALARM_WARNMASKE_2" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_ALARM_WARNMASKE_2">
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#998"/>
+			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#1010"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#1010"/>
+		</var>
 		<var name="HMI_Abluft_FarbeIcon" source="Configuration_variables" sid="V:Configuration_variables:HMI_Abluft_FarbeIcon">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#882"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#884"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#886"/>
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#889"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#888"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#890"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#893"/>
 		</var>
 		<var name="HMI_IN_FrischlSaettigunsDefizit" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_FrischlSaettigunsDefizit">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#391"/>
@@ -2249,7 +2300,7 @@
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#392"/>
 		</var>
 		<var name="HMI_IN_LuftaufberStatusIndex" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_LuftaufberStatusIndex">
-			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#877"/>
+			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#881"/>
 		</var>
 		<var name="HMI_IN_Box2_IconWitterung" source="Configuration_variables" sid="V:Configuration_variables:HMI_IN_Box2_IconWitterung">
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#538"/>
