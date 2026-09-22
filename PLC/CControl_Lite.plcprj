@@ -1810,41 +1810,38 @@ END_IF;
 ]]>
 					</sourceCode>
 				</functionBlock>
-				<functionBlock name="fbBetriebsstunden" version="1.0.0" creationDate="1787595782" lastModifiedDate="1787595798">
+				<functionBlock name="fbBetriebsstunden" version="1.0.0" creationDate="1787595782" lastModifiedDate="1790064620">
 					<vars>
-						<inoutVars>
-							<var name="Minuten" type="UINT">
-								<descr>Retain-Global, 0..59</descr>
-							</var>
-							<var name="Stunden" type="UDINT">
-								<descr>Retain-Global</descr>
-							</var>
-						</inoutVars>
 						<inputVars>
 							<var name="Aktiv" type="BOOL"/>
-							<var name="sekTick" type="BOOL">
-								<descr>1-Sekunden-Puls</descr>
+							<var name="MinTick" type="BOOL">
+								<descr>1 Puls/Minute</descr>
 							</var>
 							<var name="Reset" type="BOOL"/>
+							<var name="MinutenVor" type="UINT">
+								<descr>aktueller Stand rein</descr>
+							</var>
+							<var name="StundenVor" type="UDINT"/>
 						</inputVars>
-						<localVars>
-							<var name="Sekunden" type="USINT"/>
-						</localVars>
+						<outputVars>
+							<var name="Minuten" type="UINT"/>
+							<var name="Stunden" type="UDINT"/>
+						</outputVars>
 					</vars>
 					<iecDeclaration active="TRUE" valid="TRUE">
 						<![CDATA[FUNCTION_BLOCK fbBetriebsstunden
 
 VAR_INPUT
-    Aktiv   : BOOL;
-    sekTick : BOOL;   (* 1-Sekunden-Puls *)
-    Reset   : BOOL;
+    Aktiv      : BOOL;
+    MinTick    : BOOL;    (* 1 Puls/Minute *)
+    Reset      : BOOL;
+    MinutenVor : UINT;    (* aktueller Stand rein *)
+    StundenVor : UDINT;
 END_VAR
-VAR_IN_OUT
-    Minuten : UINT;    (* Retain-Global, 0..59 *)
-    Stunden : UDINT;   (* Retain-Global *)
-END_VAR
-VAR
-    Sekunden : USINT;
+
+VAR_OUTPUT
+    Minuten : UINT;
+    Stunden : UDINT;
 END_VAR
 ]]>
 					</iecDeclaration>
@@ -1852,19 +1849,20 @@ END_VAR
 					<methods/>
 					<sourceCode type="ST">
 						<![CDATA[IF Reset THEN
-    Sekunden := 0;  Minuten := 0;  Stunden := 0;
-ELSIF (Aktiv AND sekTick) THEN
-    IF Sekunden < 59 THEN
-        Sekunden := Sekunden + 1;
+    Minuten := 0;
+    Stunden := 0;
+ELSIF (Aktiv AND MinTick) THEN
+    IF MinutenVor < 59 THEN
+        Minuten := MinutenVor + 1;
+        Stunden := StundenVor;
     ELSE
-        Sekunden := 0;
-        IF Minuten < 59 THEN
-            Minuten := Minuten + 1;
-        ELSE
-            Minuten := 0;
-            Stunden := Stunden + 1;
-        END_IF;
+        Minuten := 0;
+        Stunden := StundenVor + 1;
     END_IF;
+ELSE
+    (* unveraendert durchreichen - sonst schreibt der Aufrufer 0 zurueck, ist eine Schneider eigenheit! *)
+    Minuten := MinutenVor;
+    Stunden := StundenVor;
 END_IF;
 ]]>
 					</sourceCode>
@@ -2499,7 +2497,7 @@ END_IF;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1789635678">
+				<program name="BerechnungCyclic" version="1.0.0" creationDate="1773513905" lastModifiedDate="1790066417">
 					<vars>
 						<localVars>
 							<var name="Frischluftsensor" type="fbMathLuft"/>
@@ -2512,11 +2510,30 @@ END_IF;
 							<var name="fbRestzeitBox2" type="fbRestzeit"/>
 							<var name="fbBetrStdBox1" type="fbBetriebsstunden"/>
 							<var name="fbBetrStdBox2" type="fbBetriebsstunden"/>
-							<var name="TON_SekTick" type="TON"/>
+							<var name="TON_MinTick" type="TON"/>
 							<var name="loc_ms" type="UDINT"/>
 						</localVars>
 					</vars>
-					<iecDeclaration active="FALSE"/>
+					<iecDeclaration active="TRUE" valid="TRUE">
+						<![CDATA[PROGRAM BerechnungCyclic
+
+VAR
+	Frischluftsensor : fbMathLuft;
+	Trockenluftsensor : fbMathLuft;
+	fbSchlechtwetterBox1 : fbCControlWitterung;
+	fbSchlechtwetterBox2 : fbCControlWitterung;
+	idx : USINT;
+	idxStufe : USINT;
+	fbRestzeitBox1 : fbRestzeit;
+	fbRestzeitBox2 : fbRestzeit;
+	fbBetrStdBox1 : fbBetriebsstunden;
+	fbBetrStdBox2 : fbBetriebsstunden;
+	TON_MinTick : TON;
+	loc_ms : UDINT;
+END_VAR
+
+]]>
+					</iecDeclaration>
 					<sourceCode type="ST">
 						<![CDATA[(*
 ================================================================================
@@ -2603,27 +2620,46 @@ gStatusAnlage.Box[1].IconWitterung := fbSchlechtwetterBox1.WetterIstSchlecht;
 gStatusAnlage.Box[1].AktSchlechtwetterPuls := fbSchlechtwetterBox1.SchlechtwetterPulszeitAktuell;
 gStatusAnlage.Box[1].AktSchlechtwetterPause := fbSchlechtwetterBox1.SchlechtwetterPausezeitAktuell;
 
-// 1-Sekunden-Takt fuer Betriebsstunden
-TON_SekTick(IN := NOT TON_SekTick.Q, PT := 1000);
+// 1-Minuten-Takt fuer Betriebsstunden
+TON_MinTick(IN := NOT TON_MinTick.Q, PT := 60000);
 
-// Betriebsstundenzaehler (zaehlt solange Box aktiv)
-fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := gBetriebsparameter.Boxen[1].Aus,
-              Minuten := gBstBox1Min, Stunden := gBstBox1Std);
-fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, sekTick := TON_SekTick.Q, Reset := gBetriebsparameter.Boxen[2].Aus,
-              Minuten := gBstBox2Min, Stunden := gBstBox2Std);
+// Betriebsstundenzaehler Box 1 (zaehlt solange Box aktiv)
+fbBetrStdBox1(Aktiv := gBetriebsparameter.Boxen[1].xBoxAktiv, MinTick := TON_MinTick.Q,
+              Reset := NOT gBetriebsparameter.Boxen[1].DauerbetriebEin,
+              MinutenVor := gBstBox1Min, StundenVor := gBstBox1Std);
+//Auf globale Variablen schreiben
+gBstBox1Min := fbBetrStdBox1.Minuten;
+gBstBox1Std := fbBetrStdBox1.Stunden;
+
+//  Betriebsstundenzaehler Box 2 (zaehlt solange Box aktiv)
+fbBetrStdBox2(Aktiv := gBetriebsparameter.Boxen[2].xBoxAktiv, MinTick := TON_MinTick.Q,
+              Reset := NOT gBetriebsparameter.Boxen[2].DauerbetriebEin,
+              MinutenVor := gBstBox2Min, StundenVor := gBstBox2Std);
+//Auf globale Variablen schreiben
+gBstBox2Min := fbBetrStdBox2.Minuten;
+gBstBox2Std := fbBetrStdBox2.Stunden;  
+
+
+// Bitmasken -> Stunden-Arrays fuer die Restzeit-Anzeige (fbRestzeit)
+FOR idx := 0 TO 23 DO
+    gBetriebsparameter.Boxen[1].IntervallbetriebZeiten[idx] := (SHR(IN := Par_Box1_Intervallzeit,    N := idx) AND 1) <> 0;
+    gBetriebsparameter.Boxen[1].NachtrocknungZeiten[idx]    := (SHR(IN := Par_Box1_Nachtrocknungszeit, N := idx) AND 1) <> 0;
+    gBetriebsparameter.Boxen[2].IntervallbetriebZeiten[idx] := (SHR(IN := Par_Box2_Intervallzeit,    N := idx) AND 1) <> 0;
+    gBetriebsparameter.Boxen[2].NachtrocknungZeiten[idx]    := (SHR(IN := Par_Box2_Nachtrocknungszeit, N := idx) AND 1) <> 0;
+END_FOR;
 
 // Rest-Laufzeit Intervall/Nachtrocknung (Zeitfenster je nach Modus)
 IF gBetriebsparameter.Boxen[1].NachtrocknungEin THEN
     fbRestzeitBox1(Freigabe := TRUE, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
                    ZeitfensterIn := gBetriebsparameter.Boxen[1].NachtrocknungZeiten);
-ELSE
+ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin THEN
     fbRestzeitBox1(Freigabe := gBetriebsparameter.Boxen[1].IntervallbetriebEin, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
                    ZeitfensterIn := gBetriebsparameter.Boxen[1].IntervallbetriebZeiten);
 END_IF;
 IF gBetriebsparameter.Boxen[2].NachtrocknungEin THEN
     fbRestzeitBox2(Freigabe := TRUE, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
                    ZeitfensterIn := gBetriebsparameter.Boxen[2].NachtrocknungZeiten);
-ELSE
+ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin THEN
     fbRestzeitBox2(Freigabe := gBetriebsparameter.Boxen[2].IntervallbetriebEin, AktuelleStunde := TO_USINT(sysClock.hours), AktuelleMinute := TO_USINT(sysClock.minutes),
                    ZeitfensterIn := gBetriebsparameter.Boxen[2].IntervallbetriebZeiten);
 END_IF;
@@ -2645,11 +2681,10 @@ ELSIF gBetriebsparameter.Boxen[1].IntervallbetriebEin OR gBetriebsparameter.Boxe
     gStatusAnlage.Box[1].LaufRestzeitStunden := TO_INT(fbRestzeitBox1.RestzeitStundenOut);
     gStatusAnlage.Box[1].LaufRestzeitMinuten := TO_INT(fbRestzeitBox1.RestzeitMinutenOut);
     IF gBetriebsparameter.Boxen[1].xBoxAktiv THEN
-        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // running in
-    ELSE
         gStatusAnlage.Box[1].TextIndexLaufzeit := 2;   // pause in
+    ELSE
+        gStatusAnlage.Box[1].TextIndexLaufzeit := 1;   // running in
     END_IF;
-
 ELSE
     // z.B. Stocktemperatur-Betrieb: keine Restzeit
     gStatusAnlage.Box[1].AnzeigeLaufRestzeit := FALSE;
@@ -2717,9 +2752,9 @@ ELSIF gBetriebsparameter.Boxen[2].IntervallbetriebEin OR gBetriebsparameter.Boxe
     gStatusAnlage.Box[2].LaufRestzeitStunden := TO_INT(fbRestzeitBox2.RestzeitStundenOut);
     gStatusAnlage.Box[2].LaufRestzeitMinuten := TO_INT(fbRestzeitBox2.RestzeitMinutenOut);
     IF gBetriebsparameter.Boxen[2].xBoxAktiv THEN
-        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // running in
-    ELSE
         gStatusAnlage.Box[2].TextIndexLaufzeit := 2;   // pause in
+    ELSE
+        gStatusAnlage.Box[2].TextIndexLaufzeit := 1;   // running in
     END_IF;
 
 ELSE
@@ -4127,7 +4162,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1790017192">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1790061745">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -78466,7 +78501,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="21504">
+			<root name="CControl_Lite" nextID="21745">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<crossReference sourceID="0x1A42BE85" module="CControl_Lite" optionsMask="0x3000001D">
+<crossReference sourceID="0x7CD615FB" module="CControl_Lite" optionsMask="0x3000001D">
 	<unknownObjs/>
 	<programs>
 		<program name="IOMappingCyclic" source="MAIN" sid="P:MAIN:IOMappingCyclic"/>
@@ -133,7 +133,7 @@
 			<ref op="DECL" pos="V::AlarmCyclic.TonF_KlappeBox2"/>
 			<ref op="DECL" pos="V::AlarmCyclic.TonF_Luftaufbereiter"/>
 			<ref op="DECL" pos="V::AlarmCyclic.TonF_Ventilator"/>
-			<ref op="DECL" pos="V::BerechnungCyclic.TON_SekTick"/>
+			<ref op="DECL" pos="V::BerechnungCyclic.TON_MinTick"/>
 		</functionBlock>
 		<functionBlock name="TOF" source="basic" sid="FB:basic:TOF">
 			<ref op="DECL" pos="V::AktorenMappingCyclic.TOF_LuftaufbAuskuehl"/>
@@ -262,38 +262,38 @@
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#82"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#83"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#84"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#113"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#114"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#118"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#119"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#120"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#121"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#124"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#125"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#126"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#128"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#130"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#135"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#136"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#144"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#145"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#177"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#178"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#179"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#180"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#185"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#186"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#190"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#191"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#192"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#193"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#132"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#133"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#137"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#138"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#139"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#140"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#143"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#144"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#145"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#147"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#149"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#153"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#154"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#162"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#163"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#195"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#196"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#197"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#198"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#200"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#202"/>
-			<ref op="WR" pos="P:MAIN:BerechnungCyclic#207"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#203"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#204"/>
 			<ref op="WR" pos="P:MAIN:BerechnungCyclic#208"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#209"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#210"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#211"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#214"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#215"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#216"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#218"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#220"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#225"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#226"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#350"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#351"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#352"/>
@@ -481,31 +481,37 @@
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#75"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#76"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#90"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#92"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#96"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#97"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#100"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#103"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#104"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#107"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#112"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#98"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#108"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#109"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#110"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#111"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#115"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#116"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#118"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#119"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#122"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#123"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#127"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#143"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#148"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#152"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#158"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#167"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#168"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#169"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#125"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#126"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#131"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#135"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#142"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#146"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#161"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#166"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#170"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#171"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#172"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#184"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#176"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#185"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#186"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#187"/>
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#188"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#195"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#199"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#189"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#190"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#202"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#206"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#213"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#217"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#45"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#53"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#54"/>
@@ -1257,23 +1263,27 @@
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#100"/>
 			<ref op="WR" pos="P:MAIN:AblaufstrgCyclic#121"/>
 		</var>
-		<var name="gBstBox1Min" sid="V::gBstBox1Min">
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#90"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#121"/>
-		</var>
-		<var name="gBstBox1Std" sid="V::gBstBox1Std">
+		<var name="gBstBox1Min" source="MAIN" sid="V:MAIN:gBstBox1Min">
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#91"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#120"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#94"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#140"/>
 		</var>
-		<var name="gBstBox2Min" sid="V::gBstBox2Min">
+		<var name="gBstBox1Std" source="MAIN" sid="V:MAIN:gBstBox1Std">
 			<ref op="RD" pos="P:MAIN:BerechnungCyclic#92"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#193"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#95"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#139"/>
 		</var>
-		<var name="gBstBox2Std" sid="V::gBstBox2Std">
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#93"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#192"/>
+		<var name="gBstBox2Min" source="MAIN" sid="V:MAIN:gBstBox2Min">
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#99"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#102"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#211"/>
 		</var>
-		<var name="xZielBetriebsartAus" sid="V::xZielBetriebsartAus">
+		<var name="gBstBox2Std" source="MAIN" sid="V:MAIN:gBstBox2Std">
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#100"/>
+			<ref op="WR" pos="P:MAIN:BerechnungCyclic#103"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#210"/>
+		</var>
+		<var name="xZielBetriebsartAus" source="MAIN" sid="V:MAIN:xZielBetriebsartAus">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#598"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#644"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#675"/>
@@ -1284,7 +1294,7 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#822"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#838"/>
 		</var>
-		<var name="xZielBetriebsartDauer" sid="V::xZielBetriebsartDauer">
+		<var name="xZielBetriebsartDauer" source="MAIN" sid="V:MAIN:xZielBetriebsartDauer">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#599"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#645"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#676"/>
@@ -1294,7 +1304,7 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#823"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#839"/>
 		</var>
-		<var name="xZielBetriebsartIntervall" sid="V::xZielBetriebsartIntervall">
+		<var name="xZielBetriebsartIntervall" source="MAIN" sid="V:MAIN:xZielBetriebsartIntervall">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#600"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#646"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#677"/>
@@ -1304,7 +1314,7 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#824"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#840"/>
 		</var>
-		<var name="xZielBetriebsartNachtr" sid="V::xZielBetriebsartNachtr">
+		<var name="xZielBetriebsartNachtr" source="MAIN" sid="V:MAIN:xZielBetriebsartNachtr">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#601"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#647"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#678"/>
@@ -1314,7 +1324,7 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#825"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#841"/>
 		</var>
-		<var name="xZielBetriebsartStocktemp" sid="V::xZielBetriebsartStocktemp">
+		<var name="xZielBetriebsartStocktemp" source="MAIN" sid="V:MAIN:xZielBetriebsartStocktemp">
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#602"/>
 			<ref op="WR" pos="P:MAIN:HmiMappingCyclic#648"/>
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#679"/>
@@ -1593,15 +1603,19 @@
 			<ref op="RD" pos="P:MAIN:HmiMappingCyclic#464"/>
 		</var>
 		<var name="Par_Box1_Intervallzeit" source="Configuration_variables" sid="V:Configuration_variables:Par_Box1_Intervallzeit">
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#108"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#20"/>
 		</var>
 		<var name="Par_Box1_Nachtrocknungszeit" source="Configuration_variables" sid="V:Configuration_variables:Par_Box1_Nachtrocknungszeit">
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#109"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#22"/>
 		</var>
 		<var name="Par_Box2_Intervallzeit" source="Configuration_variables" sid="V:Configuration_variables:Par_Box2_Intervallzeit">
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#110"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#21"/>
 		</var>
 		<var name="Par_Box2_Nachtrocknungszeit" source="Configuration_variables" sid="V:Configuration_variables:Par_Box2_Nachtrocknungszeit">
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#111"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#23"/>
 		</var>
 		<var name="Par_Anlage_Standorthoehe" source="Configuration_variables" sid="V:Configuration_variables:Par_Anlage_Standorthoehe">
@@ -2448,10 +2462,10 @@
 		<var name="sysClock" source="TGT" sid="V:TGT:sysClock">
 			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#106"/>
 			<ref op="RD" pos="P:MAIN:AblaufstrgCyclic#184"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#97"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#100"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#104"/>
-			<ref op="RD" pos="P:MAIN:BerechnungCyclic#107"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#116"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#119"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#123"/>
+			<ref op="RD" pos="P:MAIN:BerechnungCyclic#126"/>
 			<ref op="RD" pos="P:MAIN:StartStoppCyclic#19"/>
 		</var>
 		<var name="sysClockError" source="TGT" sid="V:TGT:sysClockError"/>
