@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type ="text/xsl" href="file://C:/Users/gries/AppData/Local/Temp/LLSymTab.xsl" version="1.0"?>
-<LLSymbolTable Version="1.4" Name="CControl_Lite" TargetID="TM173O_825p3" CodeId="0x7CD615FB" DebugMemoId="0x0000DB6B" MemoId="0x0000B3C5" DataRelocation="none" DbRelocation="none" FunctRelocation="none" dataAddrMode="byte" codeAddrMode="byte" NoIncrAlloc="false" is64bit="false" isBigEndian="false" dataSignature="0xD36282D7">
+<LLSymbolTable Version="1.4" Name="CControl_Lite" TargetID="TM173O_825p3" CodeId="0x26D1BB44" DebugMemoId="0x0000DB6B" MemoId="0x0000B3C5" DataRelocation="none" DbRelocation="none" FunctRelocation="none" dataAddrMode="byte" codeAddrMode="byte" NoIncrAlloc="false" is64bit="false" isBigEndian="false" dataSignature="0xFF50E96A">
 	<Resource Name="TM173O" Proc="ARMThumb2_VFP2_SP"/>
 	<CaseSensitive>false</CaseSensitive>
 	<CompilerOptions FBExtCheck="true"/>
@@ -386,6 +386,7 @@
 		<Var Name="HMI_OUT_BOX1_NACHTROCKNUNGEIN" OrigName="HMI_OUT_Box1_NachtrocknungEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D7C6" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="137" Access="3"/>
 		<Var Name="HMI_OUT_BOX1_STOCKTEMPERATUREIN" OrigName="HMI_OUT_Box1_StocktemperaturEin" Type="BOOL" OrigType="BOOL" Addr="0x2004D81E" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="181" Access="3"/>
 		<Var Name="HMI_IN_BOX1_RESTZEITUMSCHVERZBETRIEBSART" OrigName="HMI_IN_Box1_RestzeitUmschVerzBetriebsart" Type="UINT" OrigType="UINT" Addr="0x2004D7DA" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="147" Access="3"/>
+		<Var Name="HMI_IN_BOX2_RESTZEITUMSCHVERZBETRIEBSART" OrigName="HMI_IN_Box2_RestzeitUmschVerzBetriebsart" Type="UINT" OrigType="UINT" Addr="0x2004D7EA" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="155" Access="3"/>
 		<Var Name="HMI_VENTILATOR1_FARBEICON" OrigName="HMI_Ventilator1_FarbeIcon" Type="UINT" OrigType="UINT" Addr="0x2004D78E" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="109" Access="3"/>
 		<Var Name="PAR_LUFTAUFBEREITUNG_FARBEICON" OrigName="Par_Luftaufbereitung_FarbeIcon" Type="BYTE" OrigType="BYTE" Addr="0x2004FF0C" Group="Parameters" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="200" DataBlockIndex="164" Access="3"/>
 		<Var Name="HMI_IN_LUFTAUFBERSTATUSINDEX" OrigName="HMI_IN_LuftaufberStatusIndex" Type="USINT" OrigType="USINT" Addr="0x2004D840" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="198" Access="3"/>
@@ -463,7 +464,6 @@
 		<Var Name="HMI_ALLGEMEIN_ENTFEUCHTER" OrigName="HMI_Allgemein_Entfeuchter" Type="UINT" OrigType="UINT" Addr="0x2004D786" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="105" Access="3"/>
 		<Var Name="HMI_IN_RES" OrigName="HMI_IN_Res" Type="UINT" OrigType="UINT" Addr="0x2004D790" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="110" Access="3"/>
 		<Var Name="HMI_IN_ALLG_UMSCHALTVERZBETRIEBSARTAKTIV" OrigName="HMI_IN_Allg_UmschaltverzBetriebsartAktiv" Type="USINT" OrigType="USINT" Addr="0x2004D7BE" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="133" Access="3"/>
-		<Var Name="HMI_IN_BOX2_RESTZEITUMSCHVERZBETRIEBSART" OrigName="HMI_IN_Box2_RestzeitUmschVerzBetriebsart" Type="UINT" OrigType="UINT" Addr="0x2004D7EA" Group="Variables" OnDataBlock="true" DataBlockType="M" DBDataType="W" DataBlockNumber="201" DataBlockIndex="155" Access="3"/>
 		<Var Name="HW_AO2" OrigName="hw_ao2" Type="INT" OrigType="INT" Addr="0x2004D4A6" Descr="AOL2 analog output" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="Q" DBDataType="W" DataBlockNumber="0" DataBlockIndex="1" Access="3"/>
 		<Var Name="HW_AO3" OrigName="hw_ao3" Type="INT" OrigType="INT" Addr="0x2004D4A8" Descr="AOL3 analog output" Group="IO_Mapping_Local" OnDataBlock="true" DataBlockType="Q" DBDataType="W" DataBlockNumber="0" DataBlockIndex="2" Access="3"/>
 		<Var Name="SYSLOCALDIGITALINPUTS" OrigName="sysLocalDigitalInputs" Type="BOOL" OrigType="BOOL" Addr="0x2004D4AC" Descr="Local Digital Inputs" Group="Digital_Inputs" OnDataBlock="true" DataBlockType="I" DBDataType="X" DataBlockNumber="0" DataBlockIndex="0" Access="1" Dims="6"/>
@@ -550,7 +550,7 @@
 		<Var Name="$MENU_30010" OrigName="$MENU_30010" Type="$MENUITEM" OrigType="$MenuItem" Addr="0x2007D224" Group="Menu_vars" idxMin0="1" idx0="2" hidden="true"/>
 		<Var Name="$$CODEBASE$$" OrigName="$$CODEBASE$$" Type="UDINT" OrigType="UDINT" Addr="0x8100000"/>
 		<Var Name="$$CODESTART$$" OrigName="$$CODESTART$$" Type="UDINT" OrigType="UDINT" Addr="0x810DE94"/>
-		<Var Name="$$CODESIZE$$" OrigName="$$CODESIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x81257F0"/>
+		<Var Name="$$CODESIZE$$" OrigName="$$CODESIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x8125790"/>
 		<Var Name="$$CODEEND$$" OrigName="$$CODEEND$$" Type="UDINT" OrigType="UDINT" Addr="0x8200000"/>
 		<Var Name="$$DATASIZE$$" OrigName="$$DATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x2007D234"/>
 		<Var Name="$$AUXDATASIZE$$" OrigName="$$AUXDATASIZE$$" Type="UDINT" OrigType="UDINT" Addr="0x0"/>
@@ -569,7 +569,7 @@
 			<Var Name="$RES" OrigName="$res" Type="INT" OrigType="INT" Addr="0x2005E816"/>
 			<Var Name="$RESUINT" OrigName="$resUint" Type="UINT" OrigType="UINT" Addr="0x200639F8"/>
 		</Prog>
-		<Prog Name="ABLAUFSTRGCYCLIC" OrigName="AblaufstrgCyclic" SrcType="3" CodeAddr="0x811F468" HashCode="DB110A5C">
+		<Prog Name="ABLAUFSTRGCYCLIC" OrigName="AblaufstrgCyclic" SrcType="3" CodeAddr="0x811F338" HashCode="DB110A5C">
 			<Var Name="STATEENTRY" OrigName="stateEntry" Type="BOOL" OrigType="BOOL" Addr="0x20063BF9"/>
 			<Var Name="XSTARTFREIGABE" OrigName="xStartFreigabe" Type="BOOL" OrigType="BOOL" Addr="0x200639FB"/>
 			<Var Name="XSTOPANFORDERUNG" OrigName="xStopAnforderung" Type="BOOL" OrigType="BOOL" Addr="0x200639FA"/>
@@ -584,7 +584,7 @@
 			<Var Name="NTARIFSTARTLUFTAUFB" OrigName="nTarifStartLuftaufb" Type="UINT" OrigType="UINT" Addr="0x20064014"/>
 			<Var Name="LETZTEAKTIVEBOX" OrigName="letzteAktiveBox" Type="USINT" OrigType="USINT" Addr="0x20063BFB" Descr="zuletzt aktive Box (fuer Nachlauf Luftaufbereitung)"/>
 		</Prog>
-		<Prog Name="AKTORENMAPPINGCYCLIC" OrigName="AktorenMappingCyclic" SrcType="3" CodeAddr="0x811FBE8" HashCode="6AAD37F8">
+		<Prog Name="AKTORENMAPPINGCYCLIC" OrigName="AktorenMappingCyclic" SrcType="3" CodeAddr="0x811FAB8" HashCode="6AAD37F8">
 			<Var Name="FBBOXENKLAPPE1" OrigName="fbBoxenklappe1" Type="FBBOXENKLAPPE" OrigType="fbBoxenklappe" Addr="0x2006401C"/>
 			<Var Name="FBBOXENKLAPPE2" OrigName="fbBoxenklappe2" Type="FBBOXENKLAPPE" OrigType="fbBoxenklappe" Addr="0x20064064"/>
 			<Var Name="XFREIGABEKLAPPE1OUT" OrigName="xFreigabeKlappe1Out" Type="BOOL" OrigType="BOOL" Addr="0x20064016"/>
@@ -657,7 +657,7 @@
 		<Prog Name="COPMBOOT" OrigName="CopMBoot" SrcType="3" CodeAddr="0x811B6F0" HashCode="8D8E80FA">
 			<Var Name="MASTER_RETURN" OrigName="master_return" Type="DINT" OrigType="DINT" Addr="0x200643BC"/>
 		</Prog>
-		<Prog Name="HMIMAPPINGCYCLIC" OrigName="HmiMappingCyclic" SrcType="3" CodeAddr="0x8121D8C" HashCode="8D876EC2">
+		<Prog Name="HMIMAPPINGCYCLIC" OrigName="HmiMappingCyclic" SrcType="3" CodeAddr="0x8121C5C" HashCode="01EE2596">
 			<Var Name="RT_BOX_AUS" OrigName="rt_Box_Aus" Type="R_TRIG" OrigType="R_TRIG" Addr="0x2006440C"/>
 			<Var Name="RT_BOX_DAUER" OrigName="rt_Box_Dauer" Type="R_TRIG" OrigType="R_TRIG" Addr="0x20064410"/>
 			<Var Name="RT_BOX_INTERVALL" OrigName="rt_Box_Intervall" Type="R_TRIG" OrigType="R_TRIG" Addr="0x20064414"/>
@@ -684,7 +684,7 @@
 			<TmpVar Name="$$TMP3" OrigName="$$TMP3" Type="DWORD" OrigType="DWORD" Addr="0x20064454"/>
 			<TmpVar Name="$$TMP5" OrigName="$$TMP5" Type="DWORD" OrigType="DWORD" Addr="0x20064458"/>
 		</Prog>
-		<Prog Name="IOMAPPINGCYCLIC" OrigName="IOMappingCyclic" SrcType="3" CodeAddr="0x8120858" HashCode="F47FD71A">
+		<Prog Name="IOMAPPINGCYCLIC" OrigName="IOMappingCyclic" SrcType="3" CodeAddr="0x8120728" HashCode="F47FD71A">
 			<Var Name="FBFRISCHLUFTTEMPAVG" OrigName="fbFrischluftTempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x20064484"/>
 			<Var Name="FBABLUFTBOX1TEMPAVG" OrigName="fbAbluftBox1TempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x2006E194"/>
 			<Var Name="FBABLUFTBOX2TEMPAVG" OrigName="fbAbluftBox2TempAvg" Type="FB_MOVAVGFLT" OrigType="FB_MovAvgFlt" Addr="0x2007301C"/>
@@ -712,7 +712,7 @@
 			<Var Name="RSTOCKTEMPRAW" OrigName="rStocktempRaw" Type="REAL" OrigType="REAL" Addr="0x20064480"/>
 			<Var Name="GINITDONE" OrigName="gInitDone" Type="BOOL" OrigType="BOOL" Addr="0x2006445C"/>
 		</Prog>
-		<Prog Name="LEISTUNGCYCLIC" OrigName="LeistungCyclic" SrcType="3" CodeAddr="0x811E4B0" HashCode="25E476BE">
+		<Prog Name="LEISTUNGCYCLIC" OrigName="LeistungCyclic" SrcType="3" CodeAddr="0x811E4B0" HashCode="34BA42CC">
 			<Var Name="XLUFTAUFBHYSTEIN" OrigName="xLuftaufbHystEin" Type="BOOL" OrigType="BOOL" Addr="0x2006445D" Descr="Hysterese-Merker Automatikbetrieb"/>
 			<Var Name="XLUFTAUFBPIDEN" OrigName="xLuftaufbPidEn" Type="BOOL" OrigType="BOOL" Addr="0x2006445F" Descr="PID Heizregister aktiv"/>
 			<Var Name="XTROCKNUNGAKTIV" OrigName="xTrocknungAktiv" Type="BOOL" OrigType="BOOL" Addr="0x2006445E"/>
@@ -1426,7 +1426,7 @@
 	</FunctionBlocks>
 	<Functions>
 		<Fun Name="FCSETBITINBITMASK" OrigName="fcSetBitInBitmask" SrcType="3" CodeAddr="0x810ED76" HashCode="BF4A2E5C">
-			<Res Name="FCSETBITINBITMASK" OrigName="fcSetBitInBitmask" Type="UDINT" OrigType="UDINT" Addr="0x4" Attribs="register" Descr="Function result"/>
+			<Res Name="FCSETBITINBITMASK" OrigName="fcSetBitInBitmask" Type="UDINT" OrigType="UDINT" Addr="0x4" Attribs="register"/>
 			<VarI Name="BITMASK" OrigName="Bitmask" Type="UDINT" OrigType="UDINT" Addr="0x6[0]" Attribs="relative,stack"/>
 			<VarI Name="BITNR" OrigName="BitNr" Type="USINT" OrigType="USINT" Addr="0x6[4]" Attribs="relative,stack"/>
 			<Var Name="VALBIT" OrigName="ValBit" Type="UDINT" OrigType="UDINT" Addr="0x9" Attribs="register"/>
@@ -1434,7 +1434,7 @@
 			<TmpVar Name="$$INPTBITNR" OrigName="$$inptBitNr" Type="USINT" OrigType="USINT" Addr="0x6[4]" Attribs="relative,stack"/>
 		</Fun>
 		<Fun Name="FCRESETBITMASK" OrigName="fcResetBitmask" SrcType="3" CodeAddr="0x810ED54" HashCode="DCA7DB08">
-			<Res Name="FCRESETBITMASK" OrigName="fcResetBitmask" Type="UDINT" OrigType="UDINT" Addr="0x4" Attribs="register" Descr="Function result"/>
+			<Res Name="FCRESETBITMASK" OrigName="fcResetBitmask" Type="UDINT" OrigType="UDINT" Addr="0x4" Attribs="register"/>
 		</Fun>
 		<Fun Name="$FINDPARAMETER" OrigName="$FindParameter" SrcType="3" CodeAddr="0x810E164" HashCode="907CBFAB">
 			<Res Name="$FINDPARAMETER" OrigName="$FindParameter" Type="$PARINFO" OrigType="$ParInfo" Addr="0x6[8]" Attribs="relative,stack"/>

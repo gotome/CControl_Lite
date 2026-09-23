@@ -3302,7 +3302,7 @@ gAktoren.Warmluftofen();
 ]]>
 					</sourceCode>
 				</program>
-				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1789586652">
+				<program name="LeistungCyclic" version="1.0.0" creationDate="1773514698" lastModifiedDate="1790183979">
 					<vars>
 						<localVars>
 							<var name="xLuftaufbHystEin" type="BOOL">
@@ -3429,42 +3429,26 @@ CASE gAktModus OF
                 //Freigabe aus dem FB: Dauerbetrieb=immer EIN, Automatik=Saettigungsdefizit
                 xLuftaufbHystEin := gAktoren.Heizregister.FreigabeHeizregisterOut;
 
-                IF gBetriebsparameter.Luftaufbereitung.DauerbetriebEin THEN
-                    (* IMMER EIN: fixe Leistungsvorgabe (manuell), kein PID *)
-                    xLuftaufbPidEn    := FALSE;
-                    rLuftaufbLeistung := gCmdAnlage.Leistung.DrehzahlLuftaufbereitung;
-                    fbPidLuftaufb(
-                        xEn := FALSE, rPv := aiTrockenluftTemp, rSetp := 0.0,
-                        xManualMode := TRUE, rManualValue := rLuftaufbLeistung, xHold := FALSE,
-                        rHighLimit := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
-                        rLowLimit  := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
-                        rDeadband := 0.5, xAutoTune := FALSE, rAutoTuneValue := 0.0,
-                        rKp := gBetriebsparameter.Luftaufbereitung.P,
-                        uiTi := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
-                        uiTd := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
-                        xReset := FALSE
-                    );
-                ELSE
-                    (* AUTOMATIK: EIN/AUS ueber Saettigungsdefizit (FB),
-                       Leistung per PID auf Trockenlufttemperatur *)
-                    xLuftaufbPidEn := xLuftaufbHystEin AND gBetriebsparameter.Ausstattung.SensorTrockenluft;
-                    fbPidLuftaufb(
-                        xEn            := xLuftaufbPidEn,
-                        rPv            := aiTrockenluftTemp,
-                        rSetp          := gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll,
-                        xManualMode    := NOT xLuftaufbPidEn,
-                        rManualValue   := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
-                        xHold          := FALSE,
-                        rHighLimit     := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
-                        rLowLimit      := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
-                        rDeadband      := 0.5, xAutoTune := FALSE, rAutoTuneValue := 0.0,
-                        rKp            := gBetriebsparameter.Luftaufbereitung.P,
-                        uiTi           := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
-                        uiTd           := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
-                        xReset         := gQuitErr
-                    );
-                    rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
-                END_IF;
+				// Leistung IMMER per PID auf Trockenlufttemperatur regeln
+				// (Automatik und IMMER EIN gleich). Der Unterschied liegt nur im DO
+				// (FreigabeHeizregisterOut: Automatik = Saettigungsdefizit, Dauerbetrieb = immer).
+				xLuftaufbPidEn := xLuftaufbHystEin AND gBetriebsparameter.Ausstattung.SensorTrockenluft;
+				fbPidLuftaufb(
+				    xEn            := xLuftaufbPidEn,
+				    rPv            := aiTrockenluftTemp,
+				    rSetp          := gBetriebsparameter.Luftaufbereitung.TempVorgabeSoll,
+				    xManualMode    := NOT xLuftaufbPidEn,
+				    rManualValue   := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
+				    xHold          := FALSE,
+				    rHighLimit     := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMax,
+				    rLowLimit      := gBetriebsparameter.Luftaufbereitung.DrehzahlVorgabeMin,
+				    rDeadband      := 0.5, xAutoTune := FALSE, rAutoTuneValue := 0.0,
+				    rKp            := gBetriebsparameter.Luftaufbereitung.P,
+				    uiTi           := TO_UINT(gBetriebsparameter.Luftaufbereitung.I * 10.0),
+				    uiTd           := TO_UINT(gBetriebsparameter.Luftaufbereitung.D * 10.0),
+				    xReset         := gQuitErr
+				);
+				rLuftaufbLeistung := fbPidLuftaufb.rAnalog;
 
 			    //15.09.2026 LaW: Sicherheitsverriegelung Luftstrom wenn Ventilator keine Betriebsmeldung hat
 		        IF doFrgVentilator AND NOT diBetriebVentilator THEN
@@ -4162,7 +4146,7 @@ doFrgAbluftventilator := gAktoren.xFrgAbluftventilator;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1790061745">
+				<program name="HmiMappingCyclic" version="1.0.0" creationDate="1773515479" lastModifiedDate="1790185924">
 					<vars>
 						<localVars>
 							<var name="rt_Box_Aus" type="R_TRIG"/>
@@ -4877,7 +4861,7 @@ IF HMI_OUT_Box_Aktuell_BoxIndex = BOX_1 THEN
 		xUmschTrig[1]     := TRUE;
 	END_IF;
 	
-	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[1].ET);
+	
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[1].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[1].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -4955,7 +4939,6 @@ ELSIF HMI_OUT_Box_Aktuell_BoxIndex = BOX_2 THEN
 		xUmschTrig[2]     := TRUE;
 	END_IF;
 	
-	HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[2].ET);
 	//Aktuelle Trockengutfeuchte - Einstellung aus HMI
 	gBetriebsparameter.Boxen[2].AktuelleTrockengutFeuchte := HMI_OUT_Box_Aktuell_TrockengutfeuchteAktuell;
 	gBetriebsparameter.Boxen[2].StocktemperaturSoll := 	HMI_OUT_Box_Aktuell_StocktemperaturSoll;
@@ -5072,6 +5055,31 @@ FOR uIdx := 1 TO 2 DO
 	
 	xUmschTrig[uIdx] := FALSE;   // Trigger ist nur ein Puls (Timer haelt selbst nach)
 END_FOR;
+
+// Restzeit Umschaltverzoegerung je Box IMMER berechnen (popup-/betriebsart-unabhaengig).
+// Nur waehrend ein Wechsel laeuft (Q=TRUE), sonst 0.
+IF TOF_Umsch[1].Q THEN
+    HMI_IN_Box1_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[1].ET);
+ELSE
+    HMI_IN_Box1_RestzeitUmschVerzBetriebsart := 0;
+END_IF;
+
+IF TOF_Umsch[2].Q THEN
+    HMI_IN_Box2_RestzeitUmschVerzBetriebsart := TO_UINT(gBetriebsparameter.Verzoegerungen.UmschaltungBetriebsartBox - TOF_Umsch[2].ET);
+ELSE
+    HMI_IN_Box2_RestzeitUmschVerzBetriebsart := 0;
+END_IF;
+
+// Box_Aktuell (Popup + Statuszeile): angezeigte Box, sonst die gerade laufende
+IF   (HMI_OUT_Box_Aktuell_BoxIndex = BOX_1) THEN
+    HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := HMI_IN_Box1_RestzeitUmschVerzBetriebsart;
+ELSIF (HMI_OUT_Box_Aktuell_BoxIndex = BOX_2) THEN
+    HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := HMI_IN_Box2_RestzeitUmschVerzBetriebsart;
+ELSIF (HMI_IN_Box1_RestzeitUmschVerzBetriebsart > 0) THEN
+    HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := HMI_IN_Box1_RestzeitUmschVerzBetriebsart;
+ELSE
+    HMI_IN_Box_Aktuell_RestzeitUmschVerzBetriebsart := HMI_IN_Box2_RestzeitUmschVerzBetriebsart;
+END_IF;
 
 (*
 -------------------------------------------------------------------------------
@@ -5249,7 +5257,7 @@ END_FOR;
 ]]>
 					</sourceCode>
 				</program>
-				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1789384357">
+				<program name="StartStoppCyclic" version="1.0.0" creationDate="1778401637" lastModifiedDate="1790183877">
 					<vars>
 						<localVars>
 							<var name="xMindEineBoxAktiv" type="BOOL"/>
@@ -5405,8 +5413,7 @@ ELSIF gBetriebsparameter.Boxen[2].StocktemperaturEin THEN
 	xStocktemperaturBox2Anwahl := TRUE;
 	
 ELSIF gBetriebsparameter.Boxen[2].DauerbetriebEin THEN
-	xDauerbetriebBox2Anwahl := TRUE;
-	
+	xDauerbetriebBox2Anwahl := TRUE;	
 END_IF;
 
 
@@ -78501,7 +78508,7 @@ END_PROGRAM
 			</src>
 		</aux>
 		<workspace>
-			<root name="CControl_Lite" nextID="21745">
+			<root name="CControl_Lite" nextID="21886">
 				<GlobalVars name="var_glob" id="2"/>
 				<folder name="io" id="13">
 					<Pou name="IOMappingCyclic" id="1"/>
